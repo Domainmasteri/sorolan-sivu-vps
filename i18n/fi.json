@@ -1,0 +1,97 @@
+{
+  "overlay": {
+    "label": "Kieli"
+  },
+  "html": {
+    "__all__": {
+      "text": {
+        "Skip to content": "Hyppää pääsisältöön",
+        "← Back to home": "← Takaisin pääsivulle",
+        "Back to home": "Takaisin pääsivulle",
+        "⬅ Back to guides": "⬅ Takaisin ohjeisiin",
+        "Open guide": "Avaa ohje"
+      }
+    },
+    "privacy/lyhennin.html": {
+      "text": {
+        "Privacy Policy - Sorola Linkkilyhennin": "Tietosuojakäytäntö - Sorolan Linkkilyhennin",
+        "Privacy Policy for Sorola Linkkilyhennin": "Sorolan Linkkilyhentimen tietosuojakäytäntö",
+        "Effective Date:": "Voimaantulopäivä:",
+        "May 2026": "Toukokuu 2026",
+        "1. Introduction": "1. Johdanto",
+        "Sorola Linkkilyhennin (\"the Extension\") is committed to protecting user privacy. This Privacy Policy explains how the Extension handles information.": "Sorola Linkkilyhennin (\"laajennus\") on sitoutunut suojaamaan käyttäjien yksityisyyttä. Tämä tietosuojakäytäntö kertoo, miten laajennus käsittelee tietoja.",
+        "2. Data Collection and Usage": "2. Tietojen kerääminen ja käyttö",
+        "The Extension requires the": "Laajennus tarvitsee",
+        "permission to function. When the user clicks the Extension icon, it reads the URL of the currently active browser tab to send it to the user's configured srla.fi API endpoint for link shortening.": "-oikeuden toimiakseen. Kun käyttäjä napsauttaa laajennuksen kuvaketta, se lukee aktiivisen selaimen välilehden URL-osoitteen ja lähettää sen käyttäjän määrittämään srla.fi-rajapintaan linkin lyhentämistä varten.",
+        "No Tracking:": "Ei seurantaa:",
+        "The Extension does not track your browsing history, monitor your behavior, or collect any analytics.": "Laajennus ei seuraa selaushistoriaasi, valvo toimintaasi eikä kerää analytiikkaa.",
+        "No Personal Data:": "Ei henkilötietoja:",
+        "No personal identification information, accounts, or cookies are collected or stored by the Extension.": "Laajennus ei kerää eikä tallenna henkilötietoja, käyttäjätilejä tai evästeitä.",
+        "No Data Retention:": "Ei tietojen säilytystä:",
+        "The URL of the active tab is processed instantaneously in real-time and is not cached or saved locally by the extension layout.": "Aktiivisen välilehden URL-osoite käsitellään reaaliaikaisesti eikä sitä välimuistita tai tallenneta paikallisesti laajennukseen.",
+        "3. Data Sharing and Third Parties": "3. Tietojen jakaminen ja kolmannet osapuolet",
+        "We do not sell, trade, or rent user data to any third parties. Data is strictly transmitted to your own secure Cloudflare Worker endpoint (srla.fi) to create the short link.": "Emme myy, vaihda tai vuokraa käyttäjätietoja kolmansille osapuolille. Tiedot välitetään ainoastaan omaan suojattuun Cloudflare Worker -päätepisteeseesi (srla.fi) lyhytlinkin luomiseksi.",
+        "4. Security": "4. Tietoturva",
+        "The Extension communicates exclusively via secure, encrypted HTTPS protocols. It does not load or execute any remote external scripts, ensuring that the code running on your browser is 100% local and safe.": "Laajennus kommunikoi ainoastaan turvallisten, salattujen HTTPS-yhteyksien kautta. Se ei lataa tai suorita etäskriptejä, joten selaimessasi ajettava koodi on täysin paikallinen ja turvallinen.",
+        "5. Contact": "5. Yhteystiedot",
+        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tästä tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
+      }
+    },
+    "privacy/salasanat.html": {
+      "text": {
+        "Privacy Policy - Sorolan Salasanat": "Tietosuojakäytäntö - Sorolan Salasanat",
+        "Privacy Policy for Sorolan Salasanat": "Sorolan Salasanojen tietosuojakäytäntö",
+        "Effective Date:": "Voimaantulopäivä:",
+        "May 2026": "Toukokuu 2026",
+        "1. Introduction": "1. Johdanto",
+        "Sorolan Salasanat (\"the Extension\") is a strictly local password generator committed to absolute user privacy. This Privacy Policy explains how the Extension handles information.": "Sorolan Salasanat (\"laajennus\") on täysin paikallinen salasanageneraattori, joka on sitoutunut käyttäjän täydelliseen yksityisyyteen. Tämä tietosuojakäytäntö kertoo, miten laajennus käsittelee tietoja.",
+        "2. Data Collection and Usage": "2. Tietojen kerääminen ja käyttö",
+        "The Extension is a 100% offline tool. It does not collect, store, process, or transmit any personal data, browsing history, analytics, or device information.": "Laajennus on 100 % offline-työkalu. Se ei kerää, tallenna, käsittele eikä siirrä henkilötietoja, selaushistoriaa, analytiikkaa tai laitetietoja.",
+        "No Tracking:": "Ei seurantaa:",
+        "The Extension does not track your browsing history, monitor your behavior, or collect any analytics.": "Laajennus ei seuraa selaushistoriaasi, valvo toimintaasi eikä kerää analytiikkaa.",
+        "No Data Retention:": "Ei tietojen säilytystä:",
+        "Passwords generated by the extension are created instantaneously in your browser and are not saved or logged anywhere.": "Laajennuksen luomat salasanat syntyvät välittömästi selaimessasi eikä niitä tallenneta tai kirjata mihinkään.",
+        "3. Required Permissions": "3. Vaaditut oikeudet",
+        "The Extension requires the": "Laajennus tarvitsee",
+        "permission to function. This permission is used exclusively when the user explicitly clicks the \"Copy\" button within the extension's popup interface to transfer the newly generated password to their clipboard.": "-oikeuden toimiakseen. Tätä oikeutta käytetään vain silloin, kun käyttäjä napsauttaa laajennuksen ponnahdusikkunassa olevaa \"Kopioi\"-painiketta siirtääkseen uuden salasanan leikepöydälle.",
+        "4. Data Sharing and Third Parties": "4. Tietojen jakaminen ja kolmannet osapuolet",
+        "We do not share, sell, or rent any data to third parties. The Extension contains no tracking codes, analytics, or advertisements, and it does not communicate with any external APIs or servers.": "Emme jaa, myy tai vuokraa tietoja kolmansille osapuolille. Laajennus ei sisällä seurantakoodeja, analytiikkaa tai mainoksia eikä kommunikoi ulkoisten rajapintojen tai palvelimien kanssa.",
+        "5. Security": "5. Tietoturva",
+        "The Extension runs entirely locally within your browser. Since it makes no external network requests, your generated passwords remain completely private and secure.": "Laajennus toimii kokonaan paikallisesti selaimessasi. Koska se ei tee ulkoisia verkkopyyntöjä, luomasi salasanat pysyvät täysin yksityisinä ja turvallisina.",
+        "6. Contact": "6. Yhteystiedot",
+        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tästä tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
+      }
+    },
+    "privacy/holvi.html": {
+      "text": {
+        "Privacy Policy - Sorolan Holvi": "Tietosuojakäytäntö - Sorolan Holvi",
+        "Privacy Policy for Sorolan Holvi": "Sorolan Holvin tietosuojakäytäntö",
+        "Effective Date:": "Voimaantulopäivä:",
+        "May 2026": "Toukokuu 2026",
+        "1. Introduction": "1. Johdanto",
+        "Sorolan Holvi (\"the Extension\") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data.": "Sorolan Holvi (\"laajennus\") on henkilökohtainen, salattu salasananhallintaohjelma, joka on sitoutunut suojaamaan yksityisyyttäsi. Tämä tietosuojakäytäntö kertoo, miten laajennus käsittelee tietojasi.",
+        "2. Data Collection and Usage": "2. Tietojen kerääminen ja käyttö",
+        "The Extension requires the": "Laajennus tarvitsee",
+        "permission to function properly. This permission is used exclusively to scan the current webpage for login forms (username and password fields) so that the Extension can autofill your credentials when explicitly requested.": "-oikeuden toimiakseen oikein. Tätä oikeutta käytetään ainoastaan nykyisen verkkosivun kirjautumislomakkeiden (käyttäjätunnus- ja salasanakenttien) tunnistamiseen, jotta laajennus voi täyttää tunnuksesi, kun pyydät sitä.",
+        "No Tracking:": "Ei seurantaa:",
+        "The Extension does not track your browsing history, monitor your behavior, or collect any analytics.": "Laajennus ei seuraa selaushistoriaasi, valvo toimintaasi eikä kerää analytiikkaa.",
+        "No External Data Collection:": "Ei ulkoista tiedonkeruuta:",
+        "The Extension only reads login fields when you open the popup or command it to autofill.": "Laajennus lukee kirjautumiskenttiä vain silloin, kun avaat ponnahdusikkunan tai pyydät sitä täyttämään tiedot.",
+        "3. Required Permissions": "3. Vaaditut oikeudet",
+        "Needed to detect login forms on any website you visit.": "Tarvitaan kirjautumislomakkeiden tunnistamiseen millä tahansa vierailemallasi sivustolla.",
+        "Needed to copy your passwords or TOTP codes to your clipboard when you click the \"Copy\" button.": "Tarvitaan salasanojen tai TOTP-koodien kopioimiseen leikepöydälle, kun napsautat \"Kopioi\"-painiketta.",
+        "4. Data Sharing and Third Parties": "4. Tietojen jakaminen ja kolmannet osapuolet",
+        "We do not sell, trade, or rent user data to any third parties. Your encrypted password vault is synchronized directly with your own secure Cloudflare Worker endpoint. The extension does not contain tracking scripts or advertisements.": "Emme myy, vaihda tai vuokraa käyttäjätietoja kolmansille osapuolille. Salattu salasanaholviasi synkronoidaan suoraan omaan suojattuun Cloudflare Worker -päätepisteeseesi. Laajennus ei sisällä seurantaskriptejä tai mainoksia.",
+        "5. Security": "5. Tietoturva",
+        "All sensitive data (passwords, card details, TOTP secrets) is encrypted locally on your device using PBKDF2 and AES-GCM encryption before it is ever sent to your personal database. The Extension communicates exclusively via secure HTTPS protocols.": "Kaikki arkaluonteiset tiedot (salasanat, korttitiedot ja TOTP-salaisuudet) salataan paikallisesti laitteellasi PBKDF2- ja AES-GCM-salauksella ennen kuin niitä koskaan lähetetään henkilökohtaiseen tietokantaasi. Laajennus kommunikoi vain turvallisten HTTPS-yhteyksien kautta.",
+        "6. Contact": "6. Yhteystiedot",
+        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tästä tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
+      }
+    }
+  },
+  "js": {
+    "__all__": {
+      "raw": {}
+    }
+  }
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta property="og:url" content="https://sorola.fi/en/resume/application-builder/it-application">
+    <link rel="canonical" href="https://sorola.fi/en/resume/application-builder/it-application">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ansioluettelot/hakemus-make/hakemus-it">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/application-builder/it-application">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ansioluettelot/hakemus-make/hakemus-it">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job application - Markus Sorola</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="/en/resume/application-builder/style-hakemus.css">
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/ansioluettelot/hakemus-make/hakemus-it">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/resume/application-builder/it-application" aria-current="page">🇬🇧</a>
+    </nav>
+
+<button class="btn-download" onclick="generatePDF('Markus_Sorola_Open_Application_IT.pdf')">Download PDF</button>
+
+<div class="hakemus-container" id="hakemus">
+    
+    <div class="sidebar">
+        <h2>Markus Sorola</h2>
+        <p class="title">Open application</p>
+        
+        <h3>Contact details</h3>
+        <p><strong>Email:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+        <p><strong>Location:</strong><br>Salo</p>
+        <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi/en/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+
+        <h3>Technical stack</h3>
+        <p>• HTML5 & CSS3<br>• JavaScript & PHP<br>• Linux VPS / Cloud Infra<br>• Git / GitHub / CI-CD<br>• Security & Automation</p>
+    </div>
+
+    <!-- Pienennettiin paddingia täällä (alkuperäinen oli 3.5rem 3rem) -->
+    <div class="main-content" style="padding: 2.5rem 3rem;">
+        <div class="letter-header" style="justify-content: flex-end; margin-bottom: 2rem;">
+            <div class="date-info">
+                Salo, <span id="current-date"></span>
+            </div>
+        </div>
+
+        <!-- Pienennettiin otsikon alaväliä -->
+        <h1 class="application-title" style="margin-bottom: 1.2rem;">Open application – A self-directed specialist in web technologies and infrastructure</h1>
+
+        <div class="letter-body">
+            <p>Dear recruiter,</p>
+            
+            <p>I am sending you this open application because I am looking for new challenges in the field and I am highly interested in your company's work. I am a goal-oriented professional with strong logical problem-solving skills, and modern web technologies and infrastructure maintenance are not only core parts of my expertise but also a genuine passion.</p>
+            
+            <p>I have independently designed and built a comprehensive web infrastructure around my own domains. I am comfortable with both frontend and backend development (HTML, CSS, JavaScript, PHP) and understand deeply how systems communicate with each other. In addition to development work, I handle the setup and maintenance of my own server environment (for example VPS solutions and cloud storage) as well as version control through GitHub. Security, privacy, and process automation are built-in ways of working for me, not just add-on features.</p>
+            
+            <p>What I bring to a team:</p>
+            <ul style="margin-bottom: 0.8rem;">
+                <li><strong>Strong technical foundation:</strong> The ability to build and maintain web services all the way from the server layer to the user interface.</li>
+                <li><strong>Logical reasoning:</strong> I enjoy breaking down complex problems and optimizing code.</li>
+                <li><strong>Practical mindset:</strong> I understand how things are coded and how they are kept securely running.</li>
+            </ul>
+            
+            <p>My background as an early-morning delivery worker has taught me precision and the ability to get things done on schedule — qualities that are also highly valuable in demanding IT projects.</p>
+            
+            <p style="margin-bottom: 0;">I would be very happy to discuss further how my technical expertise could meet your company's needs.</p>
+        </div>
+
+        <!-- Pienennettiin alatunnisteen yläväliä -->
+        <div class="letter-footer" style="padding-top: 1rem;">
+            <p>Kind regards,</p>
+            <div class="signature">
+                Markus Sorola
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/en/resume/application-builder/script-hakemus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta property="og:url" content="https://sorola.fi/ansioluettelot/cv-make/">
+    <link rel="canonical" href="https://sorola.fi/ansioluettelot/cv-make/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ansioluettelot/cv-make/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/cv-builder/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ansioluettelot/cv-make/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markus Sorola - CV</title>
+    <!-- Tuodaan html2pdf.js -kirjasto -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Linkitetään oma tyylitiedosto -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/ansioluettelot/cv-make/" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/resume/cv-builder/">🇬🇧</a>
+    </nav>
+
+<!-- Nappi joka käynnistää PDF-luonnin -->
+<button class="btn-download" onclick="generatePDF()">Lataa PDF</button>
+
+<!-- CV:n alue (Lukittu A4-kokoon) -->
+<div class="cv-container" id="cv">
+    
+    <!-- Vasen palkki -->
+    <div class="sidebar">
+        <!-- VAIHDA TÄHÄN OMAN KUVASI TIEDOSTONIMI (esim. 73854.jpg) -->
+        <img src="cv-kuva.jpg" alt="Profiilikuva" class="profile-pic">
+        
+        <h2>Henkilötiedot</h2>
+        <p><strong>Nimi:</strong> Markus Sorola</p>
+        <p><strong>Sähköposti:</strong> <a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+        <p><strong>Paikkakunta:</strong> Salo</p>
+        <p><strong>Syntymäaika:</strong> 29. heinäkuuta 1998</p>
+        <p><strong>Verkkosivu:</strong> <a href="https://sorola.fi/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+
+        <h3>Taidot</h3>
+        <ul>
+            <li>palvelimet ja domainit</li>
+            <li>Office- ja toimisto-ohjelmat</li>
+            <li>mobiilineuvonta ja käyttö</li>
+            <li>Jakelu- ja logistiikka</li>
+        </ul>
+
+        <h3>Kielet</h3>
+        <ul>
+            <li>Suomi</li>
+            <li>English</li>
+        </ul>
+
+        <h3>Harrastukset</h3>
+        <ul>
+            <li>Tietotekniikka</li>
+            <li>Kielten opiskelu satunnaisesti</li>
+            <li>Kavereiden ja tyttöystävän kanssa ajan vietto</li>
+        </ul>
+    </div>
+
+    <!-- Oikea puoli (Pääsisältö) -->
+    <div class="main-content">
+        <h1>Markus Sorola</h1>
+
+        <h2 class="section-title">Henkilökohtainen tiivistelmä</h2>
+        <p class="item-desc">Olen luotettava ja oma-aloitteinen tekijä, jolla on monipuolinen kokemus niin käytännönläheisestä logistiikasta kuin teknisestä ongelmanratkaisustakin. Varhaisjakajana olen oppinut arvostamaan täsmällisyyttä ja optimoimaan prosesseja, ja minulla on erinomainen visuaalis-avaruudellinen muisti. Vapaa-ajallani suunnittelen, koodaan ja ylläpidän laajoja verkkoinfrastruktuureja palvelimineen. Etsin työtä, jossa voin hyödyntää kykyäni hahmottaa isoja kokonaisuuksia ja omaksua nopeasti uusia järjestelmiä – oli kyse sitten lähdekoodista tai monimutkaisista reittikartoista.</p>
+
+        <h2 class="section-title">Koulutus</h2>
+        <div class="item">
+            <div class="item-title">Puhtaus- ja kiinteistöpalvelualan perustutkinto</div>
+            <div class="item-subtitle">Ammattiopisto Spesia, Turku | huhti 2019 - huhti 2021</div>
+            <div class="item-desc">Opiskelin kotityöpalvelujen osaamisalan, joka on pääasiassa kodinhoitoa.</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Työhön ja itsenäiseen elämään valmentava koulutus</div>
+            <div class="item-subtitle">Ammattiopisto Spesia, Turku | elo 2018 - huhti 2019</div>
+            <div class="item-desc">Harjoiteltiin itsenäisen elämän taitoja.</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Peruskoulu</div>
+            <div class="item-subtitle">Armfeltin Koulu, Salo | touko 2016</div>
+        </div>
+
+        <h2 class="section-title">Työkokemus</h2>
+        <div class="item">
+            <div class="item-title">Varhaisjakaja</div>
+            <div class="item-subtitle">Varsinais-Suomen Tietojakelu Oy, Salo | kesä 2023 - Kuluva</div>
+            <div class="item-desc">Jaan aamuyöllä lehtiä, kirjeitä ja joskus myös paketteja. Yöpostihommaa siis.</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Tuotanto-Operaattori</div>
+            <div class="item-subtitle">Valmet Automotive, Salo | loka 2021 - huhti 2022</div>
+            <div class="item-desc">Tuotantolinjalla tein erilaisia tehtäviä, joilla rakennettiin sähköautojen akkuja.</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Kirpputorimyyjä</div>
+            <div class="item-subtitle">Ihme ja Kumma Tuki Ry, Salo | touko 2021 - loka 2021</div>
+            <div class="item-desc">Olin heillä kirpputorimyyjänä jokusen kuukauden, mutta se loppui minulta, kun sain työpaikan Valmetilta. Myöhemmin Ihme ja Kumma teki valitettavasti konkurssin.</div>
+        </div>
+    </div>
+</div>
+
+<!-- Linkitetään oma JavaScript-tiedosto -->
+<script src="script.js"></script>
+</body>
+</html>

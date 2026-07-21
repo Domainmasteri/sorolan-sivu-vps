@@ -1,0 +1,12 @@
+<svg width="100%" height="200" viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg">
+<rect width="100%" height="200" fill="#f0f0f0" />
+<g transform="translate(500, 100)"> <circle cx="0" cy="0" r="100" stroke="black" stroke-width="3" fill="none" />
+<circle cx="0" cy="0" r="50" stroke="blue" stroke-width="2" fill="lightblue" />
+<path d="M 0,-50 L 0,-100 M 0,50 L 0,100 M -50,0 L -100,0 M 50,0 L 100,0" stroke="black" stroke-width="2" />
+<text x="0" y="-60" text-anchor="middle" font-size="14">Aktiivisuus</text>
+<text x="0" y="60" text-anchor="middle" font-size="14">Passiivisuus</text>
+<text x="-60" y="0" text-anchor="middle" font-size="14">Introspektio</text>
+<text x="60" y="0" text-anchor="middle" font-size="14">Ekstraversio</text>
+<circle cx="0" cy="0" r="5" fill="red" />
+</g>
+<text x="500" y="180" text-anchor="middle" font-size="20">Arkkityyppielämäntapa</text> </svg>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta property="og:url" content="https://sorola.fi/en/resume/cv-builder/">
+    <link rel="canonical" href="https://sorola.fi/en/resume/cv-builder/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ansioluettelot/cv-make/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/cv-builder/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ansioluettelot/cv-make/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markus Sorola - CV</title>
+    <!-- Tuodaan html2pdf.js -kirjasto -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Linkitetään oma tyylitiedosto -->
+    <link rel="stylesheet" href="/en/resume/cv-builder/style.css">
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/ansioluettelot/cv-make/">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/resume/cv-builder/" aria-current="page">🇬🇧</a>
+    </nav>
+
+<!-- Nappi joka käynnistää PDF-luonnin -->
+<button class="btn-download" onclick="generatePDF()">Download PDF</button>
+
+<!-- CV:n alue (Lukittu A4-kokoon) -->
+<div class="cv-container" id="cv">
+    
+    <!-- Vasen palkki -->
+    <div class="sidebar">
+        <!-- VAIHDA TÄHÄN OMAN KUVASI TIEDOSTONIMI (esim. 73854.jpg) -->
+        <img src="/en/resume/cv-builder/cv-kuva.jpg" alt="Profile picture" class="profile-pic">
+        
+        <h2>Personal details</h2>
+        <p><strong>Name:</strong> Markus Sorola</p>
+        <p><strong>Email:</strong> <a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+        <p><strong>Location:</strong> Salo</p>
+        <p><strong>Date of birth:</strong> 29 July 1998</p>
+        <p><strong>Verkkosivu:</strong> <a href="https://sorola.fi/en/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+
+        <h3>Skills</h3>
+        <ul>
+            <li>servers and domains</li>
+            <li>Office and productivity software</li>
+            <li>mobile guidance and support</li>
+            <li>distribution and logistics</li>
+        </ul>
+
+        <h3>Languages</h3>
+        <ul>
+            <li>Finnish</li>
+            <li>English</li>
+        </ul>
+
+        <h3>Interests</h3>
+        <ul>
+            <li>Information technology</li>
+            <li>Studying languages from time to time</li>
+            <li>Spending time with friends and my girlfriend</li>
+        </ul>
+    </div>
+
+    <!-- Oikea puoli (Pääsisältö) -->
+    <div class="main-content">
+        <h1>Markus Sorola</h1>
+
+        <h2 class="section-title">Personal summary</h2>
+        <p class="item-desc">I am a reliable and proactive contributor with versatile experience in both practical logistics and technical problem solving. As an early-morning delivery worker, I have learned to value precision and optimize processes, and I have excellent visual-spatial memory. In my free time I design, code, and maintain extensive web infrastructures and servers. I am looking for work where I can use my ability to understand large systems and quickly learn new ones — whether it is source code or complex route maps.</p>
+
+        <h2 class="section-title">Education</h2>
+        <div class="item">
+            <div class="item-title">Vocational qualification in cleaning and property services</div>
+            <div class="item-subtitle">Ammattiopisto Spesia, Turku | Apr 2019 - Apr 2021</div>
+            <div class="item-desc">I studied the home services specialization, which focused mainly on household care.</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Preparatory education for work and independent living</div>
+            <div class="item-subtitle">Ammattiopisto Spesia, Turku | Aug 2018 - Apr 2019</div>
+            <div class="item-desc">The program focused on independent living skills.</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Comprehensive school</div>
+            <div class="item-subtitle">Armfelt School, Salo | May 2016</div>
+        </div>
+
+        <h2 class="section-title">Work experience</h2>
+        <div class="item">
+            <div class="item-title">Early-morning delivery worker</div>
+            <div class="item-subtitle">Varsinais-Suomen Tietojakelu Oy, Salo | Jun 2023 - Present</div>
+            <div class="item-desc">I deliver newspapers, letters, and occasionally parcels in the early hours of the morning.</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Production operator</div>
+            <div class="item-subtitle">Valmet Automotive, Salo | Oct 2021 - Apr 2022</div>
+            <div class="item-desc">On the production line I handled different tasks involved in building electric vehicle batteries.</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Flea market sales assistant</div>
+            <div class="item-subtitle">Ihme ja Kumma Tuki Ry, Salo | May 2021 - Oct 2021</div>
+            <div class="item-desc">I worked there as a flea market sales assistant for a few months until I got a job at Valmet. Later, Ihme ja Kumma unfortunately went bankrupt.</div>
+        </div>
+    </div>
+</div>
+
+<!-- Linkitetään oma JavaScript-tiedosto -->
+<script src="/en/resume/cv-builder/script.js"></script>
+</body>
+</html>

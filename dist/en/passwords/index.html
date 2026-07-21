@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorola Password Generator - Create strong passwords</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/en/passwords/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/salasanat/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/passwords/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/salasanat/">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <meta name="description" content="Create strong and secure passwords for free. Choose the length and character types — the password is generated directly in your browser, not on a server.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/en/passwords/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Sorola Password Generator">
+    <meta property="og:description" content="Create strong passwords safely in your browser.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sorola Password Generator">
+    <meta name="twitter:description" content="Create strong passwords safely in your browser.">
+    <style>
+        /* Salasanakoneen omat mukautetut asettelut uuteen teemaan sopiviksi */
+        .asetus-rivi {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            margin-bottom: 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            user-select: none;
+        }
+        .asetus-rivi input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #ffaa00; /* Muuttaa ruksit teeman värisiksi */
+        }
+        .slider-kontti {
+            margin-bottom: 25px;
+            color: white;
+            font-size: 1.1rem;
+        }
+        input[type="range"] {
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+            accent-color: #ffaa00;
+        }
+        #valmis-salasana {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: #ffaa00;
+            background: #0b0d13;
+            border: 1px solid #2d3748;
+        }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/salasanat/">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/passwords/" aria-current="page">🇬🇧</a>
+    </nav>
+    <a href="#paaosio" class="skip-to-content">Skip to content</a>
+
+    <div class="laatikko">
+        <h1 class="otsikko">Password generator</h1>
+
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Create strong and secure passwords to improve resistance against cracking. Choose the length and character types below.</p>
+        </div>
+
+        <main id="paaosio">
+        <div class="osion-tausta">
+            <h2>1. Adjust the settings</h2>
+            
+            <div class="slider-kontti">
+                <label for="pituus-slider">Password length: <span id="pituus-arvo" style="color: #ffaa00; font-weight: bold;">16</span> characters</label>
+                <input type="range" id="pituus-slider" min="6" max="32" value="16">
+            </div>
+
+            <label class="asetus-rivi">
+                <input type="checkbox" id="pienet-kirjaimet" checked>
+                Include lowercase letters (a-z)
+            </label>
+            
+            <label class="asetus-rivi">
+                <input type="checkbox" id="isot-kirjaimet" checked>
+                Include uppercase letters (A-Z)
+            </label>
+            
+            <label class="asetus-rivi">
+                <input type="checkbox" id="numerot" checked>
+                Include numbers (0-9)
+            </label>
+            
+            <label class="asetus-rivi">
+                <input type="checkbox" id="erikoismerkit" checked>
+                Include special characters (!@#$%)
+            </label>
+
+            <button id="luo-btn" class="nappula" style="margin-top: 15px;">🎲 Generate a new password</button>
+        </div>
+
+        <div class="osion-tausta" style="text-align: center;">
+            <h2>Ready password</h2>
+            
+            <div style="margin-bottom: 20px;">
+                <label for="valmis-salasana" class="sr-only">Generated password</label>
+                <input type="text" id="valmis-salasana" class="syote" readonly placeholder="Press the Generate button" aria-label="Generated password">
+            </div>
+            
+            <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Copy to clipboard</button>
+        </div>
+        </main>
+
+        <a href="/en/" class="linkki-takaisin">← Back to home</a>
+    </div>
+
+    <script src="/en/passwords/script.js"></script>
+</body>
+</html>

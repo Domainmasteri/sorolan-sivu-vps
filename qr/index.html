@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorolan QR-koodin luoja - Luo QR-koodeja ilmaiseksi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/qr/">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <meta name="description" content="Luo QR-koodeja ilmaiseksi – nettisivuille, WiFi-verkoille, yhteystiedoille ja muulle. Nopea ja helppokäyttöinen QR-generaattori.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/qr/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Sorolan QR-koodin luoja">
+    <meta property="og:description" content="Luo QR-koodeja ilmaiseksi nettisivuille, WiFi-verkoille ja muulle.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sorolan QR-koodin luoja">
+    <meta name="twitter:description" content="Luo QR-koodeja ilmaiseksi.">
+    <style>
+        .kentta-ryhma { display: none; flex-direction: column; gap: 15px; margin-top: 15px; }
+        .kentta-ryhma.aktiivinen { display: flex; }
+        .asetus-rivi { display: flex; gap: 15px; align-items: center; margin: 15px 0; }
+        .asetus-rivi label { color: white; font-size: 1rem; }
+        
+        #qr-tulos-laatikko {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 250px;
+            height: 250px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        #qr-kuva {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+    <div class="laatikko">
+        <h1 class="otsikko">QR-koodin luoja</h1>
+
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Luo monipuolisia QR-koodeja! Voit jakaa nettisivuja, yhteystietoja tai vaikka kotisi WiFi-salasanan.</p>
+        </div>
+
+        <main id="paaosio">
+        <div class="osion-tausta">
+            <h2>1. Valitse tyyppi ja syötä tiedot</h2>
+            
+            <label for="qr-tyyppi" class="sr-only">QR-koodin tyyppi</label>
+            <select id="qr-tyyppi" class="syote" aria-label="QR-koodin tyyppi">
+                <option value="url">Nettisivu (URL)</option>
+                <option value="text">Vapaa teksti</option>
+                <option value="wifi">WiFi-verkko</option>
+                <option value="email">Sähköposti</option>
+                <option value="phone">Soita numeroon</option>
+                <option value="sms">Lähetä tekstiviesti</option>
+            </select>
+
+            <div id="kentat-url" class="kentta-ryhma aktiivinen">
+                <input type="url" id="val-url" class="syote" placeholder="https://soro.la" aria-label="URL-osoite">
+            </div>
+
+            <div id="kentat-text" class="kentta-ryhma">
+                <textarea id="val-text" class="syote" placeholder="Kirjoita viestisi tähän..." rows="3" aria-label="Vapaa teksti"></textarea>
+            </div>
+
+            <div id="kentat-wifi" class="kentta-ryhma">
+                <input type="text" id="val-wifi-ssid" class="syote" placeholder="Verkon nimi (SSID)" aria-label="WiFi-verkon nimi (SSID)">
+                <input type="text" id="val-wifi-pass" class="syote" placeholder="Salasana" aria-label="WiFi-salasana">
+                <select id="val-wifi-type" class="syote" aria-label="WiFi-suojaustyyppi">
+                    <option value="WPA">WPA/WPA2 (Yleisin)</option>
+                    <option value="WEP">WEP</option>
+                    <option value="nopass">Ei salasanaa</option>
+                </select>
+            </div>
+
+            <div id="kentat-email" class="kentta-ryhma">
+                <input type="email" id="val-email-osoite" class="syote" placeholder="vastaanottaja@esimerkki.fi" aria-label="Sähköpostiosoite">
+                <input type="text" id="val-email-otsikko" class="syote" placeholder="Viestin otsikko" aria-label="Sähköpostin otsikko">
+            </div>
+
+            <div id="kentat-phone" class="kentta-ryhma">
+                <input type="tel" id="val-phone" class="syote" placeholder="+358401234567" aria-label="Puhelinnumero">
+            </div>
+
+            <div id="kentat-sms" class="kentta-ryhma">
+                <input type="tel" id="val-sms-numero" class="syote" placeholder="Vastaanottajan numero" aria-label="Vastaanottajan puhelinnumero">
+                <input type="text" id="val-sms-viesti" class="syote" placeholder="Viestin sisältö" aria-label="Tekstiviestin sisältö">
+            </div>
+
+            <div class="asetus-rivi">
+                <label for="qr-vari">Koodin väri:</label>
+                <input type="color" id="qr-vari" value="#000000" style="cursor: pointer; height: 40px; width: 60px; background: none; border: 1px solid #4a5568; border-radius: 6px;">
+            </div>
+
+            <button id="luo-btn" class="nappula">Päivitä QR-koodi</button>
+        </div>
+
+        <div class="osion-tausta" style="text-align: center;">
+            <h2>Valmis koodi</h2>
+            
+            <div id="qr-tulos-laatikko">
+                <img id="qr-kuva" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://soro.la" alt="Generoitu QR-koodi" loading="lazy">
+            </div>
+            
+            <button id="lataa-btn" class="nappula" style="background-color: #218838; color: white;">Lataa kuvana (PNG)</button>
+        </div>
+        </main>
+
+        <a href="../" class="linkki-takaisin">← Takaisin pääsivulle</a>
+    </div>
+
+    <script>
+        const tyyppiValitsin = document.getElementById('qr-tyyppi');
+        const ryhmat = document.querySelectorAll('.kentta-ryhma');
+
+        tyyppiValitsin.addEventListener('change', (e) => {
+            ryhmat.forEach(r => r.classList.remove('aktiivinen'));
+            document.getElementById('kentat-' + e.target.value).classList.add('aktiivinen');
+        });
+
+        document.getElementById('luo-btn').addEventListener('click', () => {
+            let dataString = "";
+            const tyyppi = tyyppiValitsin.value;
+
+            if (tyyppi === 'url') {
+                dataString = document.getElementById('val-url').value || "https://soro.la";
+            } else if (tyyppi === 'text') {
+                dataString = document.getElementById('val-text').value || "Moi!";
+            } else if (tyyppi === 'wifi') {
+                const ssid = document.getElementById('val-wifi-ssid').value;
+                const pass = document.getElementById('val-wifi-pass').value;
+                const sec = document.getElementById('val-wifi-type').value;
+                dataString = `WIFI:T:${sec};S:${ssid};P:${pass};;`;
+            } else if (tyyppi === 'email') {
+                const mail = document.getElementById('val-email-osoite').value;
+                const sub = document.getElementById('val-email-otsikko').value;
+                dataString = `mailto:${mail}?subject=${encodeURIComponent(sub)}`;
+            } else if (tyyppi === 'phone') {
+                const puhelin = document.getElementById('val-phone').value;
+                dataString = `tel:${puhelin}`;
+            } else if (tyyppi === 'sms') {
+                const nro = document.getElementById('val-sms-numero').value;
+                const msg = document.getElementById('val-sms-viesti').value;
+                dataString = `smsto:${nro}:${msg}`;
+            }
+
+            const variHex = document.getElementById('qr-vari').value.replace('#', '');
+            const urlEncodedData = encodeURIComponent(dataString);
+            const uusiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${urlEncodedData}&color=${variHex}`;
+            document.getElementById('qr-kuva').src = uusiUrl;
+        });
+
+        document.getElementById('lataa-btn').addEventListener('click', async () => {
+            const kuvaUrl = document.getElementById('qr-kuva').src;
+            try {
+                const response = await fetch(kuvaUrl);
+                const blob = await response.blob();
+                const latausLinkki = document.createElement('a');
+                latausLinkki.href = URL.createObjectURL(blob);
+                latausLinkki.download = 'sorola-qr.png';
+                document.body.appendChild(latausLinkki);
+                latausLinkki.click();
+                document.body.removeChild(latausLinkki);
+            } catch (error) {
+                alert("Lataus epäonnistui. Voit myös painaa kuvaa hiiren oikealla ja valita 'Tallenna kuva nimellä'.");
+            }
+        });
+    </script>
+</body>
+</html>

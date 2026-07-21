@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta property="og:url" content="https://sorola.fi/en/guides/link-shortener">
+    <link rel="canonical" href="https://sorola.fi/en/guides/link-shortener">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/linkinlyhennin">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/link-shortener">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/linkinlyhennin">
+    <meta charset="UTF-8">
+    <title>Link shortener guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <script src="/en/guides/ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #ffaa00;
+        }
+
+        .ohje-palsta.auki > h2 {
+            margin-bottom: 16px;
+        }
+
+        .ohje-toggle {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ffaa00;
+            border-radius: 50%;
+            background: transparent;
+            color: #ffaa00;
+            font: inherit;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .ohje-toggle:hover,
+        .ohje-toggle:focus-visible {
+            background: #ffaa00;
+            color: #111;
+            outline: none;
+        }
+
+        .ohje-sisalto[hidden] {
+            display: none;
+        }
+
+        .ohje-sisalto > :first-child {
+            margin-top: 0;
+        }
+
+        .ohje-sisalto > :last-child {
+            margin-bottom: 0;
+        }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/ohjeet/linkinlyhennin">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/guides/link-shortener" aria-current="page">🇬🇧</a>
+    </nav>
+
+<div class="laatikko">
+    <h1 class="otsikko">🔗 Using the link shortener</h1>
+
+    <div class="osion-tausta">
+        <p>With Sorola's link shortener you can turn long URLs into shorter links that are easier to share.</p>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>1. Enter the long address
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Paste the web page address you want into the field.</p>
+            <p><strong>Example:</strong></p>
+            <code>https://esimerkki.fi/todella/pitka/osoite/joka/on/hankala/jakaa</code>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>2. Create a short link
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Click the "Create link" button.</p>
+            <p>The service will automatically create a short address.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>3. Share the link
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>You can share the short link, for example:</p>
+            <ul>
+                <li>By email</li>
+                <li>On social media</li>
+                <li>In a QR code</li>
+                <li>In text messages</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>Privacy
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>The link shortener does not change the content of the original page. The short link only redirects to the original address.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="/en/guides/" class="nappula1">⬅ Back to guides</a>
+    </div>
+</div>
+
+</body>
+</html>

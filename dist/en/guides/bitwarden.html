@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitwarden guide - Sorola</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/en/guides/bitwarden">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/bitwarden">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/bitwarden">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/bitwarden">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <meta name="description" content="Bitwarden guide: sign-up, setup for browsers and mobile, and storing passwords securely.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/en/guides/bitwarden">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Bitwarden guide - Sorola">
+    <meta property="og:description" content="A guide to getting started with Bitwarden and managing your passwords.">
+    <script src="/en/guides/ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #ffaa00;
+        }
+
+        .ohje-palsta.auki > h2 {
+            margin-bottom: 16px;
+        }
+
+        .ohje-toggle {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ffaa00;
+            border-radius: 50%;
+            background: transparent;
+            color: #ffaa00;
+            font: inherit;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .ohje-toggle:hover,
+        .ohje-toggle:focus-visible {
+            background: #ffaa00;
+            color: #111;
+            outline: none;
+        }
+
+        .ohje-sisalto[hidden] {
+            display: none;
+        }
+
+        .ohje-sisalto > :first-child {
+            margin-top: 0;
+        }
+
+        .ohje-sisalto > :last-child {
+            margin-bottom: 0;
+        }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/ohjeet/bitwarden">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/guides/bitwarden" aria-current="page">🇬🇧</a>
+    </nav>
+<a href="#paaosio" class="skip-to-content">Skip to content</a>
+
+<div class="laatikko">
+    <h1 class="otsikko">🔒 Bitwarden guide</h1>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Bitwarden is an official password management service that lets you store login details, passwords, notes, payment cards, and other important information in an encrypted vault. The same vault works in your browser, on your computer, and on your phone.
+        </p>
+    </div>
+
+    <main id="paaosio">
+    <div class="osion-tausta ohje-palsta">
+        <h2>📝 Sign-up and server selection
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Open <a href="https://vault.bitwarden.com/#/signup" target="_blank" rel="noopener noreferrer">🔒 Bitwarden sign-up page</a> or choose in the app <strong>Create account</strong> (Create account).</li>
+                <li>Before creating the account, choose either of these server regions: <strong>bitwarden.com (United States)</strong> tai <strong>bitwarden.eu (European Union)</strong>.</li>
+                <li>The EU and US servers are separate. Your account only works on the server where it was created, so use the same server selection in all Bitwarden apps.</li>
+                <li>Enter your email address, your name, and a strong master password.</li>
+                <li>Only add a master password hint if it helps you without revealing the password itself.</li>
+                <li>Accept the terms and complete the account creation process. Confirm your email address from the message Bitwarden sends you.</li>
+            </ol>
+            <p><strong>Important:</strong> Choose a long and unique master password. Bitwarden does not know your master password and usually cannot recover it for you.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🔑 Signing in
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Install the official Bitwarden app or browser extension, or open the web vault.</li>
+                <li>Open the server selector before signing in and choose the same region you registered for: <strong>bitwarden.com</strong> tai <strong>bitwarden.eu</strong>.</li>
+                <li>Enter your email address and master password.</li>
+                <li>Enter your two-factor verification code or use another verification method you have configured, if protection is enabled.</li>
+                <li>Once the vault is open, sync it if needed so that the latest data is downloaded to the device.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>➕ Adding entries
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Open the vault and press <strong>New</strong>, <strong>Add item</strong> or the plus button.</li>
+                <li>Choose an entry type such as <strong>Login</strong>, <strong>Card</strong>, <strong>Identity</strong> tai <strong>Secure note</strong>.</li>
+                <li>Give the entry a clear name.</li>
+                <li>For a login entry, fill in the username, password, and website address (URI). You can generate a strong password with Bitwarden’s password generator.</li>
+                <li>If you want, add a folder, a favorite flag, custom fields, attachments, or a TOTP key.</li>
+                <li>Press <strong>Save</strong>.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>✏️ Editing and deleting entries
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li><strong>Editing:</strong> Open the entry, choose <strong>Edit</strong>, make the changes, and press <strong>Save</strong>.</li>
+                <li style="margin-top:10px;"><strong>Deleting:</strong> Open the entry and choose <strong>Delete</strong>. The entry moves to the trash, where it can be restored or deleted permanently.</li>
+                <li style="margin-top:10px;"><strong>Note:</strong> Sync the vault after changes if they do not appear immediately on another device.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🔄 Importing and exporting data
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>Import</h3>
+            <ol>
+                <li>Open the web vault and go to <strong>Tools</strong> tai <strong>Settings → Import data</strong>.</li>
+                <li>Choose the program or file format to import from.</li>
+                <li>Select the file to import and start the import.</li>
+                <li>After the import, check that no unnecessary duplicates were created in the vault.</li>
+            </ol>
+
+            <h3>Export</h3>
+            <ol>
+                <li>Open the web vault export tool and choose the vault to export.</li>
+                <li>Prefer <strong>encrypted JSON export</strong>if the backup is intended to be restored into Bitwarden later.</li>
+                <li>Confirm the export with your master password or a one-time code sent to your email.</li>
+                <li>Store the export file in a safe place and delete any unnecessary unencrypted copies.</li>
+            </ol>
+            <p><strong>Warning:</strong> CSV and unencrypted JSON contain the vault data in readable form. Do not leave them in your Downloads folder, a cloud service, or an unprotected USB drive.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>⚡ Autofill settings
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>In the browser</h3>
+            <ol>
+                <li>Install the official Bitwarden extension from your browser’s add-on store.</li>
+                <li>Open the extension’s <strong>Settings → Autofill</strong>.</li>
+                <li>Choose whether you want to show fill suggestions in form fields and autofill data when the page loads. Autofill on page load should be used with care.</li>
+                <li>You can fill a login by opening the extension and choosing the suggested entry or by using your browser’s Bitwarden keyboard shortcut.</li>
+                <li>If the wrong entry appears on a page, check the URI saved in the entry and its matching method.</li>
+            </ol>
+
+            <h3>On your phone</h3>
+            <ol>
+                <li>Open the Bitwarden app’s <strong>Settings → Autofill</strong>.</li>
+                <li>Enable the autofill service and accept the permissions requested by your device.</li>
+                <li>On Android, you can also enable additional methods if standard autofill does not work in all apps.</li>
+                <li>On iPhone, choose Bitwarden as the autofill provider in the device’s password settings.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🛡️ Securing your account and app
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li>Use a long and unique master password that you do not use anywhere else.</li>
+                <li>Enable <strong>two-step login</strong>. Keep the recovery code separate from the vault.</li>
+                <li>Enable biometric unlock or a PIN in the app only on your own secure device.</li>
+                <li>Set the vault to lock automatically after a short period of inactivity. Signing out removes the local session completely, while locking leaves the encrypted vault on the device.</li>
+                <li>Keep Bitwarden, your browser, and your operating system up to date.</li>
+                <li>Review active sessions from time to time and remove unknown devices.</li>
+                <li>Do not approve unexpected sign-in requests or give your master password to anyone.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>⏱️ TOTP codes and Bitwarden Authenticator
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>When you add a TOTP key for two-factor verification to a login entry, the one-time codes it generates can also be shown in a separate <strong>Bitwarden Authenticator</strong> app.</p>
+            <ol>
+                <li>Install Bitwarden Authenticator on your phone.</li>
+                <li>In the Authenticator settings, enable syncing with the Bitwarden vault and sign in to the same server region as in Password Manager.</li>
+                <li>The TOTP codes stored in the vault appear in Authenticator after syncing.</li>
+                <li>Keep syncing enabled so that codes added to or edited in the vault stay up to date in Authenticator.</li>
+            </ol>
+            <p><strong>Note:</strong> The code used for Bitwarden account sign-in itself is safest when stored separately from the same vault that requires the code to be opened. Keep the recovery code safe as well.</p>
+        </div>
+    </div>
+    </main>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="/en/guides/" class="nappula1">⬅ Back to guides</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitwarden-käyttöohje - Sorola</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/bitwarden">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <meta name="description" content="Suomenkielinen Bitwarden-käyttöohje: rekisteröityminen, asennusohjeet selaimeen ja mobiiliin sekä salasanojen tallentaminen turvallisesti.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/bitwarden">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Bitwarden-käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje Bitwardenin käyttöönottoon ja salasanojen hallintaan.">
+    <script src="ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #ffaa00;
+        }
+
+        .ohje-palsta.auki > h2 {
+            margin-bottom: 16px;
+        }
+
+        .ohje-toggle {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ffaa00;
+            border-radius: 50%;
+            background: transparent;
+            color: #ffaa00;
+            font: inherit;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .ohje-toggle:hover,
+        .ohje-toggle:focus-visible {
+            background: #ffaa00;
+            color: #111;
+            outline: none;
+        }
+
+        .ohje-sisalto[hidden] {
+            display: none;
+        }
+
+        .ohje-sisalto > :first-child {
+            margin-top: 0;
+        }
+
+        .ohje-sisalto > :last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+<a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+<div class="laatikko">
+    <h1 class="otsikko">🔒 Bitwarden-ohje</h1>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Bitwarden on virallinen salasananhallintapalvelu, jolla voit säilyttää kirjautumistiedot, salasanat, muistiinpanot, maksukortit ja muut tärkeät tiedot salatussa holvissa. Sama holvi toimii selaimessa, tietokoneella ja puhelimella.
+        </p>
+    </div>
+
+    <main id="paaosio">
+    <div class="osion-tausta ohje-palsta">
+        <h2>📝 Rekisteröityminen ja palvelimen valinta
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Avaa <a href="https://vault.bitwarden.com/#/signup" target="_blank" rel="noopener noreferrer">🔒 Bitwardenin rekisteröitymissivu</a> tai valitse sovelluksessa <strong>Luo tili</strong> (Create account).</li>
+                <li>Valitse ennen tilin luomista palvelinalueeksi joko <strong>bitwarden.com (Yhdysvallat)</strong> tai <strong>bitwarden.eu (Euroopan unioni)</strong>.</li>
+                <li>EU- ja USA-palvelimet ovat erillisiä. Tili on käytettävissä vain sillä palvelimella, jolle se luotiin, joten käytä samaa palvelinvalintaa kaikissa Bitwarden-sovelluksissa.</li>
+                <li>Syötä sähköpostiosoite, nimesi ja vahva pääsalasana.</li>
+                <li>Kirjoita pääsalasanavihje vain, jos se auttaa sinua paljastamatta itse salasanaa.</li>
+                <li>Hyväksy ehdot ja viimeistele tilin luominen. Vahvista sähköpostiosoite Bitwardenin lähettämästä viestistä.</li>
+            </ol>
+            <p><strong>Tärkeää:</strong> Valitse pitkä ja yksilöllinen pääsalasana. Bitwarden ei tunne pääsalasanaasi eikä tavallisesti pysty palauttamaan sitä puolestasi.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🔑 Kirjautuminen
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Asenna virallinen Bitwarden-sovellus tai selainlaajennus tai avaa verkkoholvi.</li>
+                <li>Avaa palvelinvalinta ennen kirjautumista ja valitse sama alue, jolle rekisteröidyit: <strong>bitwarden.com</strong> tai <strong>bitwarden.eu</strong>.</li>
+                <li>Syötä sähköpostiosoitteesi ja pääsalasanasi.</li>
+                <li>Anna kaksivaiheisen vahvistuksen koodi tai käytä muuta määrittämääsi vahvistustapaa, jos suojaus on käytössä.</li>
+                <li>Kun holvi on avattu, synkronoi se tarvittaessa, jotta uusimmat tiedot latautuvat laitteelle.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>➕ Tietueiden lisääminen
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Avaa holvi ja paina <strong>Uusi</strong>, <strong>Lisää kohde</strong> tai pluspainiketta.</li>
+                <li>Valitse tietueen tyypiksi esimerkiksi <strong>Kirjautuminen</strong>, <strong>Kortti</strong>, <strong>Henkilöllisyys</strong> tai <strong>Suojattu muistiinpano</strong>.</li>
+                <li>Anna tietueelle selkeä nimi.</li>
+                <li>Kirjautumistietueessa täytä käyttäjätunnus, salasana ja verkkosivun osoite eli URI. Voit luoda vahvan salasanan Bitwardenin salasanageneraattorilla.</li>
+                <li>Lisää halutessasi kansio, suosikkimerkintä, omia kenttiä, liitteitä tai TOTP-avain.</li>
+                <li>Paina <strong>Tallenna</strong>.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>✏️ Tietueiden muokkaus ja poisto
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li><strong>Muokkaaminen:</strong> Avaa tietue, valitse <strong>Muokkaa</strong>, tee muutokset ja paina <strong>Tallenna</strong>.</li>
+                <li style="margin-top:10px;"><strong>Poistaminen:</strong> Avaa tietue ja valitse <strong>Poista</strong>. Tietue siirtyy roskakoriin, josta sen voi palauttaa tai poistaa lopullisesti.</li>
+                <li style="margin-top:10px;"><strong>Huomio:</strong> Synkronoi holvi muutosten jälkeen, jos ne eivät heti näy toisella laitteella.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🔄 Tietojen tuonti ja vienti
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>Tuonti</h3>
+            <ol>
+                <li>Avaa verkkoholvi ja siirry kohtaan <strong>Työkalut</strong> tai <strong>Asetukset → Tuo tietoja</strong>.</li>
+                <li>Valitse ohjelma tai tiedostomuoto, josta tiedot tuodaan.</li>
+                <li>Valitse vietävä tiedosto ja käynnistä tuonti.</li>
+                <li>Tarkista tuonnin jälkeen, ettei holviin syntynyt tarpeettomia kaksoiskappaleita.</li>
+            </ol>
+
+            <h3>Vienti</h3>
+            <ol>
+                <li>Avaa verkkoholvin vientitoiminto ja valitse vietävä holvi.</li>
+                <li>Valitse mieluiten <strong>salattu JSON-vienti</strong>, kun varmuuskopio on tarkoitus palauttaa myöhemmin Bitwardeniin.</li>
+                <li>Vahvista vienti pääsalasanalla tai sähköpostiin lähetettävällä kertakoodilla.</li>
+                <li>Säilytä vientitiedosto turvallisessa paikassa ja poista tarpeettomat salaamattomat kopiot.</li>
+            </ol>
+            <p><strong>Varoitus:</strong> CSV ja salaamaton JSON sisältävät holvin tiedot luettavassa muodossa. Älä jätä niitä Lataukset-kansioon, pilvipalveluun tai suojaamattomalle muistitikulle.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>⚡ Automaattitäytön asetukset
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>Selaimessa</h3>
+            <ol>
+                <li>Asenna virallinen Bitwarden-laajennus selaimesi lisäosakaupasta.</li>
+                <li>Avaa laajennuksen <strong>Asetukset → Automaattitäyttö</strong>.</li>
+                <li>Valitse haluatko näyttää täyttöehdotukset lomakekentissä ja täyttää tiedot sivun latautuessa. Sivun latauksessa tapahtuvaa automaattitäyttöä kannattaa käyttää harkiten.</li>
+                <li>Voit täyttää kirjautumisen avaamalla laajennuksen ja valitsemalla ehdotetun tietueen tai käyttämällä selaimen Bitwarden-pikanäppäintä.</li>
+                <li>Jos väärä tietue näkyy sivulla, tarkista tietueeseen tallennettu URI ja sen täsmäytysmenetelmä.</li>
+            </ol>
+
+            <h3>Puhelimessa</h3>
+            <ol>
+                <li>Avaa Bitwarden-sovelluksen <strong>Asetukset → Automaattitäyttö</strong>.</li>
+                <li>Ota automaattitäyttöpalvelu käyttöön ja hyväksy laitteen pyytämät oikeudet.</li>
+                <li>Androidissa voit ottaa käyttöön myös lisämenetelmiä, jos tavallinen automaattitäyttö ei toimi kaikissa sovelluksissa.</li>
+                <li>iPhonessa valitse laitteen salasana-asetuksista Bitwarden automaattisen täytön palveluksi.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🛡️ Tilin ja sovelluksen suojaus
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li>Käytä pitkää ja yksilöllistä pääsalasanaa, jota et käytä missään muualla.</li>
+                <li>Ota Bitwarden-tilille käyttöön <strong>kaksivaiheinen kirjautuminen</strong>. Säilytä palautuskoodi erillään holvista.</li>
+                <li>Ota sovelluksessa käyttöön biometrinen avaus tai PIN vain omalla, suojatulla laitteellasi.</li>
+                <li>Aseta holvi lukittumaan automaattisesti lyhyen käyttämättömyysajan jälkeen. Uloskirjautuminen poistaa paikallisen istunnon kokonaan, lukitseminen jättää salatun holvin laitteelle.</li>
+                <li>Pidä Bitwarden, selain ja käyttöjärjestelmä ajan tasalla.</li>
+                <li>Tarkista aika ajoin aktiiviset istunnot ja poista tuntemattomat laitteet.</li>
+                <li>Älä hyväksy odottamattomia kirjautumispyyntöjä tai luovuta pääsalasanaa kenellekään.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>⏱️ TOTP-koodit ja Bitwarden Authenticator
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Kun lisäät kirjautumistietueeseen kaksivaiheisen vahvistuksen TOTP-avaimen, siitä muodostuvat kertakäyttökoodit voidaan näyttää myös erillisessä <strong>Bitwarden Authenticator</strong> -sovelluksessa.</p>
+            <ol>
+                <li>Asenna Bitwarden Authenticator puhelimeen.</li>
+                <li>Ota Authenticatorin asetuksissa käyttöön synkronointi Bitwarden-holvin kanssa ja kirjaudu samalle palvelinalueelle kuin Password Managerissa.</li>
+                <li>Holviin tallennetut TOTP-koodit näkyvät Authenticatorissa synkronoinnin jälkeen.</li>
+                <li>Pidä synkronointi päällä, jotta holviin lisätyt ja muokatut koodit pysyvät ajan tasalla Authenticatorissa.</li>
+            </ol>
+            <p><strong>Huomio:</strong> Bitwarden-tilin oman kaksivaiheisen kirjautumisen koodia on turvallisinta säilyttää erillään samasta holvista, jonka avaamiseen koodia tarvitaan. Säilytä myös palautuskoodi turvallisesti.</p>
+        </div>
+    </div>
+    </main>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="../ohjeet/" class="nappula1">⬅ Takaisin ohjeisiin</a>
+    </div>
+</div>
+
+</body>
+</html>

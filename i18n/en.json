@@ -1,0 +1,839 @@
+{
+  "overlay": {
+    "label": "Language"
+  },
+  "html": {
+    "__all__": {
+      "text": {
+        "Hyppää pääsisältöön": "Skip to content",
+        "← Takaisin pääsivulle": "← Back to home",
+        "Takaisin pääsivulle": "Back to home",
+        "⬅ Takaisin ohjeisiin": "⬅ Back to guides",
+        "Avaa ohje": "Open guide",
+        "Avaa": "Open",
+        "Tietosuoja": "Privacy",
+        "Yhteystiedot": "Contact details",
+        "Sähköposti": "Email",
+        "Paikkakunta": "Location",
+        "Verkkosivu": "Website",
+        "Lataa PDF": "Download PDF",
+        "Avoin hakemus": "Open application",
+        "Ystävällisin terveisin,": "Kind regards,",
+        "Hyvä rekrytoija,": "Dear recruiter,",
+        "Lyhennettävä URL-osoite": "URL to shorten",
+        "Käyttäjätunnus": "Username",
+        "Kutsukoodi": "Invite code",
+        "Haluttu käyttäjätunnus": "Desired username",
+        "Salasana": "Password",
+        "Nykyinen salasana": "Current password",
+        "Uusi salasana": "New password",
+        "Uusi uudelleen": "Repeat new password",
+        "Paikkakunta:": "Location:",
+        "Sosiaaliset mediat & koodaus": "Social media & coding"
+      },
+      "attributes": {
+        "Avaa ohje": "Open guide",
+        "Sorolan linkit": "Sorola links",
+        "Työkalut ja sovellukset": "Tools and apps",
+        "Tietosuojakäytännöt": "Privacy policies",
+        "Vapaa teksti": "Plain text",
+        "Käyttäjätunnus": "Username",
+        "Kutsukoodi": "Invite code",
+        "Haluttu käyttäjätunnus": "Desired username",
+        "Salasana": "Password",
+        "Kohdeosoite (https://...)": "Destination address (https://...)",
+        "Lyhenne (tyhjä = satunnainen)": "Short code (leave empty for random)",
+        "Uusi koodisana": "New invite code",
+        "Nykyinen salasana": "Current password",
+        "Uusi salasana": "New password",
+        "Uusi uudelleen": "Repeat new password",
+        "Vieraskirja - Sorolan Sakki": "Guestbook - Sorolan Sakki",
+        "Tietosuojakäytännöt - Sorolan Sakki": "Privacy policies - Sorolan Sakki"
+      },
+      "raw": {
+        "new Date(link.created_at).toLocaleDateString('fi-FI')": "new Date(link.created_at).toLocaleDateString('en-US')",
+        "new Date(u.created_at).toLocaleDateString('fi-FI')": "new Date(u.created_at).toLocaleDateString('en-US')",
+        "new Date(i.created_at).toLocaleDateString('fi-FI')": "new Date(i.created_at).toLocaleDateString('en-US')"
+      }
+    },
+    "vieraskirja/index.html": {
+      "text": {
+        "Vieraskirja - Sorolan Sakki": "Guestbook - Sorolan Sakki",
+        "Vieraskirja": "Guestbook",
+        "Jätä puumerkkisi ja terveiset Sorolan perheelle! Sana on vapaa.": "Leave your mark and greetings for the Sorola family! All words are welcome.",
+        "✍️ Jätä viesti": "✍️ Leave a message",
+        "Nimesi": "Your name",
+        "Viestisi...": "Your message...",
+        "Lähetä viesti": "Send message",
+        "Ei vielä viestejä. Ole ensimmäinen!": "No messages yet. Be the first!",
+        "Viestejä ei voitu ladata.": "Messages could not be loaded.",
+        "Palvelinvirhe viestejä ladattaessa.": "Server error while loading messages.",
+        "Nimi on pakollinen.": "Name is required.",
+        "Viesti on pakollinen.": "Message is required.",
+        "Syötä laskutoimituksen vastaus.": "Please enter the answer to the calculation.",
+        "Lähetetään...": "Sending...",
+        "Viestisi on lähetetty! Kiitos! 🎉": "Your message has been sent! Thank you! 🎉",
+        "Virhe viestin lähetyksessä.": "Error sending message.",
+        "Palvelinvirhe. Yritä uudelleen.": "Server error. Please try again.",
+        "⚡ Ylläpito": "⚡ Admin",
+        "⚡ Ylläpidon vastaus:": "⚡ Admin reply:",
+        "Jätä terveisesi Sorolan perheelle vieraskirjassa. Sana on vapaa!": "Leave your greetings for the Sorola family in the guestbook. All words are welcome!"
+      },
+      "attributes": {
+        "Jätä terveisesi Sorolan perheelle vieraskirjassa. Sana on vapaa!": "Leave your greetings for the Sorola family in the guestbook. All words are welcome!",
+        "Laskutoimituksen vastaus": "Answer to the calculation",
+        "Arvo uusi laskutoimitus": "Generate a new calculation",
+        "Nimesi": "Your name",
+        "Viestisi...": "Your message...",
+        "Vastaus": "Answer"
+      },
+      "raw": {
+        "d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })": "d.toLocaleDateString('en-US', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })",
+        "`Paljonko on ${a} ${opMerkki} ${b}?`": "`How much is ${a} ${opMerkki} ${b}?`",
+        "'Nimi on pakollinen.'": "'Name is required.'",
+        "'Viesti on pakollinen.'": "'Message is required.'",
+        "'Syötä laskutoimituksen vastaus.'": "'Please enter the answer to the calculation.'",
+        "'Lähetetään...'": "'Sending...'",
+        "'Viestisi on lähetetty! Kiitos! 🎉'": "'Your message has been sent! Thank you! 🎉'",
+        "'Virhe viestin lähetyksessä.'": "'Error sending message.'",
+        "'Palvelinvirhe. Yritä uudelleen.'": "'Server error. Please try again.'",
+        "'Viestejä ei voitu ladata.'": "'Messages could not be loaded.'",
+        "'Palvelinvirhe viestejä ladattaessa.'": "'Server error while loading messages.'",
+        "'Ei vielä viestejä. Ole ensimmäinen!'": "'No messages yet. Be the first!'",
+        "btn.textContent = 'Lähetä viesti'": "btn.textContent = 'Send message'"
+      }
+    },
+    "index.html": {
+      "text": {
+        "Sorola.fi - Hyödylliset IT-työkalut ja tekniset ohjeet": "Sorola.fi - Useful IT tools and technical guides",
+        "Tervetuloa Sorolan nettisivuille!": "Welcome to Sorola's website!",
+        "Mikä on sorola.fi?": "What is sorola.fi?",
+        "Sorola tarjoaa käyttöösi monipuoliset ja turvalliset IT-työkalut arjen helpottamiseen. Sivustoltamme löydät mm. nopean linkkilyhentimen, helppokäyttöisen väliaikaisen tiedostonjaon sekä selkeät tekniset ohjeet eri ohjelmistojen ja työkalujen käyttöön.": "Sorola offers versatile and secure IT tools to make everyday life easier. On our site you'll find, among other things, a fast link shortener, an easy temporary file sharing service, and clear technical guides for different software and tools.",
+        "Kehitämme jatkuvasti uusia ratkaisuja, jotka tekevät digitaalisesta arjestasi sujuvampaa. Tutustu myös Markus Sorolan ansioluetteloon ja portfolioon, jos etsit osaavaa tekijää IT-alan projekteihin.": "We keep building new solutions that make your digital everyday life smoother. You can also explore Markus Sorola's CV and portfolio if you're looking for a capable contributor for IT projects.",
+        "Sorolan linkit": "Sorola links",
+        "Kokoelma perheen omia sivuja, teknisiä oppaita sekä hyödyllistä tietoa.": "A collection of family pages, technical guides, and useful information.",
+        "📄 Maken Ansioluettelot": "📄 Markus's CVs",
+        "😂 Huumorikuvat": "😂 Funny pictures",
+        "💼 Maken yhteystiedot": "💼 Markus's contact details",
+        "💼 Sorolan ohjeita": "💼 Sorola guides",
+        "🛡️ Yksityisyyskäytäntö": "🛡️ Privacy policies",
+        "Työkalut ja sovellukset": "Tools and apps",
+        "Itse koodatut, nopeat ja ilman mainoksia toimivat apuvälineet digiarjen tueksi.": "Self-built, fast, ad-free helpers for everyday digital life.",
+        "⛶ QR-koodin luoja": "⛶ QR code generator",
+        "🔗 Linkin lyhennin": "🔗 Link shortener",
+        "🔐 Salasanageneraattori": "🔐 Password generator",
+        "🔁 Sorolan tiedostojako": "🔁 Sorola file sharing",
+        "📖 Vieraskirja": "📖 Guestbook",
+        "🚂 Taven pienoismallikerho": "🚂 Tave's plastic scale  models group",
+        "🔒 SorolaVault (kutsutut)": "🔒 SorolaVault (invite only)"
+      },
+      "attributes": {
+        "Sorola.fi tarjoaa näppärät ja turvalliset työkalut arkeen: nopea linkkilyhennin, väliaikainen tiedostonjako sekä selkeät IT-ohjeet ja oppaat.": "Sorola.fi offers handy and secure everyday tools: a fast link shortener, temporary file sharing, and clear IT guides and tutorials.",
+        "Sorola, IT-työkalut, linkkilyhennin, tiedostonjako, tekniset ohjeet, koodaus, web-kehitys, Markus Sorola": "Sorola, IT tools, link shortener, file sharing, technical guides, coding, web development, Markus Sorola",
+        "Sorola.fi - IT-työkalut ja ohjeet": "Sorola.fi - IT tools and guides",
+        "Kokoelma hyödyllisiä työkaluja: linkkilyhennin, tiedostonjako ja tekniset ohjeet.": "A collection of useful tools: a link shortener, file sharing, and technical guides."
+      },
+      "raw": {
+        "\"description\": \"Sorola.fi tarjoaa hyödyllisiä IT-työkaluja, kuten linkkilyhentimen, tiedostonjaon ja tekniset ohjeet.\"": "\"description\": \"Sorola.fi offers useful IT tools such as a link shortener, file sharing, and technical guides.\""
+      }
+    },
+    "lyhennin/index.html": {
+      "text": {
+        "Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä": "Sorola Link Shortener - Secure URL shortener",
+        "URL-Lyhentäjä": "URL Shortener",
+        "Jos sinulla on jokin todella pitkä linkki, voit kopioida sen tähän, ja tehdä siitä lyhyemmän.": "If you have a really long link, you can paste it here and turn it into a shorter one.",
+        "Luo Lyhytlinkki": "Create a short link",
+        "Lyhennä linkki": "Shorten link",
+        "Linkki on valmis!": "Your link is ready!",
+        "Kopioi linkki": "Copy link",
+        "QR-Koodin luojaan": "Open the QR code generator"
+      },
+      "attributes": {
+        "Lyhennä pitkät URL-osoitteet nopeasti. Suomalainen ja turvallinen linkkilyhennin, joka tarjoaa helpon hallinnan ja tilastot.": "Shorten long URLs quickly. A secure Finnish link shortener with simple management and statistics.",
+        "linkkilyhennin, URL lyhennin, lyhytlinkki, URL shortener, Sorola": "link shortener, URL shortener, short link, secure short link, Sorola",
+        "Sorolan Linkkilyhennin": "Sorola Link Shortener",
+        "Tee pitkistä urleista siistejä ja helposti jaettavia.": "Turn long URLs into neat and easy-to-share links.",
+        "Lyhennettävä URL-osoite": "URL to shorten",
+        "Lyhennetty URL-osoite": "Shortened URL"
+      }
+    },
+    "lyhennin/error.html": {
+      "text": {
+        "Sorola - Virhe": "Sorola - Error",
+        "URL-Lyhentäjä": "URL Shortener",
+        "Hups, linkkiä ei löydy": "Oops, the link could not be found",
+        "Pahoittelut, etsimääsi lyhytosoitetta ei löytynyt palvelimelta tai se on vanhentunut.": "Sorry, the short link you were looking for was not found on the server or it has expired.",
+        "Siirry takaisin lyhentimeen": "Go back to the shortener"
+      }
+    },
+    "salasanat/index.html": {
+      "text": {
+        "Sorolan Salasanakone - Luo vahvoja salasanoja": "Sorola Password Generator - Create strong passwords",
+        "Salasanakone": "Password generator",
+        "Luo vahvoja ja turvallisia salasanoja murtovarmuuden parantamiseksi. Valitse pituus ja merkit alta.": "Create strong and secure passwords to improve resistance against cracking. Choose the length and character types below.",
+        "1. Muokkaa asetuksia": "1. Adjust the settings",
+        "Salasanan pituus:": "Password length:",
+        "merkkiä": "characters",
+        "Sisällytä pieniä kirjaimia (a-z)": "Include lowercase letters (a-z)",
+        "Sisällytä isoja kirjaimia (A-Z)": "Include uppercase letters (A-Z)",
+        "Sisällytä numeroita (0-9)": "Include numbers (0-9)",
+        "Sisällytä erikoismerkkejä (!@#$%)": "Include special characters (!@#$%)",
+        "🎲 Arvo uusi salasana": "🎲 Generate a new password",
+        "Valmis salasana": "Ready password",
+        "📋 Kopioi leikepöydälle": "📋 Copy to clipboard",
+        "Generoitu salasana": "Generated password"
+      },
+      "attributes": {
+        "Luo vahvoja ja turvallisia salasanoja ilmaiseksi. Valitse pituus ja merkkityypit – salasana generoidaan suoraan selaimessasi, ei palvelimella.": "Create strong and secure passwords for free. Choose the length and character types — the password is generated directly in your browser, not on a server.",
+        "Sorolan Salasanakone": "Sorola Password Generator",
+        "Luo vahvoja salasanoja selaimessasi turvallisesti.": "Create strong passwords safely in your browser.",
+        "Generoitu salasana": "Generated password",
+        "Paina Arvo-nappia": "Press the Generate button"
+      }
+    },
+    "qr/index.html": {
+      "text": {
+        "Sorolan QR-koodin luoja - Luo QR-koodeja ilmaiseksi": "Sorola QR Code Generator - Create QR codes for free",
+        "QR-koodin luoja": "QR code generator",
+        "Luo monipuolisia QR-koodeja! Voit jakaa nettisivuja, yhteystietoja tai vaikka kotisi WiFi-salasanan.": "Create versatile QR codes! You can share websites, contact details, or even your home Wi‑Fi password.",
+        "1. Valitse tyyppi ja syötä tiedot": "1. Choose the type and enter the details",
+        "Nettisivu (URL)": "Website (URL)",
+        "Vapaa teksti": "Plain text",
+        "WiFi-verkko": "Wi‑Fi network",
+        "Sähköposti": "Email",
+        "Soita numeroon": "Call a number",
+        "Lähetä tekstiviesti": "Send a text message",
+        "WPA/WPA2 (Yleisin)": "WPA/WPA2 (most common)",
+        "Ei salasanaa": "No password",
+        "Koodin väri:": "Code color:",
+        "Päivitä QR-koodi": "Update QR code",
+        "Valmis koodi": "Ready code",
+        "Lataa kuvana (PNG)": "Download as an image (PNG)"
+      },
+      "attributes": {
+        "Luo QR-koodeja ilmaiseksi – nettisivuille, WiFi-verkoille, yhteystiedoille ja muulle. Nopea ja helppokäyttöinen QR-generaattori.": "Create QR codes for free for websites, Wi‑Fi networks, contact details, and more. A fast and easy-to-use QR generator.",
+        "Sorolan QR-koodin luoja": "Sorola QR Code Generator",
+        "Luo QR-koodeja ilmaiseksi nettisivuille, WiFi-verkoille ja muulle.": "Create QR codes for free for websites, Wi‑Fi networks, and more.",
+        "Luo QR-koodeja ilmaiseksi.": "Create QR codes for free.",
+        "QR-koodin tyyppi": "QR code type",
+        "URL-osoite": "URL address",
+        "Kirjoita viestisi tähän...": "Write your message here...",
+        "Verkon nimi (SSID)": "Network name (SSID)",
+        "WiFi-verkon nimi (SSID)": "Wi‑Fi network name (SSID)",
+        "Salasana": "Password",
+        "WiFi-salasana": "Wi‑Fi password",
+        "WiFi-suojaustyyppi": "Wi‑Fi security type",
+        "vastaanottaja@esimerkki.fi": "recipient@example.com",
+        "Sähköpostiosoite": "Email address",
+        "Viestin otsikko": "Message subject",
+        "Sähköpostin otsikko": "Email subject",
+        "Puhelinnumero": "Phone number",
+        "Vastaanottajan numero": "Recipient number",
+        "Vastaanottajan puhelinnumero": "Recipient phone number",
+        "Viestin sisältö": "Message content",
+        "Tekstiviestin sisältö": "Text message content",
+        "Generoitu QR-koodi": "Generated QR code"
+      },
+      "raw": {
+        "\"Moi!\"": "\"Hi!\"",
+        "'sorola-qr.png'": "'sorola-qr-en.png'",
+        "Lataus epäonnistui. Voit myös painaa kuvaa hiiren oikealla ja valita 'Tallenna kuva nimellä'.": "Download failed. You can also right-click the image and choose 'Save image as'."
+      }
+    },
+    "jako/index.html": {
+      "text": {
+        "Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti": "Sorola File Sharing - Share and send files securely",
+        "Sorola Share": "Sorola Share",
+        "Jaa tiedostoja turvallisesti ja aseta niille säilytysaika tai latausrajoitus. Suurin sallittu tiedostokoko on 5 GT.": "Share files securely and set a retention time or download limit. The maximum allowed file size is 5 GB.",
+        "Asetukset": "Settings",
+        "Säilytysaika:": "Retention time:",
+        "1 päivä": "1 day",
+        "3 päivää": "3 days",
+        "7 päivää (maksimi)": "7 days (maximum)",
+        "Latausrajoitus (0 = rajaton):": "Download limit (0 = unlimited):",
+        "Lataa tiedosto": "Upload a file",
+        "Raahaa tiedosto tähän": "Drag a file here",
+        "tai klikkaa ladataksesi laitteeltasi": "or click to upload from your device",
+        "Ladataan pilveen...": "Uploading to the cloud...",
+        "✔ Tiedosto ladattu onnistuneesti!": "✔ File uploaded successfully!",
+        "Jaa alla oleva linkki vastaanottajalle.": "Share the link below with the recipient.",
+        "📋 Kopioi linkki": "📋 Copy link"
+      },
+      "attributes": {
+        "Lähetä ja jaa tiedostoja nopeasti. Lataa tiedosto, luo jakolinkki ja lähetä vastaanottajalle. Tiedostot poistuvat automaattisesti määräajan kuluttua.": "Send and share files quickly. Upload a file, generate a share link, and send it to the recipient. Files are deleted automatically after the selected time.",
+        "tiedostonjako, lähetä tiedosto, jaa tiedosto, väliaikainen tallennustila, turvallinen tiedoston lähetys, lähetä isoja tiedostoja": "file sharing, send files, share files, temporary storage, secure file transfer, large file sharing",
+        "Sorolan Tiedostonjako": "Sorola File Sharing",
+        "Turvallinen ja nopea tapa jakaa tiedostoja määräajaksi.": "A secure and fast way to share files for a limited time.",
+        "Jakolinkki": "Share link"
+      },
+      "raw": {
+        "Tiedosto on liian suuri! Sallittu maksimikoko on ${MAX_SIZE_MB} MB.": "The file is too large! The maximum allowed size is ${MAX_SIZE_MB} MB.",
+        "Lataus epäonnistui.": "Upload failed.",
+        "Virhe: ": "Error: ",
+        "✅ Kopioitu!": "✅ Copied!"
+      }
+    },
+    "ohjeet/index.html": {
+      "text": {
+        "Tekniset ohjeet ja IT-oppaat - Sorola": "Technical guides and IT tutorials - Sorola",
+        "📚 Ohjeet": "📚 Guides",
+        "Täältä löydät Sorolan palveluiden käyttöohjeet.": "Here you'll find usage guides for Sorola services.",
+        "Salaa tiedostosi ennen niiden tallentamista pilveen.": "Encrypt your files before storing them in the cloud.",
+        "Opettele luomaan lyhyitä ja helposti jaettavia linkkejä.": "Learn how to create short and easy-to-share links.",
+        "Linkin lyhennin": "URL-Shortener",
+        "Salasanaholvi": "Password vault",
+        "Luo ja varastoi vahvoja salasanoja.": "Create and store strong passwords."
+      },
+      "attributes": {
+        "Selkeät ja suomenkieliset käyttöohjeet eri IT-työkaluihin, ohjelmistoihin ja teknisten ongelmien ratkaisuun. Lue oppaat ja ota laitteet haltuun.": "Clear usage guides for different IT tools, software, and technical problem solving. Read the tutorials and take control of your devices.",
+        "IT-ohjeet, tekniset oppaat, käyttöohjeet, ohjelmistojen asennus, IT-tuki, vinkit, opas, Sorola": "IT guides, technical tutorials, usage instructions, software installation, IT support, tips, Sorola",
+        "Tekniset ohjeet ja IT-oppaat": "Technical guides and IT tutorials",
+        "Suomenkieliset oppaat ja ratkaisut teknisiin ongelmiin.": "Guides and solutions for technical problems."
+      }
+    },
+    "ohjeet/linkinlyhennin.html": {
+      "text": {
+        "Linkinlyhentimen käyttöohje": "Link shortener guide",
+        "🔗 Linkinlyhentimen käyttö": "🔗 Using the link shortener",
+        "Sorolan linkinlyhentimellä voit muuttaa pitkät URL-osoitteet lyhyiksi ja helpommin jaettaviksi.": "With Sorola's link shortener you can turn long URLs into shorter links that are easier to share.",
+        "1. Syötä pitkä osoite": "1. Enter the long address",
+        "Liitä haluamasi verkkosivun osoite kenttään.": "Paste the web page address you want into the field.",
+        "Esimerkki:": "Example:",
+        "2. Luo lyhyt linkki": "2. Create a short link",
+        "Paina \"Luo linkki\" -painiketta.": "Click the \"Create link\" button.",
+        "Palvelu luo automaattisesti lyhyen osoitteen.": "The service will automatically create a short address.",
+        "3. Jaa linkki": "3. Share the link",
+        "Voit jakaa lyhyen linkin esimerkiksi:": "You can share the short link, for example:",
+        "Sähköpostissa": "By email",
+        "Sosiaalisessa mediassa": "On social media",
+        "QR-koodissa": "In a QR code",
+        "Tekstiviesteissä": "In text messages",
+        "Tietosuoja": "Privacy",
+        "Linkinlyhennin ei muuta alkuperäisen sivun sisältöä. Lyhyt linkki toimii vain uudelleenohjauksena alkuperäiseen osoitteeseen.": "The link shortener does not change the content of the original page. The short link only redirects to the original address."
+      }
+    },
+    "ohjeet/bitwarden.html": {
+      "text": {
+        "Bitwarden-käyttöohje - Sorola": "Bitwarden guide - Sorola",
+        "🔒 Bitwarden-ohje": "🔒 Bitwarden guide",
+        "Bitwarden on virallinen salasananhallintapalvelu, jolla voit säilyttää kirjautumistiedot, salasanat, muistiinpanot, maksukortit ja muut tärkeät tiedot salatussa holvissa. Sama holvi toimii selaimessa, tietokoneella ja puhelimella.": "Bitwarden is an official password management service that lets you store login details, passwords, notes, payment cards, and other important information in an encrypted vault. The same vault works in your browser, on your computer, and on your phone.",
+        "📝 Rekisteröityminen ja palvelimen valinta": "📝 Sign-up and server selection",
+        "🔑 Kirjautuminen": "🔑 Signing in",
+        "➕ Tietueiden lisääminen": "➕ Adding entries",
+        "✏️ Tietueiden muokkaus ja poisto": "✏️ Editing and deleting entries",
+        "🔄 Tietojen tuonti ja vienti": "🔄 Importing and exporting data",
+        "Tuonti": "Import",
+        "Vienti": "Export",
+        "⚡ Automaattitäytön asetukset": "⚡ Autofill settings",
+        "Selaimessa": "In the browser",
+        "Puhelimessa": "On your phone",
+        "🛡️ Tilin ja sovelluksen suojaus": "🛡️ Securing your account and app",
+        "⏱️ TOTP-koodit ja Bitwarden Authenticator": "⏱️ TOTP codes and Bitwarden Authenticator",
+        "Avaa": "Open",
+        "🔒 Bitwardenin rekisteröitymissivu": "🔒 Bitwarden sign-up page",
+        "tai valitse sovelluksessa": "or choose in the app",
+        "Luo tili": "Create account",
+        "Valitse ennen tilin luomista palvelinalueeksi joko": "Before creating the account, choose either of these server regions:",
+        "bitwarden.com (Yhdysvallat)": "bitwarden.com (United States)",
+        "bitwarden.eu (Euroopan unioni)": "bitwarden.eu (European Union)",
+        "EU- ja USA-palvelimet ovat erillisiä. Tili on käytettävissä vain sillä palvelimella, jolle se luotiin, joten käytä samaa palvelinvalintaa kaikissa Bitwarden-sovelluksissa.": "The EU and US servers are separate. Your account only works on the server where it was created, so use the same server selection in all Bitwarden apps.",
+        "Syötä sähköpostiosoite, nimesi ja vahva pääsalasana.": "Enter your email address, your name, and a strong master password.",
+        "Kirjoita pääsalasanavihje vain, jos se auttaa sinua paljastamatta itse salasanaa.": "Only add a master password hint if it helps you without revealing the password itself.",
+        "Hyväksy ehdot ja viimeistele tilin luominen. Vahvista sähköpostiosoite Bitwardenin lähettämästä viestistä.": "Accept the terms and complete the account creation process. Confirm your email address from the message Bitwarden sends you.",
+        "Tärkeää:": "Important:",
+        "Valitse pitkä ja yksilöllinen pääsalasana. Bitwarden ei tunne pääsalasanaasi eikä tavallisesti pysty palauttamaan sitä puolestasi.": "Choose a long and unique master password. Bitwarden does not know your master password and usually cannot recover it for you.",
+        "Asenna virallinen Bitwarden-sovellus tai selainlaajennus tai avaa verkkoholvi.": "Install the official Bitwarden app or browser extension, or open the web vault.",
+        "Avaa palvelinvalinta ennen kirjautumista ja valitse sama alue, jolle rekisteröidyit:": "Open the server selector before signing in and choose the same region you registered for:",
+        "Syötä sähköpostiosoitteesi ja pääsalasanasi.": "Enter your email address and master password.",
+        "Anna kaksivaiheisen vahvistuksen koodi tai käytä muuta määrittämääsi vahvistustapaa, jos suojaus on käytössä.": "Enter your two-factor verification code or use another verification method you have configured, if protection is enabled.",
+        "Kun holvi on avattu, synkronoi se tarvittaessa, jotta uusimmat tiedot latautuvat laitteelle.": "Once the vault is open, sync it if needed so that the latest data is downloaded to the device.",
+        "Avaa holvi ja paina": "Open the vault and press",
+        "Uusi": "New",
+        "Lisää kohde": "Add item",
+        "tai pluspainiketta.": "or the plus button.",
+        "Valitse tietueen tyypiksi esimerkiksi": "Choose an entry type such as",
+        "Kirjautuminen": "Login",
+        "Kortti": "Card",
+        "Henkilöllisyys": "Identity",
+        "Suojattu muistiinpano": "Secure note",
+        "Anna tietueelle selkeä nimi.": "Give the entry a clear name.",
+        "Kirjautumistietueessa täytä käyttäjätunnus, salasana ja verkkosivun osoite eli URI. Voit luoda vahvan salasanan Bitwardenin salasanageneraattorilla.": "For a login entry, fill in the username, password, and website address (URI). You can generate a strong password with Bitwarden’s password generator.",
+        "Lisää halutessasi kansio, suosikkimerkintä, omia kenttiä, liitteitä tai TOTP-avain.": "If you want, add a folder, a favorite flag, custom fields, attachments, or a TOTP key.",
+        "Paina": "Press",
+        "Tallenna": "Save",
+        "Muokkaaminen:": "Editing:",
+        "Avaa tietue, valitse": "Open the entry, choose",
+        "Muokkaa": "Edit",
+        ", tee muutokset ja paina": ", make the changes, and press",
+        "Poistaminen:": "Deleting:",
+        "Avaa tietue ja valitse": "Open the entry and choose",
+        "Poista": "Delete",
+        ". Tietue siirtyy roskakoriin, josta sen voi palauttaa tai poistaa lopullisesti.": ". The entry moves to the trash, where it can be restored or deleted permanently.",
+        "Huomio:": "Note:",
+        "Synkronoi holvi muutosten jälkeen, jos ne eivät heti näy toisella laitteella.": "Sync the vault after changes if they do not appear immediately on another device.",
+        "Avaa verkkoholvi ja siirry kohtaan": "Open the web vault and go to",
+        "Työkalut": "Tools",
+        "Asetukset → Tuo tietoja": "Settings → Import data",
+        "Valitse ohjelma tai tiedostomuoto, josta tiedot tuodaan.": "Choose the program or file format to import from.",
+        "Valitse vietävä tiedosto ja käynnistä tuonti.": "Select the file to import and start the import.",
+        "Tarkista tuonnin jälkeen, ettei holviin syntynyt tarpeettomia kaksoiskappaleita.": "After the import, check that no unnecessary duplicates were created in the vault.",
+        "Avaa verkkoholvin vientitoiminto ja valitse vietävä holvi.": "Open the web vault export tool and choose the vault to export.",
+        "Valitse mieluiten": "Prefer",
+        "salattu JSON-vienti": "encrypted JSON export",
+        ", kun varmuuskopio on tarkoitus palauttaa myöhemmin Bitwardeniin.": "if the backup is intended to be restored into Bitwarden later.",
+        "Vahvista vienti pääsalasanalla tai sähköpostiin lähetettävällä kertakoodilla.": "Confirm the export with your master password or a one-time code sent to your email.",
+        "Säilytä vientitiedosto turvallisessa paikassa ja poista tarpeettomat salaamattomat kopiot.": "Store the export file in a safe place and delete any unnecessary unencrypted copies.",
+        "Varoitus:": "Warning:",
+        "CSV ja salaamaton JSON sisältävät holvin tiedot luettavassa muodossa. Älä jätä niitä Lataukset-kansioon, pilvipalveluun tai suojaamattomalle muistitikulle.": "CSV and unencrypted JSON contain the vault data in readable form. Do not leave them in your Downloads folder, a cloud service, or an unprotected USB drive.",
+        "Asenna virallinen Bitwarden-laajennus selaimesi lisäosakaupasta.": "Install the official Bitwarden extension from your browser’s add-on store.",
+        "Avaa laajennuksen": "Open the extension’s",
+        "Asetukset → Automaattitäyttö": "Settings → Autofill",
+        "Valitse haluatko näyttää täyttöehdotukset lomakekentissä ja täyttää tiedot sivun latautuessa. Sivun latauksessa tapahtuvaa automaattitäyttöä kannattaa käyttää harkiten.": "Choose whether you want to show fill suggestions in form fields and autofill data when the page loads. Autofill on page load should be used with care.",
+        "Voit täyttää kirjautumisen avaamalla laajennuksen ja valitsemalla ehdotetun tietueen tai käyttämällä selaimen Bitwarden-pikanäppäintä.": "You can fill a login by opening the extension and choosing the suggested entry or by using your browser’s Bitwarden keyboard shortcut.",
+        "Jos väärä tietue näkyy sivulla, tarkista tietueeseen tallennettu URI ja sen täsmäytysmenetelmä.": "If the wrong entry appears on a page, check the URI saved in the entry and its matching method.",
+        "Avaa Bitwarden-sovelluksen": "Open the Bitwarden app’s",
+        "Ota automaattitäyttöpalvelu käyttöön ja hyväksy laitteen pyytämät oikeudet.": "Enable the autofill service and accept the permissions requested by your device.",
+        "Androidissa voit ottaa käyttöön myös lisämenetelmiä, jos tavallinen automaattitäyttö ei toimi kaikissa sovelluksissa.": "On Android, you can also enable additional methods if standard autofill does not work in all apps.",
+        "iPhonessa valitse laitteen salasana-asetuksista Bitwarden automaattisen täytön palveluksi.": "On iPhone, choose Bitwarden as the autofill provider in the device’s password settings.",
+        "Käytä pitkää ja yksilöllistä pääsalasanaa, jota et käytä missään muualla.": "Use a long and unique master password that you do not use anywhere else.",
+        "Ota Bitwarden-tilille käyttöön": "Enable",
+        "kaksivaiheinen kirjautuminen": "two-step login",
+        ". Säilytä palautuskoodi erillään holvista.": ". Keep the recovery code separate from the vault.",
+        "Ota sovelluksessa käyttöön biometrinen avaus tai PIN vain omalla, suojatulla laitteellasi.": "Enable biometric unlock or a PIN in the app only on your own secure device.",
+        "Aseta holvi lukittumaan automaattisesti lyhyen käyttämättömyysajan jälkeen. Uloskirjautuminen poistaa paikallisen istunnon kokonaan, lukitseminen jättää salatun holvin laitteelle.": "Set the vault to lock automatically after a short period of inactivity. Signing out removes the local session completely, while locking leaves the encrypted vault on the device.",
+        "Pidä Bitwarden, selain ja käyttöjärjestelmä ajan tasalla.": "Keep Bitwarden, your browser, and your operating system up to date.",
+        "Tarkista aika ajoin aktiiviset istunnot ja poista tuntemattomat laitteet.": "Review active sessions from time to time and remove unknown devices.",
+        "Älä hyväksy odottamattomia kirjautumispyyntöjä tai luovuta pääsalasanaa kenellekään.": "Do not approve unexpected sign-in requests or give your master password to anyone.",
+        "Kun lisäät kirjautumistietueeseen kaksivaiheisen vahvistuksen TOTP-avaimen, siitä muodostuvat kertakäyttökoodit voidaan näyttää myös erillisessä": "When you add a TOTP key for two-factor verification to a login entry, the one-time codes it generates can also be shown in a separate",
+        "-sovelluksessa.": "app.",
+        "Asenna Bitwarden Authenticator puhelimeen.": "Install Bitwarden Authenticator on your phone.",
+        "Ota Authenticatorin asetuksissa käyttöön synkronointi Bitwarden-holvin kanssa ja kirjaudu samalle palvelinalueelle kuin Password Managerissa.": "In the Authenticator settings, enable syncing with the Bitwarden vault and sign in to the same server region as in Password Manager.",
+        "Holviin tallennetut TOTP-koodit näkyvät Authenticatorissa synkronoinnin jälkeen.": "The TOTP codes stored in the vault appear in Authenticator after syncing.",
+        "Pidä synkronointi päällä, jotta holviin lisätyt ja muokatut koodit pysyvät ajan tasalla Authenticatorissa.": "Keep syncing enabled so that codes added to or edited in the vault stay up to date in Authenticator.",
+        "Bitwarden-tilin oman kaksivaiheisen kirjautumisen koodia on turvallisinta säilyttää erillään samasta holvista, jonka avaamiseen koodia tarvitaan. Säilytä myös palautuskoodi turvallisesti.": "The code used for Bitwarden account sign-in itself is safest when stored separately from the same vault that requires the code to be opened. Keep the recovery code safe as well."
+      },
+      "attributes": {
+        "Suomenkielinen Bitwarden-käyttöohje: rekisteröityminen, asennusohjeet selaimeen ja mobiiliin sekä salasanojen tallentaminen turvallisesti.": "Bitwarden guide: sign-up, setup for browsers and mobile, and storing passwords securely.",
+        "Bitwarden-käyttöohje - Sorola": "Bitwarden guide - Sorola",
+        "Suomenkielinen ohje Bitwardenin käyttöönottoon ja salasanojen hallintaan.": "A guide to getting started with Bitwarden and managing your passwords."
+      }
+    },
+    "ohjeet/cryptomator.html": {
+      "text": {
+        "Cryptomator-käyttöohje - Sorola": "Cryptomator guide - Sorola",
+        "🔐 Cryptomator-ohje": "🔐 Cryptomator guide",
+        "Cryptomator": "Cryptomator",
+        "salaa tiedostot omalla laitteellasi ennen niiden tallentamista pilvipalveluun. Tässä ohjeessa käytetään esimerkkinä Google Drivea. Pilvessä näkyvä holvikansio sisältää salattua tietoa, eikä sen tiedostoja pidä muokata suoraan.": "encrypts files on your own device before they are stored in a cloud service. This guide uses Google Drive as an example. The vault folder you see in the cloud contains encrypted data, and its files should not be edited directly.",
+        "💻 Holvin luominen tietokoneella": "💻 Creating a vault on a computer",
+        "📱 Holvin luominen puhelimella": "📱 Creating a vault on a phone",
+        "🔓 Olemassa olevan holvin lisääminen ja avaaminen": "🔓 Adding and opening an existing vault",
+        "Tietokoneella": "On a computer",
+        "Puhelimella": "On a phone",
+        "📄 Tiedostojen lisääminen ja muokkaaminen": "📄 Adding and editing files",
+        "🗑️ Poistaminen ja siirtäminen ulos holvista": "🗑️ Removing files and moving them out of the vault",
+        "🔒 Holvin sulkeminen": "🔒 Closing the vault",
+        "⚠️ Tärkeää muistaa": "⚠️ Important things to remember",
+        "Asenna": "Install",
+        "Google Drive tietokoneelle": "Google Drive for desktop",
+        "ja varmista, että Google Drive näkyy Resurssienhallinnassa tai Finderissa.": "and make sure Google Drive appears in File Explorer or Finder.",
+        "Asenna ja avaa Cryptomator.": "Install and open Cryptomator.",
+        "Valitse": "Choose",
+        "Lisää holvi → Luo uusi holvi": "Add vault → Create new vault",
+        "(Add Vault → Create New Vault).": "(Add Vault → Create New Vault).",
+        "Anna holville nimi.": "Give the vault a name.",
+        "Valitse holvin tallennuspaikaksi Google Driven synkronoitu kansio.": "Choose a Google Drive synced folder as the storage location for the vault.",
+        "Luo vahva ja yksilöllinen holvin salasana.": "Create a strong and unique password for the vault.",
+        "Tallenna palautusavain turvalliseen paikkaan erilleen holvista.": "Store the recovery key in a safe place separate from the vault.",
+        "Viimeistele luonti. Google Drive alkaa synkronoida salattua holvikansiota automaattisesti.": "Finish the setup. Google Drive will automatically start syncing the encrypted vault folder.",
+        "Tärkeää:": "Important:",
+        "Cryptomator ei pysty palauttamaan unohtunutta salasanaa ilman palautusavainta.": "Cryptomator cannot recover a forgotten password without the recovery key.",
+        "Asenna omasta sovelluskaupasta Cryptomator puhelimeesi ja avaa sovellus.": "Install Cryptomator on your phone from your app store and open the app.",
+        "Lisää Google Drive pilvipalveluksi ja kirjaudu Google-tilillesi. Hyväksy sovelluksen tarvitsemat käyttöoikeudet.": "Add Google Drive as a cloud service and sign in to your Google account. Accept the permissions requested by the app.",
+        "Paina pluspainiketta ja valitse": "Tap the plus button and choose",
+        "Luo uusi holvi": "Create new vault",
+        "Valitse tallennuspaikaksi Google Drive ja haluamasi kansio.": "Choose Google Drive and the folder you want as the storage location.",
+        "Anna holville nimi ja luo vahva salasana.": "Give the vault a name and create a strong password.",
+        "Tallenna palautusavain turvalliseen paikkaan.": "Store the recovery key in a safe place.",
+        "Valikoiden nimet voivat poiketa hieman Androidin ja iPhonen välillä. iPhonessa Cryptomator toimii myös Tiedostot-sovelluksen kautta.": "Menu names may differ slightly between Android and iPhone. On iPhone, Cryptomator also works through the Files app.",
+        "Odota, että Google Drive on synkronoinut holvikansion tietokoneelle.": "Wait until Google Drive has synced the vault folder to your computer.",
+        "Avaa Cryptomator ja valitse": "Open Cryptomator and choose",
+        "Lisää holvi → Avaa olemassa oleva holvi": "Add vault → Open existing vault",
+        "Valitse Google Drivessa oleva holvikansio ja sen": "Choose the vault folder in Google Drive and its",
+        "-tiedosto.": "file.",
+        "Valitse holvi listasta, paina": "Select the vault from the list, press",
+        "Avaa lukitus": "Unlock",
+        "ja anna holvin salasana.": "and enter the vault password.",
+        "Avaa ilmestyvä virtuaaliasema tai kansio. Käytä tiedostoja vain tämän avatun näkymän kautta.": "Open the virtual drive or folder that appears. Use files only through this unlocked view.",
+        "Lisää Google Drive Cryptomatorin pilvipalveluihin.": "Add Google Drive to Cryptomator’s cloud services.",
+        "Lisää olemassa oleva holvi": "Add existing vault",
+        "Etsi holvikansio Google Drivesta ja valitse se.": "Find the vault folder in Google Drive and select it.",
+        "Napauta holvia ja avaa se salasanalla, biometrisellä tunnistuksella tai laitteen avaimella, jos olet ottanut sellaisen käyttöön.": "Tap the vault and open it with the password, biometric authentication, or the device key if you have enabled one.",
+        "Avaa holvin lukitus Cryptomatorissa.": "Unlock the vault in Cryptomator.",
+        "Avaa Cryptomatorin näyttämä virtuaaliasema tai holvikansio.": "Open the virtual drive or vault folder shown by Cryptomator.",
+        "Vedä tai kopioi tiedostoja avatun holvin sisään kuten tavalliseen kansioon.": "Drag or copy files into the unlocked vault just like you would with a normal folder.",
+        "Avaa ja muokkaa tiedostoja tavallisilla ohjelmilla. Tallenna muutokset normaalisti.": "Open and edit files with your usual applications. Save changes normally.",
+        "Cryptomator salaa muutokset, ja Google Drive synkronoi salatut tiedostot pilveen.": "Cryptomator encrypts the changes, and Google Drive syncs the encrypted files to the cloud.",
+        "Avaa holvi Cryptomatorissa.": "Open the vault in Cryptomator.",
+        "Luo kansio, tuo tiedosto laitteelta tai käytä jakotoimintoa tiedoston lisäämiseksi holviin.": "Create a folder, import a file from the device, or use the share sheet to add a file to the vault.",
+        "Avaa tiedosto Cryptomatorista yhteensopivaan sovellukseen.": "Open the file from Cryptomator in a compatible application.",
+        "Tallenna muokattu tiedosto takaisin holviin. Kaikki sovellukset eivät pysty tallentamaan suoraan samaan tiedostoon, jolloin muokattu versio täytyy tuoda takaisin erikseen.": "Save the edited file back into the vault. Not all apps can save directly back to the same file, so the edited version may need to be imported back separately.",
+        "Poistaminen:": "Deleting:",
+        "Avaa holvi ja poista tiedosto tai kansio avatusta virtuaaliasemasta tai Cryptomator-sovelluksesta. Älä poista yksittäisiä salattuja tiedostoja suoraan Google Driven holvikansiosta.": "Open the vault and remove the file or folder from the unlocked virtual drive or the Cryptomator app. Do not delete individual encrypted files directly from the Google Drive vault folder.",
+        "Siirtäminen ulos tietokoneella:": "Moving out on a computer:",
+        "Siirrä tai kopioi tiedosto avatusta holvista tavalliseen kansioon. Jos kopioit tiedoston, poista alkuperäinen holvista erikseen, jos et halua säilyttää sitä siellä.": "Move or copy the file from the unlocked vault to a normal folder. If you copy the file, remove the original from the vault separately if you do not want to keep it there.",
+        "Siirtäminen ulos puhelimella:": "Moving out on a phone:",
+        "Valitse tiedosto ja käytä": "Select the file and use the",
+        "Vie": "Export",
+        "Jaa": "Share",
+        "- tai": "- or",
+        "Tallenna laitteelle": "Save to device",
+        "-toimintoa. Poista alkuperäinen holvista erikseen tarvittaessa.": "action. Remove the original from the vault separately if needed.",
+        "Huomio:": "Note:",
+        "Holvista ulos siirretty tai viety tiedosto ei ole enää Cryptomatorin suojaama.": "A file moved or exported out of the vault is no longer protected by Cryptomator.",
+        "Tallenna ja sulje kaikki holvissa avoinna olevat tiedostot.": "Save and close all files that are open from the vault.",
+        "Odota hetki, jotta ohjelmat ehtivät kirjoittaa muutokset levylle.": "Wait a moment so your applications have time to write changes to disk.",
+        "Palaa Cryptomatoriin ja paina holvin kohdalta": "Return to Cryptomator and press",
+        "Lukitse": "Lock",
+        "Odota, että Google Drive on synkronoinut muutokset ennen tietokoneen sammuttamista.": "Wait until Google Drive has synced the changes before shutting down the computer.",
+        "Palaa Cryptomatoriin ja sulje avoin holvi lukituspainikkeella.": "Return to Cryptomator and close the open vault with the lock button.",
+        "Voit ottaa asetuksista käyttöön automaattisen lukituksen, jolloin holvi sulkeutuu sovelluksesta poistuttaessa tai määräajan jälkeen.": "You can enable automatic locking in the settings so the vault closes when you leave the app or after a set amount of time.",
+        "Säilytä holvin salasana ja palautusavain turvallisesti. Pilvipalvelu tai Cryptomatorin ylläpito ei voi avata holvia puolestasi.": "Keep the vault password and recovery key safe. Neither the cloud service nor Cryptomator support can open the vault for you.",
+        "Älä nimeä uudelleen, siirrä tai muokkaa holvin sisällä olevia salattuja tiedostoja suoraan Google Drivessa.": "Do not rename, move, or edit the encrypted files inside the vault directly in Google Drive.",
+        "Varmuuskopioi holvi. Pilvisynkronointi ei yksin korvaa varmuuskopiota.": "Back up the vault. Cloud syncing alone is not a backup.",
+        "Varmista ennen holvin lukitsemista, että tiedostot eivät ole enää auki muissa sovelluksissa.": "Before locking the vault, make sure the files are no longer open in other applications."
+      },
+      "attributes": {
+        "Suomenkielinen Cryptomator-käyttöohje: kuinka salata tiedostot ennen pilvipalveluun tallentamista tietokoneella ja mobiililla.": "Cryptomator guide: how to encrypt files before storing them in the cloud on desktop and mobile.",
+        "Cryptomator-käyttöohje - Sorola": "Cryptomator guide - Sorola",
+        "Suomenkielinen ohje tiedostojen salaamiseen Cryptomatorilla ennen pilvipalveluun tallentamista.": "A guide to encrypting files with Cryptomator before storing them in the cloud."
+      }
+    },
+    "ansioluettelot/index.html": {
+      "text": {
+        "Markus Sorola - Ansioluettelo ja Portfolio": "Markus Sorola - CV and portfolio",
+        "Sorolan ansioluettelot": "Sorola CVs",
+        "Täältä löydät Sorolan ansioluettelot helposti ladattavassa muodossa.": "Here you'll find Sorola CVs in an easy-to-download format.",
+        "Markus Sorolan CV": "Markus Sorola's CV",
+        "Katso tai lataa Markuksen ajantasainen ansioluettelo alta.": "View or download Markus's up-to-date CV below.",
+        "📄 Katso CV": "📄 View CV",
+        "Markus Sorolan työhakemukset": "Markus Sorola's job applications",
+        "Katso tai lataa Markuksen ajantasainen työhakemus alta.": "View or download Markus's current job applications below.",
+        "📄 Katso työhakemukset": "📄 View job applications",
+        "Logistiikan hakemus": "The logistics application",
+        "IT-alan hakemus": "The IT application"
+      },
+      "attributes": {
+        "Markus Sorolan ansioluettelo, työkokemus ja IT-projektit. Etsitkö osaavaa tekijää tiimiisi? Tutustu CV:hen ja portfolioon.": "Markus Sorola's CV, work experience, and IT projects. Looking for a capable addition to your team? Explore the CV and portfolio.",
+        "Markus Sorola, ansioluettelo, CV, portfolio, ohjelmistokehittäjä, web-kehitys, koodari, työkokemus, IT-ala": "Markus Sorola, CV, resume, portfolio, software developer, web development, coder, work experience, IT",
+        "Markus Sorola - Ansioluettelo": "Markus Sorola - CV",
+        "Tutustu työkokemukseeni ja projekteihini.": "Explore my work experience and projects."
+      }
+    },
+    "ansioluettelot/hakemus-make/index.html": {
+      "text": {
+        "Työhakemukset - Sorolan Sakki": "Job applications - Sorolan Sakki",
+        "Markuksen työhakemukset": "Markus's job applications",
+        "Täältä voit valita ja avata haluamasi työhakemuspohjan.": "Here you can choose and open the job application template you want.",
+        "Jakelu- ja logistiikka-ala": "Distribution and logistics",
+        "Kohdennettu hakemus varhaisjakelun, rutiinien hallinnan ja reittisuunnittelun tehtäviin.": "A targeted application for early-morning delivery, routine management, and route planning roles.",
+        "IT-ala ja verkkokehitys": "IT and web development",
+        "Kohdennettu hakemus infrastruktuurin, järjestelmänhallinnan ja verkkokehityksen tehtäviin.": "A targeted application for infrastructure, systems administration, and web development roles."
+      },
+      "attributes": {
+        "Täältä löydät Markuksen kohdennetut työhakemuspohjat eri aloille.": "Here you'll find Markus's targeted job application templates for different industries.",
+        "Sorola, Sortin Sakki, työhakemus, IT, logistiikka": "Sorola, job application, IT, logistics"
+      }
+    },
+    "ansioluettelot/cv-make/index.html": {
+      "text": {
+        "Markus Sorola - CV": "Markus Sorola - CV",
+        "Henkilötiedot": "Personal details",
+        "Nimi:": "Name:",
+        "Syntymäaika:": "Date of birth:",
+        "29. heinäkuuta 1998": "29 July 1998",
+        "Taidot": "Skills",
+        "palvelimet ja domainit": "servers and domains",
+        "Office- ja toimisto-ohjelmat": "Office and productivity software",
+        "mobiilineuvonta ja käyttö": "mobile guidance and support",
+        "Jakelu- ja logistiikka": "distribution and logistics",
+        "Kielet": "Languages",
+        "Suomi": "Finnish",
+        "Harrastukset": "Interests",
+        "Tietotekniikka": "Information technology",
+        "Kielten opiskelu satunnaisesti": "Studying languages from time to time",
+        "Kavereiden ja tyttöystävän kanssa ajan vietto": "Spending time with friends and my girlfriend",
+        "Henkilökohtainen tiivistelmä": "Personal summary",
+        "Olen luotettava ja oma-aloitteinen tekijä, jolla on monipuolinen kokemus niin käytännönläheisestä logistiikasta kuin teknisestä ongelmanratkaisustakin. Varhaisjakajana olen oppinut arvostamaan täsmällisyyttä ja optimoimaan prosesseja, ja minulla on erinomainen visuaalis-avaruudellinen muisti. Vapaa-ajallani suunnittelen, koodaan ja ylläpidän laajoja verkkoinfrastruktuureja palvelimineen. Etsin työtä, jossa voin hyödyntää kykyäni hahmottaa isoja kokonaisuuksia ja omaksua nopeasti uusia järjestelmiä – oli kyse sitten lähdekoodista tai monimutkaisista reittikartoista.": "I am a reliable and proactive contributor with versatile experience in both practical logistics and technical problem solving. As an early-morning delivery worker, I have learned to value precision and optimize processes, and I have excellent visual-spatial memory. In my free time I design, code, and maintain extensive web infrastructures and servers. I am looking for work where I can use my ability to understand large systems and quickly learn new ones — whether it is source code or complex route maps.",
+        "Koulutus": "Education",
+        "Puhtaus- ja kiinteistöpalvelualan perustutkinto": "Vocational qualification in cleaning and property services",
+        "Ammattiopisto Spesia, Turku | huhti 2019 - huhti 2021": "Ammattiopisto Spesia, Turku | Apr 2019 - Apr 2021",
+        "Opiskelin kotityöpalvelujen osaamisalan, joka on pääasiassa kodinhoitoa.": "I studied the home services specialization, which focused mainly on household care.",
+        "Työhön ja itsenäiseen elämään valmentava koulutus": "Preparatory education for work and independent living",
+        "Ammattiopisto Spesia, Turku | elo 2018 - huhti 2019": "Ammattiopisto Spesia, Turku | Aug 2018 - Apr 2019",
+        "Harjoiteltiin itsenäisen elämän taitoja.": "The program focused on independent living skills.",
+        "Peruskoulu": "Comprehensive school",
+        "Armfeltin Koulu, Salo | touko 2016": "Armfelt School, Salo | May 2016",
+        "Työkokemus": "Work experience",
+        "Varhaisjakaja": "Early-morning delivery worker",
+        "Varsinais-Suomen Tietojakelu Oy, Salo | kesä 2023 - Kuluva": "Varsinais-Suomen Tietojakelu Oy, Salo | Jun 2023 - Present",
+        "Jaan aamuyöllä lehtiä, kirjeitä ja joskus myös paketteja. Yöpostihommaa siis.": "I deliver newspapers, letters, and occasionally parcels in the early hours of the morning.",
+        "Tuotanto-Operaattori": "Production operator",
+        "Valmet Automotive, Salo | loka 2021 - huhti 2022": "Valmet Automotive, Salo | Oct 2021 - Apr 2022",
+        "Tuotantolinjalla tein erilaisia tehtäviä, joilla rakennettiin sähköautojen akkuja.": "On the production line I handled different tasks involved in building electric vehicle batteries.",
+        "Kirpputorimyyjä": "Flea market sales assistant",
+        "Ihme ja Kumma Tuki Ry, Salo | touko 2021 - loka 2021": "Ihme ja Kumma Tuki Ry, Salo | May 2021 - Oct 2021",
+        "Olin heillä kirpputorimyyjänä jokusen kuukauden, mutta se loppui minulta, kun sain työpaikan Valmetilta. Myöhemmin Ihme ja Kumma teki valitettavasti konkurssin.": "I worked there as a flea market sales assistant for a few months until I got a job at Valmet. Later, Ihme ja Kumma unfortunately went bankrupt.",
+        "Sähköposti:": "Email:"
+      },
+      "attributes": {
+        "Profiilikuva": "Profile picture"
+      }
+    },
+    "ansioluettelot/hakemus-make/hakemus-it.html": {
+      "text": {
+        "Työhakemus - Markus Sorola": "Job application - Markus Sorola",
+        "Tekninen Stack": "Technical stack",
+        "Tietoturva & Automatisointi": "Security & automation",
+        "Avoin työhakemus – Itseohjautuva verkkoteknologioiden ja infran osaaja": "Open application – A self-directed specialist in web technologies and infrastructure",
+        "Lähetän teille tämän avoimen hakemuksen, sillä etsin uusia haasteita alan parista ja olen erittäin kiinnostunut yrityksenne toiminnasta. Olen tavoitteellinen ja vahvan loogisen ongelmanratkaisukyvyn omaava tekijä, jolle nykyaikaiset verkkoteknologiat ja infrastruktuurin ylläpito ovat paitsi osaamisen ydintä, myös suuri intohimo.": "I am sending you this open application because I am looking for new challenges in the field and I am highly interested in your company's work. I am a goal-oriented professional with strong logical problem-solving skills, and modern web technologies and infrastructure maintenance are not only core parts of my expertise but also a genuine passion.",
+        "Olen suunnitellut ja rakentanut täysin itsenäisesti kattavan verkkoinfrastruktuurin omien domainieni ympärille. Hallitsen sujuvasti frontend- ja backend-kehityksen (HTML, CSS, JavaScript, PHP) ja ymmärrän syvällisesti, miten järjestelmät keskustelevat keskenään. Kehitystyön lisäksi vastaan oman palvelinympäristöni pystyttämisestä ja ylläpidosta (esim. VPS-ratkaisut ja pilvitallennus) sekä versionhallinnasta GitHubin kautta. Tietoturva, yksityisyydensuoja ja prosessien automatisointi ovat minulle selkärangassa olevia toimintatapoja, eivätkä vain päälle liimattuja ominaisuuksia.": "I have independently designed and built a comprehensive web infrastructure around my own domains. I am comfortable with both frontend and backend development (HTML, CSS, JavaScript, PHP) and understand deeply how systems communicate with each other. In addition to development work, I handle the setup and maintenance of my own server environment (for example VPS solutions and cloud storage) as well as version control through GitHub. Security, privacy, and process automation are built-in ways of working for me, not just add-on features.",
+        "Mitä tuon mukanani tiimiin:": "What I bring to a team:",
+        "Vahva tekninen pohja:": "Strong technical foundation:",
+        "Kyky rakentaa ja ylläpitää verkkopalveluita palvelintasolta käyttöliittymään saakka.": "The ability to build and maintain web services all the way from the server layer to the user interface.",
+        "Looginen päättelykyky:": "Logical reasoning:",
+        "Nautin monimutkaisten ongelmien purkamisesta ja koodin optimoinnista.": "I enjoy breaking down complex problems and optimizing code.",
+        "Käytännönläheinen asenne:": "Practical mindset:",
+        "Ymmärrän miten asiat koodataan, ja miten ne pidetään turvallisesti pystyssä.": "I understand how things are coded and how they are kept securely running.",
+        "Varhaisjakelijan taustani on opettanut minulle täsmällisyyttä ja kykyä viedä asiat maaliin aikataulussa – ominaisuuksia, joista on valtavasti hyötyä myös vaativissa IT-projekteissa.": "My background as an early-morning delivery worker has taught me precision and the ability to get things done on schedule — qualities that are also highly valuable in demanding IT projects.",
+        "Keskustelisin erittäin mielelläni lisää siitä, miten tekninen osaamiseni vastaisi yrityksenne tarpeita.": "I would be very happy to discuss further how my technical expertise could meet your company's needs.",
+        "Sähköposti:": "Email:",
+        "• HTML5 & CSS3\n• JavaScript & PHP\n• Linux VPS / Cloud Infra\n• Git / GitHub / CI-CD\n• Tietoturva & Automatisointi": "• HTML5 & CSS3\n• JavaScript & PHP\n• Linux VPS / Cloud Infra\n• Git / GitHub / CI/CD\n• Security & Automation",
+        "• Tietoturva & Automatisointi": "• Security & Automation"
+      },
+      "raw": {
+        "generatePDF('Markus_Sorola_Avoin_Hakemus_IT.pdf')": "generatePDF('Markus_Sorola_Open_Application_IT.pdf')"
+      }
+    },
+    "ansioluettelot/hakemus-make/hakemus-jakelu.html": {
+      "text": {
+        "Työhakemus - Markus Sorola": "Job application - Markus Sorola",
+        "Ydinosaaminen": "Core strengths",
+        "Jakelu ja logistiikka": "Distribution and logistics",
+        "Reittien optimointi": "Route optimization",
+        "Erinomainen reittimuisti": "Excellent route memory",
+        "Itsenäinen työote": "Independent work style",
+        "Avoin työhakemus – Täsmällinen ja reittien hallinnan taitava tekijä": "Open application – A precise professional with strong route management skills",
+        "Lähetän teille tämän avoimen hakemuksen, sillä etsin uusia haasteita jakelun ja logistiikan parista, ja uskon kokemukseni sopivan erinomaisesti tarpeisiinne. Olen tottunut itsenäiseen, vastuulliseen ja tarkkuutta vaativaan työhön.": "I am sending you this open application because I am looking for new challenges in distribution and logistics, and I believe my experience would fit your needs very well. I am used to independent, responsible, and precision-focused work.",
+        "Työskentelen tällä hetkellä varhaisjakajana, mikä on opettanut minulle paineensietokykyä ja saumatonta rutiinien hallintaa. Vahvuuteni on poikkeuksellisen hyvä visuaalinen ja numeerinen muisti; opin ja painan mieleeni uudet reitit, asiakastiedot ja jakelulaatikoiden sijainnit erittäin nopeasti ilman jatkuvaa kertaamista. Pystyn optimoimaan ajoreittejä itsenäisesti ja huolehtimaan siitä, että toimitukset ovat perillä täsmällisesti aikataulussa, myös vaativissa sääolosuhteissa ja yöaikaan.": "I currently work as an early-morning delivery worker, which has taught me resilience under pressure and seamless routine management. One of my strengths is exceptionally strong visual and numerical memory; I learn and remember new routes, customer details, and delivery box locations very quickly without constant repetition. I can optimize driving routes independently and make sure deliveries arrive precisely on schedule, even in demanding weather conditions and during night shifts.",
+        "Miksi valita minut?": "Why choose me?",
+        "Itsenäisyys ja luotettavuus:": "Independence and reliability:",
+        "Hoidan annetut tehtävät alusta loppuun ilman jatkuvaa valvontaa.": "I handle assigned tasks from start to finish without constant supervision.",
+        "Nopea oppimiskyky:": "Fast learner:",
+        "Hahmottamalla laajoja kokonaisuuksia otan uudet alueet ja reitit haltuun hetkessä.": "By understanding larger systems quickly, I can master new areas and routes in no time.",
+        "Asenne:": "Attitude:",
+        "En pelkää fyysistä työtä tai epätyypillisiä työaikoja.": "I am not afraid of physical work or unconventional working hours.",
+        "Olen valmis tarttumaan uusiin haasteisiin ja tuomaan mukanani rautaisen työmoraalin. Tulisin mielelläni haastatteluun kertomaan lisää siitä, miten voin olla hyödyksi organisaatiollenne.": "I am ready to take on new challenges and bring a strong work ethic with me. I would gladly come to an interview to tell you more about how I could benefit your organization.",
+        "Sähköposti:": "Email:",
+        "• Jakelu ja logistiikka\n• Reittien optimointi\n• Erinomainen reittimuisti\n• Itsenäinen työote": "• Distribution and logistics\n• Route optimization\n• Excellent route memory\n• Independent work style",
+        "• Itsenäinen työote": "• Independent work style"
+      },
+      "raw": {
+        "generatePDF('Markus_Sorola_Avoin_Hakemus_Logistiikka.pdf')": "generatePDF('Markus_Sorola_Open_Application_Logistics.pdf')"
+      }
+    },
+    "makelink/index.html": {
+      "text": {
+        "Maken yhteystiedot - Markus Sorola": "Markus's contact details - Markus Sorola",
+        "Maken yhteystiedot": "Markus's contact details",
+        "Sosiaaliset mediat & koodaus": "Social media & coding",
+        "📧 Sähköposti": "📧 Email"
+      },
+      "attributes": {
+        "Markus Sorolan yhteystiedot, sosiaalisen median profiilit sekä GitHub-linkki.": "Markus Sorola's contact details, social media profiles, and GitHub link.",
+        "Maken yhteystiedot - Markus Sorola": "Markus's contact details - Markus Sorola",
+        "Markus Sorolan yhteystiedot ja sosiaalisen median profiilit.": "Markus Sorola's contact details and social media profiles.",
+        "Yhteystiedot ja sosiaalinen media": "Contact details and social media"
+      }
+    },
+    "makelink/donate.html": {
+      "text": {
+        "Tue palvelua": "Support the service",
+        "❤️ Tue palvelua": "❤️ Support the service",
+        "Jos palvelusta on ollut hyötyä, voit auttaa sen ylläpidossa lahjoituksella. Lahjoitukset käytetään palvelin-, verkkotunnus- ja kehityskuluihin.": "If this service has been useful to you, you can help keep it running with a donation. Donations are used for server, domain, and development costs.",
+        "Pankkisiirto": "Bank transfer",
+        "💳 Lahjoita PayPalilla": "💳 Donate with PayPal",
+        "Lahjoittajien edut": "Supporter benefits",
+        "Mahdollinen pääsy Sorolan yksityiseen salasanaholviin.": "Possible access to Sorola's private password vault.",
+        "Mahdollinen pääsy Sorolan yksityiseen pilvitilaan.": "Possible access to Sorola's private cloud storage.",
+        "Uusien ominaisuuksien testaus ennen muita.": "The chance to test new features before others.",
+        "Palvelun kehityksen tukeminen.": "Helping fund the service's development.",
+        "Edut ovat vapaaehtoisia tukijoille annettavia kiitoksia eivätkä takuu palvelusta.": "Benefits are optional thank-you perks for supporters and are not a service guarantee."
+      }
+    },
+    "privacy/index.html": {
+      "text": {
+        "Tietosuojakäytännöt - Sorolan Sakki": "Privacy policies - Sorolan Sakki",
+        "Tietosuoja": "Privacy",
+        "Tältä sivulta löydät Sorolan Sakin selainlaajennusten ja palveluiden viralliset tietosuojakäytännöt.": "On this page you'll find the official privacy policies for Sorolan Sakki browser extensions and services.",
+        "🔗 Linkkilyhennin": "🔗 Link shortener",
+        "🎲 Salasanakone": "🎲 Password generator"
+      },
+      "attributes": {
+        "Sorolan Sakin palveluiden ja selainlaajennusten viralliset tietosuojakäytännöt.": "Official privacy policies for Sorolan Sakki services and browser extensions.",
+        "Privacy policies": "Privacy policies",
+        "Tietosuojakäytännöt": "Privacy policies"
+      }
+    },
+    "privacy/lyhennin.html": {
+      "text": {
+        "Privacy Policy - Sorola Linkkilyhennin": "Privacy Policy - Sorola Link Shortener",
+        "Privacy Policy for Sorola Linkkilyhennin": "Privacy Policy for Sorola Link Shortener"
+      }
+    },
+    "privacy/salasanat.html": {
+      "text": {
+        "Privacy Policy for Sorolan Salasanat": "Privacy Policy for Sorola Password Generator",
+        "Privacy Policy - Sorolan Salasanat": "Privacy Policy - Sorola Password Generator",
+        "Sorolan Salasanat (\"the Extension\") is a strictly local password generator committed to absolute user privacy. This Privacy Policy explains how the Extension handles information.": "Sorola Password Generator (\"the Extension\") is a strictly local password generator committed to absolute user privacy. This Privacy Policy explains how the Extension handles information."
+      }
+    },
+    "privacy/holvi.html": {
+      "text": {
+        "Privacy Policy for Sorolan Holvi": "Privacy Policy for Sorola Vault",
+        "Privacy Policy - Sorolan Holvi": "Privacy Policy - Sorola Vault",
+        "Sorolan Holvi (\"the Extension\") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data.": "Sorola Vault (\"the Extension\") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data."
+      }
+    },
+    "huumorikuvat/index.html": {
+      "text": {
+        "Sorolan huumorikuvat": "Sorola funny pictures",
+        "Sorolan Huumorikuvat": "Sorola funny pictures",
+        "Lisäilen tänne hauskoja kuvia, joita olen vuosien aikana löytänyt. Kaikkea ei tarvitse tajuta eikä varsinkaan ottaa vakavasti. :)": "I'll keep adding funny pictures here that I've found over the years. You don't have to understand everything — and definitely not take it too seriously. :)",
+        "Huomio! Täällä oleva sisältö on pääosin suomeksi, eikä niitä voi kääntää, koska mukana on myös kieleen nojautuvia vitsejä!": "Disclaimer: The content here is mainly in Finnish, and they can't be translated because they rely strongly on Finnish language"
+      },
+      "attributes": {
+        "Hauska kokoelma huumori- ja meemukuvia, joita Sorolan perhe on koonnut vuosien varrelta.": "A fun collection of humor and meme images gathered by the Sorola family over the years.",
+        "Hauska kokoelma huumori- ja meemikuvia Sorolan perheeltä.": "A fun collection of humor and meme images from the Sorola family.",
+        "Sorolan huumorikuvat": "Sorola funny pictures"
+      }
+    },
+    "admin/index.html": {
+      "text": {
+        "Sorolan Sakki - Hallintapaneeli": "Sorolan Sakki - Admin panel",
+        "Hallintapaneeli": "Admin panel",
+        "Kirjaudu Sisään": "Sign in",
+        "Kirjaudu": "Sign in",
+        "Eikö sinulla ole tunnusta? Rekisteröidy kutsukoodilla.": "Don't have an account? Register with an invite code.",
+        "Rekisteröidy Kutsukoodilla": "Register with an invite code",
+        "Luo tunnus": "Create account",
+        "Takaisin kirjautumiseen.": "Back to sign in.",
+        "🔗 Uusi oma linkki": "🔗 New personal link",
+        "Kohdeosoite (https://...)": "Destination address (https://...)",
+        "Lyhenne (tyhjä = satunnainen)": "Short code (leave empty for random)",
+        "Luo": "Create",
+        "Päivitä Tiedot ↻": "Refresh data ↻",
+        "Aktiiviset linkit (soro.la)": "Active links (soro.la)",
+        "Lyhytosoite": "Short link",
+        "Kohdeosoite": "Destination URL",
+        "Klikit": "Clicks",
+        "Luotu": "Created",
+        "Toiminnot": "Actions",
+        "Aktiiviset linkit (srla.fi)": "Active links (srla.fi)",
+        "Aktiiviset linkit (srla.fi + srl.la)": "Active links (srla.fi + srl.la)",
+        "👥 Ylläpitäjät": "👥 Administrators",
+        "Tunnus": "Username",
+        "🎟️ Kutsukoodit": "🎟️ Invite codes",
+        "Uusi koodisana": "New invite code",
+        "Koodi": "Code",
+        "Tila": "Status",
+        "🔑 Vaihda salasana": "🔑 Change password",
+        "Nykyinen salasana": "Current password",
+        "Uusi salasana": "New password",
+        "Uusi uudelleen": "Repeat new password",
+        "Vaihda": "Change",
+        "Kirjaudu ulos": "Sign out",
+        "← Takaisin etusivulle": "← Back to home"
+      },
+      "raw": {
+        "Syötä tunnus ja salasana.": "Enter your username and password.",
+        "Virheellinen tunnus tai salasana.": "Invalid username or password.",
+        "Palvelinvirhe.": "Server error.",
+        "Täytä kaikki kentät.": "Fill in all fields.",
+        "Tunnus luotu! Voit kirjautua sisään.": "Account created! You can now sign in.",
+        "Rekisteröinti epäonnistui.": "Registration failed.",
+        "Täytä kaikki salasanakentät.": "Fill in all password fields.",
+        "Uudet salasanat eivät täsmää.": "The new passwords do not match.",
+        "Vaihdetaan...": "Changing...",
+        "Salasana vaihdettu onnistuneesti!": "Password changed successfully!",
+        "Virhe salasanan vaihdossa.": "Error while changing the password.",
+        "Muokkaa": "Edit",
+        "Ei vielä linkkejä tässä domainissa.": "No links in this domain yet.",
+        "Virhe ladattaessa linkkejä.": "Error while loading links.",
+        "Kohdeosoite on pakollinen.": "Destination URL is required.",
+        "Luodaan...": "Creating...",
+        "Linkki luotu!": "Link created!",
+        "Virhe päivityksessä.": "Update failed.",
+        "Muokataan linkkiä": "Editing link",
+        "Syötä uusi kohdeosoite:": "Enter the new destination URL:",
+        "Kohdeosoite päivitetty!": "Destination URL updated!",
+        "Poistetaanko": "Delete",
+        "Linkki poistettu.": "Link deleted.",
+        "Virhe poistossa.": "Delete failed.",
+        "(Sinä)": "(You)",
+        "Käyttäjä poistettu.": "User deleted.",
+        "Käytetty": "Used",
+        "Vapaa": "Available",
+        "Syötä uusi koodisana.": "Enter a new invite code.",
+        "on nyt aktiivinen!": "is now active!",
+        "Virhe koodin luonnissa.": "Error while creating the code.",
+        "Poistetaanko tämä kutsukoodi järjestelmästä?": "Delete this invite code from the system?",
+        "Kutsukoodi poistettu.": "Invite code deleted.",
+        "Virhe.": "Error.",
+        ">Virhe<": ">Error<"
+      }
+    },
+    "Niko/index.html": {
+      "text": {
+        "Arkkityyppi elämäntapa": "Archetype lifestyle",
+        "Hei kaikki!": "Hello everyone!",
+        "Tervetuloa sivuilleni. Täällä tutkimme arkkityyppistä elämäntapaa ja sen eri ulottuvuuksia.": "Welcome to my pages. Here we explore the archetypal lifestyle and its different dimensions.",
+        "Tämä on testisivu": "This is a test page",
+        "Linkkejä": "Links"
+      }
+    },
+    "jako/error.html": {
+      "text": {
+        "Sorola Share - Virhe": "Sorola Share - Error",
+        "Tiedostoa ei ole enää saatavilla": "File is no longer available",
+        "Jakolinkin tiedostoa ei löytynyt palvelimelta. Tiedosto on voinut vanhentua tai se on poistettu.": "The file behind this share link was not found on the server. The file may have expired or it has been removed.",
+        "Takaisin tiedostonjakoon": "Back to file sharing"
+      }
+    }
+  },
+  "js": {
+    "lyhennin/script.js": {
+      "raw": {
+        "Käsitellään...": "Processing...",
+        "Virhe: ": "Error: ",
+        "Linkin luonti epäonnistui": "Creating the link failed",
+        "Worker-virhe:": "Worker error:",
+        "Virhe yhteydessä palvelimeen. Yritä myöhemmin uudelleen.": "Error connecting to the server. Please try again later.",
+        "Odottele ${sekuntejaJaljella}s...": "Wait ${sekuntejaJaljella}s...",
+        "Lyhennä linkki": "Shorten link",
+        "Kopioitu!": "Copied!"
+      }
+    },
+    "salasanat/script.js": {
+      "raw": {
+        "Paina Arvo-nappia": "Press the Generate button",
+        "✅ Kopioitu!": "✅ Copied!"
+      }
+    },
+    "ohjeet/ohjehaitari.js": {
+      "raw": {
+        "Sulje ohje": "Close guide",
+        "Avaa ohje": "Open guide"
+      }
+    }
+  }
+}

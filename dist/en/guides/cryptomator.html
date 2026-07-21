@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cryptomator guide - Sorola</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/en/guides/cryptomator">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/cryptomator">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/cryptomator">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/cryptomator">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <meta name="description" content="Cryptomator guide: how to encrypt files before storing them in the cloud on desktop and mobile.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/en/guides/cryptomator">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Cryptomator guide - Sorola">
+    <meta property="og:description" content="A guide to encrypting files with Cryptomator before storing them in the cloud.">
+    <script src="/en/guides/ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #ffaa00;
+        }
+
+        .ohje-palsta.auki > h2 {
+            margin-bottom: 16px;
+        }
+
+        .ohje-toggle {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ffaa00;
+            border-radius: 50%;
+            background: transparent;
+            color: #ffaa00;
+            font: inherit;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .ohje-toggle:hover,
+        .ohje-toggle:focus-visible {
+            background: #ffaa00;
+            color: #111;
+            outline: none;
+        }
+
+        .ohje-sisalto[hidden] {
+            display: none;
+        }
+
+        .ohje-sisalto > :first-child {
+            margin-top: 0;
+        }
+
+        .ohje-sisalto > :last-child {
+            margin-bottom: 0;
+        }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/ohjeet/cryptomator">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/guides/cryptomator" aria-current="page">🇬🇧</a>
+    </nav>
+<a href="#paaosio" class="skip-to-content">Skip to content</a>
+
+<div class="laatikko">
+    <h1 class="otsikko">🔐 Cryptomator guide</h1>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            <a href="https://cryptomator.org/for-individuals/" target="_blank" rel="noopener noreferrer">Cryptomator</a> encrypts files on your own device before they are stored in a cloud service. This guide uses Google Drive as an example. The vault folder you see in the cloud contains encrypted data, and its files should not be edited directly.
+        </p>
+    </div>
+
+    <main id="paaosio">
+    <div class="osion-tausta ohje-palsta">
+        <h2>💻 Creating a vault on a computer
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Install <strong>Google Drive for desktop</strong> and make sure Google Drive appears in File Explorer or Finder.</li>
+                <li>Install and open Cryptomator.</li>
+                <li>Choose <strong>Add vault → Create new vault</strong> (Add Vault → Create New Vault).</li>
+                <li>Give the vault a name.</li>
+                <li>Choose a Google Drive synced folder as the storage location for the vault.</li>
+                <li>Create a strong and unique password for the vault.</li>
+                <li>Store the recovery key in a safe place separate from the vault.</li>
+                <li>Finish the setup. Google Drive will automatically start syncing the encrypted vault folder.</li>
+            </ol>
+            <p><strong>Important:</strong> Cryptomator cannot recover a forgotten password without the recovery key.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>📱 Creating a vault on a phone
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Install Cryptomator on your phone from your app store and open the app.</li>
+                <li>Add Google Drive as a cloud service and sign in to your Google account. Accept the permissions requested by the app.</li>
+                <li>Tap the plus button and choose <strong>Create new vault</strong>.</li>
+                <li>Choose Google Drive and the folder you want as the storage location.</li>
+                <li>Give the vault a name and create a strong password.</li>
+                <li>Store the recovery key in a safe place.</li>
+            </ol>
+            <p>Menu names may differ slightly between Android and iPhone. On iPhone, Cryptomator also works through the Files app.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🔓 Adding and opening an existing vault
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>On a computer</h3>
+            <ol>
+                <li>Wait until Google Drive has synced the vault folder to your computer.</li>
+                <li>Open Cryptomator and choose <strong>Add vault → Open existing vault</strong>.</li>
+                <li>Choose the vault folder in Google Drive and its <code>vault.cryptomator</code>file.</li>
+                <li>Select the vault from the list, press <strong>Unlock</strong> and enter the vault password.</li>
+                <li>Open the virtual drive or folder that appears. Use files only through this unlocked view.</li>
+            </ol>
+
+            <h3>On a phone</h3>
+            <ol>
+                <li>Add Google Drive to Cryptomator’s cloud services.</li>
+                <li>Tap the plus button and choose <strong>Add existing vault</strong>.</li>
+                <li>Find the vault folder in Google Drive and select it.</li>
+                <li>Tap the vault and open it with the password, biometric authentication, or the device key if you have enabled one.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>📄 Adding and editing files
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>On a computer</h3>
+            <ol>
+                <li>Unlock the vault in Cryptomator.</li>
+                <li>Open the virtual drive or vault folder shown by Cryptomator.</li>
+                <li>Drag or copy files into the unlocked vault just like you would with a normal folder.</li>
+                <li>Open and edit files with your usual applications. Save changes normally.</li>
+                <li>Cryptomator encrypts the changes, and Google Drive syncs the encrypted files to the cloud.</li>
+            </ol>
+
+            <h3>On a phone</h3>
+            <ol>
+                <li>Open the vault in Cryptomator.</li>
+                <li>Create a folder, import a file from the device, or use the share sheet to add a file to the vault.</li>
+                <li>Open the file from Cryptomator in a compatible application.</li>
+                <li>Save the edited file back into the vault. Not all apps can save directly back to the same file, so the edited version may need to be imported back separately.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🗑️ Removing files and moving them out of the vault
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li><strong>Deleting:</strong> Open the vault and remove the file or folder from the unlocked virtual drive or the Cryptomator app. Do not delete individual encrypted files directly from the Google Drive vault folder.</li>
+                <li style="margin-top:10px;"><strong>Moving out on a computer:</strong> Move or copy the file from the unlocked vault to a normal folder. If you copy the file, remove the original from the vault separately if you do not want to keep it there.</li>
+                <li style="margin-top:10px;"><strong>Moving out on a phone:</strong> Select the file and use the <strong>Export</strong>-, <strong>Share</strong>- or <strong>Save to device</strong> action. Remove the original from the vault separately if needed.</li>
+            </ul>
+            <p><strong>Note:</strong> A file moved or exported out of the vault is no longer protected by Cryptomator.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🔒 Closing the vault
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>On a computer</h3>
+            <ol>
+                <li>Save and close all files that are open from the vault.</li>
+                <li>Wait a moment so your applications have time to write changes to disk.</li>
+                <li>Return to Cryptomator and press <strong>Lock</strong> (Lock).</li>
+                <li>Wait until Google Drive has synced the changes before shutting down the computer.</li>
+            </ol>
+
+            <h3>On a phone</h3>
+            <ol>
+                <li>Return to Cryptomator and close the open vault with the lock button.</li>
+                <li>You can enable automatic locking in the settings so the vault closes when you leave the app or after a set amount of time.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>⚠️ Important things to remember
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li>Keep the vault password and recovery key safe. Neither the cloud service nor Cryptomator support can open the vault for you.</li>
+                <li>Do not rename, move, or edit the encrypted files inside the vault directly in Google Drive.</li>
+                <li>Back up the vault. Cloud syncing alone is not a backup.</li>
+                <li>Before locking the vault, make sure the files are no longer open in other applications.</li>
+            </ul>
+        </div>
+    </div>
+    </main>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="/en/guides/" class="nappula1">⬅ Back to guides</a>
+    </div>
+</div>
+
+</body>
+</html>

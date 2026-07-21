@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <!-- Tyylikäs sininen liukuväri -->
+    <linearGradient id="sorola-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1e40af" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Moderni pyöristetty tausta (squircle) -->
+  <rect width="100" height="100" rx="24" fill="url(#sorola-grad)" />
+  
+  <!-- Paksu, selkeä ja skaalautuva S-kirjain -->
+  <path d="M 68 34 C 68 26 58 24 50 24 C 40 24 32 30 32 40 C 32 48 42 51 50 53 C 58 55 68 59 68 67 C 68 76 58 78 50 78 C 38 78 32 70 32 60" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="14" 
+        stroke-linecap="round" />
+</svg>

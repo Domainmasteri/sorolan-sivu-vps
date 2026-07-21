@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   
+   <!-- Etusivu -->
+   <url>
+      <loc>https://sorola.fi/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>1.0</priority>
+   </url>
+   
+   <!-- IT-ohjeet -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <!-- Bitwarden-ohje -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/bitwarden</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Cryptomator-ohje -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/cryptomator</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+   
+   <!-- Ansioluettelot ja portfolio -->
+   <url>
+      <loc>https://sorola.fi/ansioluettelot/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   
+   <!-- Väliaikainen tiedostonjako -->
+   <url>
+      <loc>https://sorola.fi/jako/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+   
+   <!-- Linkkilyhennin -->
+   <url>
+      <loc>https://sorola.fi/lyhennin/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
+   <!-- QR-koodin luoja -->
+   <url>
+      <loc>https://sorola.fi/qr/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
+   <!-- Salasanakone -->
+   <url>
+      <loc>https://sorola.fi/salasanat/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
+   <!-- Vieraskirja -->
+   <url>
+      <loc>https://sorola.fi/vieraskirja/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+   </url>
+
+   <!-- Huumorikuvat -->
+   <url>
+      <loc>https://sorola.fi/huumorikuvat/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+   </url>
+
+   <!-- Yhteystiedot -->
+   <url>
+      <loc>https://sorola.fi/makelink/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Tietosuoja -->
+   <url>
+      <loc>https://sorola.fi/privacy/</loc>
+      <lastmod>2025-07-12</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.4</priority>
+   </url>
+
+</urlset>

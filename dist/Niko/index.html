@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta property="og:url" content="https://sorola.fi/Niko/">
+    <link rel="canonical" href="https://sorola.fi/Niko/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/Niko/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/Niko/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/Niko/">
+    <meta charset="UTF-8">
+    <title>Arkkityyppi elämäntapa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/Niko/" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/Niko/">🇬🇧</a>
+    </nav>
+
+    <header class="banner">
+        <svg class="banner-bg" viewBox="0 0 1000 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1000" height="200" fill="#f4f7f6" />
+            <circle cx="500" cy="100" r="80" stroke="#add8e6" stroke-width="2" fill="none" opacity="0.5"/>
+            <circle cx="500" cy="100" r="40" stroke="#33bdef" stroke-width="1" fill="#33bdef" fill-opacity="0.1" />
+            <line x1="420" y1="100" x2="580" y2="100" stroke="#33bdef" stroke-width="1" opacity="0.5" />
+            <line x1="500" y1="20" x2="500" y2="180" stroke="#33bdef" stroke-width="1" opacity="0.5" />
+        </svg>
+        
+        <div class="banner-content">
+            <h1 class="otsikko">Arkkityyppi elämäntapa</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="esittely">
+            <h2 class="intro">Hei kaikki!</h2>
+        </section>
+
+        <section class="sisalto-alue">
+            <aside class="nappula-sarake">
+                <a href="https://google.com/" class="nappula">Google</a>
+                <a href="#" class="nappula">Google</a>
+                <a href="#" class="nappula">Google</a>
+                <a href="#" class="nappula">Google</a>
+                <a href="#" class="nappula">Google</a>
+            </aside>
+            
+            <article class="teksti-sarake">
+                <p>Tervetuloa sivuilleni. Täällä tutkimme arkkityyppistä elämäntapaa ja sen eri ulottuvuuksia.</p>
+                <p>Tämä on testisivu</p>
+            </article>
+
+            <aside class="linkki-sarake">
+                <h2>Linkkejä</h2>
+                <a href="https://google.com/">Google</a>
+                <a href="https://ystavyydenmajatalo.fi/healingeagle/indexfi.html">Kotkansydän</a>
+                <a href="#">Insta</a>
+                <a href="#">Tiktok</a>
+                <a href="#">Twitter</a>
+            </aside>
+        </section>
+    </main>
+
+</body>
+</html>

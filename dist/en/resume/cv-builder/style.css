@@ -1,0 +1,136 @@
+/* Perusasetukset */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: #e9ecef; 
+    color: #333; 
+    line-height: 1.4; 
+}
+
+/* Yhden sivun A4-kehys - Pienennetty 1mm tyhjän sivun estämiseksi! */
+.cv-container { 
+    width: 210mm; 
+    height: 296mm; 
+    background: #fff; 
+    margin: 2rem auto; 
+    display: flex; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    overflow: hidden; 
+}
+
+/* Vihreä sivupalkki (Vasemmalla) */
+.sidebar { 
+    width: 35%; 
+    background: #4a8c53; 
+    color: #fff; 
+    padding: 2rem 1.5rem; 
+}
+.sidebar a {
+    color: #fff;
+    text-decoration: underline;
+    transition: opacity 0.2s;
+}
+.sidebar a:hover {
+    opacity: 0.8;
+}
+
+.profile-pic { 
+    width: 130px; 
+    height: 130px; 
+    background: #fff; 
+    border-radius: 50%; 
+    margin: 0 auto 1.5rem auto; 
+    display: block; 
+    object-fit: cover; 
+    border: 3px solid #fff;
+}
+.sidebar h2 { 
+    font-size: 1.2rem; 
+    margin-bottom: 0.6rem; 
+    border-bottom: 2px solid #fff; 
+    padding-bottom: 0.2rem; 
+}
+.sidebar h3 { 
+    font-size: 1.05rem; 
+    margin-top: 1.2rem; 
+    margin-bottom: 0.6rem; 
+    border-bottom: 1px solid rgba(255,255,255,0.5); 
+    padding-bottom: 0.2rem;
+}
+.sidebar p, .sidebar ul { 
+    font-size: 0.9rem; 
+    margin-bottom: 0.4rem; 
+}
+.sidebar ul { 
+    list-style-type: none; 
+}
+.sidebar li { 
+    margin-bottom: 0.3rem; 
+}
+
+/* Pääsisältö (Oikealla) */
+.main-content { 
+    width: 65%; 
+    padding: 2.5rem 2.5rem; 
+}
+.main-content h1 { 
+    font-size: 2.4rem; 
+    color: #333; 
+    margin-bottom: 1.2rem; 
+}
+.section-title { 
+    font-size: 1.3rem; 
+    color: #4a8c53; 
+    border-bottom: 2px solid #4a8c53; 
+    margin-top: 1.2rem; 
+    margin-bottom: 0.8rem; 
+    padding-bottom: 0.2rem; 
+}
+.item {
+    margin-bottom: 1rem;
+}
+.item-title { 
+    font-weight: bold; 
+    font-size: 1.05rem; 
+    color: #333; 
+}
+.item-subtitle { 
+    font-style: italic; 
+    color: #666; 
+    margin-bottom: 0.2rem; 
+    font-size: 0.9rem; 
+}
+.item-desc { 
+    font-size: 0.9rem; 
+}
+
+/* PDF-Latauspainike */
+.btn-download { 
+    position: fixed; 
+    top: 20px; 
+    right: 20px; 
+    padding: 12px 24px; 
+    background: #4a8c53; 
+    color: #fff; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 1rem; 
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background 0.3s;
+}
+.btn-download:hover { 
+    background: #3a6b41; 
+}
+
+@media (max-width: 768px) {
+    .cv-container { width: 100%; height: auto; min-height: 296mm; flex-direction: column; }
+    .sidebar { width: 100%; }
+    .main-content { width: 100%; }
+    .btn-download { position: static; display: block; width: 100%; border-radius: 0; }
+}

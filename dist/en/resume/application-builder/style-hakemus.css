@@ -1,0 +1,153 @@
+/* Perusasetukset */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: #e9ecef; 
+    color: #333; 
+    line-height: 1.5; 
+}
+
+/* Lukittu A4-kehys - Täsmälleen samat mitat kuin CV:ssä */
+.hakemus-container { 
+    width: 210mm; 
+    height: 296mm; 
+    background: #fff; 
+    margin: 2rem auto; 
+    display: flex; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    overflow: hidden; 
+}
+
+/* Vasen sivupalkki yhteystiedoille (Luo jatkuvuutta CV:n kanssa) */
+.sidebar { 
+    width: 30%; 
+    background: #1e293b; /* Moderni tumma slate/navy IT-puolelle defaultina */
+    color: #fff; 
+    padding: 3rem 1.5rem; 
+}
+
+/* Vaihtoehtoinen teema jakelupuolelle (Sama vihreä kuin CV:ssä) */
+.sidebar.theme-green {
+    background: #4a8c53;
+}
+
+.sidebar h2 { 
+    font-size: 1.4rem; 
+    margin-bottom: 0.2rem; 
+}
+.sidebar .title {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.sidebar h3 { 
+    font-size: 1.1rem; 
+    margin-top: 2rem; 
+    margin-bottom: 0.8rem; 
+    border-bottom: 1px solid rgba(255,255,255,0.25); 
+    padding-bottom: 0.3rem;
+}
+.sidebar p { 
+    font-size: 0.85rem; 
+    margin-bottom: 0.6rem; 
+    line-height: 1.4;
+}
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.4);
+}
+.sidebar a:hover {
+    opacity: 0.8;
+}
+
+/* Pääsisältö (Itse kirjeosa) */
+.main-content { 
+    width: 70%; 
+    padding: 3.5rem 3rem; 
+    display: flex;
+    flex-direction: column; /* Mahdollistaa alatunnisteen työntämisen pohjaan */
+}
+.letter-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 3.5rem;
+}
+.recipient-info {
+    line-height: 1.5;
+}
+.date-info {
+    text-align: right;
+}
+.application-title { 
+    font-size: 1.35rem; 
+    color: #1e293b; 
+    margin-bottom: 1.8rem; 
+    line-height: 1.3;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+}
+
+/* Tekstialueen muotoilut */
+.letter-body p { 
+    font-size: 0.95rem; 
+    margin-bottom: 1.2rem; 
+    text-align: justify;
+}
+.letter-body ul {
+    margin-left: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+.letter-body li {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Työntää allekirjoituksen automaattisesti sivun alalaitaan tyylikkäästi */
+.letter-footer {
+    margin-top: auto; 
+    padding-top: 2rem;
+    font-size: 0.95rem;
+}
+.signature {
+    margin-top: 1.5rem;
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+/* PDF-Latauspainike */
+.btn-download { 
+    position: fixed; 
+    top: 20px; 
+    right: 20px; 
+    padding: 12px 24px; 
+    background: #1e293b; 
+    color: #fff; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 1rem; 
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background 0.3s;
+    z-index: 1000;
+}
+.btn-download:hover { 
+    background: #0f172a; 
+}
+
+/* Responsiivisuus selaimessa katsottuna */
+@media (max-width: 768px) {
+    .hakemus-container { width: 100%; height: auto; min-height: 296mm; flex-direction: column; }
+    .sidebar { width: 100%; padding: 2rem 1.5rem; }
+    .main-content { width: 100%; padding: 2rem 1.5rem; }
+    .btn-download { position: static; display: block; width: 100%; border-radius: 0; }
+}

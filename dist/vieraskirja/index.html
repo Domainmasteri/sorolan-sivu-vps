@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Vieraskirja - Sorolan Sakki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/vieraskirja/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/vieraskirja/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guestbook/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/vieraskirja/">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <meta name="description" content="Jätä terveisesi Sorolan perheelle vieraskirjassa. Sana on vapaa!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/vieraskirja/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Vieraskirja - Sorolan Sakki">
+    <meta property="og:description" content="Jätä terveisesi Sorolan perheelle vieraskirjassa.">
+    <style>
+        .ilmoitus { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
+        .virhe { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+        .onnistui { background-color: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #4ade80; }
+        .piilotettu { display: none !important; }
+
+        .viestikortti {
+            background: #191f2d;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 16px;
+        }
+        .viestikortti.yllapito-viesti {
+            border-color: #ffaa00;
+            background: rgba(255, 170, 0, 0.06);
+        }
+        .viestikortti-otsikko {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .viestikortti-nimi {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #e2e8f0;
+        }
+        .viestikortti.yllapito-viesti .viestikortti-nimi {
+            color: #ffaa00;
+        }
+        .yllapito-merkki {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+            padding: 2px 9px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid rgba(255, 170, 0, 0.4);
+        }
+        .viestikortti-aika {
+            font-size: 0.78rem;
+            color: #718096;
+            margin-left: auto;
+        }
+        .viestikortti-teksti {
+            color: #cbd5e0;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .admin-vastaus {
+            margin-top: 14px;
+            padding: 12px 16px;
+            background: rgba(255, 170, 0, 0.08);
+            border-left: 3px solid #ffaa00;
+            border-radius: 0 8px 8px 0;
+        }
+        .admin-vastaus-otsikko {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #ffaa00;
+            margin-bottom: 5px;
+        }
+        .admin-vastaus-teksti {
+            color: #cbd5e0;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .lataus-spinner {
+            display: inline-block;
+            width: 24px; height: 24px;
+            border: 3px solid rgba(255,170,0,0.3);
+            border-radius: 50%;
+            border-top-color: #ffaa00;
+            animation: pyori 1s ease-in-out infinite;
+        }
+        @keyframes pyori { to { transform: rotate(360deg); } }
+
+        .flex-form { display: flex; flex-direction: column; gap: 10px; }
+        .captcha-rivi { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .captcha-kysymys {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            background: #0b0d13;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 9px 15px;
+            white-space: nowrap;
+        }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/vieraskirja/" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/guestbook/">🇬🇧</a>
+    </nav>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+    <div class="laatikko" style="max-width: 700px;">
+        <h1 class="otsikko">Vieraskirja</h1>
+
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Jätä puumerkkisi ja terveiset Sorolan perheelle! Sana on vapaa.</p>
+        </div>
+
+        <main id="paaosio">
+            <!-- Lomake -->
+            <div class="osion-tausta">
+                <h2 style="margin-top: 0; color: #ffaa00; border-bottom: 2px solid #2d3748; padding-bottom: 8px;">✍️ Jätä viesti</h2>
+                <div id="lomake-ilmoitus" class="ilmoitus piilotettu"></div>
+                <div class="flex-form">
+                    <input type="text" id="gb-nimi" class="syote" placeholder="Nimesi" maxlength="100" autocomplete="name">
+                    <textarea id="gb-viesti" class="syote" placeholder="Viestisi..." rows="4" maxlength="2000" style="resize: vertical; min-height: 90px;"></textarea>
+                    <div class="captcha-rivi">
+                        <span id="captcha-kysymys" class="captcha-kysymys" aria-live="polite"></span>
+                        <input type="number" id="captcha-vastaus" class="syote" placeholder="Vastaus" style="width: 90px; flex: 0 0 90px;" aria-label="Laskutoimituksen vastaus">
+                        <button type="button" onclick="uusiCaptcha()" class="nappula nappi-pieni" aria-label="Arvo uusi laskutoimitus" title="Arvo uusi laskutoimitus">🔄</button>
+                    </div>
+                    <button type="button" onclick="lahetaViesti()" id="btn-laheta" class="nappula nappi-oranssi">Lähetä viesti</button>
+                </div>
+            </div>
+
+            <!-- Viestilista -->
+            <div id="viestit-osio">
+                <div style="text-align: center; padding: 20px;">
+                    <div class="lataus-spinner"></div>
+                </div>
+            </div>
+        </main>
+
+        <a href="../" class="linkki-takaisin">← Takaisin pääsivulle</a>
+    </div>
+
+    <script>
+        const API_GUESTBOOK = '/api/guestbook';
+
+        let captchaA = 0, captchaB = 0, captchaOp = '+';
+
+        function uusiCaptcha() {
+            const luvut = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20];
+            const operaattorit = ['+', '-', '*'];
+            const op = operaattorit[Math.floor(Math.random() * operaattorit.length)];
+            let a = luvut[Math.floor(Math.random() * luvut.length)];
+            let b = luvut[Math.floor(Math.random() * luvut.length)];
+
+            // Vältetään negatiiviset tulokset vähennyslaskussa
+            if (op === '-' && b > a) [a, b] = [b, a];
+            // Pidetään kertolasku kohtuullisena
+            if (op === '*') { a = Math.floor(Math.random() * 9) + 1; b = Math.floor(Math.random() * 9) + 1; }
+
+            captchaA = a;
+            captchaB = b;
+            captchaOp = op;
+
+            const opMerkki = op === '*' ? '×' : op;
+            document.getElementById('captcha-kysymys').textContent = `Paljonko on ${a} ${opMerkki} ${b}?`;
+            document.getElementById('captcha-vastaus').value = '';
+        }
+
+        function naytaLomakeIlmoitus(viesti, tyyppi = 'virhe') {
+            const el = document.getElementById('lomake-ilmoitus');
+            el.textContent = viesti;
+            el.className = `ilmoitus ${tyyppi}`;
+            el.classList.remove('piilotettu');
+            if (tyyppi === 'onnistui') {
+                setTimeout(() => el.classList.add('piilotettu'), 6000);
+            }
+        }
+
+        async function lahetaViesti() {
+            const nimi = document.getElementById('gb-nimi').value.trim();
+            const viesti = document.getElementById('gb-viesti').value.trim();
+            const vastaus = document.getElementById('captcha-vastaus').value.trim();
+
+            if (!nimi) return naytaLomakeIlmoitus('Nimi on pakollinen.');
+            if (!viesti) return naytaLomakeIlmoitus('Viesti on pakollinen.');
+            if (!vastaus) return naytaLomakeIlmoitus('Syötä laskutoimituksen vastaus.');
+
+            const btn = document.getElementById('btn-laheta');
+            btn.disabled = true;
+            btn.textContent = 'Lähetetään...';
+
+            try {
+                const res = await fetch(API_GUESTBOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: nimi,
+                        message: viesti,
+                        captcha_a: captchaA,
+                        captcha_b: captchaB,
+                        captcha_op: captchaOp,
+                        captcha_answer: vastaus
+                    })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    naytaLomakeIlmoitus('Viestisi on lähetetty! Kiitos! 🎉', 'onnistui');
+                    document.getElementById('gb-nimi').value = '';
+                    document.getElementById('gb-viesti').value = '';
+                    uusiCaptcha();
+                    await lataaViestit();
+                } else {
+                    naytaLomakeIlmoitus(data.error || 'Virhe viestin lähetyksessä.');
+                }
+            } catch (e) {
+                naytaLomakeIlmoitus('Palvelinvirhe. Yritä uudelleen.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Lähetä viesti';
+            }
+        }
+
+        function muotoilePvm(isoString) {
+            const d = new Date(isoString);
+            return d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function renderViestit(viestit) {
+            const osio = document.getElementById('viestit-osio');
+            if (!viestit || viestit.length === 0) {
+                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;">Ei vielä viestejä. Ole ensimmäinen!</p></div>';
+                return;
+            }
+            osio.innerHTML = viestit.map(v => {
+                const onYllapito = v.is_admin === 1 || v.is_admin === true;
+                const korttiLuokka = onYllapito ? 'viestikortti yllapito-viesti' : 'viestikortti';
+                const merkki = onYllapito ? '<span class="yllapito-merkki">⚡ Ylläpito</span>' : '';
+                const vastausHtml = v.admin_reply
+                    ? `<div class="admin-vastaus">
+                        <div class="admin-vastaus-otsikko">⚡ Ylläpidon vastaus:</div>
+                        <div class="admin-vastaus-teksti">${escapeHtml(v.admin_reply)}</div>
+                       </div>`
+                    : '';
+                return `<div class="${korttiLuokka}">
+                    <div class="viestikortti-otsikko">
+                        <span class="viestikortti-nimi">${escapeHtml(v.name)}</span>
+                        ${merkki}
+                        <span class="viestikortti-aika">${muotoilePvm(v.created_at)}</span>
+                    </div>
+                    <div class="viestikortti-teksti">${escapeHtml(v.message)}</div>
+                    ${vastausHtml}
+                </div>`;
+            }).join('');
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        async function lataaViestit() {
+            try {
+                const res = await fetch(API_GUESTBOOK);
+                if (res.ok) {
+                    const data = await res.json();
+                    renderViestit(data.messages || []);
+                } else {
+                    document.getElementById('viestit-osio').innerHTML =
+                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Viestejä ei voitu ladata.</p></div>';
+                }
+            } catch (e) {
+                document.getElementById('viestit-osio').innerHTML =
+                    '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Palvelinvirhe viestejä ladattaessa.</p></div>';
+            }
+        }
+
+        // Alustus
+        uusiCaptcha();
+        lataaViestit();
+    </script>
+</body>
+</html>

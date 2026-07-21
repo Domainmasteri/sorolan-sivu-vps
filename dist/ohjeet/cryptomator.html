@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Cryptomator-käyttöohje - Sorola</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/cryptomator">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/cryptomator">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/cryptomator">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/cryptomator">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <meta name="description" content="Suomenkielinen Cryptomator-käyttöohje: kuinka salata tiedostot ennen pilvipalveluun tallentamista tietokoneella ja mobiililla.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/cryptomator">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Cryptomator-käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje tiedostojen salaamiseen Cryptomatorilla ennen pilvipalveluun tallentamista.">
+    <script src="ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #ffaa00;
+        }
+
+        .ohje-palsta.auki > h2 {
+            margin-bottom: 16px;
+        }
+
+        .ohje-toggle {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ffaa00;
+            border-radius: 50%;
+            background: transparent;
+            color: #ffaa00;
+            font: inherit;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .ohje-toggle:hover,
+        .ohje-toggle:focus-visible {
+            background: #ffaa00;
+            color: #111;
+            outline: none;
+        }
+
+        .ohje-sisalto[hidden] {
+            display: none;
+        }
+
+        .ohje-sisalto > :first-child {
+            margin-top: 0;
+        }
+
+        .ohje-sisalto > :last-child {
+            margin-bottom: 0;
+        }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/ohjeet/cryptomator" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/guides/cryptomator">🇬🇧</a>
+    </nav>
+<a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+<div class="laatikko">
+    <h1 class="otsikko">🔐 Cryptomator-ohje</h1>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            <a href="https://cryptomator.org/for-individuals/" target="_blank" rel="noopener noreferrer">Cryptomator</a> salaa tiedostot omalla laitteellasi ennen niiden tallentamista pilvipalveluun. Tässä ohjeessa käytetään esimerkkinä Google Drivea. Pilvessä näkyvä holvikansio sisältää salattua tietoa, eikä sen tiedostoja pidä muokata suoraan.
+        </p>
+    </div>
+
+    <main id="paaosio">
+    <div class="osion-tausta ohje-palsta">
+        <h2>💻 Holvin luominen tietokoneella
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Asenna <strong>Google Drive tietokoneelle</strong> ja varmista, että Google Drive näkyy Resurssienhallinnassa tai Finderissa.</li>
+                <li>Asenna ja avaa Cryptomator.</li>
+                <li>Valitse <strong>Lisää holvi → Luo uusi holvi</strong> (Add Vault → Create New Vault).</li>
+                <li>Anna holville nimi.</li>
+                <li>Valitse holvin tallennuspaikaksi Google Driven synkronoitu kansio.</li>
+                <li>Luo vahva ja yksilöllinen holvin salasana.</li>
+                <li>Tallenna palautusavain turvalliseen paikkaan erilleen holvista.</li>
+                <li>Viimeistele luonti. Google Drive alkaa synkronoida salattua holvikansiota automaattisesti.</li>
+            </ol>
+            <p><strong>Tärkeää:</strong> Cryptomator ei pysty palauttamaan unohtunutta salasanaa ilman palautusavainta.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>📱 Holvin luominen puhelimella
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ol>
+                <li>Asenna omasta sovelluskaupasta Cryptomator puhelimeesi ja avaa sovellus.</li>
+                <li>Lisää Google Drive pilvipalveluksi ja kirjaudu Google-tilillesi. Hyväksy sovelluksen tarvitsemat käyttöoikeudet.</li>
+                <li>Paina pluspainiketta ja valitse <strong>Luo uusi holvi</strong>.</li>
+                <li>Valitse tallennuspaikaksi Google Drive ja haluamasi kansio.</li>
+                <li>Anna holville nimi ja luo vahva salasana.</li>
+                <li>Tallenna palautusavain turvalliseen paikkaan.</li>
+            </ol>
+            <p>Valikoiden nimet voivat poiketa hieman Androidin ja iPhonen välillä. iPhonessa Cryptomator toimii myös Tiedostot-sovelluksen kautta.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🔓 Olemassa olevan holvin lisääminen ja avaaminen
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>Tietokoneella</h3>
+            <ol>
+                <li>Odota, että Google Drive on synkronoinut holvikansion tietokoneelle.</li>
+                <li>Avaa Cryptomator ja valitse <strong>Lisää holvi → Avaa olemassa oleva holvi</strong>.</li>
+                <li>Valitse Google Drivessa oleva holvikansio ja sen <code>vault.cryptomator</code>-tiedosto.</li>
+                <li>Valitse holvi listasta, paina <strong>Avaa lukitus</strong> ja anna holvin salasana.</li>
+                <li>Avaa ilmestyvä virtuaaliasema tai kansio. Käytä tiedostoja vain tämän avatun näkymän kautta.</li>
+            </ol>
+
+            <h3>Puhelimella</h3>
+            <ol>
+                <li>Lisää Google Drive Cryptomatorin pilvipalveluihin.</li>
+                <li>Paina pluspainiketta ja valitse <strong>Lisää olemassa oleva holvi</strong>.</li>
+                <li>Etsi holvikansio Google Drivesta ja valitse se.</li>
+                <li>Napauta holvia ja avaa se salasanalla, biometrisellä tunnistuksella tai laitteen avaimella, jos olet ottanut sellaisen käyttöön.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>📄 Tiedostojen lisääminen ja muokkaaminen
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>Tietokoneella</h3>
+            <ol>
+                <li>Avaa holvin lukitus Cryptomatorissa.</li>
+                <li>Avaa Cryptomatorin näyttämä virtuaaliasema tai holvikansio.</li>
+                <li>Vedä tai kopioi tiedostoja avatun holvin sisään kuten tavalliseen kansioon.</li>
+                <li>Avaa ja muokkaa tiedostoja tavallisilla ohjelmilla. Tallenna muutokset normaalisti.</li>
+                <li>Cryptomator salaa muutokset, ja Google Drive synkronoi salatut tiedostot pilveen.</li>
+            </ol>
+
+            <h3>Puhelimella</h3>
+            <ol>
+                <li>Avaa holvi Cryptomatorissa.</li>
+                <li>Luo kansio, tuo tiedosto laitteelta tai käytä jakotoimintoa tiedoston lisäämiseksi holviin.</li>
+                <li>Avaa tiedosto Cryptomatorista yhteensopivaan sovellukseen.</li>
+                <li>Tallenna muokattu tiedosto takaisin holviin. Kaikki sovellukset eivät pysty tallentamaan suoraan samaan tiedostoon, jolloin muokattu versio täytyy tuoda takaisin erikseen.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🗑️ Poistaminen ja siirtäminen ulos holvista
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li><strong>Poistaminen:</strong> Avaa holvi ja poista tiedosto tai kansio avatusta virtuaaliasemasta tai Cryptomator-sovelluksesta. Älä poista yksittäisiä salattuja tiedostoja suoraan Google Driven holvikansiosta.</li>
+                <li style="margin-top:10px;"><strong>Siirtäminen ulos tietokoneella:</strong> Siirrä tai kopioi tiedosto avatusta holvista tavalliseen kansioon. Jos kopioit tiedoston, poista alkuperäinen holvista erikseen, jos et halua säilyttää sitä siellä.</li>
+                <li style="margin-top:10px;"><strong>Siirtäminen ulos puhelimella:</strong> Valitse tiedosto ja käytä <strong>Vie</strong>-, <strong>Jaa</strong>- tai <strong>Tallenna laitteelle</strong> -toimintoa. Poista alkuperäinen holvista erikseen tarvittaessa.</li>
+            </ul>
+            <p><strong>Huomio:</strong> Holvista ulos siirretty tai viety tiedosto ei ole enää Cryptomatorin suojaama.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>🔒 Holvin sulkeminen
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <h3>Tietokoneella</h3>
+            <ol>
+                <li>Tallenna ja sulje kaikki holvissa avoinna olevat tiedostot.</li>
+                <li>Odota hetki, jotta ohjelmat ehtivät kirjoittaa muutokset levylle.</li>
+                <li>Palaa Cryptomatoriin ja paina holvin kohdalta <strong>Lukitse</strong> (Lock).</li>
+                <li>Odota, että Google Drive on synkronoinut muutokset ennen tietokoneen sammuttamista.</li>
+            </ol>
+
+            <h3>Puhelimella</h3>
+            <ol>
+                <li>Palaa Cryptomatoriin ja sulje avoin holvi lukituspainikkeella.</li>
+                <li>Voit ottaa asetuksista käyttöön automaattisen lukituksen, jolloin holvi sulkeutuu sovelluksesta poistuttaessa tai määräajan jälkeen.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>⚠️ Tärkeää muistaa
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li>Säilytä holvin salasana ja palautusavain turvallisesti. Pilvipalvelu tai Cryptomatorin ylläpito ei voi avata holvia puolestasi.</li>
+                <li>Älä nimeä uudelleen, siirrä tai muokkaa holvin sisällä olevia salattuja tiedostoja suoraan Google Drivessa.</li>
+                <li>Varmuuskopioi holvi. Pilvisynkronointi ei yksin korvaa varmuuskopiota.</li>
+                <li>Varmista ennen holvin lukitsemista, että tiedostot eivät ole enää auki muissa sovelluksissa.</li>
+            </ul>
+        </div>
+    </div>
+    </main>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="../ohjeet/" class="nappula1">⬅ Takaisin ohjeisiin</a>
+    </div>
+</div>
+
+</body>
+</html>

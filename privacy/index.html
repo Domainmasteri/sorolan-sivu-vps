@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tietosuojakäytännöt - Sorolan Sakki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/privacy/">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <meta name="description" content="Sorolan Sakin palveluiden ja selainlaajennusten viralliset tietosuojakäytännöt.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/privacy/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Tietosuojakäytännöt - Sorolan Sakki">
+    <meta property="og:description" content="Sorolan Sakin palveluiden ja selainlaajennusten viralliset tietosuojakäytännöt.">
+    <style>
+        .tietosuoja-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .tietosuoja-linkki {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #191f2d;
+            border: 1px solid #2d3748;
+            padding: 18px 22px;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .tietosuoja-linkki:hover {
+            border-color: #ffaa00;
+            background: #1e2637;
+            box-shadow: 0 0 12px rgba(255, 170, 0, 0.15);
+            transform: translateY(-1px);
+        }
+        .tietosuoja-linkki .nuoli {
+            color: #ffaa00;
+            font-size: 1.3rem;
+            transition: transform 0.2s ease;
+        }
+        .tietosuoja-linkki:hover .nuoli {
+            transform: translateX(3px);
+        }
+    </style>
+</head>
+<body>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+    <div class="laatikko" style="max-width: 550px; width: 95%;">
+        <h1 class="otsikko">Tietosuoja</h1>
+
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center; line-height: 1.6;">
+                Tältä sivulta löydät Sorolan Sakin selainlaajennusten ja palveluiden viralliset tietosuojakäytännöt.
+            </p>
+        </div>
+
+        <main id="paaosio">
+        <nav class="tietosuoja-lista" aria-label="Tietosuojakäytännöt">
+
+            <a href="lyhennin" class="tietosuoja-linkki">
+                <span>🔗 Linkkilyhennin</span>
+                <span class="nuoli">→</span>
+            </a>
+            <a href="salasanat" class="tietosuoja-linkki">
+                <span>🎲 Salasanakone</span>
+                <span class="nuoli">→</span>
+            </a>
+        </nav>
+        </main>
+
+        <a href="../" class="linkki-takaisin">← Takaisin pääsivulle</a>
+    </div>
+
+</body>
+</html>

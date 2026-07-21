@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta property="og:url" content="https://sorola.fi/en/privacy/holvi">
+    <link rel="canonical" href="https://sorola.fi/en/privacy/holvi">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/holvi">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/holvi">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/privacy/holvi">
+    <meta charset="UTF-8">
+    <title>Privacy Policy - Sorola Vault</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; background: #0b0d13; color: #e2e8f0; }
+        h1, h2 { color: #ffaa00; }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/privacy/holvi">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/privacy/holvi" aria-current="page">🇬🇧</a>
+    </nav>
+    <h1>Privacy Policy for Sorola Vault</h1>
+    <p><strong>Effective Date:</strong> May 2026</p>
+
+    <h2>1. Introduction</h2>
+    <p>Sorola Vault ("the Extension") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data.</p>
+
+    <h2>2. Data Collection and Usage</h2>
+    <p>The Extension requires the <code>&lt;all_urls&gt;</code> permission to function properly. This permission is used exclusively to scan the current webpage for login forms (username and password fields) so that the Extension can autofill your credentials when explicitly requested.</p>
+    <ul>
+        <li><strong>No Tracking:</strong> The Extension does not track your browsing history, monitor your behavior, or collect any analytics.</li>
+        <li><strong>No External Data Collection:</strong> The Extension only reads login fields when you open the popup or command it to autofill.</li>
+    </ul>
+
+    <h2>3. Required Permissions</h2>
+    <ul>
+        <li><strong><code>&lt;all_urls&gt;</code>:</strong> Needed to detect login forms on any website you visit.</li>
+        <li><strong><code>clipboardWrite</code>:</strong> Needed to copy your passwords or TOTP codes to your clipboard when you click the "Copy" button.</li>
+    </ul>
+
+    <h2>4. Data Sharing and Third Parties</h2>
+    <p>We do not sell, trade, or rent user data to any third parties. Your encrypted password vault is synchronized directly with your own secure Cloudflare Worker endpoint. The extension does not contain tracking scripts or advertisements.</p>
+
+    <h2>5. Security</h2>
+    <p>All sensitive data (passwords, card details, TOTP secrets) is encrypted locally on your device using PBKDF2 and AES-GCM encryption before it is ever sent to your personal database. The Extension communicates exclusively via secure HTTPS protocols.</p>
+
+    <h2>6. Contact</h2>
+    <p>If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi</p>
+</body>
+</html>

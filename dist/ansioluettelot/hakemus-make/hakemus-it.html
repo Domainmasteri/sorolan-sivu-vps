@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta property="og:url" content="https://sorola.fi/ansioluettelot/hakemus-make/hakemus-it">
+    <link rel="canonical" href="https://sorola.fi/ansioluettelot/hakemus-make/hakemus-it">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ansioluettelot/hakemus-make/hakemus-it">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/application-builder/it-application">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ansioluettelot/hakemus-make/hakemus-it">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Työhakemus - Markus Sorola</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="style-hakemus.css">
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/ansioluettelot/hakemus-make/hakemus-it" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/resume/application-builder/it-application">🇬🇧</a>
+    </nav>
+
+<button class="btn-download" onclick="generatePDF('Markus_Sorola_Avoin_Hakemus_IT.pdf')">Lataa PDF</button>
+
+<div class="hakemus-container" id="hakemus">
+    
+    <div class="sidebar">
+        <h2>Markus Sorola</h2>
+        <p class="title">Avoin hakemus</p>
+        
+        <h3>Yhteystiedot</h3>
+        <p><strong>Sähköposti:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+        <p><strong>Paikkakunta:</strong><br>Salo</p>
+        <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+
+        <h3>Tekninen Stack</h3>
+        <p>• HTML5 & CSS3<br>• JavaScript & PHP<br>• Linux VPS / Cloud Infra<br>• Git / GitHub / CI-CD<br>• Tietoturva & Automatisointi</p>
+    </div>
+
+    <!-- Pienennettiin paddingia täällä (alkuperäinen oli 3.5rem 3rem) -->
+    <div class="main-content" style="padding: 2.5rem 3rem;">
+        <div class="letter-header" style="justify-content: flex-end; margin-bottom: 2rem;">
+            <div class="date-info">
+                Salo, <span id="current-date"></span>
+            </div>
+        </div>
+
+        <!-- Pienennettiin otsikon alaväliä -->
+        <h1 class="application-title" style="margin-bottom: 1.2rem;">Avoin työhakemus – Itseohjautuva verkkoteknologioiden ja infran osaaja</h1>
+
+        <div class="letter-body">
+            <p>Hyvä rekrytoija,</p>
+            
+            <p>Lähetän teille tämän avoimen hakemuksen, sillä etsin uusia haasteita alan parista ja olen erittäin kiinnostunut yrityksenne toiminnasta. Olen tavoitteellinen ja vahvan loogisen ongelmanratkaisukyvyn omaava tekijä, jolle nykyaikaiset verkkoteknologiat ja infrastruktuurin ylläpito ovat paitsi osaamisen ydintä, myös suuri intohimo.</p>
+            
+            <p>Olen suunnitellut ja rakentanut täysin itsenäisesti kattavan verkkoinfrastruktuurin omien domainieni ympärille. Hallitsen sujuvasti frontend- ja backend-kehityksen (HTML, CSS, JavaScript, PHP) ja ymmärrän syvällisesti, miten järjestelmät keskustelevat keskenään. Kehitystyön lisäksi vastaan oman palvelinympäristöni pystyttämisestä ja ylläpidosta (esim. VPS-ratkaisut ja pilvitallennus) sekä versionhallinnasta GitHubin kautta. Tietoturva, yksityisyydensuoja ja prosessien automatisointi ovat minulle selkärangassa olevia toimintatapoja, eivätkä vain päälle liimattuja ominaisuuksia.</p>
+            
+            <p>Mitä tuon mukanani tiimiin:</p>
+            <ul style="margin-bottom: 0.8rem;">
+                <li><strong>Vahva tekninen pohja:</strong> Kyky rakentaa ja ylläpitää verkkopalveluita palvelintasolta käyttöliittymään saakka.</li>
+                <li><strong>Looginen päättelykyky:</strong> Nautin monimutkaisten ongelmien purkamisesta ja koodin optimoinnista.</li>
+                <li><strong>Käytännönläheinen asenne:</strong> Ymmärrän miten asiat koodataan, ja miten ne pidetään turvallisesti pystyssä.</li>
+            </ul>
+            
+            <p>Varhaisjakelijan taustani on opettanut minulle täsmällisyyttä ja kykyä viedä asiat maaliin aikataulussa – ominaisuuksia, joista on valtavasti hyötyä myös vaativissa IT-projekteissa.</p>
+            
+            <p style="margin-bottom: 0;">Keskustelisin erittäin mielelläni lisää siitä, miten tekninen osaamiseni vastaisi yrityksenne tarpeita.</p>
+        </div>
+
+        <!-- Pienennettiin alatunnisteen yläväliä -->
+        <div class="letter-footer" style="padding-top: 1rem;">
+            <p>Ystävällisin terveisin,</p>
+            <div class="signature">
+                Markus Sorola
+            </div>
+        </div>
+    </div>
+</div>
+<script src="script-hakemus.js"></script>
+
+</body>
+</html>

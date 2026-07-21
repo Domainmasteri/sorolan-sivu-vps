@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Privacy Policy - Sorolan Holvi</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; background: #0b0d13; color: #e2e8f0; }
+        h1, h2 { color: #ffaa00; }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy for Sorolan Holvi</h1>
+    <p><strong>Effective Date:</strong> May 2026</p>
+
+    <h2>1. Introduction</h2>
+    <p>Sorolan Holvi ("the Extension") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data.</p>
+
+    <h2>2. Data Collection and Usage</h2>
+    <p>The Extension requires the <code>&lt;all_urls&gt;</code> permission to function properly. This permission is used exclusively to scan the current webpage for login forms (username and password fields) so that the Extension can autofill your credentials when explicitly requested.</p>
+    <ul>
+        <li><strong>No Tracking:</strong> The Extension does not track your browsing history, monitor your behavior, or collect any analytics.</li>
+        <li><strong>No External Data Collection:</strong> The Extension only reads login fields when you open the popup or command it to autofill.</li>
+    </ul>
+
+    <h2>3. Required Permissions</h2>
+    <ul>
+        <li><strong><code>&lt;all_urls&gt;</code>:</strong> Needed to detect login forms on any website you visit.</li>
+        <li><strong><code>clipboardWrite</code>:</strong> Needed to copy your passwords or TOTP codes to your clipboard when you click the "Copy" button.</li>
+    </ul>
+
+    <h2>4. Data Sharing and Third Parties</h2>
+    <p>We do not sell, trade, or rent user data to any third parties. Your encrypted password vault is synchronized directly with your own secure Cloudflare Worker endpoint. The extension does not contain tracking scripts or advertisements.</p>
+
+    <h2>5. Security</h2>
+    <p>All sensitive data (passwords, card details, TOTP secrets) is encrypted locally on your device using PBKDF2 and AES-GCM encryption before it is ever sent to your personal database. The Extension communicates exclusively via secure HTTPS protocols.</p>
+
+    <h2>6. Contact</h2>
+    <p>If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi</p>
+</body>
+</html>

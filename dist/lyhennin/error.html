@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta property="og:url" content="https://sorola.fi/lyhennin/error">
+    <link rel="canonical" href="https://sorola.fi/lyhennin/error">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/lyhennin/error">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/shortener/error">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/lyhennin/error">
+    <meta charset="UTF-8">
+    <title>Sorola - Virhe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/lyhennin/error" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/shortener/error">🇬🇧</a>
+    </nav>
+    <div class="laatikko">
+        <h1 class="otsikko">URL-Lyhentäjä</h1>
+        
+        <div class="palsta" style="text-align: center; padding: 30px;">
+            <h2 style="color: #ffaa00; margin-bottom: 15px;">Hups, linkkiä ei löydy</h2>
+            <p class="saate" style="margin-bottom: 25px;">
+                Pahoittelut, etsimääsi lyhytosoitetta ei löytynyt palvelimelta tai se on vanhentunut.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+                <a href="../lyhennin" class="nappula" style="width: 220px; text-decoration: none;">Siirry takaisin lyhentimeen</a>
+                <a href="../" class="nappula1" style="width: 220px; text-decoration: none;">Takaisin pääsivulle</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
