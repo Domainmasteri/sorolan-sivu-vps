@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const databasePath = path.resolve(__dirname, process.env.DATABASE_PATH || 'data/database.sqlite');
 const schemaPath = path.resolve(__dirname, 'schema.sql');
-const busyTimeoutMs = Math.max(0, Number.parseInt(process.env.SQLITE_BUSY_TIMEOUT_MS || '5000', 10) || 5000);
+const busyTimeoutMs = Math.max(0, Number.parseInt(process.env.SQLITE_BUSY_TIMEOUT_MS, 10) || 5000);
 
 fs.mkdirSync(path.dirname(databasePath), { recursive: true });
 
@@ -89,7 +89,8 @@ const execute = (connection, sql, params = []) => {
   const statement = connection.prepare(normalized.sql);
 
   if (isReadQuery(normalized.sql)) {
-    return { rows: statement.all(...normalized.params), fields: statement.columns() };
+    const rows = statement.all(...normalized.params);
+    return { rows, fields: statement.columns() || [] };
   }
 
   const result = statement.run(...normalized.params);
