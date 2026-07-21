@@ -324,7 +324,7 @@ app.post('/api/auth', async (req, res) => {
         return res.status(400).json({ error: 'Tunnuksen minimipituus 3, salasanan 6 merkkiä.' });
       }
 
-      const inviteResult = await db.query('SELECT id FROM invites WHERE code_hash = $1 AND is_used = FALSE LIMIT 1', [inviteCode]);
+      const inviteResult = await db.query('SELECT id FROM invites WHERE code_hash = $1 AND is_used = 0 LIMIT 1', [inviteCode]);
       if (!inviteResult.rows[0]) {
         return res.status(400).json({ error: 'Kutsukoodi on virheellinen tai jo käytetty.' });
       }
@@ -338,7 +338,7 @@ app.post('/api/auth', async (req, res) => {
       try {
         await client.query('BEGIN');
         await client.query('INSERT INTO users (username, password_hash) VALUES ($1, $2)', [username, hashPassword(password)]);
-        await client.query('UPDATE invites SET is_used = TRUE WHERE id = $1', [inviteResult.rows[0].id]);
+        await client.query('UPDATE invites SET is_used = 1 WHERE id = $1', [inviteResult.rows[0].id]);
         await client.query('COMMIT');
       } catch (error) {
         await client.query('ROLLBACK');
@@ -471,7 +471,7 @@ app.post('/api/guestbook', async (req, res) => {
       return res.status(400).json({ error: 'Bottisuojausta ei läpäisty. Tarkista laskutoimituksen tulos.' });
     }
 
-    await db.query('INSERT INTO guestbook (name, message, is_admin) VALUES ($1, $2, FALSE)', [String(name).trim(), String(message).trim()]);
+    await db.query('INSERT INTO guestbook (name, message, is_admin) VALUES ($1, $2, 0)', [String(name).trim(), String(message).trim()]);
     return res.json({ success: true });
   } catch {
     return res.status(500).json({ error: 'Palvelinvirhe.' });
@@ -499,7 +499,7 @@ app.patch('/api/guestbook', requireAuth, async (req, res) => {
       if (!adminMessage.trim()) return res.status(400).json({ error: 'Viesti on pakollinen.' });
       if (adminName.trim().length > 100) return res.status(400).json({ error: 'Nimi on liian pitkä (max 100 merkkiä).' });
       if (adminMessage.trim().length > 2000) return res.status(400).json({ error: 'Viesti on liian pitkä (max 2000 merkkiä).' });
-      await db.query('INSERT INTO guestbook (name, message, is_admin) VALUES ($1, $2, TRUE)', [adminName.trim(), adminMessage.trim()]);
+      await db.query('INSERT INTO guestbook (name, message, is_admin) VALUES ($1, $2, 1)', [adminName.trim(), adminMessage.trim()]);
       return res.json({ success: true });
     }
 

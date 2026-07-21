@@ -12,7 +12,7 @@ Welcome to the **Sorolan Sivut** repository. This is a side project of our famil
  * **🛡️ Admin Panel:** Backend management with invite and user systems.
 ### 🛠 Tech Stack
  * **Frontend:** HTML5, CSS3, Vanilla JS
- * **Backend / API:** Cloudflare Pages Functions (Serverless Workers)
+ * **Backend / API:** Cloudflare Pages Functions (Serverless Workers) + Express VPS server
  * **Build Tool:** Node.js (build.mjs)
  * **Deployment:** Cloudflare Pages
 ### 🚀 Getting Started
@@ -42,6 +42,9 @@ Welcome to the **Sorolan Sivut** repository. This is a side project of our famil
    docker run -p 3000:3000 --env-file .env sorolan-sivu-vps
    ```
    *Repository now includes a Dockerfile and can be deployed directly from Git in Coolify.*
+  5. **Local database:**
+   * The VPS server stores app data in a local SQLite file (`data/database.sqlite` by default).
+   * Override the file location with `DATABASE_PATH` if needed.
 ## 🇫🇮 Suomi
 Tervetuloa **Sorolan Sivut** -repositorioon. Tämä on perheemme sivuprojekti koodaamisen suhteen. Se on laaja, monikielinen verkkoprojekti, joka on suunniteltu Cloudflare Pages -alustalle. Se toimii henkilökohtaisena portaalina ja tarjoaa useita itse koodattuja työkaluja ja oppaita.
 ### ✨ Ominaisuudet & Työkalut
@@ -54,7 +57,7 @@ Tervetuloa **Sorolan Sivut** -repositorioon. Tämä on perheemme sivuprojekti ko
  * **🛡️ Hallintapaneeli:** Ylläpitopaneeli kutsu- ja käyttäjähallinnalla.
 ### 🛠 Teknologiat
  * **Frontend:** HTML5, CSS3, Vanilla JS
- * **Backend / API:** Cloudflare Pages Functions (Serverless Workers)
+ * **Backend / API:** Cloudflare Pages Functions (Serverless Workers) + Express VPS-palvelin
  * **Build-työkalu:** Node.js (build.mjs)
  * **Julkaisu:** Cloudflare Pages
 ### 🚀 Aloitusopas
@@ -84,4 +87,7 @@ Tervetuloa **Sorolan Sivut** -repositorioon. Tämä on perheemme sivuprojekti ko
    docker run -p 3000:3000 --env-file .env sorolan-sivu-vps
    ```
    *Repossa on nyt Dockerfile, joten voit ottaa koodin suoraan Coolifyyn Gitistä.*
+  5. **Paikallinen tietokanta:**
+   * VPS-palvelin tallentaa sovelluksen datan paikalliseen SQLite-tiedostoon (`data/database.sqlite` oletuksena).
+   * Voit vaihtaa tiedoston sijainnin `DATABASE_PATH`-muuttujalla.
 *Repository maintained by @Domainmasteri*
