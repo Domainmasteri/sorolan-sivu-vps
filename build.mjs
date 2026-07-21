@@ -11,7 +11,23 @@ const SITE_ORIGIN = 'https://sorola.fi';
 const SITE_ORIGIN_PATTERN = new RegExp(`${escapeRegExp(SITE_ORIGIN)}(?:/en)?(?:/[^"'\\s<]*)?`, 'g');
 const TEXT_FILE_EXTENSIONS = new Set(['.html', '.js', '.xml', '.txt']);
 const ROOT_ONLY_FILES = new Set(['_headers', 'robots.txt', 'sitemap.xml']);
-const IGNORE_NAMES = new Set(['.git', 'dist', 'node_modules', 'i18n', 'functions', 'package.json', 'package-lock.json', 'build.mjs', 'README.md', 'route-localization.js']);
+const IGNORE_NAMES = new Set([
+  '.git',
+  'dist',
+  'node_modules',
+  'i18n',
+  'functions',
+  'package.json',
+  'package-lock.json',
+  'build.mjs',
+  'README.md',
+  'route-localization.js',
+  '.env.example',
+  'db.js',
+  'schema.sql',
+  'server.js',
+  'storage.js'
+]);
 const ATTRIBUTE_PATTERN = /(placeholder|aria-label|content|title|alt)=(["'])(.*?)\2/gi;
 const URL_ATTRIBUTE_PATTERN = /\b(href|src|action)=(["'])(.*?)\2/gi;
 
