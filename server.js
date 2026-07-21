@@ -3,7 +3,6 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
-import fs from 'node:fs/promises';
 import multer from 'multer';
 import rateLimit from 'express-rate-limit';
 import contentDisposition from 'content-disposition';
@@ -25,18 +24,17 @@ const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, 'dist');
 const shortenerHomeUrl = process.env.SHORTENER_HOME_URL || 'https://sorola.fi/lyhennin';
 const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/lyhennin/error';
-const uploadDir = path.resolve(process.env.UPLOAD_DIR || '/tmp/uploads');
-
-await fs.mkdir(uploadDir, { recursive: true });
+const MAX_SHARE_FILE_SIZE_BYTES = 200 * 1024 * 1024;
+const MAX_HUMOR_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 
 const uploadShare = multer({
-  dest: uploadDir,
-  limits: { fileSize: 5120 * 1024 * 1024 }
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_SHARE_FILE_SIZE_BYTES }
 });
 
 const uploadHumor = multer({
-  dest: uploadDir,
-  limits: { fileSize: 20 * 1024 * 1024 }
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_HUMOR_FILE_SIZE_BYTES }
 });
 
 const apiLimiter = rateLimit({
@@ -56,6 +54,13 @@ const authLimiter = rateLimit({
 const uploadLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const pageLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 1200,
   standardHeaders: true,
   legacyHeaders: false
 });
@@ -229,24 +234,6 @@ function prefersEnglish(req) {
   if (!header) return false;
   const first = header.split(',')[0]?.trim().toLowerCase() || '';
   return first.startsWith('en');
-}
-
-function ensureSafeUploadPath(filePath) {
-  const resolved = path.resolve(filePath);
-  if (resolved !== uploadDir && !resolved.startsWith(`${uploadDir}${path.sep}`)) {
-    throw new Error('Virheellinen väliaikaistiedoston polku.');
-  }
-  return resolved;
-}
-
-async function readUploadedFile(file) {
-  return fs.readFile(ensureSafeUploadPath(file.path));
-}
-
-async function deleteUploadedFile(file) {
-  if (!file?.path) return;
-  const safePath = ensureSafeUploadPath(file.path);
-  await fs.unlink(safePath).catch(() => {});
 }
 
 async function listAllObjects(bucketName) {
@@ -675,7 +662,7 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
     const fileName = `${id}.${extension || 'bin'}`;
 
-    const body = await readUploadedFile(file);
+    const body = file.buffer;
 
     await s3.send(new PutObjectCommand({
       Bucket: shareBucketName,
@@ -694,8 +681,6 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     return res.json({ url: downloadUrl, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
-  } finally {
-    await deleteUploadedFile(file).catch(() => {});
   }
 });
 
@@ -796,7 +781,6 @@ app.post('/api/humor/upload', requireAuth, uploadHumor.single('file'), async (re
 
   if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
   if (!String(file.mimetype || '').startsWith('image/')) {
-    await deleteUploadedFile(file).catch(() => {});
     return res.status(400).json({ error: 'Vain kuvatiedostot (image/*) ovat sallittuja.' });
   }
 
@@ -805,7 +789,7 @@ app.post('/api/humor/upload', requireAuth, uploadHumor.single('file'), async (re
     const rawExt = (file.originalname.split('.').pop() || '').toLowerCase();
     const safeExt = /^[a-z0-9]{1,10}$/.test(rawExt) ? rawExt : 'jpg';
     const key = `${id}.${safeExt}`;
-    const body = await readUploadedFile(file);
+    const body = file.buffer;
 
     await s3.send(new PutObjectCommand({
       Bucket: humorBucketName,
@@ -822,8 +806,6 @@ app.post('/api/humor/upload', requireAuth, uploadHumor.single('file'), async (re
     return res.json({ success: true, key });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
-  } finally {
-    await deleteUploadedFile(file).catch(() => {});
   }
 });
 
@@ -862,9 +844,9 @@ app.use((error, _req, res, next) => {
   return next();
 });
 
-app.use(express.static(distPath));
+app.use(pageLimiter, express.static(distPath));
 
-app.get('*', (_req, res) => {
+app.get('*', pageLimiter, (_req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
