@@ -10,12 +10,52 @@ const schemaPath = path.resolve(__dirname, 'schema.sql');
 
 fs.mkdirSync(path.dirname(databasePath), { recursive: true });
 
-const database = new Database(databasePath);
+const readSchemaSql = () => {
+  try {
+    return fs.readFileSync(schemaPath, 'utf8');
+  } catch (error) {
+    throw new Error(`SQLite-skeeman lukeminen epäonnistui tiedostosta ${schemaPath}: ${error.message}`);
+  }
+};
 
-const schemaSql = fs.readFileSync(schemaPath, 'utf8');
-database.exec(schemaSql);
+const openDatabase = () => {
+  try {
+    const connection = new Database(databasePath);
+    connection.pragma('busy_timeout = 5000');
+    return connection;
+  } catch (error) {
+    throw new Error(`SQLite-tietokannan avaaminen epäonnistui polusta ${databasePath}: ${error.message}`);
+  }
+};
 
-const toSqlitePlaceholders = (sql) => sql.replace(/\$\d+/g, '?');
+const schemaSql = readSchemaSql();
+
+const initializeDatabase = () => {
+  const connection = openDatabase();
+
+  try {
+    connection.exec(schemaSql);
+    return connection;
+  } catch (error) {
+    connection.close();
+    throw new Error(`SQLite-skeeman alustus epäonnistui: ${error.message}`);
+  }
+};
+
+const database = initializeDatabase();
+
+const normalizeSqliteQuery = (sql, params = []) => {
+  const orderedParams = [];
+  const normalizedSql = sql.replace(/\$(\d+)/g, (_match, index) => {
+    orderedParams.push(params[Number.parseInt(index, 10) - 1]);
+    return '?';
+  });
+
+  return {
+    sql: normalizedSql,
+    params: orderedParams.length > 0 ? orderedParams : params
+  };
+};
 
 const isReadQuery = (sql) => {
   const normalized = sql.trimStart().toUpperCase();
@@ -25,29 +65,33 @@ const isReadQuery = (sql) => {
     || normalized.startsWith('EXPLAIN');
 };
 
-const execute = (sql, params = []) => {
-  const normalizedSql = toSqlitePlaceholders(sql);
-  const statement = database.prepare(normalizedSql);
+const execute = (connection, sql, params = []) => {
+  const normalized = normalizeSqliteQuery(sql, params);
+  const statement = connection.prepare(normalized.sql);
 
-  if (isReadQuery(normalizedSql)) {
-    return { rows: statement.all(...params), fields: [] };
+  if (isReadQuery(normalized.sql)) {
+    return { rows: statement.all(...normalized.params), fields: [] };
   }
 
-  const result = statement.run(...params);
+  const result = statement.run(...normalized.params);
   return {
     rows: [],
     fields: [],
     changes: result.changes,
-    lastInsertRowid: Number(result.lastInsertRowid)
+    lastInsertRowid: result.lastInsertRowid
   };
 };
 
-const query = (sql, params = []) => execute(sql, params);
+const query = (sql, params = []) => execute(database, sql, params);
 
-const connect = () => ({
-  query: (sql, params = []) => execute(sql, params),
-  release: () => {}
-});
+const connect = () => {
+  const connection = openDatabase();
+
+  return {
+    query: (sql, params = []) => execute(connection, sql, params),
+    release: () => connection.close()
+  };
+};
 
 export const db = {
   query,
