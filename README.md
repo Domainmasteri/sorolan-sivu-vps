@@ -35,6 +35,13 @@ Welcome to the **Sorolan Sivut** repository. This is a side project of our famil
    
    ```
    *The compiled site will be output to the /dist directory.*
+
+ 4. **Run with Docker (Coolify compatible):**
+   ```
+   docker build -t sorolan-sivu-vps .
+   docker run -p 3000:3000 --env-file .env sorolan-sivu-vps
+   ```
+   *Repository now includes a Dockerfile and can be deployed directly from Git in Coolify.*
 ## 🇫🇮 Suomi
 Tervetuloa **Sorolan Sivut** -repositorioon. Tämä on perheemme sivuprojekti koodaamisen suhteen. Se on laaja, monikielinen verkkoprojekti, joka on suunniteltu Cloudflare Pages -alustalle. Se toimii henkilökohtaisena portaalina ja tarjoaa useita itse koodattuja työkaluja ja oppaita.
 ### ✨ Ominaisuudet & Työkalut
@@ -70,4 +77,11 @@ Tervetuloa **Sorolan Sivut** -repositorioon. Tämä on perheemme sivuprojekti ko
    
    ```
    *Valmis sivusto generoituu /dist -kansioon.*
+
+ 4. **Aja Dockerilla (Coolify-yhteensopiva):**
+   ```
+   docker build -t sorolan-sivu-vps .
+   docker run -p 3000:3000 --env-file .env sorolan-sivu-vps
+   ```
+   *Repossa on nyt Dockerfile, joten voit ottaa koodin suoraan Coolifyyn Gitistä.*
 *Repository maintained by @Domainmasteri*
