@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import multer from 'multer';
+import rateLimit from 'express-rate-limit';
+import contentDisposition from 'content-disposition';
 import {
   CopyObjectCommand,
   DeleteObjectCommand,
@@ -23,30 +25,83 @@ const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, 'dist');
 const shortenerHomeUrl = process.env.SHORTENER_HOME_URL || 'https://sorola.fi/lyhennin';
 const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/lyhennin/error';
+const uploadDir = path.resolve(process.env.UPLOAD_DIR || '/tmp/uploads');
 
-await fs.mkdir('/tmp/uploads', { recursive: true });
+await fs.mkdir(uploadDir, { recursive: true });
 
 const uploadShare = multer({
-  dest: '/tmp/uploads',
+  dest: uploadDir,
   limits: { fileSize: 5120 * 1024 * 1024 }
 });
 
 const uploadHumor = multer({
-  dest: '/tmp/uploads',
+  dest: uploadDir,
   limits: { fileSize: 20 * 1024 * 1024 }
+});
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 300,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 40,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+const uploadLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false
 });
 
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-
-function luoHash(teksti) {
-  return crypto.createHash('sha256').update(teksti).digest('hex');
-}
+app.use('/api', apiLimiter);
+app.use('/api/auth', authLimiter);
+app.use('/api/upload', uploadLimiter);
+app.use('/api/humor/upload', uploadLimiter);
 
 function luoSatunnainenPolku(pituus = 5) {
   const merkit = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  const randomValues = crypto.randomBytes(pituus);
-  return Array.from(randomValues).map((v) => merkit[v % merkit.length]).join('');
+  let pathValue = '';
+  for (let i = 0; i < pituus; i += 1) {
+    pathValue += merkit[crypto.randomInt(0, merkit.length)];
+  }
+  return pathValue;
+}
+
+function hashPassword(password) {
+  const iterations = 210000;
+  const keyLength = 32;
+  const digest = 'sha512';
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.pbkdf2Sync(password, salt, iterations, keyLength, digest).toString('hex');
+  return `pbkdf2$${iterations}$${digest}$${salt}$${hash}`;
+}
+
+function verifyPassword(password, storedHash) {
+  const parts = String(storedHash || '').split('$');
+  if (parts.length !== 5 || parts[0] !== 'pbkdf2') {
+    return false;
+  }
+
+  const iterations = Number.parseInt(parts[1], 10);
+  const digest = parts[2];
+  const salt = parts[3];
+  const expected = parts[4];
+
+  if (!iterations || !digest || !salt || !expected) {
+    return false;
+  }
+
+  const derived = crypto.pbkdf2Sync(password, salt, iterations, expected.length / 2, digest).toString('hex');
+  return crypto.timingSafeEqual(Buffer.from(derived, 'hex'), Buffer.from(expected, 'hex'));
 }
 
 function parseBasicBearer(req) {
@@ -62,15 +117,100 @@ function parseBasicBearer(req) {
   }
 }
 
+function resolveTableByHostname(hostname) {
+  switch (hostname) {
+    case 'soro.la': return 'links';
+    case 'srla.fi': return 'srla_links';
+    case 'srl.la': return 'srl_links';
+    default: return null;
+  }
+}
+
+function resolveTableByDomain(domain) {
+  switch (domain) {
+    case 'soro.la': return 'links';
+    case 'srla.fi': return 'srla_links';
+    case 'srl.la': return 'srl_links';
+    default: return null;
+  }
+}
+
+async function fetchLinkByPath(table, shortPath) {
+  switch (table) {
+    case 'links':
+      return db.query('SELECT original_url FROM links WHERE short_path = $1 LIMIT 1', [shortPath]);
+    case 'srla_links':
+      return db.query('SELECT original_url FROM srla_links WHERE short_path = $1 LIMIT 1', [shortPath]);
+    case 'srl_links':
+      return db.query('SELECT original_url FROM srl_links WHERE short_path = $1 LIMIT 1', [shortPath]);
+    default:
+      throw new Error('Virheellinen taulu.');
+  }
+}
+
+function incrementLinkClicks(table, shortPath) {
+  switch (table) {
+    case 'links':
+      return db.query('UPDATE links SET clicks = clicks + 1 WHERE short_path = $1', [shortPath]);
+    case 'srla_links':
+      return db.query('UPDATE srla_links SET clicks = clicks + 1 WHERE short_path = $1', [shortPath]);
+    case 'srl_links':
+      return db.query('UPDATE srl_links SET clicks = clicks + 1 WHERE short_path = $1', [shortPath]);
+    default:
+      return Promise.resolve();
+  }
+}
+
+async function insertShortLink(table, shortPath, originalUrl) {
+  switch (table) {
+    case 'links':
+      return db.query('INSERT INTO links (short_path, original_url, clicks) VALUES ($1, $2, 0)', [shortPath, originalUrl]);
+    case 'srla_links':
+      return db.query('INSERT INTO srla_links (short_path, original_url, clicks) VALUES ($1, $2, 0)', [shortPath, originalUrl]);
+    case 'srl_links':
+      return db.query('INSERT INTO srl_links (short_path, original_url, clicks) VALUES ($1, $2, 0)', [shortPath, originalUrl]);
+    default:
+      throw new Error('Virheellinen taulu.');
+  }
+}
+
+async function updateShortLink(table, shortPath, originalUrl) {
+  switch (table) {
+    case 'links':
+      return db.query('UPDATE links SET original_url = $1 WHERE short_path = $2', [originalUrl, shortPath]);
+    case 'srla_links':
+      return db.query('UPDATE srla_links SET original_url = $1 WHERE short_path = $2', [originalUrl, shortPath]);
+    case 'srl_links':
+      return db.query('UPDATE srl_links SET original_url = $1 WHERE short_path = $2', [originalUrl, shortPath]);
+    default:
+      throw new Error('Virheellinen taulu.');
+  }
+}
+
+async function deleteShortLink(table, shortPath) {
+  switch (table) {
+    case 'links':
+      return db.query('DELETE FROM links WHERE short_path = $1', [shortPath]);
+    case 'srla_links':
+      return db.query('DELETE FROM srla_links WHERE short_path = $1', [shortPath]);
+    case 'srl_links':
+      return db.query('DELETE FROM srl_links WHERE short_path = $1', [shortPath]);
+    default:
+      throw new Error('Virheellinen taulu.');
+  }
+}
+
 async function haeKayttaja(req) {
   const parsed = parseBasicBearer(req);
   if (!parsed) return null;
-  const passHash = luoHash(parsed.password);
-  const result = await db.query(
-    'SELECT id, username FROM users WHERE username = $1 AND password_hash = $2',
-    [parsed.username, passHash]
-  );
-  return result.rows[0] || null;
+
+  const result = await db.query('SELECT id, username, password_hash FROM users WHERE username = $1 LIMIT 1', [parsed.username]);
+  const user = result.rows[0];
+  if (!user || !verifyPassword(parsed.password, user.password_hash)) {
+    return null;
+  }
+
+  return { id: user.id, username: user.username };
 }
 
 async function requireAuth(req, res, next) {
@@ -89,6 +229,24 @@ function prefersEnglish(req) {
   if (!header) return false;
   const first = header.split(',')[0]?.trim().toLowerCase() || '';
   return first.startsWith('en');
+}
+
+function ensureSafeUploadPath(filePath) {
+  const resolved = path.resolve(filePath);
+  if (resolved !== uploadDir && !resolved.startsWith(`${uploadDir}${path.sep}`)) {
+    throw new Error('Virheellinen väliaikaistiedoston polku.');
+  }
+  return resolved;
+}
+
+async function readUploadedFile(file) {
+  return fs.readFile(ensureSafeUploadPath(file.path));
+}
+
+async function deleteUploadedFile(file) {
+  if (!file?.path) return;
+  const safePath = ensureSafeUploadPath(file.path);
+  await fs.unlink(safePath).catch(() => {});
 }
 
 async function listAllObjects(bucketName) {
@@ -111,39 +269,42 @@ async function listAllObjects(bucketName) {
   return objects;
 }
 
+async function streamS3BodyToResponse(body, res) {
+  if (!body) return res.status(404).send('Tiedostoa ei löydy.');
+
+  if (typeof body.pipe === 'function') {
+    body.on('error', () => res.destroy());
+    body.pipe(res);
+    return;
+  }
+
+  if (typeof body.transformToByteArray === 'function') {
+    const bytes = await body.transformToByteArray();
+    res.send(Buffer.from(bytes));
+    return;
+  }
+
+  res.status(500).send('Tiedoston luku epäonnistui.');
+}
+
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
     const pathname = req.path.replace(/^\/+/, '');
+    const table = resolveTableByHostname(hostname);
 
-    const domains = {
-      'soro.la': 'links',
-      'srla.fi': 'srla_links',
-      'srl.la': 'srl_links'
-    };
-
-    const table = domains[hostname];
     if (!table) return next();
+    if (!pathname) return res.redirect(302, shortenerHomeUrl);
+    if (pathname.startsWith('api/')) return next();
 
-    if (!pathname) {
-      return res.redirect(302, shortenerHomeUrl);
-    }
-
-    if (pathname.startsWith('api/')) {
-      return next();
-    }
-
-    const linkResult = await db.query(
-      `SELECT original_url FROM ${table} WHERE short_path = $1 LIMIT 1`,
-      [pathname]
-    );
-
+    const linkResult = await fetchLinkByPath(table, pathname);
     const match = linkResult.rows[0];
+
     if (!match?.original_url) {
       return res.redirect(302, shortenerErrorUrl);
     }
 
-    db.query(`UPDATE ${table} SET clicks = clicks + 1 WHERE short_path = $1`, [pathname]).catch(() => {});
+    incrementLinkClicks(table, pathname).catch(() => {});
     return res.redirect(302, match.original_url);
   } catch {
     return res.redirect(302, shortenerErrorUrl);
@@ -158,12 +319,12 @@ app.post('/api/auth', async (req, res) => {
       const { username, password } = body;
       if (!username || !password) return res.status(400).json({ error: 'Tunnus ja salasana vaaditaan.' });
 
-      const result = await db.query(
-        'SELECT id FROM users WHERE username = $1 AND password_hash = $2',
-        [username, luoHash(password)]
-      );
+      const result = await db.query('SELECT password_hash FROM users WHERE username = $1 LIMIT 1', [username]);
+      const user = result.rows[0];
+      if (user && verifyPassword(password, user.password_hash)) {
+        return res.json({ success: true });
+      }
 
-      if (result.rows[0]) return res.json({ success: true });
       return res.status(401).json({ error: 'Väärä käyttäjätunnus tai salasana.' });
     }
 
@@ -176,10 +337,7 @@ app.post('/api/auth', async (req, res) => {
         return res.status(400).json({ error: 'Tunnuksen minimipituus 3, salasanan 6 merkkiä.' });
       }
 
-      const inviteResult = await db.query(
-        'SELECT id FROM invites WHERE code_hash = $1 AND is_used = FALSE LIMIT 1',
-        [inviteCode]
-      );
+      const inviteResult = await db.query('SELECT id FROM invites WHERE code_hash = $1 AND is_used = FALSE LIMIT 1', [inviteCode]);
       if (!inviteResult.rows[0]) {
         return res.status(400).json({ error: 'Kutsukoodi on virheellinen tai jo käytetty.' });
       }
@@ -192,7 +350,7 @@ app.post('/api/auth', async (req, res) => {
       const client = await db.connect();
       try {
         await client.query('BEGIN');
-        await client.query('INSERT INTO users (username, password_hash) VALUES ($1, $2)', [username, luoHash(password)]);
+        await client.query('INSERT INTO users (username, password_hash) VALUES ($1, $2)', [username, hashPassword(password)]);
         await client.query('UPDATE invites SET is_used = TRUE WHERE id = $1', [inviteResult.rows[0].id]);
         await client.query('COMMIT');
       } catch (error) {
@@ -214,16 +372,13 @@ app.post('/api/auth', async (req, res) => {
         return res.status(400).json({ error: 'Uuden salasanan minimipituus on 6 merkkiä.' });
       }
 
-      const userCheck = await db.query(
-        'SELECT id FROM users WHERE username = $1 AND password_hash = $2 LIMIT 1',
-        [username, luoHash(oldPassword)]
-      );
-
-      if (!userCheck.rows[0]) {
+      const result = await db.query('SELECT id, password_hash FROM users WHERE username = $1 LIMIT 1', [username]);
+      const user = result.rows[0];
+      if (!user || !verifyPassword(oldPassword, user.password_hash)) {
         return res.status(401).json({ error: 'Nykyinen salasana on väärin.' });
       }
 
-      await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [luoHash(newPassword), userCheck.rows[0].id]);
+      await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [hashPassword(newPassword), user.id]);
       return res.json({ success: true, message: 'Salasana vaihdettu.' });
     }
 
@@ -295,9 +450,7 @@ app.delete('/api/invites', requireAuth, async (req, res) => {
 
 app.get('/api/guestbook', async (_req, res) => {
   try {
-    const result = await db.query(
-      'SELECT id, name, message, created_at, is_admin, admin_reply FROM guestbook ORDER BY created_at DESC'
-    );
+    const result = await db.query('SELECT id, name, message, created_at, is_admin, admin_reply FROM guestbook ORDER BY created_at DESC');
     res.json({ messages: result.rows });
   } catch {
     res.status(500).json({ error: 'Palvelinvirhe.' });
@@ -353,13 +506,13 @@ app.patch('/api/guestbook', requireAuth, async (req, res) => {
     }
 
     if (action === 'admin_message') {
-      const name = String(req.body?.name || '');
-      const message = String(req.body?.message || '');
-      if (!name.trim()) return res.status(400).json({ error: 'Nimi on pakollinen.' });
-      if (!message.trim()) return res.status(400).json({ error: 'Viesti on pakollinen.' });
-      if (name.trim().length > 100) return res.status(400).json({ error: 'Nimi on liian pitkä (max 100 merkkiä).' });
-      if (message.trim().length > 2000) return res.status(400).json({ error: 'Viesti on liian pitkä (max 2000 merkkiä).' });
-      await db.query('INSERT INTO guestbook (name, message, is_admin) VALUES ($1, $2, TRUE)', [name.trim(), message.trim()]);
+      const adminName = String(req.body?.name || '');
+      const adminMessage = String(req.body?.message || '');
+      if (!adminName.trim()) return res.status(400).json({ error: 'Nimi on pakollinen.' });
+      if (!adminMessage.trim()) return res.status(400).json({ error: 'Viesti on pakollinen.' });
+      if (adminName.trim().length > 100) return res.status(400).json({ error: 'Nimi on liian pitkä (max 100 merkkiä).' });
+      if (adminMessage.trim().length > 2000) return res.status(400).json({ error: 'Viesti on liian pitkä (max 2000 merkkiä).' });
+      await db.query('INSERT INTO guestbook (name, message, is_admin) VALUES ($1, $2, TRUE)', [adminName.trim(), adminMessage.trim()]);
       return res.json({ success: true });
     }
 
@@ -388,11 +541,7 @@ app.get('/api/links', requireAuth, async (_req, res) => {
       db.query('SELECT * FROM srl_links ORDER BY created_at DESC')
     ]);
 
-    res.json({
-      sorola: sorola.rows,
-      srla: srla.rows,
-      srl: srl.rows
-    });
+    res.json({ sorola: sorola.rows, srla: srla.rows, srl: srl.rows });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -408,19 +557,11 @@ app.post('/api/links', requireAuth, async (req, res) => {
     if (!pathValue || String(pathValue).trim() === '') pathValue = luoSatunnainenPolku();
     else pathValue = String(pathValue).trim().replace(/[^a-zA-Z0-9_-]/g, '');
 
-    const domainTable = {
-      'soro.la': 'links',
-      'srla.fi': 'srla_links',
-      'srl.la': 'srl_links'
-    }[domain];
-
-    if (!domainTable) return res.status(400).json({ error: 'Virheellinen domain.' });
+    const table = resolveTableByDomain(domain);
+    if (!table) return res.status(400).json({ error: 'Virheellinen domain.' });
 
     try {
-      await db.query(
-        `INSERT INTO ${domainTable} (short_path, original_url, clicks) VALUES ($1, $2, 0)`,
-        [pathValue, originalURL]
-      );
+      await insertShortLink(table, pathValue, originalURL);
       return res.json({ success: true, path: pathValue, domain });
     } catch (error) {
       if (error.code === '23505') {
@@ -438,15 +579,10 @@ app.put('/api/links', requireAuth, async (req, res) => {
     const { domain, path: pathValue, newOriginalURL } = req.body || {};
     if (!newOriginalURL) return res.status(400).json({ error: 'Uusi kohdeosoite puuttuu.' });
 
-    const domainTable = {
-      'soro.la': 'links',
-      'srla.fi': 'srla_links',
-      'srl.la': 'srl_links'
-    }[domain];
+    const table = resolveTableByDomain(domain);
+    if (!table) return res.status(400).json({ error: 'Virheellinen domain.' });
 
-    if (!domainTable) return res.status(400).json({ error: 'Virheellinen domain.' });
-
-    await db.query(`UPDATE ${domainTable} SET original_url = $1 WHERE short_path = $2`, [newOriginalURL, pathValue]);
+    await updateShortLink(table, pathValue, newOriginalURL);
     return res.json({ success: true });
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -462,15 +598,10 @@ app.delete('/api/links', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'Tiedot puuttuvat' });
     }
 
-    const domainTable = {
-      'soro.la': 'links',
-      'srla.fi': 'srla_links',
-      'srl.la': 'srl_links'
-    }[domainToRemove];
+    const table = resolveTableByDomain(domainToRemove);
+    if (!table) return res.status(400).json({ error: 'Virheellinen domain.' });
 
-    if (!domainTable) return res.status(400).json({ error: 'Virheellinen domain.' });
-
-    await db.query(`DELETE FROM ${domainTable} WHERE short_path = $1`, [pathToRemove]);
+    await deleteShortLink(table, pathToRemove);
     return res.json({ success: true });
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -502,27 +633,21 @@ app.all('/api/lyhennin/create', async (req, res) => {
     let koodi = req.query.code;
     const domain = String(req.query.domain || 'srla.fi').toLowerCase();
 
-    const domainConfig = {
-      'srla.fi': { table: 'srla_links', baseUrl: 'https://srla.fi' },
-      'srl.la': { table: 'srl_links', baseUrl: 'https://srl.la' }
-    }[domain];
-
     if (!kohdeUrl) {
       return res.status(400).json({ error: 'URL puuttuu' });
     }
 
-    if (!domainConfig) {
+    if (!['srla.fi', 'srl.la'].includes(domain)) {
       return res.status(400).json({ error: 'Virheellinen domain.' });
     }
 
     if (!koodi || String(koodi).trim() === '') koodi = luoSatunnainenPolku();
     else koodi = String(koodi).trim().replace(/[^a-zA-Z0-9_-]/g, '');
 
+    const table = resolveTableByDomain(domain);
+
     try {
-      await db.query(
-        `INSERT INTO ${domainConfig.table} (short_path, original_url, clicks) VALUES ($1, $2, 0)`,
-        [koodi, kohdeUrl]
-      );
+      await insertShortLink(table, koodi, kohdeUrl);
     } catch (error) {
       if (error.code === '23505') {
         return res.status(400).json({ error: 'Tämä lyhenne on jo käytössä!' });
@@ -530,7 +655,8 @@ app.all('/api/lyhennin/create', async (req, res) => {
       throw error;
     }
 
-    return res.json({ success: true, shortUrl: `${domainConfig.baseUrl}/${koodi}` });
+    const baseUrl = domain === 'srl.la' ? 'https://srl.la' : 'https://srla.fi';
+    return res.json({ success: true, shortUrl: `${baseUrl}/${koodi}` });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
@@ -549,7 +675,7 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
     const fileName = `${id}.${extension || 'bin'}`;
 
-    const body = await fs.readFile(file.path);
+    const body = await readUploadedFile(file);
 
     await s3.send(new PutObjectCommand({
       Bucket: shareBucketName,
@@ -569,9 +695,7 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    if (file?.path) {
-      await fs.unlink(file.path).catch(() => {});
-    }
+    await deleteUploadedFile(file).catch(() => {});
   }
 });
 
@@ -598,7 +722,6 @@ app.get('/api/download', async (req, res) => {
 
     if (maxDownloads > 0) {
       const currentDownloads = downloads + 1;
-
       if (currentDownloads >= maxDownloads) {
         await s3.send(new DeleteObjectCommand({ Bucket: shareBucketName, Key: fileId })).catch(() => {});
       } else {
@@ -618,15 +741,12 @@ app.get('/api/download', async (req, res) => {
 
     res.setHeader('Content-Type', object.ContentType || 'application/octet-stream');
     const originalName = metadata.originalname || fileId;
-    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(originalName)}"`);
-    res.setHeader('ETag', object.ETag || '');
-
-    if (!object.Body) {
-      return res.status(404).send('Tiedostoa ei löydy.');
+    res.setHeader('Content-Disposition', contentDisposition(originalName));
+    if (object.ETag) {
+      res.setHeader('ETag', object.ETag);
     }
 
-    object.Body.on('error', () => res.destroy());
-    object.Body.pipe(res);
+    await streamS3BodyToResponse(object.Body, res);
   } catch {
     const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
     return res.redirect(302, errorPath);
@@ -663,10 +783,7 @@ app.delete('/api/humor/images', requireAuth, async (req, res) => {
   if (!key) return res.status(400).json({ error: 'Parametri ?key puuttuu.' });
 
   try {
-    await s3.send(new DeleteObjectCommand({
-      Bucket: humorBucketName,
-      Key: key
-    }));
+    await s3.send(new DeleteObjectCommand({ Bucket: humorBucketName, Key: key }));
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -679,7 +796,7 @@ app.post('/api/humor/upload', requireAuth, uploadHumor.single('file'), async (re
 
   if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
   if (!String(file.mimetype || '').startsWith('image/')) {
-    await fs.unlink(file.path).catch(() => {});
+    await deleteUploadedFile(file).catch(() => {});
     return res.status(400).json({ error: 'Vain kuvatiedostot (image/*) ovat sallittuja.' });
   }
 
@@ -688,7 +805,7 @@ app.post('/api/humor/upload', requireAuth, uploadHumor.single('file'), async (re
     const rawExt = (file.originalname.split('.').pop() || '').toLowerCase();
     const safeExt = /^[a-z0-9]{1,10}$/.test(rawExt) ? rawExt : 'jpg';
     const key = `${id}.${safeExt}`;
-    const body = await fs.readFile(file.path);
+    const body = await readUploadedFile(file);
 
     await s3.send(new PutObjectCommand({
       Bucket: humorBucketName,
@@ -706,9 +823,7 @@ app.post('/api/humor/upload', requireAuth, uploadHumor.single('file'), async (re
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    if (file?.path) {
-      await fs.unlink(file.path).catch(() => {});
-    }
+    await deleteUploadedFile(file).catch(() => {});
   }
 });
 
@@ -719,24 +834,32 @@ app.get('/api/humor/image', async (req, res) => {
   if (!/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,10}$/.test(key)) return res.status(400).send('Virheellinen avain.');
 
   try {
-    const object = await s3.send(new GetObjectCommand({
-      Bucket: humorBucketName,
-      Key: key
-    }));
-
-    if (!object?.Body) {
-      return res.status(404).send('Kuvaa ei löydy.');
-    }
-
+    const object = await s3.send(new GetObjectCommand({ Bucket: humorBucketName, Key: key }));
     res.setHeader('Content-Type', object.ContentType || 'application/octet-stream');
-    res.setHeader('ETag', object.ETag || '');
+    if (object.ETag) {
+      res.setHeader('ETag', object.ETag);
+    }
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
 
-    object.Body.on('error', () => res.destroy());
-    object.Body.pipe(res);
+    await streamS3BodyToResponse(object.Body, res);
   } catch {
     return res.status(404).send('Kuvaa ei löydy.');
   }
+});
+
+app.use((error, _req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ error: 'Tiedosto ylittää sallitun kokorajan.' });
+    }
+    return res.status(400).json({ error: `Lähetysvirhe: ${error.message}` });
+  }
+
+  if (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
+  }
+
+  return next();
 });
 
 app.use(express.static(distPath));

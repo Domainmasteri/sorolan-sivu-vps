@@ -13,6 +13,7 @@ const TEXT_FILE_EXTENSIONS = new Set(['.html', '.js', '.xml', '.txt']);
 const ROOT_ONLY_FILES = new Set(['_headers', 'robots.txt', 'sitemap.xml']);
 const IGNORE_NAMES = new Set([
   '.git',
+  '.gitignore',
   'dist',
   'node_modules',
   'i18n',
