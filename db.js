@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const databasePath = path.resolve(__dirname, process.env.DATABASE_PATH || 'data/database.sqlite');
 const schemaPath = path.resolve(__dirname, 'schema.sql');
+const busyTimeoutMs = Math.max(0, Number.parseInt(process.env.SQLITE_BUSY_TIMEOUT_MS || '5000', 10) || 5000);
 
 fs.mkdirSync(path.dirname(databasePath), { recursive: true });
 
@@ -22,7 +23,7 @@ const openDatabase = () => {
   try {
     const connection = new Database(databasePath);
     try {
-      connection.pragma('busy_timeout = 5000');
+      connection.pragma(`busy_timeout = ${busyTimeoutMs}`);
     } catch (error) {
       connection.close();
       throw new Error(`SQLite busy_timeout -pragma epäonnistui: ${error.message}`);
@@ -48,6 +49,15 @@ const initializeDatabase = () => {
 };
 
 const database = initializeDatabase();
+
+const closeDatabase = () => {
+  if (database.open) {
+    database.close();
+  }
+};
+
+process.once('SIGINT', closeDatabase);
+process.once('SIGTERM', closeDatabase);
 
 const normalizeSqliteQuery = (sql, params = []) => {
   const orderedParams = [];
