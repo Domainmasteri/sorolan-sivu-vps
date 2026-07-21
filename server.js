@@ -16,7 +16,7 @@ import {
 } from '@aws-sdk/client-s3';
 
 import { db } from './db.js';
-import { s3, shareBucketName, humorBucketName } from './storage.js';
+import { s3, bucketName } from './storage.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -665,7 +665,7 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const body = file.buffer;
 
     await s3.send(new PutObjectCommand({
-      Bucket: shareBucketName,
+      Bucket: bucketName,
       Key: fileName,
       Body: body,
       ContentType: file.mimetype || 'application/octet-stream',
@@ -692,12 +692,12 @@ app.get('/api/download', async (req, res) => {
   }
 
   try {
-    const object = await s3.send(new GetObjectCommand({ Bucket: shareBucketName, Key: fileId }));
+    const object = await s3.send(new GetObjectCommand({ Bucket: bucketName, Key: fileId }));
     const metadata = object.Metadata || {};
 
     const expiresAt = Number.parseInt(metadata.expiresat || '0', 10);
     if (expiresAt && Date.now() > expiresAt) {
-      await s3.send(new DeleteObjectCommand({ Bucket: shareBucketName, Key: fileId })).catch(() => {});
+      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
       const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
       return res.redirect(302, errorPath);
     }
@@ -708,12 +708,12 @@ app.get('/api/download', async (req, res) => {
     if (maxDownloads > 0) {
       const currentDownloads = downloads + 1;
       if (currentDownloads >= maxDownloads) {
-        await s3.send(new DeleteObjectCommand({ Bucket: shareBucketName, Key: fileId })).catch(() => {});
+        await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
       } else {
         await s3.send(new CopyObjectCommand({
-          Bucket: shareBucketName,
+          Bucket: bucketName,
           Key: fileId,
-          CopySource: `${shareBucketName}/${fileId}`,
+          CopySource: `${bucketName}/${fileId}`,
           MetadataDirective: 'REPLACE',
           ContentType: object.ContentType || 'application/octet-stream',
           Metadata: {
@@ -740,11 +740,11 @@ app.get('/api/download', async (req, res) => {
 
 app.get('/api/humor/images', async (_req, res) => {
   try {
-    const objects = await listAllObjects(humorBucketName);
+    const objects = await listAllObjects(bucketName);
 
     const images = await Promise.all(objects.map(async (obj) => {
       const head = await s3.send(new HeadObjectCommand({
-        Bucket: humorBucketName,
+        Bucket: bucketName,
         Key: obj.Key
       }));
 
@@ -768,7 +768,7 @@ app.delete('/api/humor/images', requireAuth, async (req, res) => {
   if (!key) return res.status(400).json({ error: 'Parametri ?key puuttuu.' });
 
   try {
-    await s3.send(new DeleteObjectCommand({ Bucket: humorBucketName, Key: key }));
+    await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: key }));
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -792,7 +792,7 @@ app.post('/api/humor/upload', requireAuth, uploadHumor.single('file'), async (re
     const body = file.buffer;
 
     await s3.send(new PutObjectCommand({
-      Bucket: humorBucketName,
+      Bucket: bucketName,
       Key: key,
       Body: body,
       ContentType: file.mimetype || 'application/octet-stream',
@@ -816,7 +816,7 @@ app.get('/api/humor/image', async (req, res) => {
   if (!/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,10}$/.test(key)) return res.status(400).send('Virheellinen avain.');
 
   try {
-    const object = await s3.send(new GetObjectCommand({ Bucket: humorBucketName, Key: key }));
+    const object = await s3.send(new GetObjectCommand({ Bucket: bucketName, Key: key }));
     res.setHeader('Content-Type', object.ContentType || 'application/octet-stream');
     if (object.ETag) {
       res.setHeader('ETag', object.ETag);
