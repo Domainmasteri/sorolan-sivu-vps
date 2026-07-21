@@ -17,13 +17,8 @@ export const s3 = new S3Client({
   }
 });
 
-export const shareBucketName = process.env.SHARE_BUCKET_NAME;
-export const humorBucketName = process.env.HUMOR_BUCKET_NAME;
+export const bucketName = process.env.BUCKET_NAME;
 
-if (!shareBucketName) {
-  throw new Error('SHARE_BUCKET_NAME puuttuu ympäristömuuttujista.');
-}
-
-if (!humorBucketName) {
-  throw new Error('HUMOR_BUCKET_NAME puuttuu ympäristömuuttujista.');
+if (!bucketName) {
+  throw new Error('BUCKET_NAME puuttuu ympäristömuuttujista.');
 }
