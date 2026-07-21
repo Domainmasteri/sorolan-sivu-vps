@@ -11,7 +11,6 @@ const schemaPath = path.resolve(__dirname, 'schema.sql');
 fs.mkdirSync(path.dirname(databasePath), { recursive: true });
 
 const database = new Database(databasePath);
-database.pragma('foreign_keys = ON');
 
 const schemaSql = fs.readFileSync(schemaPath, 'utf8');
 database.exec(schemaSql);
@@ -43,10 +42,10 @@ const execute = (sql, params = []) => {
   };
 };
 
-const query = async (sql, params = []) => execute(sql, params);
+const query = (sql, params = []) => execute(sql, params);
 
-const connect = async () => ({
-  query: async (sql, params = []) => execute(sql, params),
+const connect = () => ({
+  query: (sql, params = []) => execute(sql, params),
   release: () => {}
 });
 
