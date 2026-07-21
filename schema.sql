@@ -47,3 +47,5 @@ CREATE TABLE IF NOT EXISTS srl_links (
     clicks INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT OR IGNORE INTO invites (code_hash) VALUES ('root');
