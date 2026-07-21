@@ -21,7 +21,12 @@ const readSchemaSql = () => {
 const openDatabase = () => {
   try {
     const connection = new Database(databasePath);
-    connection.pragma('busy_timeout = 5000');
+    try {
+      connection.pragma('busy_timeout = 5000');
+    } catch (error) {
+      connection.close();
+      throw new Error(`SQLite busy_timeout -pragma epäonnistui: ${error.message}`);
+    }
     return connection;
   } catch (error) {
     throw new Error(`SQLite-tietokannan avaaminen epäonnistui polusta ${databasePath}: ${error.message}`);
@@ -47,7 +52,11 @@ const database = initializeDatabase();
 const normalizeSqliteQuery = (sql, params = []) => {
   const orderedParams = [];
   const normalizedSql = sql.replace(/\$(\d+)/g, (_match, index) => {
-    orderedParams.push(params[Number.parseInt(index, 10) - 1]);
+    const paramIndex = Number.parseInt(index, 10) - 1;
+    if (paramIndex < 0 || paramIndex >= params.length) {
+      throw new Error(`SQL-parametri $${index} puuttuu kyselyn parametreista.`);
+    }
+    orderedParams.push(params[paramIndex]);
     return '?';
   });
 
@@ -70,7 +79,7 @@ const execute = (connection, sql, params = []) => {
   const statement = connection.prepare(normalized.sql);
 
   if (isReadQuery(normalized.sql)) {
-    return { rows: statement.all(...normalized.params), fields: [] };
+    return { rows: statement.all(...normalized.params), fields: statement.columns() };
   }
 
   const result = statement.run(...normalized.params);
