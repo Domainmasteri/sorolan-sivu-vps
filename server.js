@@ -726,14 +726,16 @@ app.get('/api/download', async (req, res) => {
     }
 
     res.setHeader('Content-Type', object.ContentType || 'application/octet-stream');
-    const originalName = metadata.originalname || fileId;
+    const rawName = metadata.originalname || fileId;
+    const originalName = rawName.replace(/[\x00-\x1f\x7f/\\:*?"<>|]/g, '').trim() || 'download';
     res.setHeader('Content-Disposition', contentDisposition(originalName));
     if (object.ETag) {
       res.setHeader('ETag', object.ETag);
     }
 
     await streamS3BodyToResponse(object.Body, res);
-  } catch {
+  } catch (error) {
+    console.error('S3 Latausvirhe:', error);
     const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
     return res.redirect(302, errorPath);
   }
