@@ -10,8 +10,6 @@ import {
   CopyObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
-  HeadObjectCommand,
-  ListObjectsV2Command,
   PutObjectCommand
 } from '@aws-sdk/client-s3';
 
@@ -26,16 +24,10 @@ const distPath = path.join(__dirname, 'dist');
 const shortenerHomeUrl = process.env.SHORTENER_HOME_URL || 'https://sorola.fi/lyhennin';
 const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/lyhennin/error';
 const MAX_SHARE_FILE_SIZE_BYTES = 200 * 1024 * 1024;
-const MAX_HUMOR_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 
 const uploadShare = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_SHARE_FILE_SIZE_BYTES }
-});
-
-const uploadHumor = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: MAX_HUMOR_FILE_SIZE_BYTES }
 });
 
 const apiLimiter = rateLimit({
@@ -71,7 +63,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiLimiter);
 app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
-app.use('/api/humor/upload', uploadLimiter);
 
 function luoSatunnainenPolku(pituus = 5) {
   const merkit = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -235,26 +226,6 @@ function prefersEnglish(req) {
   if (!header) return false;
   const first = header.split(',')[0]?.trim().toLowerCase() || '';
   return first.startsWith('en');
-}
-
-async function listAllObjects(bucketName) {
-  const objects = [];
-  let continuationToken;
-
-  do {
-    const response = await s3.send(new ListObjectsV2Command({
-      Bucket: bucketName,
-      ContinuationToken: continuationToken
-    }));
-
-    if (response.Contents) {
-      objects.push(...response.Contents);
-    }
-
-    continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
-  } while (continuationToken);
-
-  return objects;
 }
 
 async function streamS3BodyToResponse(body, res) {
@@ -678,7 +649,10 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
       }
     }));
 
-    const downloadUrl = `${req.protocol}://${req.get('host')}/api/download?file=${encodeURIComponent(fileName)}`;
+    const siteUrl = process.env.SITE_URL
+      ? process.env.SITE_URL.replace(/\/$/, '')
+      : `${req.protocol}://${req.hostname}`;
+    const downloadUrl = `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`;
     return res.json({ url: downloadUrl, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
@@ -738,97 +712,6 @@ app.get('/api/download', async (req, res) => {
     console.error('S3 Latausvirhe:', error);
     const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
     return res.redirect(302, errorPath);
-  }
-});
-
-app.get('/api/humor/images', async (_req, res) => {
-  try {
-    const objects = await listAllObjects(bucketName);
-
-    const images = await Promise.all(objects.map(async (obj) => {
-      const head = await s3.send(new HeadObjectCommand({
-        Bucket: bucketName,
-        Key: obj.Key
-      }));
-
-      return {
-        key: obj.Key,
-        size: obj.Size,
-        uploaded: obj.LastModified ? obj.LastModified.toISOString() : null,
-        title: head.Metadata?.title || '',
-        originalName: head.Metadata?.originalname || obj.Key
-      };
-    }));
-
-    res.json({ images });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.delete('/api/humor/images', requireAuth, async (req, res) => {
-  const key = String(req.query.key || '');
-  if (!key) return res.status(400).json({ error: 'Parametri ?key puuttuu.' });
-
-  try {
-    await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: key }));
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/humor/upload', requireAuth, uploadHumor.single('file'), async (req, res) => {
-  const file = req.file;
-  const title = String(req.body?.title || '').trim();
-
-  if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
-  if (!String(file.mimetype || '').startsWith('image/')) {
-    return res.status(400).json({ error: 'Vain kuvatiedostot (image/*) ovat sallittuja.' });
-  }
-
-  try {
-    const id = crypto.randomUUID();
-    const rawExt = (file.originalname.split('.').pop() || '').toLowerCase();
-    const safeExt = /^[a-z0-9]{1,10}$/.test(rawExt) ? rawExt : 'jpg';
-    const key = `${id}.${safeExt}`;
-    const body = file.buffer;
-
-    await s3.send(new PutObjectCommand({
-      Bucket: bucketName,
-      Key: key,
-      Body: body,
-      ContentType: file.mimetype || 'application/octet-stream',
-      Metadata: {
-        title,
-        originalname: file.originalname,
-        uploadedat: new Date().toISOString()
-      }
-    }));
-
-    return res.json({ success: true, key });
-  } catch (error) {
-    return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
-  }
-});
-
-app.get('/api/humor/image', async (req, res) => {
-  const key = String(req.query.key || '');
-
-  if (!key) return res.status(400).send('Parametri ?key puuttuu.');
-  if (!/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{1,10}$/.test(key)) return res.status(400).send('Virheellinen avain.');
-
-  try {
-    const object = await s3.send(new GetObjectCommand({ Bucket: bucketName, Key: key }));
-    res.setHeader('Content-Type', object.ContentType || 'application/octet-stream');
-    if (object.ETag) {
-      res.setHeader('ETag', object.ETag);
-    }
-    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-
-    await streamS3BodyToResponse(object.Body, res);
-  } catch {
-    return res.status(404).send('Kuvaa ei löydy.');
   }
 });
 
