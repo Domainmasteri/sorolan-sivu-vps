@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
@@ -57,6 +58,30 @@ const pageLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false
 });
+
+async function resolveStaticHtmlPath(requestPath) {
+  if (typeof requestPath !== 'string') {
+    return null;
+  }
+
+  const trimmedPath = requestPath.replace(/^\/+|\/+$/g, '');
+  if (!trimmedPath) return null;
+  if (path.extname(trimmedPath)) return null;
+
+  const candidatePath = path.resolve(distPath, `${trimmedPath}.html`);
+  const relativePath = path.relative(distPath, candidatePath);
+
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+    return null;
+  }
+
+  try {
+    const stats = await fs.stat(candidatePath);
+    return stats.isFile() ? candidatePath : null;
+  } catch {
+    return null;
+  }
+}
 
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -145,7 +170,7 @@ async function fetchLinkByPath(table, shortPath) {
   }
 }
 
-function incrementLinkClicks(table, shortPath) {
+async function incrementLinkClicks(table, shortPath) {
   switch (table) {
     case 'links':
       return db.query('UPDATE links SET clicks = clicks + 1 WHERE short_path = $1', [shortPath]);
@@ -263,7 +288,7 @@ app.use(async (req, res, next) => {
       return res.redirect(302, shortenerErrorUrl);
     }
 
-    incrementLinkClicks(table, pathname).catch(() => {});
+    void incrementLinkClicks(table, pathname).catch(() => {});
     return res.redirect(302, match.original_url);
   } catch {
     return res.redirect(302, shortenerErrorUrl);
@@ -732,8 +757,13 @@ app.use((error, _req, res, next) => {
 
 app.use(pageLimiter, express.static(distPath));
 
-app.get('*', pageLimiter, (_req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
+app.get('*', pageLimiter, async (req, res) => {
+  const staticHtmlPath = await resolveStaticHtmlPath(req.path);
+  if (staticHtmlPath) {
+    return res.sendFile(staticHtmlPath);
+  }
+
+  return res.sendFile(path.join(distPath, 'index.html'));
 });
 
 const port = Number.parseInt(process.env.PORT || '3000', 10);
