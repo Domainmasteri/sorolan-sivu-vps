@@ -60,7 +60,11 @@ const pageLimiter = rateLimit({
 });
 
 async function resolveStaticHtmlPath(requestPath) {
-  const trimmedPath = String(requestPath || '').replace(/^\/+|\/+$/g, '');
+  if (typeof requestPath !== 'string') {
+    return null;
+  }
+
+  const trimmedPath = requestPath.replace(/^\/+|\/+$/g, '');
   if (!trimmedPath) return null;
   if (path.extname(trimmedPath)) return null;
 
@@ -72,8 +76,8 @@ async function resolveStaticHtmlPath(requestPath) {
   }
 
   try {
-    await fs.access(candidatePath);
-    return candidatePath;
+    const stats = await fs.stat(candidatePath);
+    return stats.isFile() ? candidatePath : null;
   } catch {
     return null;
   }
