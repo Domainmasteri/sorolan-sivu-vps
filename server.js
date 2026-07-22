@@ -279,7 +279,9 @@ app.use(async (req, res, next) => {
       return res.redirect(302, shortenerErrorUrl);
     }
 
-    incrementLinkClicks(table, pathname).catch(() => {});
+    try {
+      incrementLinkClicks(table, pathname);
+    } catch {}
     return res.redirect(302, match.original_url);
   } catch {
     return res.redirect(302, shortenerErrorUrl);
