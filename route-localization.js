@@ -4,7 +4,6 @@ export const EN_ROUTE_SEGMENTS = new Map([
   ['hakemus-it', 'it-application'],
   ['hakemus-jakelu', 'delivery-application'],
   ['hakemus-make', 'application-builder'],
-  ['huumorikuvat', 'funny-pictures'],
   ['jako', 'share'],
   ['linkinlyhennin', 'link-shortener'],
   ['lyhennin', 'shortener'],

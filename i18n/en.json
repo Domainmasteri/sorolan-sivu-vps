@@ -113,7 +113,6 @@
         "Sorolan linkit": "Sorola links",
         "Kokoelma perheen omia sivuja, teknisiä oppaita sekä hyödyllistä tietoa.": "A collection of family pages, technical guides, and useful information.",
         "📄 Maken Ansioluettelot": "📄 Markus's CVs",
-        "😂 Huumorikuvat": "😂 Funny pictures",
         "💼 Maken yhteystiedot": "💼 Markus's contact details",
         "💼 Sorolan ohjeita": "💼 Sorola guides",
         "🛡️ Yksityisyyskäytäntö": "🛡️ Privacy policies",
@@ -702,19 +701,6 @@
         "Privacy Policy for Sorolan Holvi": "Privacy Policy for Sorola Vault",
         "Privacy Policy - Sorolan Holvi": "Privacy Policy - Sorola Vault",
         "Sorolan Holvi (\"the Extension\") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data.": "Sorola Vault (\"the Extension\") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data."
-      }
-    },
-    "huumorikuvat/index.html": {
-      "text": {
-        "Sorolan huumorikuvat": "Sorola funny pictures",
-        "Sorolan Huumorikuvat": "Sorola funny pictures",
-        "Lisäilen tänne hauskoja kuvia, joita olen vuosien aikana löytänyt. Kaikkea ei tarvitse tajuta eikä varsinkaan ottaa vakavasti. :)": "I'll keep adding funny pictures here that I've found over the years. You don't have to understand everything — and definitely not take it too seriously. :)",
-        "Huomio! Täällä oleva sisältö on pääosin suomeksi, eikä niitä voi kääntää, koska mukana on myös kieleen nojautuvia vitsejä!": "Disclaimer: The content here is mainly in Finnish, and they can't be translated because they rely strongly on Finnish language"
-      },
-      "attributes": {
-        "Hauska kokoelma huumori- ja meemukuvia, joita Sorolan perhe on koonnut vuosien varrelta.": "A fun collection of humor and meme images gathered by the Sorola family over the years.",
-        "Hauska kokoelma huumori- ja meemikuvia Sorolan perheeltä.": "A fun collection of humor and meme images from the Sorola family.",
-        "Sorolan huumorikuvat": "Sorola funny pictures"
       }
     },
     "admin/index.html": {

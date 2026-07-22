@@ -161,22 +161,6 @@
       <priority>0.5</priority>
    </url>
 <url>
-      <loc>https://sorola.fi/huumorikuvat/</loc>
-      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/huumorikuvat/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/funny-pictures/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/funny-pictures/</loc>
-      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/huumorikuvat/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/funny-pictures/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
-   </url>
-<url>
       <loc>https://sorola.fi/makelink/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/makelink/" />
       <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/makelink/" />

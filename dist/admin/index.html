@@ -159,24 +159,6 @@
                 </div>
             </div>
 
-            <!-- Huumorikuvat -->
-            <div class="admin-section" style="margin-top: 25px;" id="humor-section">
-                <h2 style="font-size: 1.1rem;">🖼️ Huumorikuvat (HUMOR-BUCKET)</h2>
-
-                <div class="flex-form" style="margin-bottom: 10px;">
-                    <input type="file" id="humor-tiedosto" class="syote" accept="image/*" style="flex: 1; padding: 9px 12px;">
-                    <input type="text" id="humor-otsikko" class="syote" placeholder="Otsikko (valinnainen)" style="flex: 1;">
-                    <button onclick="uploadaaHumori()" id="btn-humor-upload" class="nappula nappi-oranssi nappi-pieni">Lisää kuva</button>
-                </div>
-
-                <div style="overflow-x: auto;">
-                    <table id="humor-taulukko">
-                        <thead><tr><th>Esikatselu</th><th>Otsikko / Nimi</th><th>Ladattu</th><th>Koko</th><th>Toiminto</th></tr></thead>
-                        <tbody id="humor-tbody"></tbody>
-                    </table>
-                </div>
-            </div>
-
             <!-- Vieraskirja -->
             <div class="admin-section" style="margin-top: 25px;" id="guestbook-section">
                 <h2 style="font-size: 1.1rem;">📖 Vieraskirja</h2>
@@ -232,9 +214,6 @@
         const API_LINKS = '/api/links';
         const API_USERS = '/api/users';
         const API_INVITES = '/api/invites';
-        const API_HUMOR_IMAGES = '/api/humor/images';
-        const API_HUMOR_UPLOAD = '/api/humor/upload';
-        const API_HUMOR_IMAGE = '/api/humor/image';
         const API_GUESTBOOK = '/api/guestbook';
 
         let sessionToken = localStorage.getItem('sorola_admin_token');
@@ -269,7 +248,6 @@
             lataaLinkit();
             lataaKayttajat();
             lataaKutsut();
-            lataaHumoriKuvat();
             lataaVieraskirja();
         }
 
@@ -467,90 +445,6 @@
             try {
                 const res = await fetch(`${API_INVITES}?id=${id}`, { method: 'DELETE', headers: haeOtsakkeet() });
                 if (res.ok) { naytaIlmoitus("Kutsukoodi poistettu.", "onnistui"); lataaKutsut(); }
-            } catch (e) { naytaIlmoitus("Virhe poistossa."); }
-        }
-
-        // --- HUUMORIKUVAT ---
-        async function lataaHumoriKuvat() {
-            const tbody = document.getElementById('humor-tbody');
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;"><div class="lataus-spinner"></div></td></tr>`;
-            try {
-                const res = await fetch(API_HUMOR_IMAGES);
-                if (res.status === 401) return kirjauduUlos();
-                const data = await res.json();
-                tbody.innerHTML = '';
-                if (data.error) {
-                    const tr = tbody.insertRow(); const td = tr.insertCell(); td.colSpan = 5; td.style.color = '#f87171'; td.textContent = data.error; return;
-                }
-                const kuvat = data.images || [];
-                if (!kuvat.length) {
-                    const tr = tbody.insertRow(); const td = tr.insertCell(); td.colSpan = 5; td.style.cssText = 'text-align:center;color:#a0aec0;'; td.textContent = 'Ei vielä kuvia bucketissa.'; return;
-                }
-                kuvat.forEach(k => {
-                    const src = `${API_HUMOR_IMAGE}?key=${encodeURIComponent(k.key)}`;
-                    const otsikko = k.title || k.originalName || k.key;
-                    const pvm = k.uploaded ? new Date(k.uploaded).toLocaleDateString('fi-FI') : '–';
-                    const koko = k.size ? (k.size / 1024).toFixed(1) + ' KB' : '–';
-                    const tr = tbody.insertRow();
-                    // Preview
-                    const tdImg = tr.insertCell(); tdImg.style.padding = '6px';
-                    const img = document.createElement('img');
-                    img.src = src; img.alt = otsikko; img.loading = 'lazy';
-                    img.tabIndex = 0;
-                    img.title = 'Avaa täysikokoisena';
-                    img.setAttribute('aria-label', otsikko + ' – avaa täysikokoisena');
-                    img.style.cssText = 'width:56px;height:56px;object-fit:cover;border-radius:6px;border:1px solid #2d3748;cursor:pointer;';
-                    img.addEventListener('click', () => window.open(src, '_blank'));
-                    img.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(src, '_blank'); } });
-                    tdImg.appendChild(img);
-                    // Title
-                    const tdTitle = tr.insertCell(); tdTitle.style.cssText = 'max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'; tdTitle.title = otsikko; tdTitle.textContent = otsikko;
-                    // Date
-                    const tdPvm = tr.insertCell(); tdPvm.style.cssText = 'font-size:0.8rem;color:#a0aec0;'; tdPvm.textContent = pvm;
-                    // Size
-                    const tdKoko = tr.insertCell(); tdKoko.style.cssText = 'font-size:0.8rem;color:#a0aec0;'; tdKoko.textContent = koko;
-                    // Delete button
-                    const tdBtn = tr.insertCell();
-                    const btn = document.createElement('button');
-                    btn.className = 'nappula nappi-pieni nappi-puna'; btn.textContent = 'Poista';
-                    btn.addEventListener('click', () => poistaHumoriKuva(k.key));
-                    tdBtn.appendChild(btn);
-                });
-            } catch (e) {
-                tbody.innerHTML = ''; const tr = tbody.insertRow(); const td = tr.insertCell(); td.colSpan = 5; td.style.color = '#f87171'; td.textContent = 'Virhe ladattaessa kuvia.';
-            }
-        }
-
-        async function uploadaaHumori() {
-            const tiedosto = document.getElementById('humor-tiedosto').files[0];
-            const otsikko = document.getElementById('humor-otsikko').value.trim();
-            if (!tiedosto) return naytaIlmoitus("Valitse ensin kuvatiedosto.");
-            const btn = document.getElementById('btn-humor-upload');
-            btn.disabled = true; btn.textContent = "Ladataan...";
-            try {
-                const fd = new FormData();
-                fd.append('file', tiedosto);
-                fd.append('title', otsikko);
-                const res = await fetch(API_HUMOR_UPLOAD, { method: 'POST', headers: { 'Authorization': 'Bearer ' + sessionToken }, body: fd });
-                if (res.status === 401) return kirjauduUlos();
-                const data = await res.json();
-                if (res.ok) {
-                    naytaIlmoitus(`Kuva lisätty! (${data.key})`, "onnistui");
-                    document.getElementById('humor-tiedosto').value = '';
-                    document.getElementById('humor-otsikko').value = '';
-                    lataaHumoriKuvat();
-                } else { naytaIlmoitus(data.error || "Lataus epäonnistui."); }
-            } catch (e) { naytaIlmoitus("Palvelinvirhe."); }
-            finally { btn.disabled = false; btn.textContent = "Lisää kuva"; }
-        }
-
-        async function poistaHumoriKuva(key) {
-            if (!confirm(`Poistetaanko kuva "${key}" pysyvästi?`)) return;
-            try {
-                const res = await fetch(`${API_HUMOR_IMAGES}?key=${encodeURIComponent(key)}`, { method: 'DELETE', headers: haeOtsakkeet() });
-                if (res.status === 401) return kirjauduUlos();
-                if (res.ok) { naytaIlmoitus("Kuva poistettu.", "onnistui"); lataaHumoriKuvat(); }
-                else { const data = await res.json(); naytaIlmoitus(data.error || "Poisto epäonnistui."); }
             } catch (e) { naytaIlmoitus("Virhe poistossa."); }
         }
 
