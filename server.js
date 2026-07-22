@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
-import fs from 'node:fs';
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
@@ -59,7 +59,7 @@ const pageLimiter = rateLimit({
   legacyHeaders: false
 });
 
-function resolveStaticHtmlPath(requestPath) {
+async function resolveStaticHtmlPath(requestPath) {
   const trimmedPath = String(requestPath || '').replace(/^\/+|\/+$/g, '');
   if (!trimmedPath) return null;
   if (path.extname(trimmedPath)) return null;
@@ -71,7 +71,12 @@ function resolveStaticHtmlPath(requestPath) {
     return null;
   }
 
-  return fs.existsSync(candidatePath) ? candidatePath : null;
+  try {
+    await fs.access(candidatePath);
+    return candidatePath;
+  } catch {
+    return null;
+  }
 }
 
 app.use(express.json({ limit: '2mb' }));
@@ -161,7 +166,7 @@ async function fetchLinkByPath(table, shortPath) {
   }
 }
 
-function incrementLinkClicks(table, shortPath) {
+async function incrementLinkClicks(table, shortPath) {
   switch (table) {
     case 'links':
       return db.query('UPDATE links SET clicks = clicks + 1 WHERE short_path = $1', [shortPath]);
@@ -279,9 +284,7 @@ app.use(async (req, res, next) => {
       return res.redirect(302, shortenerErrorUrl);
     }
 
-    try {
-      incrementLinkClicks(table, pathname);
-    } catch {}
+    void incrementLinkClicks(table, pathname).catch(() => {});
     return res.redirect(302, match.original_url);
   } catch {
     return res.redirect(302, shortenerErrorUrl);
@@ -750,8 +753,8 @@ app.use((error, _req, res, next) => {
 
 app.use(pageLimiter, express.static(distPath));
 
-app.get('*', pageLimiter, (req, res) => {
-  const staticHtmlPath = resolveStaticHtmlPath(req.path);
+app.get('*', pageLimiter, async (req, res) => {
+  const staticHtmlPath = await resolveStaticHtmlPath(req.path);
   if (staticHtmlPath) {
     return res.sendFile(staticHtmlPath);
   }
