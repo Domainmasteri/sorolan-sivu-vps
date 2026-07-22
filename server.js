@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
@@ -57,6 +58,21 @@ const pageLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false
 });
+
+function resolveStaticHtmlPath(requestPath) {
+  const trimmedPath = String(requestPath || '').replace(/^\/+|\/+$/g, '');
+  if (!trimmedPath) return null;
+  if (path.extname(trimmedPath)) return null;
+
+  const candidatePath = path.resolve(distPath, `${trimmedPath}.html`);
+  const relativePath = path.relative(distPath, candidatePath);
+
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+    return null;
+  }
+
+  return fs.existsSync(candidatePath) ? candidatePath : null;
+}
 
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -732,8 +748,13 @@ app.use((error, _req, res, next) => {
 
 app.use(pageLimiter, express.static(distPath));
 
-app.get('*', pageLimiter, (_req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
+app.get('*', pageLimiter, (req, res) => {
+  const staticHtmlPath = resolveStaticHtmlPath(req.path);
+  if (staticHtmlPath) {
+    return res.sendFile(staticHtmlPath);
+  }
+
+  return res.sendFile(path.join(distPath, 'index.html'));
 });
 
 const port = Number.parseInt(process.env.PORT || '3000', 10);
