@@ -19,6 +19,7 @@ import { db } from './db.js';
 import { s3, bucketName } from './storage.js';
 
 const app = express();
+app.set('trust proxy', 1);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, 'dist');
