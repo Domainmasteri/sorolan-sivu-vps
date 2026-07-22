@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
 import multer from 'multer';
 import rateLimit from 'express-rate-limit';
-import contentDisposition from 'content-disposition';
+import { create as contentDisposition } from 'content-disposition';
 import {
   CopyObjectCommand,
   DeleteObjectCommand,
