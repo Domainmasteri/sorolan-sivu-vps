@@ -9,9 +9,16 @@ function getHetznerApiKey() {
   return String(process.env.HETZNER_API_KEY || '').trim();
 }
 
-function getHetznerHeaders(apiKey) {
+function getHetznerCloudHeaders(apiKey) {
   return {
     Authorization: 'Bearer ' + apiKey,
+    'Content-Type': 'application/json'
+  };
+}
+
+function getHetznerDnsHeaders(apiKey) {
+  return {
+    'Auth-API-Token': apiKey,
     'Content-Type': 'application/json'
   };
 }
@@ -31,7 +38,7 @@ router.get('/zones', async (_req, res) => {
   if (!apiKey) return;
   try {
     const response = await fetch(HETZNER_ZONES_API, {
-      headers: getHetznerHeaders(apiKey)
+      headers: getHetznerCloudHeaders(apiKey)
     });
     const textData = await response.text();
     console.log(textData);
@@ -77,7 +84,7 @@ router.get('/', async (req, res) => {
   }
   try {
     const response = await fetch(`${HETZNER_DNS_API}/records?zone_id=${encodeURIComponent(zoneId)}`, {
-      headers: getHetznerHeaders(apiKey)
+      headers: getHetznerDnsHeaders(apiKey)
     });
     const data = await response.json();
     return res.status(response.status).json(data);
@@ -110,7 +117,7 @@ router.post('/', async (req, res) => {
 
     const response = await fetch(`${HETZNER_DNS_API}/records`, {
       method: 'POST',
-      headers: getHetznerHeaders(apiKey),
+      headers: getHetznerDnsHeaders(apiKey),
       body: JSON.stringify(body)
     });
     const data = await response.json();
@@ -145,7 +152,7 @@ router.put('/:id', async (req, res) => {
 
     const response = await fetch(`${HETZNER_DNS_API}/records/${encodeURIComponent(recordId)}`, {
       method: 'PUT',
-      headers: getHetznerHeaders(apiKey),
+      headers: getHetznerDnsHeaders(apiKey),
       body: JSON.stringify(body)
     });
     const data = await response.json();
@@ -163,7 +170,7 @@ router.delete('/:id', async (req, res) => {
     const recordId = req.params.id;
     const response = await fetch(`${HETZNER_DNS_API}/records/${encodeURIComponent(recordId)}`, {
       method: 'DELETE',
-      headers: getHetznerHeaders(apiKey)
+      headers: getHetznerDnsHeaders(apiKey)
     });
 
     if (response.status === 200 || response.status === 204) {
