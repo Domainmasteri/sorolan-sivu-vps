@@ -7,7 +7,7 @@ const HETZNER_ZONES_API = 'https://api.hetzner.cloud/v1/zones';
 
 function getHetznerHeaders() {
   return {
-    Authorization: `******
+    Authorization: 'Bearer ' + process.env.HETZNER_API_KEY,
     'Content-Type': 'application/json'
   };
 }

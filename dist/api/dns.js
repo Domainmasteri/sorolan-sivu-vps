@@ -3,10 +3,11 @@ import { Router } from 'express';
 
 const router = Router();
 const HETZNER_DNS_API = 'https://dns.hetzner.com/api/v1';
+const HETZNER_ZONES_API = 'https://api.hetzner.cloud/v1/zones';
 
 function getHetznerHeaders() {
   return {
-    'Auth-API-Token': process.env.HETZNER_API_KEY,
+    Authorization: 'Bearer ' + process.env.HETZNER_API_KEY,
     'Content-Type': 'application/json'
   };
 }
@@ -23,7 +24,7 @@ function checkApiKey(res) {
 router.get('/zones', async (_req, res) => {
   if (!checkApiKey(res)) return;
   try {
-    const response = await fetch(`${HETZNER_DNS_API}/zones`, {
+    const response = await fetch(HETZNER_ZONES_API, {
       headers: getHetznerHeaders()
     });
     const textData = await response.text();
