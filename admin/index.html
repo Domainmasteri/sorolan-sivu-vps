@@ -593,7 +593,7 @@
                     <td>
                         <div style="display: flex; gap: 5px;">
                             <button class="nappula nappi-pieni nappi-oranssi" onclick="muokkaaDNSTietue('${escapeHtmlAdmin(r.id)}')">Muokkaa</button>
-                            <button class="nappula nappi-pieni nappi-puna" onclick="poistaDNSTietue('${escapeHtmlAdmin(r.id)}', '${escapeHtmlAdmin(r.name)}')">X</button>
+                            <button class="nappula nappi-pieni nappi-puna" onclick="poistaDNSTietue('${escapeHtmlAdmin(r.id)}')">X</button>
                         </div>
                     </td>
                 </tr>`).join('');
@@ -637,7 +637,7 @@
         }
 
         async function muokkaaDNSTietue(id) {
-            const tietue = dnsRecordsCache.find(r => r.id === id);
+            const tietue = dnsRecordsCache.find(r => String(r.id) === String(id));
             if (!tietue) return naytaIlmoitus('Tietuetta ei löydy. Päivitä tiedot ensin.');
 
             const newValue = prompt(`Muokataan tietuetta ${tietue.type} ${tietue.name}\n\nSyötä uusi arvo:`, tietue.value);
@@ -663,8 +663,10 @@
             }
         }
 
-        async function poistaDNSTietue(id, name) {
-            if (!confirm(`Poistetaanko DNS-tietue: ${name}?`)) return;
+        async function poistaDNSTietue(id) {
+            const tietue = dnsRecordsCache.find(r => String(r.id) === String(id));
+            const nimi = tietue ? tietue.name : id;
+            if (!confirm(`Poistetaanko DNS-tietue: ${nimi}?`)) return;
             try {
                 const res = await fetch(`${API_DNS}/${encodeURIComponent(id)}`, {
                     method: 'DELETE',
