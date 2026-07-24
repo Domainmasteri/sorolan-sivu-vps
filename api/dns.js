@@ -26,15 +26,32 @@ router.get('/zones', async (_req, res) => {
     const response = await fetch(`${HETZNER_DNS_API}/zones`, {
       headers: getHetznerHeaders()
     });
-    const data = await response.json();
+    const textData = await response.text();
+    console.log(textData);
+
+    let data;
+    try {
+      data = JSON.parse(textData);
+    } catch (parseError) {
+      return res.status(502).json({
+        error: 'Virheellinen vastaus Hetzner DNS API:lta.',
+        details: parseError.message
+      });
+    }
 
     // If Hetzner returns a plain array, wrap it in a zones key
     if (Array.isArray(data)) {
       return res.status(response.status).json({ zones: data });
     }
-    // If it returns an object with a zones field, return as-is
-    if (data && Array.isArray(data.zones)) {
-      return res.status(response.status).json(data);
+    // If it returns an object containing an array, extract that array
+    if (data && typeof data === 'object') {
+      if (Array.isArray(data.zones)) {
+        return res.status(response.status).json({ zones: data.zones });
+      }
+      const extractedArray = Object.values(data).find(Array.isArray);
+      if (extractedArray) {
+        return res.status(response.status).json({ zones: extractedArray });
+      }
     }
 
     return res.status(response.status).json({ zones: [] });
