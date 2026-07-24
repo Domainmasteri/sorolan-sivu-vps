@@ -171,6 +171,47 @@
                 </div>
             </div>
 
+            <!-- DNS Hallinta -->
+            <div class="admin-section" style="margin-top: 25px;" id="dns-section">
+                <h2 style="font-size: 1.1rem;">🌐 DNS Hallinta</h2>
+
+                <!-- Uuden tietueen lomake -->
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 0.95rem; color: #a0aec0; margin-bottom: 10px;">Lisää uusi DNS-tietue</h3>
+                    <div class="flex-form">
+                        <select id="dns-type" class="syote" style="flex: 0 0 auto; min-width: 110px; width: auto;">
+                            <option value="A">A</option>
+                            <option value="AAAA">AAAA</option>
+                            <option value="CNAME">CNAME</option>
+                            <option value="MX">MX</option>
+                            <option value="TXT">TXT</option>
+                            <option value="NS">NS</option>
+                            <option value="SRV">SRV</option>
+                        </select>
+                        <input type="text" id="dns-name" class="syote" placeholder="Nimi (esim. @ tai subdomain)">
+                        <input type="text" id="dns-value" class="syote" placeholder="Arvo (esim. IP tai hostname)">
+                        <input type="number" id="dns-ttl" class="syote" placeholder="TTL (oletus 300)" style="flex: 0 0 auto; min-width: 130px; width: auto;">
+                        <button onclick="luoDNSTietue()" id="btn-dns-luo" class="nappula nappi-oranssi">Lisää</button>
+                    </div>
+                </div>
+
+                <!-- DNS-tietueiden taulukko -->
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nimi</th>
+                                <th>Tyyppi</th>
+                                <th>Arvo</th>
+                                <th>TTL</th>
+                                <th>Toiminnot</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dns-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Salasanan vaihto -->
             <div class="admin-section" style="margin-top: 25px;">
                 <h2 style="font-size: 1.1rem;">🔑 Vaihda salasana</h2>
@@ -196,6 +237,7 @@
         const API_USERS = '/api/users';
         const API_INVITES = '/api/invites';
         const API_GUESTBOOK = '/api/guestbook';
+        const API_DNS = '/api/dns';
 
         let sessionToken = localStorage.getItem('sorola_admin_token');
 
@@ -230,6 +272,7 @@
             lataaKayttajat();
             lataaKutsut();
             lataaVieraskirja();
+            lataaDNS();
         }
 
         // --- AUTH ---
@@ -521,6 +564,123 @@
                 } else { const data = await res.json(); naytaIlmoitus(data.error || 'Virhe viestin lähetyksessä.'); }
             } catch (e) { naytaIlmoitus('Palvelinvirhe.'); }
             finally { btn.disabled = false; btn.textContent = 'Lähetä ylläpidon viesti'; }
+        }
+        // --- DNS HALLINTA ---
+        let dnsRecordsCache = [];
+
+        async function lataaDNS() {
+            const tbody = document.getElementById('dns-table-body');
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;"><div class="lataus-spinner"></div></td></tr>`;
+            try {
+                const res = await fetch(API_DNS, { headers: haeOtsakkeet() });
+                if (res.status === 401) return kirjauduUlos();
+                const data = await res.json();
+                if (!res.ok) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="color:#ef4444; text-align:center;">${escapeHtmlAdmin(data.error || 'Virhe DNS-tietueiden haussa.')}</td></tr>`;
+                    return;
+                }
+                const tietueet = data.records || [];
+                dnsRecordsCache = tietueet;
+                if (!tietueet.length) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #a0aec0;">Ei DNS-tietueita tässä vyöhykkeessä.</td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = tietueet.map(r => `<tr>
+                    <td><code>${escapeHtmlAdmin(r.name)}</code></td>
+                    <td><strong>${escapeHtmlAdmin(r.type)}</strong></td>
+                    <td style="max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtmlAdmin(r.value)}">${escapeHtmlAdmin(r.value)}</td>
+                    <td style="font-size: 0.85rem; color: #a0aec0;">${r.ttl}</td>
+                    <td>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="nappula nappi-pieni nappi-oranssi" onclick="muokkaaDNSTietue('${escapeHtmlAdmin(r.id)}')">Muokkaa</button>
+                            <button class="nappula nappi-pieni nappi-puna" onclick="poistaDNSTietue('${escapeHtmlAdmin(r.id)}', '${escapeHtmlAdmin(r.name)}')">X</button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color: #ef4444; text-align: center;">Virhe ladattaessa DNS-tietueita.</td></tr>`;
+            }
+        }
+
+        async function luoDNSTietue() {
+            const type = document.getElementById('dns-type').value;
+            const name = document.getElementById('dns-name').value.trim();
+            const value = document.getElementById('dns-value').value.trim();
+            const ttl = parseInt(document.getElementById('dns-ttl').value, 10) || 300;
+
+            if (!name || !value) return naytaIlmoitus('Nimi ja arvo ovat pakollisia.');
+
+            const btn = document.getElementById('btn-dns-luo');
+            btn.disabled = true; btn.textContent = 'Luodaan...';
+            try {
+                const res = await fetch(API_DNS, {
+                    method: 'POST',
+                    headers: haeOtsakkeet(),
+                    body: JSON.stringify({ type, name, value, ttl })
+                });
+                if (res.status === 401) return kirjauduUlos();
+                const data = await res.json();
+                if (res.ok) {
+                    naytaIlmoitus('DNS-tietue luotu!', 'onnistui');
+                    document.getElementById('dns-name').value = '';
+                    document.getElementById('dns-value').value = '';
+                    document.getElementById('dns-ttl').value = '';
+                    lataaDNS();
+                } else {
+                    naytaIlmoitus(data.error || data.message || 'Virhe tietueen luonnissa.');
+                }
+            } catch (e) {
+                naytaIlmoitus('Palvelinvirhe.');
+            } finally {
+                btn.disabled = false; btn.textContent = 'Lisää';
+            }
+        }
+
+        async function muokkaaDNSTietue(id) {
+            const tietue = dnsRecordsCache.find(r => r.id === id);
+            if (!tietue) return naytaIlmoitus('Tietuetta ei löydy. Päivitä tiedot ensin.');
+
+            const newValue = prompt(`Muokataan tietuetta ${tietue.type} ${tietue.name}\n\nSyötä uusi arvo:`, tietue.value);
+            if (newValue === null || newValue === tietue.value) return;
+            if (!newValue.trim()) return naytaIlmoitus('Arvo ei voi olla tyhjä.');
+
+            try {
+                const res = await fetch(`${API_DNS}/${encodeURIComponent(id)}`, {
+                    method: 'PUT',
+                    headers: haeOtsakkeet(),
+                    body: JSON.stringify({ type: tietue.type, name: tietue.name, value: newValue.trim(), ttl: tietue.ttl })
+                });
+                if (res.status === 401) return kirjauduUlos();
+                const data = await res.json();
+                if (res.ok) {
+                    naytaIlmoitus('DNS-tietue päivitetty!', 'onnistui');
+                    lataaDNS();
+                } else {
+                    naytaIlmoitus(data.error || data.message || 'Virhe tietueen päivityksessä.');
+                }
+            } catch (e) {
+                naytaIlmoitus('Palvelinvirhe.');
+            }
+        }
+
+        async function poistaDNSTietue(id, name) {
+            if (!confirm(`Poistetaanko DNS-tietue: ${name}?`)) return;
+            try {
+                const res = await fetch(`${API_DNS}/${encodeURIComponent(id)}`, {
+                    method: 'DELETE',
+                    headers: haeOtsakkeet()
+                });
+                if (res.status === 401) return kirjauduUlos();
+                if (res.ok) {
+                    naytaIlmoitus('DNS-tietue poistettu.', 'onnistui');
+                    lataaDNS();
+                } else {
+                    const data = await res.json();
+                    naytaIlmoitus(data.error || data.message || 'Virhe poistossa.');
+                }
+            } catch (e) {
+                naytaIlmoitus('Virhe poistossa.');
+            }
         }
     </script>
 </body>
