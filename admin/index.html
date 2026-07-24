@@ -173,7 +173,12 @@
 
             <!-- DNS Hallinta -->
             <div class="admin-section" style="margin-top: 25px;" id="dns-section">
-                <h2 style="font-size: 1.1rem;">🌐 DNS Hallinta</h2>
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <h2 style="font-size: 1.1rem; margin: 0; border: none;">🌐 DNS Hallinta</h2>
+                    <select id="dns-zone" class="syote" style="flex: 0 0 auto; min-width: 160px; width: auto; margin: 0;" onchange="lataaDNS()">
+                        <option value="" disabled selected>Ladataan vyöhykkeitä...</option>
+                    </select>
+                </div>
 
                 <!-- Uuden tietueen lomake -->
                 <div style="margin-bottom: 20px;">
@@ -272,7 +277,7 @@
             lataaKayttajat();
             lataaKutsut();
             lataaVieraskirja();
-            lataaDNS();
+            lataaVyohykkeet();
         }
 
         // --- AUTH ---
@@ -568,11 +573,38 @@
         // --- DNS HALLINTA ---
         let dnsRecordsCache = [];
 
+        async function lataaVyohykkeet() {
+            const select = document.getElementById('dns-zone');
+            try {
+                const res = await fetch(`${API_DNS}/zones`, { headers: haeOtsakkeet() });
+                if (res.status === 401) return kirjauduUlos();
+                const data = await res.json();
+                const zones = data.zones || [];
+                if (!zones.length) {
+                    select.innerHTML = '<option value="" disabled selected>Ei vyöhykkeitä</option>';
+                    return;
+                }
+                const prev = select.value;
+                select.innerHTML = zones
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(z => `<option value="${escapeHtmlAdmin(z.id)}">${escapeHtmlAdmin(z.name)}</option>`)
+                    .join('');
+                if (prev && zones.find(z => z.id === prev)) {
+                    select.value = prev;
+                }
+                lataaDNS();
+            } catch (e) {
+                select.innerHTML = '<option value="" disabled selected>Virhe ladattaessa</option>';
+            }
+        }
+
         async function lataaDNS() {
             const tbody = document.getElementById('dns-table-body');
+            const zoneId = document.getElementById('dns-zone').value;
+            if (!zoneId) return;
             tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;"><div class="lataus-spinner"></div></td></tr>`;
             try {
-                const res = await fetch(API_DNS, { headers: haeOtsakkeet() });
+                const res = await fetch(`${API_DNS}?zone_id=${encodeURIComponent(zoneId)}`, { headers: haeOtsakkeet() });
                 if (res.status === 401) return kirjauduUlos();
                 const data = await res.json();
                 if (!res.ok) {
@@ -603,6 +635,8 @@
         }
 
         async function luoDNSTietue() {
+            const zoneId = document.getElementById('dns-zone').value;
+            if (!zoneId) return naytaIlmoitus('Valitse ensin DNS-vyöhyke.');
             const type = document.getElementById('dns-type').value;
             const name = document.getElementById('dns-name').value.trim();
             const value = document.getElementById('dns-value').value.trim();
@@ -616,7 +650,7 @@
                 const res = await fetch(API_DNS, {
                     method: 'POST',
                     headers: haeOtsakkeet(),
-                    body: JSON.stringify({ type, name, value, ttl })
+                    body: JSON.stringify({ zone_id: zoneId, type, name, value, ttl })
                 });
                 if (res.status === 401) return kirjauduUlos();
                 const data = await res.json();
@@ -637,6 +671,7 @@
         }
 
         async function muokkaaDNSTietue(id) {
+            const zoneId = document.getElementById('dns-zone').value;
             const tietue = dnsRecordsCache.find(r => String(r.id) === String(id));
             if (!tietue) return naytaIlmoitus('Tietuetta ei löydy. Päivitä tiedot ensin.');
 
@@ -648,7 +683,7 @@
                 const res = await fetch(`${API_DNS}/${encodeURIComponent(id)}`, {
                     method: 'PUT',
                     headers: haeOtsakkeet(),
-                    body: JSON.stringify({ type: tietue.type, name: tietue.name, value: newValue.trim(), ttl: tietue.ttl })
+                    body: JSON.stringify({ zone_id: zoneId, type: tietue.type, name: tietue.name, value: newValue.trim(), ttl: tietue.ttl })
                 });
                 if (res.status === 401) return kirjauduUlos();
                 const data = await res.json();

@@ -11,23 +11,36 @@ function getHetznerHeaders() {
   };
 }
 
-function checkConfig(res) {
+function checkApiKey(res) {
   if (!process.env.HETZNER_API_KEY) {
     res.status(500).json({ error: 'HETZNER_API_KEY ei ole asetettu palvelimella.' });
-    return false;
-  }
-  if (!process.env.HETZNER_DNS_ZONE_ID) {
-    res.status(500).json({ error: 'HETZNER_DNS_ZONE_ID ei ole asetettu palvelimella.' });
     return false;
   }
   return true;
 }
 
-// GET - Fetch all DNS records for the configured zone
-router.get('/', async (_req, res) => {
-  if (!checkConfig(res)) return;
+// GET /zones - List all DNS zones
+router.get('/zones', async (_req, res) => {
+  if (!checkApiKey(res)) return;
   try {
-    const zoneId = process.env.HETZNER_DNS_ZONE_ID;
+    const response = await fetch(`${HETZNER_DNS_API}/zones`, {
+      headers: getHetznerHeaders()
+    });
+    const data = await response.json();
+    return res.status(response.status).json(data);
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe DNS-vyöhykkeiden haussa.', details: error.message });
+  }
+});
+
+// GET - Fetch all DNS records for a zone (zone_id as query param)
+router.get('/', async (req, res) => {
+  if (!checkApiKey(res)) return;
+  const zoneId = req.query.zone_id;
+  if (!zoneId) {
+    return res.status(400).json({ error: 'zone_id on pakollinen query-parametri.' });
+  }
+  try {
     const response = await fetch(`${HETZNER_DNS_API}/records?zone_id=${encodeURIComponent(zoneId)}`, {
       headers: getHetznerHeaders()
     });
@@ -38,19 +51,21 @@ router.get('/', async (_req, res) => {
   }
 });
 
-// POST - Create a new DNS record
+// POST - Create a new DNS record (zone_id in request body)
 router.post('/', async (req, res) => {
-  if (!checkConfig(res)) return;
+  if (!checkApiKey(res)) return;
   try {
-    const zoneId = process.env.HETZNER_DNS_ZONE_ID;
-    const { type, name, value, ttl } = req.body || {};
+    const { zone_id, type, name, value, ttl } = req.body || {};
 
+    if (!zone_id) {
+      return res.status(400).json({ error: 'zone_id on pakollinen.' });
+    }
     if (!type || !name || !value) {
       return res.status(400).json({ error: 'Tyyppi, nimi ja arvo ovat pakollisia.' });
     }
 
     const body = {
-      zone_id: zoneId,
+      zone_id: String(zone_id),
       type: String(type).toUpperCase(),
       name: String(name),
       value: String(value),
@@ -69,20 +84,22 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT - Update an existing DNS record
+// PUT - Update an existing DNS record (zone_id in request body)
 router.put('/:id', async (req, res) => {
-  if (!checkConfig(res)) return;
+  if (!checkApiKey(res)) return;
   try {
-    const zoneId = process.env.HETZNER_DNS_ZONE_ID;
     const recordId = req.params.id;
-    const { type, name, value, ttl } = req.body || {};
+    const { zone_id, type, name, value, ttl } = req.body || {};
 
+    if (!zone_id) {
+      return res.status(400).json({ error: 'zone_id on pakollinen.' });
+    }
     if (!type || !name || !value) {
       return res.status(400).json({ error: 'Tyyppi, nimi ja arvo ovat pakollisia.' });
     }
 
     const body = {
-      zone_id: zoneId,
+      zone_id: String(zone_id),
       type: String(type).toUpperCase(),
       name: String(name),
       value: String(value),
@@ -103,7 +120,7 @@ router.put('/:id', async (req, res) => {
 
 // DELETE - Delete a DNS record
 router.delete('/:id', async (req, res) => {
-  if (!checkConfig(res)) return;
+  if (!checkApiKey(res)) return;
   try {
     const recordId = req.params.id;
     const response = await fetch(`${HETZNER_DNS_API}/records/${encodeURIComponent(recordId)}`, {
