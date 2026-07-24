@@ -48,9 +48,9 @@ router.get('/zones', async (_req, res) => {
       if (Array.isArray(data.zones)) {
         return res.status(response.status).json({ zones: data.zones });
       }
-      const extractedArrays = Object.values(data).filter(Array.isArray);
-      if (extractedArrays.length === 1) {
-        return res.status(response.status).json({ zones: extractedArrays[0] });
+      const entries = Object.entries(data);
+      if (entries.length === 1 && Array.isArray(entries[0][1])) {
+        return res.status(response.status).json({ zones: entries[0][1] });
       }
     }
 
