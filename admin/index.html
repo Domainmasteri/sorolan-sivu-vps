@@ -570,6 +570,7 @@
             } catch (e) { naytaIlmoitus('Palvelinvirhe.'); }
             finally { btn.disabled = false; btn.textContent = 'Lähetä ylläpidon viesti'; }
         }
+        
         // --- DNS HALLINTA ---
         let dnsRecordsCache = [];
 
@@ -699,11 +700,13 @@
         }
 
         async function poistaDNSTietue(id) {
+            const zoneId = document.getElementById('dns-zone').value; // TÄMÄ LISÄTTIIN
             const tietue = dnsRecordsCache.find(r => String(r.id) === String(id));
             const nimi = tietue ? tietue.name : id;
             if (!confirm(`Poistetaanko DNS-tietue: ${nimi}?`)) return;
             try {
-                const res = await fetch(`${API_DNS}/${encodeURIComponent(id)}`, {
+                // TÄSSÄ PÄIVITETTY POISTOPYYNTÖ SISÄLTÄMÄÄN zone_id:n
+                const res = await fetch(`${API_DNS}/${encodeURIComponent(id)}?zone_id=${encodeURIComponent(zoneId)}`, {
                     method: 'DELETE',
                     headers: haeOtsakkeet()
                 });
