@@ -27,7 +27,17 @@ router.get('/zones', async (_req, res) => {
       headers: getHetznerHeaders()
     });
     const data = await response.json();
-    return res.status(response.status).json(data);
+
+    // If Hetzner returns a plain array, wrap it in a zones key
+    if (Array.isArray(data)) {
+      return res.status(response.status).json({ zones: data });
+    }
+    // If it returns an object with a zones field, return as-is
+    if (data && Array.isArray(data.zones)) {
+      return res.status(response.status).json(data);
+    }
+
+    return res.status(response.status).json({ zones: [] });
   } catch (error) {
     return res.status(500).json({ error: 'Palvelinvirhe DNS-vyöhykkeiden haussa.', details: error.message });
   }
