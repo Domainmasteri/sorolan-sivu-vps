@@ -16,6 +16,7 @@ import {
 
 import { db } from './db.js';
 import { s3, bucketName } from './storage.js';
+import dnsRouter from './api/dns.js';
 
 const app = express();
 app.set('trust proxy', 1);
@@ -645,6 +646,8 @@ app.all('/api/lyhennin/create', async (req, res) => {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
 });
+
+app.use('/api/dns', requireAuth, dnsRouter);
 
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
