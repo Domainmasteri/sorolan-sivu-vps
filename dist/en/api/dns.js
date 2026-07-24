@@ -5,27 +5,33 @@ const router = Router();
 const HETZNER_DNS_API = 'https://dns.hetzner.com/api/v1';
 const HETZNER_ZONES_API = 'https://api.hetzner.cloud/v1/zones';
 
-function getHetznerHeaders() {
+function getHetznerApiKey() {
+  return String(process.env.HETZNER_API_KEY || '').trim();
+}
+
+function getHetznerHeaders(apiKey) {
   return {
-    Authorization: 'Bearer ' + process.env.HETZNER_API_KEY,
+    Authorization: 'Bearer ' + apiKey,
     'Content-Type': 'application/json'
   };
 }
 
 function checkApiKey(res) {
-  if (!process.env.HETZNER_API_KEY) {
+  const apiKey = getHetznerApiKey();
+  if (!apiKey) {
     res.status(500).json({ error: 'HETZNER_API_KEY ei ole asetettu palvelimella.' });
-    return false;
+    return null;
   }
-  return true;
+  return apiKey;
 }
 
 // GET /zones - List all DNS zones
 router.get('/zones', async (_req, res) => {
-  if (!checkApiKey(res)) return;
+  const apiKey = checkApiKey(res);
+  if (!apiKey) return;
   try {
     const response = await fetch(HETZNER_ZONES_API, {
-      headers: getHetznerHeaders()
+      headers: getHetznerHeaders(apiKey)
     });
     const textData = await response.text();
     console.log(textData);
@@ -63,14 +69,15 @@ router.get('/zones', async (_req, res) => {
 
 // GET - Fetch all DNS records for a zone (zone_id as query param)
 router.get('/', async (req, res) => {
-  if (!checkApiKey(res)) return;
+  const apiKey = checkApiKey(res);
+  if (!apiKey) return;
   const zoneId = req.query.zone_id;
   if (!zoneId) {
     return res.status(400).json({ error: 'zone_id on pakollinen query-parametri.' });
   }
   try {
     const response = await fetch(`${HETZNER_DNS_API}/records?zone_id=${encodeURIComponent(zoneId)}`, {
-      headers: getHetznerHeaders()
+      headers: getHetznerHeaders(apiKey)
     });
     const data = await response.json();
     return res.status(response.status).json(data);
@@ -81,7 +88,8 @@ router.get('/', async (req, res) => {
 
 // POST - Create a new DNS record (zone_id in request body)
 router.post('/', async (req, res) => {
-  if (!checkApiKey(res)) return;
+  const apiKey = checkApiKey(res);
+  if (!apiKey) return;
   try {
     const { zone_id, type, name, value, ttl } = req.body || {};
 
@@ -102,7 +110,7 @@ router.post('/', async (req, res) => {
 
     const response = await fetch(`${HETZNER_DNS_API}/records`, {
       method: 'POST',
-      headers: getHetznerHeaders(),
+      headers: getHetznerHeaders(apiKey),
       body: JSON.stringify(body)
     });
     const data = await response.json();
@@ -114,7 +122,8 @@ router.post('/', async (req, res) => {
 
 // PUT - Update an existing DNS record (zone_id in request body)
 router.put('/:id', async (req, res) => {
-  if (!checkApiKey(res)) return;
+  const apiKey = checkApiKey(res);
+  if (!apiKey) return;
   try {
     const recordId = req.params.id;
     const { zone_id, type, name, value, ttl } = req.body || {};
@@ -136,7 +145,7 @@ router.put('/:id', async (req, res) => {
 
     const response = await fetch(`${HETZNER_DNS_API}/records/${encodeURIComponent(recordId)}`, {
       method: 'PUT',
-      headers: getHetznerHeaders(),
+      headers: getHetznerHeaders(apiKey),
       body: JSON.stringify(body)
     });
     const data = await response.json();
@@ -148,12 +157,13 @@ router.put('/:id', async (req, res) => {
 
 // DELETE - Delete a DNS record
 router.delete('/:id', async (req, res) => {
-  if (!checkApiKey(res)) return;
+  const apiKey = checkApiKey(res);
+  if (!apiKey) return;
   try {
     const recordId = req.params.id;
     const response = await fetch(`${HETZNER_DNS_API}/records/${encodeURIComponent(recordId)}`, {
       method: 'DELETE',
-      headers: getHetznerHeaders()
+      headers: getHetznerHeaders(apiKey)
     });
 
     if (response.status === 200 || response.status === 204) {
