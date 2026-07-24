@@ -19,6 +19,13 @@ function checkApiKey(res) {
   return true;
 }
 
+// APUFUKTIO: Estetään Hetznerin 401-virheen (Unauthorized) valuminen frontendille,
+// ettei frontend luule admin-kirjautumista vanhentuneeksi ja potki käyttäjää ulos!
+function getSafeStatus(status) {
+    if (status === 401 || status === 403) return 502; // 502 Bad Gateway
+    return status;
+}
+
 // GET /zones - List all DNS zones
 router.get('/zones', async (_req, res) => {
   if (!checkApiKey(res)) return;
@@ -26,10 +33,12 @@ router.get('/zones', async (_req, res) => {
     const response = await fetch(`${HETZNER_CLOUD_API}/zones`, {
       headers: getHetznerCloudHeaders()
     });
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
     
     if (!response.ok) {
-        return res.status(response.status).json({ error: data.error?.message || 'Virhe vyöhykkeiden haussa.' });
+        return res.status(getSafeStatus(response.status)).json({ 
+            error: data.error?.message || 'Hetzner API hylkäsi pyynnön (Tarkista API-avain Coolifysta).' 
+        });
     }
 
     return res.status(200).json({ zones: data.zones || [] });
@@ -49,18 +58,17 @@ router.get('/', async (req, res) => {
     const response = await fetch(`${HETZNER_CLOUD_API}/zones/${zoneId}/rrsets`, {
       headers: getHetznerCloudHeaders()
     });
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-        return res.status(response.status).json({ error: data.error?.message || 'Virhe tietueiden haussa.' });
+        return res.status(getSafeStatus(response.status)).json({ error: data.error?.message || 'Virhe tietueiden haussa.' });
     }
 
-    // Uudessa Cloud API:ssa tietueet ovat "RRsettejä". Puretaan ne litteäksi listaksi frontendia varten.
     const mappedRecords = [];
     for (const rrset of data.rrsets || []) {
       for (const record of rrset.records || []) {
         mappedRecords.push({
-          id: `${rrset.name}/${rrset.type}|${record.value}`, // Yksilöllinen yhdistelmä-ID poistoa ja muokkausta varten
+          id: `${rrset.name}/${rrset.type}|${record.value}`, 
           name: rrset.name,
           type: rrset.type,
           ttl: rrset.ttl,
@@ -84,17 +92,15 @@ router.post('/', async (req, res) => {
     if (!type || name === undefined || !value) return res.status(400).json({ error: 'Tyyppi, nimi ja arvo ovat pakollisia.' });
 
     let safeName = String(name).trim();
-    if (safeName === '') safeName = '@'; // Cloud API vaatii root-domainille @-merkin
+    if (safeName === '') safeName = '@'; 
     const safeType = String(type).toUpperCase();
     const safeValue = String(value).trim();
     
-    // 1. Tarkista onko kyseinen RRset (nimi + tyyppi) jo olemassa
     const rrsetRes = await fetch(`${HETZNER_CLOUD_API}/zones/${zone_id}/rrsets/${encodeURIComponent(safeName)}/${safeType}`, {
       headers: getHetznerCloudHeaders()
     });
 
     if (rrsetRes.ok) {
-        // RRset on jo olemassa, lisätään uusi arvo muiden joukkoon
         const data = await rrsetRes.json();
         const records = data.rrset.records || [];
         
@@ -110,10 +116,9 @@ router.post('/', async (req, res) => {
             body: JSON.stringify({ records })
         });
         
-        const updateData = await updateRes.json();
-        return res.status(updateRes.status).json(updateData);
+        const updateData = await updateRes.json().catch(() => ({}));
+        return res.status(getSafeStatus(updateRes.status)).json(updateData);
     } else {
-        // 2. RRset ei ole olemassa, luodaan täysin uusi
         const createRes = await fetch(`${HETZNER_CLOUD_API}/zones/${zone_id}/rrsets`, {
             method: 'POST',
             headers: getHetznerCloudHeaders(),
@@ -124,8 +129,8 @@ router.post('/', async (req, res) => {
                 records: [{ value: safeValue }]
             })
         });
-        const createData = await createRes.json();
-        return res.status(createRes.status).json(createData);
+        const createData = await createRes.json().catch(() => ({}));
+        return res.status(getSafeStatus(createRes.status)).json(createData);
     }
   } catch (error) {
     return res.status(500).json({ error: 'Palvelinvirhe DNS-tietueen luonnissa.', details: error.message });
@@ -151,19 +156,18 @@ router.put('/:id', async (req, res) => {
     const safeType = String(type).toUpperCase();
     const safeValue = String(value).trim();
 
-    // Hae olemassa oleva RRset
     const rrsetRes = await fetch(`${HETZNER_CLOUD_API}/zones/${zone_id}/rrsets/${encodeURIComponent(safeName)}/${safeType}`, {
       headers: getHetznerCloudHeaders()
     });
     
     if (!rrsetRes.ok) {
-        return res.status(rrsetRes.status).json(await rrsetRes.json());
+        const errorData = await rrsetRes.json().catch(() => ({}));
+        return res.status(getSafeStatus(rrsetRes.status)).json(errorData);
     }
 
     const data = await rrsetRes.json();
     const records = data.rrset.records || [];
 
-    // Vaihda vanha arvo uuteen
     let found = false;
     for (const r of records) {
         if (r.value === oldValue) {
@@ -173,7 +177,7 @@ router.put('/:id', async (req, res) => {
         }
     }
 
-    if (!found) records.push({ value: safeValue }); // Varatoimenpide
+    if (!found) records.push({ value: safeValue });
 
     const updateRes = await fetch(`${HETZNER_CLOUD_API}/zones/${zone_id}/rrsets/${encodeURIComponent(safeName)}/${safeType}/actions/set_records`, {
         method: 'POST',
@@ -181,7 +185,8 @@ router.put('/:id', async (req, res) => {
         body: JSON.stringify({ records })
     });
     
-    return res.status(updateRes.status).json(await updateRes.json());
+    const updateData = await updateRes.json().catch(() => ({}));
+    return res.status(getSafeStatus(updateRes.status)).json(updateData);
   } catch (error) {
     return res.status(500).json({ error: 'Palvelinvirhe DNS-tietueen päivityksessä.', details: error.message });
   }
@@ -194,7 +199,7 @@ router.delete('/:id', async (req, res) => {
     const zone_id = req.query.zone_id;
     if (!zone_id) return res.status(400).json({ error: 'zone_id on pakollinen query-parametri poistossa.' });
 
-    const idParam = req.params.id; // Formaatti: "name/type|value"
+    const idParam = req.params.id; 
     const firstPipe = idParam.indexOf('|');
     if (firstPipe === -1) return res.status(400).json({ error: 'Virheellinen ID-formaatti.' });
     
@@ -205,20 +210,19 @@ router.delete('/:id', async (req, res) => {
     const safeName = nameType.substring(0, lastSlash);
     const safeType = nameType.substring(lastSlash + 1);
 
-    // Hae RRset nähdäksemme jääkö muita tietueita
     const rrsetRes = await fetch(`${HETZNER_CLOUD_API}/zones/${zone_id}/rrsets/${encodeURIComponent(safeName)}/${safeType}`, {
         headers: getHetznerCloudHeaders()
     });
     
     if (!rrsetRes.ok) {
-        return res.status(rrsetRes.status).json(await rrsetRes.json());
+        const errorData = await rrsetRes.json().catch(() => ({}));
+        return res.status(getSafeStatus(rrsetRes.status)).json(errorData);
     }
 
     const data = await rrsetRes.json();
     const records = (data.rrset.records || []).filter(r => r.value !== valueToRemove);
 
     if (records.length === 0) {
-        // Poista koko RRset jos muita arvoja ei jäänyt
         const delRes = await fetch(`${HETZNER_CLOUD_API}/zones/${zone_id}/rrsets/${encodeURIComponent(safeName)}/${safeType}`, {
             method: 'DELETE',
             headers: getHetznerCloudHeaders()
@@ -226,15 +230,16 @@ router.delete('/:id', async (req, res) => {
         if (delRes.status === 200 || delRes.status === 204) {
             return res.json({ success: true });
         }
-        return res.status(delRes.status).json(await delRes.json().catch(() => ({})));
+        return res.status(getSafeStatus(delRes.status)).json(await delRes.json().catch(() => ({})));
     } else {
-        // Päivitä RRset ja poista vain kyseinen arvo listasta
         const updateRes = await fetch(`${HETZNER_CLOUD_API}/zones/${zone_id}/rrsets/${encodeURIComponent(safeName)}/${safeType}/actions/set_records`, {
             method: 'POST',
             headers: getHetznerCloudHeaders(),
             body: JSON.stringify({ records })
         });
-        return res.status(updateRes.status).json(await updateRes.json());
+        
+        const updateData = await updateRes.json().catch(() => ({}));
+        return res.status(getSafeStatus(updateRes.status)).json(updateData);
     }
   } catch (error) {
     return res.status(500).json({ error: 'Palvelinvirhe DNS-tietueen poistossa.', details: error.message });
