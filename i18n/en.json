@@ -245,6 +245,8 @@
       "text": {
         "Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti": "Sorola File Sharing - Share and send files securely",
         "Sorola Share": "Sorola Share",
+        "Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän -salauksen. Suurin sallittu tiedostokoko on 1 Gt.": "Share files securely. You can optionally enable your browser's end-to-end encryption. The maximum allowed file size is 1 GB.",
+        "Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän -salauksen. Suurin sallittu tiedostokoko on 200 MT.": "Share files securely. You can optionally enable your browser's end-to-end encryption. The maximum allowed file size is 200 MB.",
         "Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän -salauksen. Suurin sallittu tiedostokoko on 5 GT.": "Share files securely. You can optionally enable your browser's end-to-end encryption. The maximum allowed file size is 5 GB.",
         "Asetukset": "Settings",
         "Säilytysaika:": "Retention time:",
@@ -270,6 +272,7 @@
       },
       "raw": {
         "Tiedosto on liian suuri! Sallittu maksimikoko on ${MAX_SIZE_MB} MB.": "The file is too large! The maximum allowed size is ${MAX_SIZE_MB} MB.",
+        "Tiedosto on liian suuri! Sallittu maksimikoko on 1 Gt.": "The file is too large! The maximum allowed size is 1 GB.",
         "Lataus epäonnistui.": "Upload failed.",
         "Virhe: ": "Error: ",
         "'Salataan selaimessa...'": "'Encrypting in browser...'",
@@ -865,6 +868,15 @@
         "Virhe.": "Error.",
         ">Virhe<": ">Error<"
       }
+    },
+    "Niko/index.html": {
+      "text": {
+        "Arkkityyppi elämäntapa": "Archetype lifestyle",
+        "Hei kaikki!": "Hello everyone!",
+        "Tervetuloa sivuilleni. Täällä tutkimme arkkityyppistä elämäntapaa ja sen eri ulottuvuuksia.": "Welcome to my pages. Here we explore the archetypal lifestyle and its different dimensions.",
+        "Tämä on testisivu": "This is a test page",
+        "Linkkejä": "Links"
+      }
     }
   },
   "js": {
@@ -893,4 +905,3 @@
       }
     }
   }
-}
