@@ -280,6 +280,8 @@
         "Salaa tiedostosi ennen niiden tallentamista pilveen.": "Encrypt your files before storing them in the cloud.",
         "Opettele luomaan lyhyitä ja helposti jaettavia linkkejä.": "Learn how to create short and easy-to-share links.",
         "Linkin lyhennin": "URL-Shortener",
+        "Tiedostonjako": "File sharing",
+        "Jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla.": "Share files securely with download limits and expiration times.",
         "Salasanaholvi": "Password vault",
         "Luo ja varastoi vahvoja salasanoja.": "Create and store strong passwords."
       },
@@ -309,6 +311,23 @@
         "Tekstiviesteissä": "In text messages",
         "Tietosuoja": "Privacy",
         "Linkinlyhennin ei muuta alkuperäisen sivun sisältöä. Lyhyt linkki toimii vain uudelleenohjauksena alkuperäiseen osoitteeseen.": "The link shortener does not change the content of the original page. The short link only redirects to the original address."
+      }
+    },
+    "ohjeet/tiedostojako.html": {
+      "text": {
+        "Tiedostonjaon käyttöohje": "File sharing guide",
+        "📁 Tiedostonjaon käyttö": "📁 Using file sharing",
+        "Tiedostonjakopalvelun avulla voit jakaa tiedostoja turvallisesti määrittämällä niille tarvittaessa latausrajoituksen ja vanhenemisajan.": "With the file sharing service you can share files securely by setting a download limit and an expiration time if needed.",
+        "1. Valitse tiedosto": "1. Select a file",
+        "Aloita valitsemalla laitteeltasi tiedosto, jonka haluat jakaa vastaanottajalle.": "Start by selecting a file from your device that you want to share with the recipient.",
+        "2. Aseta rajoitukset (Valinnainen)": "2. Set limits (Optional)",
+        "Voit parantaa jaon turvallisuutta asettamalla sille rajoituksia:": "You can improve the security of the share by setting limits to it:",
+        "Latausrajoitus:": "Download limit:",
+        "Määritä, kuinka monta kertaa tiedosto voidaan ladata ennen kuin linkki lakkaa toimimasta.": "Determine how many times the file can be downloaded before the link stops working.",
+        "Vanhenemisaika:": "Expiration time:",
+        "Aseta aikaraja, jonka umpeuduttua tiedostoa ei voi enää ladata.": "Set a time limit after which the file can no longer be downloaded.",
+        "3. Luo ja jaa linkki": "3. Create and share the link",
+        "Luo jakolinkki ja kopioi se itsellesi. Voit lähettää linkin eteenpäin esimerkiksi sähköpostilla tai pikaviestimellä.": "Create a share link and copy it for yourself. You can forward the link via email or instant messenger, for example."
       }
     },
     "ohjeet/bitwarden.html": {
