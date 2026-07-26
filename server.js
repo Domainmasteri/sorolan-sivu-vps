@@ -291,6 +291,7 @@ app.use(async (req, res, next) => {
     if (!table) return next();
     if (!pathname) return res.redirect(302, shortenerHomeUrl);
     
+    // Suojataan omat työkalut lyhentimen sieppaukselta
     const reservedPrefixes = [
         'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 
         'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat', 
@@ -716,7 +717,7 @@ app.delete('/api/pastes', requireAuth, async (req, res) => {
   }
 });
 
-// --- TIEDOSTOLATAUS JA S3 (VÄLIAIKAISLATAUS LEVYLLE) ---
+// --- TIEDOSTOLATAUS JA S3 (LEVYVÄLIMUISTI) ---
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
@@ -730,7 +731,7 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
     const fileName = `${id}.${extension || 'bin'}`;
 
-    // Luodaan stream suoraan äsken levylle tallennetusta tiedostosta
+    // Luodaan stream suoraan levyltä RAM-kaatumisten estämiseksi
     const fileStream = createReadStream(file.path);
 
     await s3.send(new PutObjectCommand({
@@ -754,7 +755,7 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    // Siivotaan väliaikainen tiedosto aina pois levyltä!
+    // Siivotaan kookas väliaikaistiedosto aina pois!
     if (file && file.path) {
       await fs.unlink(file.path).catch(err => console.error("Temp file cleanup error:", err));
     }
