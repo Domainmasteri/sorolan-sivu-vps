@@ -37,7 +37,7 @@
     <div class="laatikko">
         <h1 class="otsikko">Sorola Share</h1>
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän -salauksen. Suurin sallittu tiedostokoko on 5 GT.</p>
+            <p style="margin: 0; text-align: center;">Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän -salauksen. Suurin sallittu tiedostokoko on 200 MT.</p>
         </div>
         <main id="paaosio">
             <div class="osion-tausta">
@@ -110,6 +110,12 @@
         });
 
         async function handleUpload(file) {
+            const MAX_SIZE_MB = 2560;
+            if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+                alert(`Tiedosto on liian suuri! Sallittu maksimikoko on ${MAX_SIZE_MB} MB.`);
+                return;
+            }
+
             dropzoneContent.style.display = 'none';
             loading.style.display = 'flex';
             result.style.display = 'none';
@@ -153,11 +159,15 @@
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Lataus epäonnistui.');
 
+                // TÄSSÄ KORJAUS 2: Tunnistetaan kieli URL:n perusteella
+                const isEn = window.location.pathname.includes('/en/');
+
                 if (isEncrypted) {
-                    // Päivitetty reitti salatulle purkusivulle (/s/id#avain)
-                    shareLink.value = window.location.origin + '/s/' + data.id + '#key=' + encryptionKeyHash;
+                    // Generoidaan linkki lataussivulle kielen mukaisesti
+                    const basePath = isEn ? '/en/share/download.html' : '/jako/lataus.html';
+                    shareLink.value = window.location.origin + basePath + '?file=' + data.id + '#key=' + encryptionKeyHash;
                 } else {
-                    // Tavallinen tiedosto tulee suoraan /d/id muodossa
+                    // Tavallinen tiedosto palauttaa suoran latauslinkin api/download
                     shareLink.value = data.url;
                 }
 
