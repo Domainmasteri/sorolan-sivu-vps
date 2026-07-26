@@ -11,8 +11,7 @@ import {
   CopyObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
-  PutObjectCommand,
-  HeadObjectCommand
+  PutObjectCommand
 } from '@aws-sdk/client-s3';
 
 import { db } from './db.js';
@@ -273,7 +272,6 @@ async function streamS3BodyToResponse(body, res) {
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
 
-// URL-lyhentimen ohitus reititykselle
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
@@ -283,11 +281,8 @@ app.use(async (req, res, next) => {
     if (!table) return next();
     if (!pathname) return res.redirect(302, shortenerHomeUrl);
     
-    // Ohitetaan uudet työkalut ja API
-    if (pathname.startsWith('api/') ||
-        pathname.startsWith('p/') ||
-        pathname.startsWith('d/') ||
-        pathname.startsWith('s/')) {
+    // TÄSSÄ KORJAUS 1: Ohitetaan Pastebin (p/), api/ ja lataukset, jottei lyhennin nappaa niitä!
+    if (pathname.startsWith('api/') || pathname.startsWith('p/') || pathname.startsWith('d/')) {
         return next();
     }
 
@@ -564,7 +559,7 @@ app.post('/api/links', requireAuth, async (req, res) => {
       throw error;
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -579,7 +574,7 @@ app.put('/api/links', requireAuth, async (req, res) => {
     await updateShortLink(table, pathValue, newOriginalURL);
     return res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -598,7 +593,7 @@ app.delete('/api/links', requireAuth, async (req, res) => {
     await deleteShortLink(table, pathToRemove);
     return res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -631,7 +626,7 @@ app.all('/api/lyhennin/create', async (req, res) => {
       return res.status(400).json({ error: 'URL puuttuu' });
     }
 
-    if (!['srla.fi', 'srl.la', 'soro.la'].includes(domain)) {
+    if (!['srla.fi', 'srl.la'].includes(domain)) {
       return res.status(400).json({ error: 'Virheellinen domain.' });
     }
 
@@ -649,7 +644,7 @@ app.all('/api/lyhennin/create', async (req, res) => {
       throw error;
     }
 
-    const baseUrl = `https://${domain}`;
+    const baseUrl = domain === 'srl.la' ? 'https://srl.la' : 'https://srla.fi';
     return res.json({ success: true, shortUrl: `${baseUrl}/${koodi}` });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
@@ -658,19 +653,18 @@ app.all('/api/lyhennin/create', async (req, res) => {
 
 app.use('/api/dns', requireAuth, dnsRouter);
 
-// --- PASTEBIN API-REITIT ---
+// --- TÄSSÄ KORJAUS 3: Pastebin API-reitit ---
 app.post('/api/paste', async (req, res) => {
   try {
     const { content } = req.body;
     if (!content || !content.trim()) {
       return res.status(400).json({ error: 'Teksti on pakollinen.' });
     }
-    
     const shortPath = luoSatunnainenPolku(6);
     await db.query('INSERT INTO pastes (short_path, content) VALUES ($1, $2)', [shortPath, content.trim()]);
     return res.json({ success: true, path: shortPath });
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa. Onko taulu olemassa?' });
+    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa.' });
   }
 });
 
@@ -679,28 +673,18 @@ app.get('/api/paste/:path', async (req, res) => {
     const { path: pastePath } = req.params;
     const result = await db.query('SELECT content FROM pastes WHERE short_path = $1 LIMIT 1', [pastePath]);
     const match = result.rows[0];
-    
-    if (!match) {
-      return res.status(404).json({ error: 'Tekstiä ei löytynyt.' });
-    }
-    
+    if (!match) return res.status(404).json({ error: 'Tekstiä ei löytynyt.' });
     return res.json({ content: match.content });
   } catch (error) {
     return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
 });
 
-// Admin-reitit Pastebinin hallintaan
+// Admin Pastebin hallinta
 app.get('/api/pastes', requireAuth, async (_req, res) => {
   try {
-    const result = await db.query('SELECT id, short_path, created_at, content FROM pastes ORDER BY created_at DESC');
-    const pastes = result.rows.map(p => ({
-      id: p.id,
-      short_path: p.short_path,
-      created_at: p.created_at,
-      snippet: p.content.length > 40 ? p.content.substring(0, 40) + '...' : p.content
-    }));
-    res.json({ pastes });
+    const result = await db.query('SELECT id, short_path, content, created_at FROM pastes ORDER BY created_at DESC');
+    res.json({ pastes: result.rows });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -716,7 +700,7 @@ app.delete('/api/pastes', requireAuth, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// ---------------------------
+// ------------------------------------------
 
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
@@ -749,21 +733,16 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const siteUrl = process.env.SITE_URL
       ? process.env.SITE_URL.replace(/\/$/, '')
       : `${req.protocol}://${req.hostname}`;
-      
-    // Jos pyyntö tulee englanninkieliseltä puolelta, annetaan siihen sopiva alkuosa
-    const isEn = prefersEnglish(req);
-    const linkPrefix = isEn ? '/en/share/d/' : '/d/';
-    const downloadUrl = `${siteUrl}${linkPrefix}${encodeURIComponent(fileName)}`;
     
-    return res.json({ url: downloadUrl, id: fileName });
+    // Annetaan pelkkä tiedoston nimi selaimelle. Selain /jako/index.html luo varsinaisen HTML-linkin
+    return res.json({ url: `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
 });
 
-// LYHYT LATAUSREITTI (/d/:file) JA ENGLANNINKIELINEN VERSIO (/en/share/d/:file)
-app.get(['/d/:file', '/en/share/d/:file'], async (req, res) => {
-  const fileId = String(req.params.file || '');
+app.get('/api/download', async (req, res) => {
+  const fileId = String(req.query.file || '');
   if (!fileId) {
     const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
     return res.redirect(302, errorPath);
@@ -818,7 +797,7 @@ app.get(['/d/:file', '/en/share/d/:file'], async (req, res) => {
   }
 });
 
-// Reitti Pastebinin katselusivulle, tunnistaa kielen
+// TÄSSÄ KORJAUS 1: Frontend reitti pastebin lukemiselle
 app.get('/p/:path', async (req, res) => {
   const isEn = prefersEnglish(req);
   const filePath = isEn 
@@ -828,51 +807,14 @@ app.get('/p/:path', async (req, res) => {
     await fs.access(filePath);
     return res.sendFile(filePath);
   } catch {
-    return res.sendFile(path.join(distPath, 'index.html'));
-  }
-});
-
-// Reitti salatun tiedoston lataus/purkusivulle, TARKISTAA ENSIN S3 RAJAT JA VANHENEMISET!
-app.get('/s/:file', async (req, res) => {
-  const fileId = String(req.params.file || '');
-  const isEn = prefersEnglish(req);
-  const errorPath = isEn ? '/en/share/error' : '/jako/error';
-
-  if (!fileId) return res.redirect(302, errorPath);
-
-  try {
-    // Tehdään nopea HEAD-pyyntö S3:een rajoitusten tarkistamiseksi
-    const object = await s3.send(new HeadObjectCommand({ Bucket: bucketName, Key: fileId }));
-    const metadata = object.Metadata || {};
-
-    const expiresAt = Number.parseInt(metadata.expiresat || '0', 10);
-    if (expiresAt && Date.now() > expiresAt) {
-      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
-      return res.redirect(302, errorPath);
-    }
-
-    const maxDownloads = Number.parseInt(metadata.maxdownloads || '0', 10);
-    const downloads = Number.parseInt(metadata.downloads || '0', 10);
-    // Emme lisää latauskertaa tässä, sillä /d/:file -reitti hoitaa sen
-    if (maxDownloads > 0 && downloads >= maxDownloads) {
-      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
-      return res.redirect(302, errorPath);
-    }
-
-    // Tiedosto on yhä voimassa! Näytetään lataus-/purkusivu oikealla kielellä
-    const filePath = isEn 
-      ? path.join(distPath, 'en', 'share', 'download.html') 
-      : path.join(distPath, 'jako', 'lataus.html');
-      
+    // Fallback suomenkieliseen, jos englannin käännös puuttuu
+    const fallbackPath = path.join(distPath, 'pastebin', 'lue.html');
     try {
-      await fs.access(filePath);
-      return res.sendFile(filePath);
+      await fs.access(fallbackPath);
+      return res.sendFile(fallbackPath);
     } catch {
       return res.sendFile(path.join(distPath, 'index.html'));
     }
-  } catch (error) {
-    // Jos S3:sta ei löydy (404), ohjataan virhesivulle
-    return res.redirect(302, errorPath);
   }
 });
 
