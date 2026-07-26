@@ -9,6 +9,7 @@ export const EN_ROUTE_SEGMENTS = new Map([
   ['lyhennin', 'shortener'],
   ['ohjeet', 'guides'],
   ['salasanat', 'passwords'],
+  ['tiedostojako', 'file-sharing'],
   ['vieraskirja', 'guestbook']
 ]);
 
