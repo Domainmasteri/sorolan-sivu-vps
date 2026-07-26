@@ -22,8 +22,12 @@
         let originalFilename = "tiedosto.enc";
 
         async function puraTiedosto() {
-            const pathParts = window.location.pathname.split('/');
-            const fileId = pathParts[pathParts.length - 1]; // nappaa ID:n esim /s/ID
+            // Etsitään ID pomminvarmasti riippumatta polusta (toimii sekä /s/ID että ?file=ID)
+            let fileId = window.location.pathname.split('/').pop();
+            if (fileId.includes('.html') || fileId === 's' || !fileId) {
+                const urlParams = new URLSearchParams(window.location.search);
+                fileId = urlParams.get('file');
+            }
             const hashKey = window.location.hash.substring(1).replace('key=', '');
 
             const teksti = document.getElementById('teksti');
@@ -36,7 +40,7 @@
             }
 
             try {
-                // Haetaan raaka salattu tiedosto /d/ -reitistä taustalla
+                // Haetaan raaka salattu tiedosto. Käytämme /d/-reittiä, joka palvelee tiedoston taustalla.
                 const res = await fetch(`/d/${fileId}`);
                 if (!res.ok) throw new Error('Tiedostoa ei löytynyt tai se on vanhentunut.');
                 const encryptedArrayBuffer = await res.arrayBuffer();
@@ -50,7 +54,6 @@
                     "raw", bytes.buffer, { name: "AES-GCM" }, false, ["decrypt"]
                 );
 
-                // Erotetaan IV ja itse data
                 const iv = encryptedArrayBuffer.slice(0, 12);
                 const data = encryptedArrayBuffer.slice(12);
 
@@ -60,7 +63,6 @@
 
                 decryptedBlob = new Blob([decryptedContent]);
 
-                // Erotetaan tiedostonimi otsikoista jos sieltä löytyy alkuperäinen
                 const contentDisp = res.headers.get('Content-Disposition');
                 if (contentDisp && contentDisp.includes('filename=')) {
                     const matches = contentDisp.match(/filename="?([^"]+)"?/);
