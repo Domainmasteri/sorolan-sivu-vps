@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import fs from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
@@ -26,10 +27,17 @@ const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, 'dist');
 const shortenerHomeUrl = process.env.SHORTENER_HOME_URL || 'https://sorola.fi/lyhennin';
 const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/lyhennin/error';
-const MAX_SHARE_FILE_SIZE_BYTES = 200 * 1024 * 1024;
 
+// 1 GB maksimikoko (1024 * 1024 * 1024 tavua)
+const MAX_SHARE_FILE_SIZE_BYTES = 1 * 1024 * 1024 * 1024;
+const uploadDir = path.join(__dirname, 'uploads');
+
+// Varmistetaan, että uploads-kansio on olemassa, jottei multer kaadu
+fs.mkdir(uploadDir, { recursive: true }).catch(err => console.error('Uploads-kansion luonti epäonnistui:', err));
+
+// Käytetään dest-asetusta RAM-muistin sijaan, jotta VPS ei kaadu isoissa tiedostoissa!
 const uploadShare = multer({
-  storage: multer.memoryStorage(),
+  dest: uploadDir,
   limits: { fileSize: MAX_SHARE_FILE_SIZE_BYTES }
 });
 
@@ -273,9 +281,7 @@ async function streamS3BodyToResponse(body, res) {
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
 
-// =======================================================
 // POMMINVARMA URL-LYHENTIMEN OHITUS
-// =======================================================
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
@@ -285,8 +291,6 @@ app.use(async (req, res, next) => {
     if (!table) return next();
     if (!pathname) return res.redirect(302, shortenerHomeUrl);
     
-    // Suojataan kaikki sivuston omat kansiot, tiedostot ja reitit, 
-    // jottei lyhennin vahingossa yritä etsiä niitä tietokannasta ja aiheuta 404:ää!
     const reservedPrefixes = [
         'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 
         'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat', 
@@ -294,7 +298,6 @@ app.use(async (req, res, next) => {
     ];
     const firstSegment = pathname.split('/')[0];
     
-    // Jos polku alkaa varatulla nimellä TAI sisältää pisteen (esim .html, .css, .png)
     if (reservedPrefixes.includes(firstSegment) || pathname.includes('.')) {
         return next();
     }
@@ -713,7 +716,7 @@ app.delete('/api/pastes', requireAuth, async (req, res) => {
   }
 });
 
-// --- TIEDOSTOLATAUS JA S3 ---
+// --- TIEDOSTOLATAUS JA S3 (VÄLIAIKAISLATAUS LEVYLLE) ---
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
@@ -727,12 +730,13 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
     const fileName = `${id}.${extension || 'bin'}`;
 
-    const body = file.buffer;
+    // Luodaan stream suoraan äsken levylle tallennetusta tiedostosta
+    const fileStream = createReadStream(file.path);
 
     await s3.send(new PutObjectCommand({
       Bucket: bucketName,
       Key: fileName,
-      Body: body,
+      Body: fileStream,
       ContentType: file.mimetype || 'application/octet-stream',
       Metadata: {
         originalname: file.originalname,
@@ -749,6 +753,11 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     return res.json({ url: `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
+  } finally {
+    // Siivotaan väliaikainen tiedosto aina pois levyltä!
+    if (file && file.path) {
+      await fs.unlink(file.path).catch(err => console.error("Temp file cleanup error:", err));
+    }
   }
 });
 
