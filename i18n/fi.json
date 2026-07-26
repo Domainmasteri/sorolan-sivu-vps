@@ -5,10 +5,10 @@
   "html": {
     "__all__": {
       "text": {
-        "Skip to content": "Hyppää pääsisältöön",
-        "← Back to home": "← Takaisin pääsivulle",
+        "Skip to content": "Hyppää sisältöön",
+        "« Back to home": "« Takaisin pääsivulle",
         "Back to home": "Takaisin pääsivulle",
-        "⬅ Back to guides": "⬅ Takaisin ohjeisiin",
+        "« Back to guides": "« Takaisin ohjeisiin",
         "Open guide": "Avaa ohje"
       }
     },
@@ -34,7 +34,7 @@
         "4. Security": "4. Tietoturva",
         "The Extension communicates exclusively via secure, encrypted HTTPS protocols. It does not load or execute any remote external scripts, ensuring that the code running on your browser is 100% local and safe.": "Laajennus kommunikoi ainoastaan turvallisten, salattujen HTTPS-yhteyksien kautta. Se ei lataa tai suorita etäskriptejä, joten selaimessasi ajettava koodi on täysin paikallinen ja turvallinen.",
         "5. Contact": "5. Yhteystiedot",
-        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tästä tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
+        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
       }
     },
     "privacy/salasanat.html": {
@@ -44,7 +44,7 @@
         "Effective Date:": "Voimaantulopäivä:",
         "May 2026": "Toukokuu 2026",
         "1. Introduction": "1. Johdanto",
-        "Sorolan Salasanat (\"the Extension\") is a strictly local password generator committed to absolute user privacy. This Privacy Policy explains how the Extension handles information.": "Sorolan Salasanat (\"laajennus\") on täysin paikallinen salasanageneraattori, joka on sitoutunut käyttäjän täydelliseen yksityisyyteen. Tämä tietosuojakäytäntö kertoo, miten laajennus käsittelee tietoja.",
+        "Sorolan Salasanat (\"the Extension\") is a strictly local password generator committed to absolute user privacy. This Privacy Policy explains how the Extension handles information.": "Sorolan Salasanat (\"laajennus\") on täysin paikallinen salasanageneraattori, joka on sitoutunut täydelliseen yksityisyyteen. Tämä tietosuojakäytäntö kertoo, miten laajennus käsittelee tietoja.",
         "2. Data Collection and Usage": "2. Tietojen kerääminen ja käyttö",
         "The Extension is a 100% offline tool. It does not collect, store, process, or transmit any personal data, browsing history, analytics, or device information.": "Laajennus on 100 % offline-työkalu. Se ei kerää, tallenna, käsittele eikä siirrä henkilötietoja, selaushistoriaa, analytiikkaa tai laitetietoja.",
         "No Tracking:": "Ei seurantaa:",
@@ -59,7 +59,7 @@
         "5. Security": "5. Tietoturva",
         "The Extension runs entirely locally within your browser. Since it makes no external network requests, your generated passwords remain completely private and secure.": "Laajennus toimii kokonaan paikallisesti selaimessasi. Koska se ei tee ulkoisia verkkopyyntöjä, luomasi salasanat pysyvät täysin yksityisinä ja turvallisina.",
         "6. Contact": "6. Yhteystiedot",
-        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tästä tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
+        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
       }
     },
     "privacy/holvi.html": {
@@ -85,7 +85,7 @@
         "5. Security": "5. Tietoturva",
         "All sensitive data (passwords, card details, TOTP secrets) is encrypted locally on your device using PBKDF2 and AES-GCM encryption before it is ever sent to your personal database. The Extension communicates exclusively via secure HTTPS protocols.": "Kaikki arkaluonteiset tiedot (salasanat, korttitiedot ja TOTP-salaisuudet) salataan paikallisesti laitteellasi PBKDF2- ja AES-GCM-salauksella ennen kuin niitä koskaan lähetetään henkilökohtaiseen tietokantaasi. Laajennus kommunikoi vain turvallisten HTTPS-yhteyksien kautta.",
         "6. Contact": "6. Yhteystiedot",
-        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tästä tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
+        "If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi": "Jos sinulla on kysyttävää tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi"
       }
     }
   },
