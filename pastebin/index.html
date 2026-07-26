@@ -2,11 +2,26 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Sorolan Pastebin - Jaa tekstiä ja koodia</title>
+    <title>Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/pastebin/">
     <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    
+    <!-- SEO-optimoinnit -->
+    <meta name="description" content="Jaa koodinpätkiä, logeja ja puhdasta tekstiä nopeasti ja turvallisesti ilman mainoksia. Sorolan Pastebin tarjoaa helpon tavan tekstin jakamiseen.">
+    <meta name="keywords" content="pastebin, koodinjako, tekstinjako, sorola, koodi, logit, koodaus, ilman mainoksia">
+    
+    <!-- Some-esikatselut -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/pastebin/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Sorolan Pastebin - Jaa tekstiä ja koodia">
+    <meta property="og:description" content="Jaa koodinpätkiä ja tekstiä nopeasti, helposti ja ilman mainoksia.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sorolan Pastebin">
+    <meta name="twitter:description" content="Jaa koodinpätkiä ja tekstiä nopeasti ja ilman mainoksia.">
+
     <style>
         #paste-content {
             width: 100%;
@@ -60,7 +75,6 @@
             btn.textContent = 'Tallennetaan...';
 
             try {
-                // Tämä API-reitti luodaan myöhemmin server.js-tiedostoon
                 const res = await fetch('/api/paste', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -71,7 +85,6 @@
                 if (res.ok) {
                     document.getElementById('syotto-alue').style.display = 'none';
                     document.getElementById('tulos-alue').style.display = 'block';
-                    // Linkki ohjaa uuteen katselunäkymään
                     document.getElementById('paste-linkki').value = window.location.origin + '/p/' + data.path;
                 } else {
                     alert(data.error || 'Virhe tallennuksessa');
