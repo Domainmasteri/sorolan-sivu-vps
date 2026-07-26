@@ -272,6 +272,9 @@ async function streamS3BodyToResponse(body, res) {
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
 
+// ----------------------------------------------------
+// TÄSSÄ KORJATTU URL-LYHENTIMEN OHITUS (Bypasses p/, d/ and s/)
+// ----------------------------------------------------
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
@@ -280,7 +283,14 @@ app.use(async (req, res, next) => {
 
     if (!table) return next();
     if (!pathname) return res.redirect(302, shortenerHomeUrl);
-    if (pathname.startsWith('api/')) return next();
+    
+    // Ohitetaan uudet työkalut ja API
+    if (pathname.startsWith('api/') ||
+        pathname.startsWith('p/') ||
+        pathname.startsWith('d/') ||
+        pathname.startsWith('s/')) {
+        return next();
+    }
 
     const linkResult = await fetchLinkByPath(table, pathname);
     const match = linkResult.rows[0];
@@ -713,15 +723,18 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const siteUrl = process.env.SITE_URL
       ? process.env.SITE_URL.replace(/\/$/, '')
       : `${req.protocol}://${req.hostname}`;
-    const downloadUrl = `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`;
+      
+    // TÄSSÄ PÄIVITETTY YKSINKERTAISEMPI LATAUSLINKKI (/d/tiedosto)
+    const downloadUrl = `${siteUrl}/d/${encodeURIComponent(fileName)}`;
     return res.json({ url: downloadUrl, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
 });
 
-app.get('/api/download', async (req, res) => {
-  const fileId = String(req.query.file || '');
+// TÄSSÄ PÄIVITETTY LYHYEMPI LATAUSREITTI
+app.get('/d/:file', async (req, res) => {
+  const fileId = String(req.params.file || '');
   if (!fileId) {
     const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
     return res.redirect(302, errorPath);
@@ -786,6 +799,18 @@ app.get('/p/:path', async (req, res) => {
     return res.sendFile(path.join(distPath, 'index.html'));
   }
 });
+
+// Reitti salatun tiedoston lataus/purkusivulle (/s/tiedostoId)
+app.get('/s/:file', async (req, res) => {
+  const filePath = path.join(distPath, 'jako', 'lataus.html');
+  try {
+    await fs.access(filePath);
+    return res.sendFile(filePath);
+  } catch {
+    return res.sendFile(path.join(distPath, 'index.html'));
+  }
+});
+
 
 app.use((error, _req, res, next) => {
   if (error instanceof multer.MulterError) {
