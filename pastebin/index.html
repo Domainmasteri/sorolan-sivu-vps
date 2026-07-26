@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorolan Pastebin - Jaa tekstiä ja koodia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/pastebin/">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <style>
+        #paste-content {
+            width: 100%;
+            min-height: 350px;
+            font-family: 'Courier New', Courier, monospace;
+            resize: vertical;
+            box-sizing: border-box;
+            background: #0b0d13;
+            color: #e2e8f0;
+        }
+        #tulos-alue { display: none; }
+    </style>
+</head>
+<body>
+    <a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
+    <div class="laatikko" style="max-width: 800px;">
+        <h1 class="otsikko">Pastebin</h1>
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Jaa koodinpätkiä, logeja tai puhdasta tekstiä nopeasti ilman muotoilun rikkoutumista.</p>
+        </div>
+        
+        <main id="paaosio">
+            <div class="osion-tausta" id="syotto-alue">
+                <div class="flex-form">
+                    <label for="paste-content" class="sr-only">Liitä tekstisi</label>
+                    <textarea id="paste-content" class="syote" placeholder="Liitä koodi tai teksti tähän..."></textarea>
+                </div>
+                <button id="tallenna-btn" class="nappula" style="width: 100%;">Tallenna ja luo linkki</button>
+            </div>
+
+            <div class="osion-tausta" id="tulos-alue" style="text-align: center;">
+                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;">Teksti tallennettu!</h2>
+                <p style="color: #a0aec0; margin-bottom: 15px;">Jaa alla oleva linkki vastaanottajalle.</p>
+                <input type="text" id="paste-linkki" class="syote" readonly aria-label="Pastebin linkki" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; margin-bottom: 15px;">
+                <div class="flex-form">
+                    <button id="kopioi-btn" class="nappula" style="flex: 1;">Kopioi linkki</button>
+                    <button id="uusi-btn" class="nappula1" style="flex: 1; background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">Luo uusi</button>
+                </div>
+            </div>
+        </main>
+        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+    </div>
+    
+    <script>
+        document.getElementById('tallenna-btn').addEventListener('click', async () => {
+            const content = document.getElementById('paste-content').value;
+            if (!content.trim()) return alert('Tekstikenttä on tyhjä!');
+            
+            const btn = document.getElementById('tallenna-btn');
+            btn.disabled = true;
+            btn.textContent = 'Tallennetaan...';
+
+            try {
+                // Tämä API-reitti luodaan myöhemmin server.js-tiedostoon
+                const res = await fetch('/api/paste', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    document.getElementById('syotto-alue').style.display = 'none';
+                    document.getElementById('tulos-alue').style.display = 'block';
+                    // Linkki ohjaa uuteen katselunäkymään
+                    document.getElementById('paste-linkki').value = window.location.origin + '/p/' + data.path;
+                } else {
+                    alert(data.error || 'Virhe tallennuksessa');
+                }
+            } catch (e) {
+                alert('Palvelinvirhe yhteydessä.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Tallenna ja luo linkki';
+            }
+        });
+
+        document.getElementById('kopioi-btn').addEventListener('click', () => {
+            const linkki = document.getElementById('paste-linkki');
+            linkki.select();
+            linkki.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            
+            const btn = document.getElementById('kopioi-btn');
+            const alkuperainen = btn.textContent;
+            btn.textContent = 'Kopioitu!';
+            btn.style.backgroundColor = '#218838';
+            btn.style.color = 'white';
+            setTimeout(() => {
+                btn.textContent = alkuperainen;
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+            }, 2000);
+        });
+
+        document.getElementById('uusi-btn').addEventListener('click', () => {
+            document.getElementById('paste-content').value = '';
+            document.getElementById('tulos-alue').style.display = 'none';
+            document.getElementById('syotto-alue').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
