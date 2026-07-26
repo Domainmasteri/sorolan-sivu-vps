@@ -273,9 +273,9 @@ async function streamS3BodyToResponse(body, res) {
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
 
-// ----------------------------------------------------
-// TÄSSÄ KORJATTU URL-LYHENTIMEN OHITUS
-// ----------------------------------------------------
+// =======================================================
+// POMMINVARMA URL-LYHENTIMEN OHITUS
+// =======================================================
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
@@ -285,11 +285,17 @@ app.use(async (req, res, next) => {
     if (!table) return next();
     if (!pathname) return res.redirect(302, shortenerHomeUrl);
     
-    // OHITETAAN PASTEBIN (p/), SALATUT LATAUKSET (s/), LATAUKSET (d/) JA API
-    if (pathname.startsWith('api/') || 
-        pathname.startsWith('p/') || 
-        pathname.startsWith('s/') || 
-        pathname.startsWith('d/')) {
+    // Suojataan kaikki sivuston omat kansiot, tiedostot ja reitit, 
+    // jottei lyhennin vahingossa yritä etsiä niitä tietokannasta ja aiheuta 404:ää!
+    const reservedPrefixes = [
+        'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 
+        'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat', 
+        'privacy', 'vieraskirja', 'makelink'
+    ];
+    const firstSegment = pathname.split('/')[0];
+    
+    // Jos polku alkaa varatulla nimellä TAI sisältää pisteen (esim .html, .css, .png)
+    if (reservedPrefixes.includes(firstSegment) || pathname.includes('.')) {
         return next();
     }
 
@@ -671,7 +677,7 @@ app.post('/api/paste', async (req, res) => {
     await db.query('INSERT INTO pastes (short_path, content) VALUES ($1, $2)', [shortPath, content.trim()]);
     return res.json({ success: true, path: shortPath });
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa. Onko taulu olemassa?' });
+    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa.' });
   }
 });
 
@@ -687,7 +693,6 @@ app.get('/api/paste/:path', async (req, res) => {
   }
 });
 
-// Admin-reitit Pastebin-hallintaan
 app.get('/api/pastes', requireAuth, async (_req, res) => {
   try {
     const result = await db.query('SELECT id, short_path, content, created_at FROM pastes ORDER BY created_at DESC');
@@ -741,14 +746,12 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
       ? process.env.SITE_URL.replace(/\/$/, '')
       : `${req.protocol}://${req.hostname}`;
     
-    // Annetaan clientille vain ID ja normaali latauslinkki - client generoi salatun purkulinkin itse!
     return res.json({ url: `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
 });
 
-// SUORA LATAUSREITTI (/d/:file)
 app.get(['/d/:file', '/en/share/d/:file'], async (req, res) => {
   const fileId = String(req.params.file || '');
   if (!fileId) {
@@ -806,7 +809,6 @@ app.get(['/d/:file', '/en/share/d/:file'], async (req, res) => {
 });
 
 app.get('/api/download', async (req, res) => {
-  // Yhteensopivuus alkuperäiseen latausreittiin
   const fileId = String(req.query.file || '');
   res.redirect(`/d/${encodeURIComponent(fileId)}`);
 });
@@ -831,10 +833,12 @@ app.get('/p/:path', async (req, res) => {
   }
 });
 
-// SALATUN PURKUSIVUN REITTI (/s/:file)
-app.get('/s/:file', async (req, res) => {
+// SALATUN PURKUSIVUN REITTI (/s/:file JA /en/share/s/:file)
+app.get(['/s/:file', '/en/share/s/:file'], async (req, res) => {
   const fileId = String(req.params.file || '');
-  const isEn = prefersEnglish(req);
+  
+  const isEnPath = req.path.startsWith('/en/');
+  const isEn = isEnPath || prefersEnglish(req);
   const errorPath = isEn ? '/en/share/error' : '/jako/error';
 
   if (!fileId) return res.redirect(302, errorPath);
@@ -864,7 +868,7 @@ app.get('/s/:file', async (req, res) => {
       await fs.access(filePath);
       return res.sendFile(filePath);
     } catch {
-      return res.sendFile(path.join(distPath, 'index.html'));
+      return res.sendFile(path.join(distPath, 'jako', 'lataus.html'));
     }
   } catch (error) {
     return res.redirect(302, errorPath);
