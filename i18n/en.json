@@ -865,15 +865,6 @@
         "Virhe.": "Error.",
         ">Virhe<": ">Error<"
       }
-    },
-    "Niko/index.html": {
-      "text": {
-        "Arkkityyppi elämäntapa": "Archetype lifestyle",
-        "Hei kaikki!": "Hello everyone!",
-        "Tervetuloa sivuilleni. Täällä tutkimme arkkityyppistä elämäntapaa ja sen eri ulottuvuuksia.": "Welcome to my pages. Here we explore the archetypal lifestyle and its different dimensions.",
-        "Tämä on testisivu": "This is a test page",
-        "Linkkejä": "Links"
-      }
     }
   },
   "js": {
