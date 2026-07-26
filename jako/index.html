@@ -159,16 +159,15 @@
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Lataus epäonnistui.');
 
-                // TÄSSÄ KORJAUS 2: Tunnistetaan kieli URL:n perusteella
+                // Tunnistetaan kieli ja ohjataan lyhyisiin reitteihin oikealla kielellä!
                 const isEn = window.location.pathname.includes('/en/');
 
                 if (isEncrypted) {
-                    // Generoidaan linkki lataussivulle kielen mukaisesti
-                    const basePath = isEn ? '/en/share/download.html' : '/jako/lataus.html';
-                    shareLink.value = window.location.origin + basePath + '?file=' + data.id + '#key=' + encryptionKeyHash;
+                    const prefix = isEn ? '/en/share/s/' : '/s/';
+                    shareLink.value = window.location.origin + prefix + data.id + '#key=' + encryptionKeyHash;
                 } else {
-                    // Tavallinen tiedosto palauttaa suoran latauslinkin api/download
-                    shareLink.value = data.url;
+                    const prefix = isEn ? '/en/share/d/' : '/d/';
+                    shareLink.value = window.location.origin + prefix + data.id;
                 }
 
                 result.style.display = 'block';
