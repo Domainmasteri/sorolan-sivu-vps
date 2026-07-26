@@ -555,7 +555,7 @@ app.post('/api/links', requireAuth, async (req, res) => {
       throw error;
     }
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -667,8 +667,8 @@ app.post('/api/paste', async (req, res) => {
 
 app.get('/api/paste/:path', async (req, res) => {
   try {
-    const { path } = req.params;
-    const result = await db.query('SELECT content FROM pastes WHERE short_path = $1 LIMIT 1', [path]);
+    const { path: pastePath } = req.params;
+    const result = await db.query('SELECT content FROM pastes WHERE short_path = $1 LIMIT 1', [pastePath]);
     const match = result.rows[0];
     
     if (!match) {
@@ -773,6 +773,17 @@ app.get('/api/download', async (req, res) => {
     console.error('S3 Latausvirhe:', error);
     const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
     return res.redirect(302, errorPath);
+  }
+});
+
+// Reitti Pastebinin katselusivulle (/p/lyhytkoodi)
+app.get('/p/:path', async (req, res) => {
+  const filePath = path.join(distPath, 'pastebin', 'lue.html');
+  try {
+    await fs.access(filePath);
+    return res.sendFile(filePath);
+  } catch {
+    return res.sendFile(path.join(distPath, 'index.html'));
   }
 });
 
