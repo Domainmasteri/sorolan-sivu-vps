@@ -631,7 +631,7 @@ app.all('/api/lyhennin/create', async (req, res) => {
       return res.status(400).json({ error: 'URL puuttuu' });
     }
 
-    if (!['srla.fi', 'srl.la'].includes(domain)) {
+    if (!['srla.fi', 'srl.la', 'soro.la'].includes(domain)) {
       return res.status(400).json({ error: 'Virheellinen domain.' });
     }
 
@@ -649,7 +649,7 @@ app.all('/api/lyhennin/create', async (req, res) => {
       throw error;
     }
 
-    const baseUrl = domain === 'srl.la' ? 'https://srl.la' : 'https://srla.fi';
+    const baseUrl = `https://${domain}`;
     return res.json({ success: true, shortUrl: `${baseUrl}/${koodi}` });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
