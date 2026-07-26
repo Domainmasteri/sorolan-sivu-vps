@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
-    <!-- Prism.js Tumma Teema Koodin korostukseen -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <style>
         .koodi-kontti {
@@ -32,18 +31,12 @@
         <a href="/pastebin" class="linkki-takaisin">« Luo uusi paste</a>
     </div>
 
-    <!-- Prism.js scriptit -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            // Poimitaan koodi osoitteesta (esim. sorola.fi/p/aB3dE -> aB3dE)
-            const pathParts = window.location.pathname.split('/');
-            const pasteId = pathParts[pathParts.length - 1];
+            // Irrotetaan ID pomminvarmasti poistamalla ensin ylimääräinen / lopusta
+            const rawPath = window.location.pathname.replace(/\/+$/, '');
+            const pasteId = rawPath.split('/').pop();
             const koodiAlue = document.getElementById('koodi-alue');
 
             try {
