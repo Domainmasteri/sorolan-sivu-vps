@@ -570,7 +570,7 @@ app.put('/api/links', requireAuth, async (req, res) => {
     await updateShortLink(table, pathValue, newOriginalURL);
     return res.json({ success: true });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -589,7 +589,7 @@ app.delete('/api/links', requireAuth, async (req, res) => {
     await deleteShortLink(table, pathToRemove);
     return res.json({ success: true });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -648,6 +648,39 @@ app.all('/api/lyhennin/create', async (req, res) => {
 });
 
 app.use('/api/dns', requireAuth, dnsRouter);
+
+// --- PASTEBIN API-REITIT ---
+app.post('/api/paste', async (req, res) => {
+  try {
+    const { content } = req.body;
+    if (!content || !content.trim()) {
+      return res.status(400).json({ error: 'Teksti on pakollinen.' });
+    }
+    
+    const shortPath = luoSatunnainenPolku(6);
+    await db.query('INSERT INTO pastes (short_path, content) VALUES ($1, $2)', [shortPath, content.trim()]);
+    return res.json({ success: true, path: shortPath });
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa.' });
+  }
+});
+
+app.get('/api/paste/:path', async (req, res) => {
+  try {
+    const { path } = req.params;
+    const result = await db.query('SELECT content FROM pastes WHERE short_path = $1 LIMIT 1', [path]);
+    const match = result.rows[0];
+    
+    if (!match) {
+      return res.status(404).json({ error: 'Tekstiä ei löytynyt.' });
+    }
+    
+    return res.json({ content: match.content });
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
+  }
+});
+// ---------------------------
 
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
