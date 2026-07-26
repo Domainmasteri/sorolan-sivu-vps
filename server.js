@@ -11,7 +11,8 @@ import {
   CopyObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
-  PutObjectCommand
+  PutObjectCommand,
+  HeadObjectCommand
 } from '@aws-sdk/client-s3';
 
 import { db } from './db.js';
@@ -272,9 +273,7 @@ async function streamS3BodyToResponse(body, res) {
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
 
-// ----------------------------------------------------
-// TÄSSÄ KORJATTU URL-LYHENTIMEN OHITUS (Bypasses p/, d/ and s/)
-// ----------------------------------------------------
+// URL-lyhentimen ohitus reititykselle
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
@@ -671,7 +670,7 @@ app.post('/api/paste', async (req, res) => {
     await db.query('INSERT INTO pastes (short_path, content) VALUES ($1, $2)', [shortPath, content.trim()]);
     return res.json({ success: true, path: shortPath });
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa.' });
+    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa. Onko taulu olemassa?' });
   }
 });
 
@@ -688,6 +687,33 @@ app.get('/api/paste/:path', async (req, res) => {
     return res.json({ content: match.content });
   } catch (error) {
     return res.status(500).json({ error: 'Palvelinvirhe.' });
+  }
+});
+
+// Admin-reitit Pastebinin hallintaan
+app.get('/api/pastes', requireAuth, async (_req, res) => {
+  try {
+    const result = await db.query('SELECT id, short_path, created_at, content FROM pastes ORDER BY created_at DESC');
+    const pastes = result.rows.map(p => ({
+      id: p.id,
+      short_path: p.short_path,
+      created_at: p.created_at,
+      snippet: p.content.length > 40 ? p.content.substring(0, 40) + '...' : p.content
+    }));
+    res.json({ pastes });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/pastes', requireAuth, async (req, res) => {
+  try {
+    const idToRemove = Number.parseInt(req.query.id, 10);
+    if (!idToRemove) return res.status(400).json({ error: 'ID puuttuu.' });
+    await db.query('DELETE FROM pastes WHERE id = $1', [idToRemove]);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 // ---------------------------
@@ -724,16 +750,19 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
       ? process.env.SITE_URL.replace(/\/$/, '')
       : `${req.protocol}://${req.hostname}`;
       
-    // TÄSSÄ PÄIVITETTY YKSINKERTAISEMPI LATAUSLINKKI (/d/tiedosto)
-    const downloadUrl = `${siteUrl}/d/${encodeURIComponent(fileName)}`;
+    // Jos pyyntö tulee englanninkieliseltä puolelta, annetaan siihen sopiva alkuosa
+    const isEn = prefersEnglish(req);
+    const linkPrefix = isEn ? '/en/share/d/' : '/d/';
+    const downloadUrl = `${siteUrl}${linkPrefix}${encodeURIComponent(fileName)}`;
+    
     return res.json({ url: downloadUrl, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
 });
 
-// TÄSSÄ PÄIVITETTY LYHYEMPI LATAUSREITTI
-app.get('/d/:file', async (req, res) => {
+// LYHYT LATAUSREITTI (/d/:file) JA ENGLANNINKIELINEN VERSIO (/en/share/d/:file)
+app.get(['/d/:file', '/en/share/d/:file'], async (req, res) => {
   const fileId = String(req.params.file || '');
   if (!fileId) {
     const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
@@ -789,9 +818,12 @@ app.get('/d/:file', async (req, res) => {
   }
 });
 
-// Reitti Pastebinin katselusivulle (/p/lyhytkoodi)
+// Reitti Pastebinin katselusivulle, tunnistaa kielen
 app.get('/p/:path', async (req, res) => {
-  const filePath = path.join(distPath, 'pastebin', 'lue.html');
+  const isEn = prefersEnglish(req);
+  const filePath = isEn 
+    ? path.join(distPath, 'en', 'pastebin', 'view.html') 
+    : path.join(distPath, 'pastebin', 'lue.html');
   try {
     await fs.access(filePath);
     return res.sendFile(filePath);
@@ -800,17 +832,49 @@ app.get('/p/:path', async (req, res) => {
   }
 });
 
-// Reitti salatun tiedoston lataus/purkusivulle (/s/tiedostoId)
+// Reitti salatun tiedoston lataus/purkusivulle, TARKISTAA ENSIN S3 RAJAT JA VANHENEMISET!
 app.get('/s/:file', async (req, res) => {
-  const filePath = path.join(distPath, 'jako', 'lataus.html');
+  const fileId = String(req.params.file || '');
+  const isEn = prefersEnglish(req);
+  const errorPath = isEn ? '/en/share/error' : '/jako/error';
+
+  if (!fileId) return res.redirect(302, errorPath);
+
   try {
-    await fs.access(filePath);
-    return res.sendFile(filePath);
-  } catch {
-    return res.sendFile(path.join(distPath, 'index.html'));
+    // Tehdään nopea HEAD-pyyntö S3:een rajoitusten tarkistamiseksi
+    const object = await s3.send(new HeadObjectCommand({ Bucket: bucketName, Key: fileId }));
+    const metadata = object.Metadata || {};
+
+    const expiresAt = Number.parseInt(metadata.expiresat || '0', 10);
+    if (expiresAt && Date.now() > expiresAt) {
+      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
+      return res.redirect(302, errorPath);
+    }
+
+    const maxDownloads = Number.parseInt(metadata.maxdownloads || '0', 10);
+    const downloads = Number.parseInt(metadata.downloads || '0', 10);
+    // Emme lisää latauskertaa tässä, sillä /d/:file -reitti hoitaa sen
+    if (maxDownloads > 0 && downloads >= maxDownloads) {
+      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
+      return res.redirect(302, errorPath);
+    }
+
+    // Tiedosto on yhä voimassa! Näytetään lataus-/purkusivu oikealla kielellä
+    const filePath = isEn 
+      ? path.join(distPath, 'en', 'share', 'download.html') 
+      : path.join(distPath, 'jako', 'lataus.html');
+      
+    try {
+      await fs.access(filePath);
+      return res.sendFile(filePath);
+    } catch {
+      return res.sendFile(path.join(distPath, 'index.html'));
+    }
+  } catch (error) {
+    // Jos S3:sta ei löydy (404), ohjataan virhesivulle
+    return res.redirect(302, errorPath);
   }
 });
-
 
 app.use((error, _req, res, next) => {
   if (error instanceof multer.MulterError) {
