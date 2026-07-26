@@ -22,8 +22,8 @@
         let originalFilename = "tiedosto.enc";
 
         async function puraTiedosto() {
-            // Etsitään ID pomminvarmasti riippumatta polusta (toimii sekä /s/ID että ?file=ID)
-            let fileId = window.location.pathname.split('/').pop();
+            // Etsitään ID varmasti
+            let fileId = window.location.pathname.replace(/\/+$/, '').split('/').pop();
             if (fileId.includes('.html') || fileId === 's' || !fileId) {
                 const urlParams = new URLSearchParams(window.location.search);
                 fileId = urlParams.get('file');
@@ -40,13 +40,20 @@
             }
 
             try {
-                // Haetaan raaka salattu tiedosto. Käytämme /d/-reittiä, joka palvelee tiedoston taustalla.
+                // Haetaan raaka salattu tiedosto. 
                 const res = await fetch(`/d/${fileId}`);
                 if (!res.ok) throw new Error('Tiedostoa ei löytynyt tai se on vanhentunut.');
                 const encryptedArrayBuffer = await res.arrayBuffer();
 
-                // Muunnetaan URL-hash avain takaisin CryptoKey-muotoon
-                const binStr = atob(hashKey.replace(/-/g, '+').replace(/_/g, '/'));
+                // Korjataan base64 padding! Selaimen atob kaatuu, jos täytemerkit puuttuvat
+                let b64 = hashKey.replace(/-/g, '+').replace(/_/g, '/');
+                const pad = b64.length % 4;
+                if (pad) {
+                    b64 += '='.repeat(4 - pad);
+                }
+
+                // Nyt atob ei enää kaadu
+                const binStr = atob(b64);
                 const bytes = new Uint8Array(binStr.length);
                 for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
 
