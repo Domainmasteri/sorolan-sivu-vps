@@ -11,7 +11,8 @@ import {
   CopyObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
-  PutObjectCommand
+  PutObjectCommand,
+  HeadObjectCommand
 } from '@aws-sdk/client-s3';
 
 import { db } from './db.js';
@@ -272,6 +273,9 @@ async function streamS3BodyToResponse(body, res) {
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
 
+// ----------------------------------------------------
+// TÄSSÄ KORJATTU URL-LYHENTIMEN OHITUS
+// ----------------------------------------------------
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
@@ -281,8 +285,11 @@ app.use(async (req, res, next) => {
     if (!table) return next();
     if (!pathname) return res.redirect(302, shortenerHomeUrl);
     
-    // TÄSSÄ KORJAUS 1: Ohitetaan Pastebin (p/), api/ ja lataukset, jottei lyhennin nappaa niitä!
-    if (pathname.startsWith('api/') || pathname.startsWith('p/') || pathname.startsWith('d/')) {
+    // OHITETAAN PASTEBIN (p/), SALATUT LATAUKSET (s/), LATAUKSET (d/) JA API
+    if (pathname.startsWith('api/') || 
+        pathname.startsWith('p/') || 
+        pathname.startsWith('s/') || 
+        pathname.startsWith('d/')) {
         return next();
     }
 
@@ -653,7 +660,7 @@ app.all('/api/lyhennin/create', async (req, res) => {
 
 app.use('/api/dns', requireAuth, dnsRouter);
 
-// --- TÄSSÄ KORJAUS 3: Pastebin API-reitit ---
+// --- PASTEBIN REITIT ---
 app.post('/api/paste', async (req, res) => {
   try {
     const { content } = req.body;
@@ -664,7 +671,7 @@ app.post('/api/paste', async (req, res) => {
     await db.query('INSERT INTO pastes (short_path, content) VALUES ($1, $2)', [shortPath, content.trim()]);
     return res.json({ success: true, path: shortPath });
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa.' });
+    return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa. Onko taulu olemassa?' });
   }
 });
 
@@ -680,7 +687,7 @@ app.get('/api/paste/:path', async (req, res) => {
   }
 });
 
-// Admin Pastebin hallinta
+// Admin-reitit Pastebin-hallintaan
 app.get('/api/pastes', requireAuth, async (_req, res) => {
   try {
     const result = await db.query('SELECT id, short_path, content, created_at FROM pastes ORDER BY created_at DESC');
@@ -700,8 +707,8 @@ app.delete('/api/pastes', requireAuth, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// ------------------------------------------
 
+// --- TIEDOSTOLATAUS JA S3 ---
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
@@ -734,15 +741,16 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
       ? process.env.SITE_URL.replace(/\/$/, '')
       : `${req.protocol}://${req.hostname}`;
     
-    // Annetaan pelkkä tiedoston nimi selaimelle. Selain /jako/index.html luo varsinaisen HTML-linkin
+    // Annetaan clientille vain ID ja normaali latauslinkki - client generoi salatun purkulinkin itse!
     return res.json({ url: `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
 });
 
-app.get('/api/download', async (req, res) => {
-  const fileId = String(req.query.file || '');
+// SUORA LATAUSREITTI (/d/:file)
+app.get(['/d/:file', '/en/share/d/:file'], async (req, res) => {
+  const fileId = String(req.params.file || '');
   if (!fileId) {
     const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
     return res.redirect(302, errorPath);
@@ -797,7 +805,13 @@ app.get('/api/download', async (req, res) => {
   }
 });
 
-// TÄSSÄ KORJAUS 1: Frontend reitti pastebin lukemiselle
+app.get('/api/download', async (req, res) => {
+  // Yhteensopivuus alkuperäiseen latausreittiin
+  const fileId = String(req.query.file || '');
+  res.redirect(`/d/${encodeURIComponent(fileId)}`);
+});
+
+// PASTEBIN KÄYTTÖLIITTYMÄREITTI (/p/:path)
 app.get('/p/:path', async (req, res) => {
   const isEn = prefersEnglish(req);
   const filePath = isEn 
@@ -807,7 +821,6 @@ app.get('/p/:path', async (req, res) => {
     await fs.access(filePath);
     return res.sendFile(filePath);
   } catch {
-    // Fallback suomenkieliseen, jos englannin käännös puuttuu
     const fallbackPath = path.join(distPath, 'pastebin', 'lue.html');
     try {
       await fs.access(fallbackPath);
@@ -815,6 +828,46 @@ app.get('/p/:path', async (req, res) => {
     } catch {
       return res.sendFile(path.join(distPath, 'index.html'));
     }
+  }
+});
+
+// SALATUN PURKUSIVUN REITTI (/s/:file)
+app.get('/s/:file', async (req, res) => {
+  const fileId = String(req.params.file || '');
+  const isEn = prefersEnglish(req);
+  const errorPath = isEn ? '/en/share/error' : '/jako/error';
+
+  if (!fileId) return res.redirect(302, errorPath);
+
+  try {
+    const object = await s3.send(new HeadObjectCommand({ Bucket: bucketName, Key: fileId }));
+    const metadata = object.Metadata || {};
+
+    const expiresAt = Number.parseInt(metadata.expiresat || '0', 10);
+    if (expiresAt && Date.now() > expiresAt) {
+      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
+      return res.redirect(302, errorPath);
+    }
+
+    const maxDownloads = Number.parseInt(metadata.maxdownloads || '0', 10);
+    const downloads = Number.parseInt(metadata.downloads || '0', 10);
+    if (maxDownloads > 0 && downloads >= maxDownloads) {
+      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
+      return res.redirect(302, errorPath);
+    }
+
+    const filePath = isEn 
+      ? path.join(distPath, 'en', 'share', 'download.html') 
+      : path.join(distPath, 'jako', 'lataus.html');
+      
+    try {
+      await fs.access(filePath);
+      return res.sendFile(filePath);
+    } catch {
+      return res.sendFile(path.join(distPath, 'index.html'));
+    }
+  } catch (error) {
+    return res.redirect(302, errorPath);
   }
 });
 
