@@ -18,6 +18,10 @@
         .edit-btn:hover { background: #2563eb; }
         .hidden { display: none !important; }
         #app-container { max-width: 1000px; margin: 0 auto; }
+        /* DNS Admin Styles */
+        .dns-tietue-tila { background: #0b0d13; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .dns-input-rivi { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; }
+        .dns-input-rivi > div { flex: 1; min-width: 120px; }
     </style>
 </head>
 <body>
@@ -50,6 +54,9 @@
         </div>
 
         <div id="dashboard-section" class="hidden">
+            <button onclick="lataaTiedot()" class="nappula1" style="margin-bottom: 20px; width: 100%;">Päivitä Tiedot 🔄</button>
+
+            <!-- Linkkien hallinta -->
             <div class="osion-tausta" style="margin-bottom: 20px;">
                 <h2 style="color: #4ade80;">➕ Uusi oma linkki</h2>
                 <div class="flex-form" style="display: flex; gap: 10px; align-items: flex-end;">
@@ -70,8 +77,6 @@
                 </div>
             </div>
 
-            <button onclick="lataaTiedot()" class="nappula1" style="margin-bottom: 20px; width: 100%;">Päivitä Tiedot 🔄</button>
-            
             <div class="osion-tausta">
                 <h2 style="color: #ffaa00;">Aktiiviset linkit (soro.la)</h2>
                 <div class="table-container">
@@ -102,7 +107,7 @@
                 </div>
             </div>
 
-            <!-- TÄSSÄ KORJAUS 3: Uusi laatikko Pastebin-hallinnalle -->
+            <!-- Pastebin -->
             <div class="osion-tausta">
                 <h2 style="color: #4ade80;">📝 Pastebin-tekstit</h2>
                 <div class="table-container">
@@ -120,6 +125,75 @@
                 </div>
             </div>
 
+            <!-- Vieraskirjan hallinta -->
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #f472b6;">📖 Vieraskirja</h2>
+                <div class="flex-form" style="margin-bottom: 15px;">
+                    <input type="text" id="admin-gb-message" class="syote" placeholder="Kirjoita ylläpidon uusi viesti vieraskirjaan..." style="flex: 2;">
+                    <button onclick="lahetaAdminViesti()" class="nappula1" style="flex: 1; border: 1px solid #f472b6; color: #f472b6; background: transparent;">Lähetä ilmoitus</button>
+                </div>
+                <div class="table-container">
+                    <table id="guestbook-table">
+                        <thead><tr><th>Nimi</th><th>Viesti</th><th>Ylläpidon vastaus</th><th>Pvm</th><th>Toiminnot</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- DNS Hallinta -->
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #60a5fa;">🌐 DNS-hallinta (Hetzner)</h2>
+                <div style="margin-bottom: 15px;">
+                    <label for="dns-zone-select" style="display:block; color:#a0aec0; margin-bottom:5px; font-size:0.9rem;">Valitse hallittava domain:</label>
+                    <div style="display:flex; gap:10px;">
+                        <select id="dns-zone-select" class="syote" style="flex: 1;">
+                            <option value="">Ladataan vyöhykkeitä...</option>
+                        </select>
+                        <button onclick="lataaDnsTietueet()" class="nappula1" style="width: auto;">Hae tietueet</button>
+                    </div>
+                </div>
+
+                <div id="dns-hallinta-alue" class="hidden">
+                    <div class="dns-tietue-tila">
+                        <h3 style="color:#4ade80; margin-bottom:10px;">Lisää uusi tietue</h3>
+                        <div class="dns-input-rivi">
+                            <div style="flex: 0.5;">
+                                <label style="font-size:0.8rem; color:#a0aec0;">Tyyppi</label>
+                                <select id="new-dns-type" class="syote">
+                                    <option value="A">A</option>
+                                    <option value="AAAA">AAAA</option>
+                                    <option value="CNAME">CNAME</option>
+                                    <option value="MX">MX</option>
+                                    <option value="TXT">TXT</option>
+                                    <option value="SRV">SRV</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="font-size:0.8rem; color:#a0aec0;">Nimi (esim. @, www, api)</label>
+                                <input type="text" id="new-dns-name" class="syote" placeholder="@">
+                            </div>
+                            <div style="flex: 2;">
+                                <label style="font-size:0.8rem; color:#a0aec0;">Arvo (IP tai kohde)</label>
+                                <input type="text" id="new-dns-value" class="syote" placeholder="1.2.3.4">
+                            </div>
+                            <div style="flex: 0.5;">
+                                <label style="font-size:0.8rem; color:#a0aec0;">TTL (s)</label>
+                                <input type="number" id="new-dns-ttl" class="syote" value="300">
+                            </div>
+                            <button onclick="luoDnsTietue()" class="nappula" style="width:auto; height: 44px; margin-bottom: 2px;">Lisää</button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="dns-records-table">
+                            <thead><tr><th>Tyyppi</th><th>Nimi</th><th>Arvo</th><th>TTL</th><th>Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Käyttäjät & Kutsut -->
             <div class="osion-tausta" style="margin-top: 20px;">
                 <h2 style="color: #f472b6;">👑 Ylläpitäjät</h2>
                 <div class="table-container">
@@ -162,6 +236,7 @@
     <script>
         let currentUser = null;
         let currentAuthHeader = null;
+        let currentDnsZoneId = null;
 
         function toggleMode() {
             document.getElementById('login-section').classList.toggle('hidden');
@@ -185,6 +260,7 @@
                     document.getElementById('login-section').classList.add('hidden');
                     document.getElementById('dashboard-section').classList.remove('hidden');
                     lataaTiedot();
+                    lataaDnsVyohykkeet();
                 } else {
                     alert(data.error || 'Virheellinen tunnus tai salasana.');
                 }
@@ -249,6 +325,7 @@
         function logout() {
             currentUser = null;
             currentAuthHeader = null;
+            currentDnsZoneId = null;
             document.getElementById('dashboard-section').classList.add('hidden');
             document.getElementById('login-section').classList.remove('hidden');
             document.getElementById('login-password').value = '';
@@ -293,7 +370,7 @@
                     renderLinkTable('srlla-table', data.srl, 'srl.la');
                 }
                 
-                // Pastebin-tekstit adminille
+                // Pastebin
                 const resPastes = await fetch('/api/pastes', { headers: { 'Authorization': currentAuthHeader } });
                 if (resPastes.ok) {
                     const data = await resPastes.json();
@@ -304,7 +381,6 @@
                     } else {
                         data.pastes.forEach(p => {
                             const date = new Date(p.created_at).toLocaleDateString('fi-FI');
-                            // Lyhennetään leipäteksti max 40 merkkiin html koodin sotkemisen estämiseksi
                             let snippet = p.content.length > 40 ? p.content.substring(0, 40) + '...' : p.content;
                             snippet = snippet.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                             tbody.innerHTML += `
@@ -312,8 +388,35 @@
                                     <td><a href="/p/${p.short_path}" target="_blank" style="color:#4ade80;">/p/${p.short_path}</a></td>
                                     <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${snippet}</td>
                                     <td>${date}</td>
+                                    <td><button onclick="poistaPaste(${p.id})" class="action-btn">Poista</button></td>
+                                </tr>
+                            `;
+                        });
+                    }
+                }
+
+                // Vieraskirja
+                const resGb = await fetch('/api/guestbook');
+                if (resGb.ok) {
+                    const data = await resGb.json();
+                    const tbody = document.querySelector('#guestbook-table tbody');
+                    tbody.innerHTML = '';
+                    if (!data.messages.length) {
+                        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#a0aec0;">Ei vieraskirjaviestejä.</td></tr>`;
+                    } else {
+                        data.messages.forEach(m => {
+                            const date = new Date(m.created_at).toLocaleDateString('fi-FI');
+                            const nameHtml = m.is_admin ? `<span style="color:#f472b6;font-weight:bold;">👑 ${m.name}</span>` : m.name;
+                            const replyHtml = m.admin_reply ? m.admin_reply : `<em style="color:#64748b;">Ei vastausta</em>`;
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${nameHtml}</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${m.message}</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${replyHtml}</td>
+                                    <td>${date}</td>
                                     <td>
-                                        <button onclick="poistaPaste(${p.id})" class="action-btn">Poista</button>
+                                        ${!m.is_admin ? `<button onclick="vastaaVieraskirjaan(${m.id})" class="action-btn edit-btn">Vastaa</button>` : ''}
+                                        <button onclick="poistaVieraskirjaviesti(${m.id})" class="action-btn">Poista</button>
                                     </td>
                                 </tr>
                             `;
@@ -334,9 +437,7 @@
                             <tr>
                                 <td>${u.username} ${isMe ? '<span style="color:#4ade80; font-size:0.8rem;">(Sinä)</span>' : ''}</td>
                                 <td>${date}</td>
-                                <td>
-                                    ${!isMe ? `<button onclick="poistaKayttaja(${u.id})" class="action-btn">Poista</button>` : ''}
-                                </td>
+                                <td>${!isMe ? `<button onclick="poistaKayttaja(${u.id})" class="action-btn">Poista</button>` : ''}</td>
                             </tr>
                         `;
                     });
@@ -367,23 +468,21 @@
             }
         }
 
+        // --- Linkit ---
         async function luoUusiLinkki() {
             const domain = document.getElementById('new-domain').value;
             const url = document.getElementById('new-url').value;
             const path = document.getElementById('new-path').value;
-
             if (!url) return alert('Kohdeosoite on pakollinen.');
 
             try {
                 event.target.textContent = 'Luodaan...';
                 event.target.disabled = true;
-
                 const res = await fetch('/api/links', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
                     body: JSON.stringify({ domain, originalURL: url, path })
                 });
-                
                 if (res.ok) {
                     document.getElementById('new-url').value = '';
                     document.getElementById('new-path').value = '';
@@ -401,19 +500,14 @@
         async function muokkaaLinkkia(domain, path, currentUrl) {
             const newUrl = prompt(`Muokataan linkkiä /${path}\nSyötä uusi kohdeosoite:`, currentUrl);
             if (!newUrl || newUrl === currentUrl) return;
-
             try {
                 const res = await fetch('/api/links', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
                     body: JSON.stringify({ domain, path, newOriginalURL: newUrl })
                 });
-                if (res.ok) {
-                    lataaTiedot();
-                } else {
-                    const data = await res.json();
-                    alert(data.error || 'Virhe päivityksessä.');
-                }
+                if (res.ok) lataaTiedot();
+                else alert('Virhe päivityksessä.');
             } catch { alert('Palvelinvirhe.'); }
         }
 
@@ -460,13 +554,9 @@
                     body: JSON.stringify({ code: koodi })
                 });
                 if (res.ok) {
-                    alert(`Kutsukoodi "${koodi}" on nyt aktiivinen!`);
                     document.getElementById('new-invite').value = '';
                     lataaTiedot();
-                } else {
-                    const data = await res.json();
-                    alert(data.error || 'Virhe koodin luonnissa.');
-                }
+                } else alert('Virhe koodin luonnissa.');
             } catch { alert('Palvelinvirhe.'); }
         }
 
@@ -480,6 +570,147 @@
                 else alert('Virhe poistossa.');
             } catch { alert('Palvelinvirhe.'); }
         }
+
+        // --- Vieraskirja ---
+        async function lahetaAdminViesti() {
+            const msg = document.getElementById('admin-gb-message').value;
+            if (!msg) return alert('Kirjoita viesti ensin.');
+            try {
+                const res = await fetch('/api/guestbook', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ action: 'admin_message', name: currentUser, message: msg })
+                });
+                if (res.ok) {
+                    document.getElementById('admin-gb-message').value = '';
+                    lataaTiedot();
+                } else alert('Virhe viestin lähetyksessä.');
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        async function vastaaVieraskirjaan(id) {
+            const vastaus = prompt('Kirjoita ylläpidon vastaus viestiin (tyhjä poistaa vastauksen):');
+            if (vastaus === null) return;
+            try {
+                const res = await fetch('/api/guestbook', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ action: 'reply', id, reply: vastaus })
+                });
+                if (res.ok) lataaTiedot();
+                else alert('Virhe vastauksen tallennuksessa.');
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        async function poistaVieraskirjaviesti(id) {
+            if (!confirm('Poistetaanko tämä viesti pysyvästi?')) return;
+            try {
+                const res = await fetch(`/api/guestbook?id=${id}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaTiedot();
+                else alert('Virhe viestin poistossa.');
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        // --- DNS Hallinta (Hetzner) ---
+        async function lataaDnsVyohykkeet() {
+            try {
+                const select = document.getElementById('dns-zone-select');
+                const res = await fetch('/api/dns/zones', { headers: { 'Authorization': currentAuthHeader } });
+                const data = await res.json();
+                
+                if (res.ok && data.zones) {
+                    select.innerHTML = '<option value="">-- Valitse domain --</option>';
+                    data.zones.forEach(z => {
+                        select.innerHTML += `<option value="${z.id}">${z.name}</option>`;
+                    });
+                } else {
+                    select.innerHTML = '<option value="">DNS API ei saatavilla</option>';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function lataaDnsTietueet() {
+            const zoneId = document.getElementById('dns-zone-select').value;
+            if (!zoneId) return alert('Valitse domain ensin.');
+            currentDnsZoneId = zoneId;
+            
+            document.getElementById('dns-hallinta-alue').classList.remove('hidden');
+            const tbody = document.querySelector('#dns-records-table tbody');
+            tbody.innerHTML = '<tr><td colspan="5">Ladataan...</td></tr>';
+
+            try {
+                const res = await fetch(`/api/dns?zone_id=${zoneId}`, { headers: { 'Authorization': currentAuthHeader } });
+                const data = await res.json();
+                
+                if (res.ok && data.records) {
+                    tbody.innerHTML = '';
+                    data.records.forEach(r => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td><strong>${r.type}</strong></td>
+                                <td>${r.name}</td>
+                                <td><span style="font-family:monospace; color:#4ade80;">${r.value}</span></td>
+                                <td>${r.ttl}</td>
+                                <td>
+                                    <button onclick="poistaDnsTietue('${r.id}')" class="action-btn">Poista</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="5" style="color:red;">${data.error || 'Virhe ladattaessa.'}</td></tr>`;
+                }
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Palvelinvirhe.</td></tr>`;
+            }
+        }
+
+        async function luoDnsTietue() {
+            if (!currentDnsZoneId) return alert('Valitse domain ensin.');
+            
+            const type = document.getElementById('new-dns-type').value;
+            const name = document.getElementById('new-dns-name').value || '@';
+            const value = document.getElementById('new-dns-value').value;
+            const ttl = document.getElementById('new-dns-ttl').value;
+
+            if (!value) return alert('Tietueen arvo (IP/kohde) on pakollinen.');
+
+            try {
+                const res = await fetch('/api/dns', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ zone_id: currentDnsZoneId, type, name, value, ttl })
+                });
+                
+                if (res.ok) {
+                    document.getElementById('new-dns-value').value = '';
+                    document.getElementById('new-dns-name').value = '';
+                    lataaDnsTietueet();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Virhe tietueen luonnissa.');
+                }
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        async function poistaDnsTietue(recordId) {
+            if (!confirm('Haluatko varmasti poistaa tämän DNS-tietueen? Tämä voi rikkoa sivuston tai sähköpostin!')) return;
+            try {
+                const res = await fetch(`/api/dns/${recordId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaDnsTietueet();
+                else alert('Virhe poistossa.');
+            } catch { alert('Palvelinvirhe.'); }
+        }
     </script>
 </body>
 </html>
+```
+
+Nyt hallintapaneelista löytyy täysi tuki kaikelle. Pääset heti vastaamaan vieraskirjaviesteihin ja pyörittämään DNS-palveluita (kunhan `HETZNER_API_KEY` on asetettuna palvelimella)!
