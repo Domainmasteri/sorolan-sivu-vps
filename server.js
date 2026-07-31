@@ -25,6 +25,7 @@ app.set('trust proxy', 1);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, 'dist');
+const stylesDir = process.env.STYLES_DIR || '/opt/sorola/styles';
 const shortenerHomeUrl = process.env.SHORTENER_HOME_URL || 'https://sorola.fi/lyhennin';
 const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/lyhennin/error';
 
@@ -73,6 +74,7 @@ app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
 
 // --- TÄRKEÄ KORJAUS: Staattiset tiedostot & tyylit toimitetaan HETI ennen reitityslogiikkaa ---
+app.use('/styles', pageLimiter, express.static(stylesDir));
 app.use(pageLimiter, express.static(distPath));
 
 function luoSatunnainenPolku(pituus = 5) {
@@ -207,7 +209,7 @@ app.use(async (req, res, next) => {
     if (!pathname) return res.redirect(302, shortenerHomeUrl);
 
     const reservedPrefixes = [
-      'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit',
+      'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 'styles',
       'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat',
       'privacy', 'vieraskirja', 'makelink'
     ];
