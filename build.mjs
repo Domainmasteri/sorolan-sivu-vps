@@ -246,7 +246,9 @@ function localizeDocumentUrl(value, relativePath, locale) {
     const parsed = new URL(value, baseUrl);
     if (parsed.origin !== SITE_ORIGIN) return value;
     if (parsed.pathname.startsWith('/api/') || parsed.pathname.startsWith('/functions/')) return value;
-    if (parsed.pathname.startsWith('/tyylit/')) return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    if (parsed.pathname.startsWith('/tyylit/') || parsed.pathname.startsWith('/styles/')) {
+      return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    }
 
     parsed.pathname = localizeSitePathname(parsed.pathname, locale);
 

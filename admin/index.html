@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorolan Sakki - Hallintapaneeli</title>
-    <link rel="stylesheet" href="/tyylit/pohja.css">
-    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <link rel="stylesheet" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     <style>
         .table-container { overflow-x: auto; margin-top: 15px; }
         table { width: 100%; border-collapse: collapse; min-width: 500px; color: #e2e8f0; }
@@ -613,10 +613,10 @@
             } catch { alert('Palvelinvirhe.'); }
         }
 
-        // --- DNS Hallinta (Hetzner) ---
+        // --- DNS Hallinta (OVH) ---
         async function lataaDnsVyohykkeet() {
+            const select = document.getElementById('dns-zone-select');
             try {
-                const select = document.getElementById('dns-zone-select');
                 const res = await fetch('/api/dns/zones', { headers: { 'Authorization': currentAuthHeader } });
                 const data = await res.json();
                 
@@ -626,9 +626,11 @@
                         select.innerHTML += `<option value="${z.id}">${z.name}</option>`;
                     });
                 } else {
-                    select.innerHTML = '<option value="">DNS API ei saatavilla</option>';
+                    const errorText = data?.error ? `DNS API virhe: ${data.error}` : 'DNS API ei saatavilla';
+                    select.innerHTML = `<option value="">${errorText}</option>`;
                 }
             } catch (e) {
+                select.innerHTML = '<option value="">DNS API ei vastaa</option>';
                 console.error(e);
             }
         }
@@ -700,7 +702,9 @@
         async function poistaDnsTietue(recordId) {
             if (!confirm('Haluatko varmasti poistaa tämän DNS-tietueen? Tämä voi rikkoa sivuston tai sähköpostin!')) return;
             try {
-                const res = await fetch(`/api/dns/${recordId}`, {
+                const zoneId = currentDnsZoneId || document.getElementById('dns-zone-select').value;
+                if (!zoneId) return alert('Valitse domain ensin.');
+                const res = await fetch(`/api/dns/${recordId}?zone_id=${encodeURIComponent(zoneId)}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': currentAuthHeader }
                 });
