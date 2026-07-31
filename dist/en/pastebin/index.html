@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorola Pastebin - Share text and code securely</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/en/pastebin/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/pastebin/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/pastebin/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/pastebin/">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    
+    <!-- SEO-optimoinnit -->
+    <meta name="description" content="Share code snippets, logs, and plain text quickly and securely without ads. Sorola Pastebin offers an easy way to share text.">
+    <meta name="keywords" content="pastebin, code sharing, text sharing, sorola, code, logs, coding, ad-free">
+    
+    <!-- Some-esikatselut -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/en/pastebin/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Sorola Pastebin - Share text and code">
+    <meta property="og:description" content="Share code snippets and text quickly, easily, and without ads.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sorola Pastebin">
+    <meta name="twitter:description" content="Share code snippets and text quickly and without ads.">
+
+    <style>
+        #paste-content {
+            width: 100%;
+            min-height: 350px;
+            font-family: 'Courier New', Courier, monospace;
+            resize: vertical;
+            box-sizing: border-box;
+            background: #0b0d13;
+            color: #e2e8f0;
+        }
+        #tulos-alue { display: none; }
+    </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-YNdLPWi1IRdbPeUxj0Qa6.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/pastebin/">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/pastebin/" aria-current="page">🇬🇧</a>
+    </nav>
+    <a href="#paaosio" class="skip-to-content">Skip to content</a>
+    <div class="laatikko" style="max-width: 800px;">
+        <h1 class="otsikko">Pastebin</h1>
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Share code snippets, logs, or plain text quickly without breaking formatting.</p>
+        </div>
+        
+        <main id="paaosio">
+            <div class="osion-tausta" id="syotto-alue">
+                <div class="flex-form">
+                    <label for="paste-content" class="sr-only">Liitä tekstisi</label>
+                    <textarea id="paste-content" class="syote" placeholder="Paste code or text here..."></textarea>
+                </div>
+                <button id="tallenna-btn" class="nappula" style="width: 100%;">Save and create link</button>
+            </div>
+
+            <div class="osion-tausta" id="tulos-alue" style="text-align: center;">
+                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;">Text saved!</h2>
+                <p style="color: #a0aec0; margin-bottom: 15px;">Share the link below with the recipient.</p>
+                <input type="text" id="paste-linkki" class="syote" readonly aria-label="Pastebin link" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; margin-bottom: 15px;">
+                <div class="flex-form">
+                    <button id="kopioi-btn" class="nappula" style="flex: 1;">Copy link</button>
+                    <button id="uusi-btn" class="nappula1" style="flex: 1; background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">Create new</button>
+                </div>
+            </div>
+        </main>
+        <a href="/en/" class="linkki-takaisin">« Back to home</a>
+    </div>
+    
+    <script>
+        document.getElementById('tallenna-btn').addEventListener('click', async () => {
+            const content = document.getElementById('paste-content').value;
+            if (!content.trim()) return alert('Text field is empty!');
+            
+            const btn = document.getElementById('tallenna-btn');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            try {
+                const res = await fetch('/api/paste', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    document.getElementById('syotto-alue').style.display = 'none';
+                    document.getElementById('tulos-alue').style.display = 'block';
+                    document.getElementById('paste-linkki').value = window.location.origin + '/p/' + data.path;
+                } else {
+                    alert(data.error || 'Error while saving');
+                }
+            } catch (e) {
+                alert('Server error in connection.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Save and create link';
+            }
+        });
+
+        document.getElementById('kopioi-btn').addEventListener('click', () => {
+            const linkki = document.getElementById('paste-linkki');
+            linkki.select();
+            linkki.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            
+            const btn = document.getElementById('kopioi-btn');
+            const alkuperainen = btn.textContent;
+            btn.textContent = 'Kopioitu!';
+            btn.style.backgroundColor = '#218838';
+            btn.style.color = 'white';
+            setTimeout(() => {
+                btn.textContent = alkuperainen;
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+            }, 2000);
+        });
+
+        document.getElementById('uusi-btn').addEventListener('click', () => {
+            document.getElementById('paste-content').value = '';
+            document.getElementById('tulos-alue').style.display = 'none';
+            document.getElementById('syotto-alue').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

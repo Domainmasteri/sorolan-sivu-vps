@@ -7,38 +7,26 @@
     <link rel="alternate" hreflang="en" href="https://sorola.fi/en/admin/">
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/admin/">
     <meta charset="UTF-8">
-    <title>Sorolan Sakki - Admin panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <title>Sorolan Sakki - Admin panel</title>
+    <link rel="stylesheet" href="/tyylit/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
     <style>
-        .piilotettu { display: none !important; }
-        .ilmoitus { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
-        .virhe { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
-        .onnistui { background-color: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #4ade80; }
-        
-        .lataus-spinner {
-            display: inline-block;
-            width: 20px; height: 20px;
-            border: 3px solid rgba(255,170,0,0.3);
-            border-radius: 50%;
-            border-top-color: #ffaa00;
-            animation: pyori 1s ease-in-out infinite;
-        }
-        @keyframes pyori { to { transform: rotate(360deg); } }
-
-        .grid-asettelu { display: grid; gap: 25px; grid-template-columns: 1fr; }
-        @media (min-width: 768px) { .grid-asettelu { grid-template-columns: 1fr 1fr; } }
-        
-        .klikit-merkki {
-            background: rgba(255, 170, 0, 0.2);
-            color: #ffaa00;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            border: 1px solid rgba(255, 170, 0, 0.3);
-        }
+        .table-container { overflow-x: auto; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; color: #e2e8f0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #2d3748; }
+        th { background: #191f2d; color: #ffaa00; }
+        tr:hover { background: #1a202c; }
+        .action-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+        .action-btn:hover { background: #dc2626; }
+        .edit-btn { background: #3b82f6; margin-right: 5px; }
+        .edit-btn:hover { background: #2563eb; }
+        .hidden { display: none !important; }
+        #app-container { max-width: 1000px; margin: 0 auto; }
+        /* DNS Admin Styles */
+        .dns-tietue-tila { background: #0b0d13; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .dns-input-rivi { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; }
+        .dns-input-rivi > div { flex: 1; min-width: 120px; }
     </style>
 
     <style>
@@ -56,687 +44,688 @@
         <a class="language-overlay__link" href="/admin/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/admin/" aria-current="page">🇬🇧</a>
     </nav>
-
-    <div class="laatikko" style="max-width: 1000px;">
-        <h1 class="otsikko">Admin panel</h1>
-
-        <div id="ilmoitus-laatikko" class="ilmoitus piilotettu"></div>
-
-        <!-- 1. KIRJAUTUMISNÄKYMÄ -->
-        <div id="login-section" class="admin-section">
-            <h2>Sign in</h2>
+    <div class="laatikko" id="app-container">
+        <h1 class="otsikko" style="margin-bottom: 10px;">Admin panel</h1>
+        
+        <div id="login-section" class="osion-tausta">
+            <h2 style="color: #4ade80;">Sign in</h2>
             <div class="flex-form">
-                <input type="text" id="login-user" class="syote" placeholder="Username">
-                <input type="password" id="login-pass" class="syote" placeholder="Password">
-                <button onclick="kirjaudu()" class="nappula">Sign in</button>
+                <input type="text" id="login-username" class="syote" placeholder="Username">
+                <input type="password" id="login-password" class="syote" placeholder="Password">
+                <button onclick="login()" class="nappula" style="width: 100%;">Sign in</button>
             </div>
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="#" onclick="vaihdaNakymaa('register-section')" class="linkki-takaisin" style="margin-top: 0;">Don't have an account? Register with an invite code.</a>
-            </div>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
+                <a href="#" onclick="toggleMode()" style="color: #a0aec0;">Don't have an account? Register with an invite code.</a>
+            </p>
         </div>
 
-        <!-- 2. REKISTERÖINTINÄKYMÄ -->
-        <div id="register-section" class="admin-section piilotettu">
-            <h2>Register with an invite code</h2>
+        <div id="register-section" class="osion-tausta hidden">
+            <h2 style="color: #60a5fa;">Register with an invite code</h2>
             <div class="flex-form">
                 <input type="text" id="reg-invite" class="syote" placeholder="Invite code">
-                <input type="text" id="reg-user" class="syote" placeholder="Desired username">
-                <input type="password" id="reg-pass" class="syote" placeholder="Password">
-                <button onclick="rekisteroidy()" class="nappula nappi-oranssi">Create account</button>
+                <input type="text" id="reg-username" class="syote" placeholder="Desired username">
+                <input type="password" id="reg-password" class="syote" placeholder="Salasana (min. 6 merkkiä)">
+                <button onclick="register()" class="nappula1" style="width: 100%; border: 1px solid #60a5fa; color: #60a5fa;">Create account</button>
             </div>
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="#" onclick="vaihdaNakymaa('login-section')" class="linkki-takaisin" style="margin-top: 0;">Back to sign in.</a>
-            </div>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
+                <a href="#" onclick="toggleMode()" style="color: #a0aec0;">Back to sign in.</a>
+            </p>
         </div>
 
-        <!-- 3. HALLINTANÄKYMÄ (DASHBOARD) -->
-        <div id="dashboard-section" class="piilotettu">
+        <div id="dashboard-section" class="hidden">
+            <button onclick="lataaTiedot()" class="nappula1" style="margin-bottom: 20px; width: 100%;">Refresh data 🔄</button>
+
+            <!-- Linkkien hallinta -->
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <h2 style="color: #4ade80;">➕ New personal link</h2>
+                <div class="flex-form" style="display: flex; gap: 10px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <select id="new-domain" class="syote" style="width: 100%;">
+                            <option value="soro.la">soro.la</option>
+                            <option value="srla.fi">srla.fi</option>
+                            <option value="srl.la">srl.la</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2;">
+                        <input type="text" id="new-url" class="syote" placeholder="Destination address (https://...)" style="width: 100%;">
+                    </div>
+                    <div style="flex: 1;">
+                        <input type="text" id="new-path" class="syote" placeholder="Short code (leave empty for random)" style="width: 100%;">
+                    </div>
+                    <button onclick="luoUusiLinkki()" class="nappula">Create</button>
+                </div>
+            </div>
+
+            <div class="osion-tausta">
+                <h2 style="color: #ffaa00;">Active links (soro.la)</h2>
+                <div class="table-container">
+                    <table id="sorola-table">
+                        <thead><tr><th>Short link</th><th>Destination URL</th><th>Clicks</th><th>Created</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="osion-tausta">
+                <h2 style="color: #60a5fa;">Active links (srla.fi)</h2>
+                <div class="table-container">
+                    <table id="srla-table">
+                        <thead><tr><th>Short link</th><th>Destination URL</th><th>Clicks</th><th>Created</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
             
-            <!-- Lyhennin osio -->
-            <div class="admin-section">
-                <h2>🔗 New personal link</h2>
-                <div class="flex-form">
-                    <select id="link-domain" class="syote" style="flex: 0.3; min-width: 120px;">
-                        <option value="soro.la">soro.la</option>
-                        <option value="srla.fi">srla.fi</option>
-                        <option value="srl.la">srl.la</option>
-                    </select>
-                    <input type="url" id="link-original" class="syote" placeholder="Destination address (https://...)">
-                    <input type="text" id="link-path" class="syote" placeholder="Short code (leave empty for random)">
-                    <button onclick="luoLinkki()" id="btn-luo" class="nappula nappi-oranssi">Create</button>
-                </div>
-            </div>
-
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-                <button onclick="ladataanKaikki()" class="nappula nappi-pieni">Refresh data ↻</button>
-            </div>
-
-            <div class="admin-section">
-                <h2 style="margin: 0; border: none; margin-bottom: 15px;">Active links (soro.la)</h2>
-                <div style="overflow-x: auto;">
-                    <table>
+            <div class="osion-tausta">
+                <h2 style="color: #a78bfa;">Aktiiviset linkit (srl.la)</h2>
+                <div class="table-container">
+                    <table id="srlla-table">
                         <thead><tr><th>Short link</th><th>Destination URL</th><th>Clicks</th><th>Created</th><th>Actions</th></tr></thead>
-                        <tbody id="sorola-links-table-body"></tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="admin-section">
-                <h2 style="margin: 0; border: none; margin-bottom: 15px;">Active links (srla.fi + srl.la)</h2>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead><tr><th>Short link</th><th>Destination URL</th><th>Clicks</th><th>Created</th><th>Actions</th></tr></thead>
-                        <tbody id="srla-srl-links-table-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="grid-asettelu">
-                <!-- Käyttäjien hallinta -->
-                <div class="admin-section">
-                    <h2 style="font-size: 1.1rem;">👥 Administrators</h2>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead><tr><th>Username</th><th>Created</th><th></th></tr></thead>
-                            <tbody id="users-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Kutsukoodien hallinta -->
-                <div class="admin-section">
-                    <h2 style="font-size: 1.1rem;">🎟️ Invite codes</h2>
-                    <div class="flex-form" style="margin-bottom: 15px;">
-                        <input type="text" id="new-invite-code" class="syote" placeholder="New invite code">
-                        <button onclick="luoKutsu()" class="nappula nappi-pieni">Create</button>
-                    </div>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead><tr><th>Code</th><th>Status</th><th>Created</th><th></th></tr></thead>
-                            <tbody id="invites-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vieraskirja -->
-            <div class="admin-section" style="margin-top: 25px;" id="guestbook-section">
-                <h2 style="font-size: 1.1rem;">📖 Vieraskirja</h2>
-
-                <!-- Ylläpidon oma viesti -->
-                <div style="margin-bottom: 20px;">
-                    <h3 style="font-size: 0.95rem; color: #a0aec0; margin-bottom: 10px;">Kirjoita ylläpidon viesti</h3>
-                    <div class="flex-form">
-                        <input type="text" id="gb-admin-nimi" class="syote" placeholder="Lähettäjän nimi (esim. Ylläpito)" maxlength="100">
-                        <textarea id="gb-admin-viesti" class="syote" placeholder="Viesti..." rows="3" maxlength="2000" style="resize: vertical;"></textarea>
-                        <button onclick="lahetaYllapitoViesti()" id="btn-gb-admin-send" class="nappula nappi-oranssi nappi-pieni">Lähetä ylläpidon viesti</button>
-                    </div>
-                </div>
-
-                <!-- Viestilista -->
-                <div style="overflow-x: auto;">
-                    <table id="gb-taulukko">
+            <!-- Pastebin -->
+            <div class="osion-tausta">
+                <h2 style="color: #4ade80;">📝 Pastebin-tekstit</h2>
+                <div class="table-container">
+                    <table id="pastes-table">
                         <thead>
                             <tr>
-                                <th>Nimi</th>
-                                <th>Viesti</th>
-                                <th>Vastaus</th>
-                                <th>Pvm</th>
+                                <th>Polku</th>
+                                <th>Ote</th>
+                                <th>Created</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="gb-tbody"></tbody>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Vieraskirjan hallinta -->
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #f472b6;">📖 Vieraskirja</h2>
+                <div class="flex-form" style="margin-bottom: 15px;">
+                    <input type="text" id="admin-gb-message" class="syote" placeholder="Kirjoita ylläpidon uusi viesti vieraskirjaan..." style="flex: 2;">
+                    <button onclick="lahetaAdminViesti()" class="nappula1" style="flex: 1; border: 1px solid #f472b6; color: #f472b6; background: transparent;">Lähetä ilmoitus</button>
+                </div>
+                <div class="table-container">
+                    <table id="guestbook-table">
+                        <thead><tr><th>Nimi</th><th>Viesti</th><th>Ylläpidon vastaus</th><th>Pvm</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
 
             <!-- DNS Hallinta -->
-            <div class="admin-section" style="margin-top: 25px;" id="dns-section">
-                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
-                    <h2 style="font-size: 1.1rem; margin: 0; border: none;">🌐 DNS Hallinta</h2>
-                    <select id="dns-zone" class="syote" style="flex: 0 0 auto; min-width: 160px; width: auto; margin: 0;" onchange="lataaDNS()">
-                        <option value="" disabled selected>Ladataan vyöhykkeitä...</option>
-                    </select>
-                </div>
-
-                <!-- Uuden tietueen lomake -->
-                <div style="margin-bottom: 20px;">
-                    <h3 style="font-size: 0.95rem; color: #a0aec0; margin-bottom: 10px;">Lisää uusi DNS-tietue</h3>
-                    <div class="flex-form">
-                        <select id="dns-type" class="syote" style="flex: 0 0 auto; min-width: 110px; width: auto;">
-                            <option value="A">A</option>
-                            <option value="AAAA">AAAA</option>
-                            <option value="CNAME">CNAME</option>
-                            <option value="MX">MX</option>
-                            <option value="TXT">TXT</option>
-                            <option value="NS">NS</option>
-                            <option value="SRV">SRV</option>
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #60a5fa;">🌐 DNS-hallinta (Hetzner)</h2>
+                <div style="margin-bottom: 15px;">
+                    <label for="dns-zone-select" style="display:block; color:#a0aec0; margin-bottom:5px; font-size:0.9rem;">Valitse hallittava domain:</label>
+                    <div style="display:flex; gap:10px;">
+                        <select id="dns-zone-select" class="syote" style="flex: 1;">
+                            <option value="">Ladataan vyöhykkeitä...</option>
                         </select>
-                        <input type="text" id="dns-name" class="syote" placeholder="Nimi (esim. @ tai subdomain)">
-                        <input type="text" id="dns-value" class="syote" placeholder="Arvo (esim. IP tai hostname)">
-                        <input type="number" id="dns-ttl" class="syote" placeholder="TTL (oletus 300)" style="flex: 0 0 auto; min-width: 130px; width: auto;">
-                        <button onclick="luoDNSTietue()" id="btn-dns-luo" class="nappula nappi-oranssi">Lisää</button>
+                        <button onclick="lataaDnsTietueet()" class="nappula1" style="width: auto;">Hae tietueet</button>
                     </div>
                 </div>
 
-                <!-- DNS-tietueiden taulukko -->
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nimi</th>
-                                <th>Tyyppi</th>
-                                <th>Arvo</th>
-                                <th>TTL</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dns-table-body"></tbody>
+                <div id="dns-hallinta-alue" class="hidden">
+                    <div class="dns-tietue-tila">
+                        <h3 style="color:#4ade80; margin-bottom:10px;">Lisää uusi tietue</h3>
+                        <div class="dns-input-rivi">
+                            <div style="flex: 0.5;">
+                                <label style="font-size:0.8rem; color:#a0aec0;">Tyyppi</label>
+                                <select id="new-dns-type" class="syote">
+                                    <option value="A">A</option>
+                                    <option value="AAAA">AAAA</option>
+                                    <option value="CNAME">CNAME</option>
+                                    <option value="MX">MX</option>
+                                    <option value="TXT">TXT</option>
+                                    <option value="SRV">SRV</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="font-size:0.8rem; color:#a0aec0;">Nimi (esim. @, www, api)</label>
+                                <input type="text" id="new-dns-name" class="syote" placeholder="@">
+                            </div>
+                            <div style="flex: 2;">
+                                <label style="font-size:0.8rem; color:#a0aec0;">Arvo (IP tai kohde)</label>
+                                <input type="text" id="new-dns-value" class="syote" placeholder="1.2.3.4">
+                            </div>
+                            <div style="flex: 0.5;">
+                                <label style="font-size:0.8rem; color:#a0aec0;">TTL (s)</label>
+                                <input type="number" id="new-dns-ttl" class="syote" value="300">
+                            </div>
+                            <button onclick="luoDnsTietue()" class="nappula" style="width:auto; height: 44px; margin-bottom: 2px;">Lisää</button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="dns-records-table">
+                            <thead><tr><th>Tyyppi</th><th>Nimi</th><th>Arvo</th><th>TTL</th><th>Actions</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Käyttäjät & Kutsut -->
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #f472b6;">👑 Administrators</h2>
+                <div class="table-container">
+                    <table id="users-table">
+                        <thead><tr><th>Username</th><th>Created</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Salasanan vaihto -->
-            <div class="admin-section" style="margin-top: 25px;">
-                <h2 style="font-size: 1.1rem;">🔑 Change password</h2>
-                <div class="flex-form">
-                    <input type="password" id="cp-old" class="syote" placeholder="Current password">
-                    <input type="password" id="cp-new" class="syote" placeholder="New password">
-                    <input type="password" id="cp-new2" class="syote" placeholder="Repeat new password">
-                    <button onclick="vaihdaSalasana()" id="btn-cp" class="nappula nappi-oranssi">Change</button>
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #fbbf24;">🎟️ Invite codes</h2>
+                <div class="flex-form" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="text" id="new-invite" class="syote" placeholder="New invite code" style="flex: 1;">
+                    <button onclick="luoKutsukoodi()" class="nappula1" style="border: 1px solid #fbbf24; color: #fbbf24;">Create</button>
+                </div>
+                <div class="table-container">
+                    <table id="invites-table">
+                        <thead><tr><th>Code</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: 25px;">
-                <button onclick="kirjauduUlos()" class="nappula nappi-pieni nappi-puna">Sign out</button>
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #9ca3af;">🔑 Change password</h2>
+                <div class="flex-form">
+                    <input type="password" id="change-old-password" class="syote" placeholder="Current password" style="margin-bottom: 10px;">
+                    <input type="password" id="change-new-password" class="syote" placeholder="New password" style="margin-bottom: 10px;">
+                    <input type="password" id="change-new-password-confirm" class="syote" placeholder="Repeat new password" style="margin-bottom: 10px;">
+                    <button onclick="vaihdaSalasana()" class="nappula" style="width: 100%; background: #4b5563;">Change</button>
+                </div>
             </div>
-        </div>
 
-        <a href="/en/" class="linkki-takaisin">← Back to home</a>
+            <button onclick="logout()" class="nappula action-btn" style="width: 100%; margin-top: 20px; font-size: 1rem; padding: 12px;">Sign out</button>
+        </div>
+        <a href="/en/" class="linkki-takaisin" style="margin-top: 20px; display: block; text-align: center;">« Back to home</a>
     </div>
 
     <script>
-        const API_AUTH = '/api/auth';
-        const API_LINKS = '/api/links';
-        const API_USERS = '/api/users';
-        const API_INVITES = '/api/invites';
-        const API_GUESTBOOK = '/api/guestbook';
-        const API_DNS = '/api/dns';
+        let currentUser = null;
+        let currentAuthHeader = null;
+        let currentDnsZoneId = null;
 
-        let sessionToken = localStorage.getItem('sorola_admin_token');
-
-        window.onload = () => {
-            if (sessionToken) {
-                vaihdaNakymaa('dashboard-section');
-                ladataanKaikki();
-            }
-        };
-
-        function naytaIlmoitus(viesti, tyyppi = 'virhe') {
-            const laatikko = document.getElementById('ilmoitus-laatikko');
-            laatikko.textContent = viesti;
-            laatikko.className = `ilmoitus ${tyyppi}`;
-            laatikko.classList.remove('piilotettu');
-            setTimeout(() => { laatikko.classList.add('piilotettu'); }, 5000);
+        function toggleMode() {
+            document.getElementById('login-section').classList.toggle('hidden');
+            document.getElementById('register-section').classList.toggle('hidden');
         }
 
-        function vaihdaNakymaa(id) {
-            document.getElementById('login-section').classList.add('piilotettu');
-            document.getElementById('register-section').classList.add('piilotettu');
-            document.getElementById('dashboard-section').classList.add('piilotettu');
-            document.getElementById(id).classList.remove('piilotettu');
-            document.getElementById('ilmoitus-laatikko').classList.add('piilotettu');
-        }
-
-        function haeOtsakkeet() { return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` }; }
-        function haeOmaTunnus() { return sessionToken ? atob(sessionToken).split(":")[0] : ""; }
-
-        function ladataanKaikki() {
-            lataaLinkit();
-            lataaKayttajat();
-            lataaKutsut();
-            lataaVieraskirja();
-            lataaVyohykkeet();
-        }
-
-        // --- AUTH ---
-        async function kirjaudu() {
-            const user = document.getElementById('login-user').value;
-            const pass = document.getElementById('login-pass').value;
-            if(!user || !pass) return naytaIlmoitus("Enter your username and password.");
+        async function login() {
+            const u = document.getElementById('login-username').value;
+            const p = document.getElementById('login-password').value;
+            if (!u || !p) return alert('Enter your username and password.');
+            
             try {
-                const res = await fetch(API_AUTH, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'login', username: user, password: pass }) });
+                const res = await fetch('/api/auth', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'login', username: u, password: p })
+                });
                 const data = await res.json();
-                if (res.ok) {
-                    sessionToken = btoa(user + ":" + pass); 
-                    localStorage.setItem('sorola_admin_token', sessionToken);
-                    document.getElementById('login-user').value = ''; document.getElementById('login-pass').value = '';
-                    vaihdaNakymaa('dashboard-section'); ladataanKaikki();
-                } else { naytaIlmoitus(data.error || "Invalid username or password."); }
-            } catch (e) { naytaIlmoitus("Server error."); }
+                if (data.success) {
+                    currentUser = u;
+                    currentAuthHeader = 'Bearer ' + btoa(u + ':' + p);
+                    document.getElementById('login-section').classList.add('hidden');
+                    document.getElementById('dashboard-section').classList.remove('hidden');
+                    lataaTiedot();
+                    lataaDnsVyohykkeet();
+                } else {
+                    alert(data.error || 'Invalid username or password.');
+                }
+            } catch { alert('Server error.'); }
         }
 
-        async function rekisteroidy() {
-            const invite = document.getElementById('reg-invite').value;
-            const user = document.getElementById('reg-user').value;
-            const pass = document.getElementById('reg-pass').value;
-            if(!invite || !user || !pass) return naytaIlmoitus("Fill in all fields.");
+        async function register() {
+            const inv = document.getElementById('reg-invite').value;
+            const u = document.getElementById('reg-username').value;
+            const p = document.getElementById('reg-password').value;
+            if (!inv || !u || !p) return alert('Fill in all fields.');
+
             try {
-                const res = await fetch(API_AUTH, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'register', inviteCode: invite, username: user, password: pass }) });
-                if (res.ok) {
-                    naytaIlmoitus("Account created! You can now sign in.", "onnistui");
-                    document.getElementById('reg-invite').value = ''; document.getElementById('reg-user').value = ''; document.getElementById('reg-pass').value = '';
-                    vaihdaNakymaa('login-section');
-                } else { const data = await res.json(); naytaIlmoitus(data.error || "Registration failed."); }
-            } catch (e) { naytaIlmoitus("Server error."); }
+                const res = await fetch('/api/auth', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'register', inviteCode: inv, username: u, password: p })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Account created! You can now sign in.');
+                    toggleMode();
+                    document.getElementById('login-username').value = u;
+                } else {
+                    alert(data.error || 'Registration failed.');
+                }
+            } catch { alert('Server error.'); }
         }
 
         async function vaihdaSalasana() {
-            const oldP = document.getElementById('cp-old').value;
-            const newP = document.getElementById('cp-new').value;
-            const newP2 = document.getElementById('cp-new2').value;
+            const oldP = document.getElementById('change-old-password').value;
+            const newP = document.getElementById('change-new-password').value;
+            const confirmP = document.getElementById('change-new-password-confirm').value;
             
-            if(!oldP || !newP || !newP2) return naytaIlmoitus("Fill in all password fields.");
-            if(newP !== newP2) return naytaIlmoitus("The new passwords do not match.");
-            
-            const btn = document.getElementById('btn-cp');
-            btn.disabled = true; btn.textContent = "Changing...";
-            const username = haeOmaTunnus();
+            if (!oldP || !newP || !confirmP) return alert('Fill in all password fields.');
+            if (newP !== confirmP) return alert('The new passwords do not match.');
 
             try {
-                const res = await fetch(API_AUTH, {
+                const btn = event.target;
+                btn.textContent = 'Changing...';
+                btn.disabled = true;
+
+                const res = await fetch('/api/auth', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'change_password', username: currentUser, oldPassword: oldP, newPassword: newP })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Password changed successfully!');
+                    currentAuthHeader = 'Bearer ' + btoa(currentUser + ':' + newP);
+                    document.getElementById('change-old-password').value = '';
+                    document.getElementById('change-new-password').value = '';
+                    document.getElementById('change-new-password-confirm').value = '';
+                } else {
+                    alert(data.error || 'Error while changing the password.');
+                }
+            } catch { alert('Server error.'); } finally {
+                event.target.textContent = 'Vaihda';
+                event.target.disabled = false;
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            currentAuthHeader = null;
+            currentDnsZoneId = null;
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('login-password').value = '';
+        }
+
+        function renderLinkTable(tableId, links, domain) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = '';
+            if (!links.length) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#a0aec0;">No links in this domain yet.</td></tr>`;
+                return;
+            }
+            links.forEach(link => {
+                const baseUrl = domain === 'soro.la' ? 'soro.la' : domain;
+                const date = new Date(link.created_at).toLocaleDateString('en-US');
+                tbody.innerHTML += `
+                    <tr>
+                        <td><a href="https://${baseUrl}/${link.short_path}" target="_blank" style="color:#ffaa00;">/${link.short_path}</a></td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <a href="/en/admin/$%7Blink.original_url%7D" target="_blank" style="color:#60a5fa;">${link.original_url}</a>
+                        </td>
+                        <td>${link.clicks}</td>
+                        <td>${date}</td>
+                        <td>
+                            <button onclick="muokkaaLinkkia('${domain}', '${link.short_path}', '${link.original_url}')" class="action-btn edit-btn">Edit</button>
+                            <button onclick="poistaLinkki('${domain}', '${link.short_path}')" class="action-btn">Poista</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function lataaTiedot() {
+            if (!currentAuthHeader) return;
+            try {
+                // Linkit
+                const resLinks = await fetch('/api/links', { headers: { 'Authorization': currentAuthHeader } });
+                if (resLinks.ok) {
+                    const data = await resLinks.json();
+                    renderLinkTable('sorola-table', data.sorola, 'soro.la');
+                    renderLinkTable('srla-table', data.srla, 'srla.fi');
+                    renderLinkTable('srlla-table', data.srl, 'srl.la');
+                }
+                
+                // Pastebin
+                const resPastes = await fetch('/api/pastes', { headers: { 'Authorization': currentAuthHeader } });
+                if (resPastes.ok) {
+                    const data = await resPastes.json();
+                    const tbody = document.querySelector('#pastes-table tbody');
+                    tbody.innerHTML = '';
+                    if(!data.pastes.length) {
+                        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#a0aec0;">Ei vielä pasteja.</td></tr>`;
+                    } else {
+                        data.pastes.forEach(p => {
+                            const date = new Date(p.created_at).toLocaleDateString('fi-FI');
+                            let snippet = p.content.length > 40 ? p.content.substring(0, 40) + '...' : p.content;
+                            snippet = snippet.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td><a href="/en/p/$%7Bp.short_path%7D" target="_blank" style="color:#4ade80;">/p/${p.short_path}</a></td>
+                                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${snippet}</td>
+                                    <td>${date}</td>
+                                    <td><button onclick="poistaPaste(${p.id})" class="action-btn">Poista</button></td>
+                                </tr>
+                            `;
+                        });
+                    }
+                }
+
+                // Vieraskirja
+                const resGb = await fetch('/api/guestbook');
+                if (resGb.ok) {
+                    const data = await resGb.json();
+                    const tbody = document.querySelector('#guestbook-table tbody');
+                    tbody.innerHTML = '';
+                    if (!data.messages.length) {
+                        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#a0aec0;">Ei vieraskirjaviestejä.</td></tr>`;
+                    } else {
+                        data.messages.forEach(m => {
+                            const date = new Date(m.created_at).toLocaleDateString('fi-FI');
+                            const nameHtml = m.is_admin ? `<span style="color:#f472b6;font-weight:bold;">👑 ${m.name}</span>` : m.name;
+                            const replyHtml = m.admin_reply ? m.admin_reply : `<em style="color:#64748b;">Ei vastausta</em>`;
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${nameHtml}</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${m.message}</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${replyHtml}</td>
+                                    <td>${date}</td>
+                                    <td>
+                                        ${!m.is_admin ? `<button onclick="vastaaVieraskirjaan(${m.id})" class="action-btn edit-btn">Vastaa</button>` : ''}
+                                        <button onclick="poistaVieraskirjaviesti(${m.id})" class="action-btn">Poista</button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+                }
+
+                // Käyttäjät
+                const resUsers = await fetch('/api/users', { headers: { 'Authorization': currentAuthHeader } });
+                if (resUsers.ok) {
+                    const data = await resUsers.json();
+                    const tbody = document.querySelector('#users-table tbody');
+                    tbody.innerHTML = '';
+                    data.users.forEach(u => {
+                        const date = new Date(u.created_at).toLocaleDateString('en-US');
+                        const isMe = u.username === currentUser;
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${u.username} ${isMe ? '<span style="color:#4ade80; font-size:0.8rem;">(You)</span>' : ''}</td>
+                                <td>${date}</td>
+                                <td>${!isMe ? `<button onclick="poistaKayttaja(${u.id})" class="action-btn">Poista</button>` : ''}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                // Kutsut
+                const resInv = await fetch('/api/invites', { headers: { 'Authorization': currentAuthHeader } });
+                if (resInv.ok) {
+                    const data = await resInv.json();
+                    const tbody = document.querySelector('#invites-table tbody');
+                    tbody.innerHTML = '';
+                    data.invites.forEach(i => {
+                        const date = new Date(i.created_at).toLocaleDateString('en-US');
+                        const status = i.is_used ? '<span style="color:#ef4444;">Used</span>' : '<span style="color:#4ade80;">Available</span>';
+                        tbody.innerHTML += `
+                            <tr>
+                                <td style="font-family: monospace;">${i.code}</td>
+                                <td>${status}</td>
+                                <td>${date}</td>
+                                <td><button onclick="poistaKutsu(${i.id})" class="action-btn">Poista</button></td>
+                            </tr>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Virhe ladattaessa tietoja.');
+            }
+        }
+
+        // --- Linkit ---
+        async function luoUusiLinkki() {
+            const domain = document.getElementById('new-domain').value;
+            const url = document.getElementById('new-url').value;
+            const path = document.getElementById('new-path').value;
+            if (!url) return alert('Destination URL is required.');
+
+            try {
+                event.target.textContent = 'Creating...';
+                event.target.disabled = true;
+                const res = await fetch('/api/links', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'change_password', username: username, oldPassword: oldP, newPassword: newP })
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ domain, originalURL: url, path })
                 });
                 if (res.ok) {
-                    naytaIlmoitus("Password changed successfully!", "onnistui");
-                    sessionToken = btoa(username + ":" + newP);
-                    localStorage.setItem('sorola_admin_token', sessionToken);
-                    document.getElementById('cp-old').value = ''; document.getElementById('cp-new').value = ''; document.getElementById('cp-new2').value = '';
-                } else { const data = await res.json(); naytaIlmoitus(data.error || "Error while changing the password."); }
-            } catch (e) { naytaIlmoitus("Server error."); } finally { btn.disabled = false; btn.textContent = "Vaihda"; }
+                    document.getElementById('new-url').value = '';
+                    document.getElementById('new-path').value = '';
+                    lataaTiedot();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Error.');
+                }
+            } catch { alert('Server error.'); } finally {
+                event.target.textContent = 'Luo';
+                event.target.disabled = false;
+            }
         }
 
-        function kirjauduUlos() { sessionToken = null; localStorage.removeItem('sorola_admin_token'); vaihdaNakymaa('login-section'); }
-
-        // --- LINKIT ---
-        function renderTbody(tbodyId, dataList) {
-            const tbody = document.getElementById(tbodyId);
-            if (dataList && dataList.length > 0) {
-                tbody.innerHTML = dataList.map(link => `<tr>
-                    <td><code>${link.domain}/${link.short_path}</code></td>
-                    <td><a href="/en/admin/$%7Blink.original_url%7D" target="_blank" rel="noopener noreferrer" style="color: #63b3ed; text-decoration: none;">${link.original_url.substring(0, 30)}${link.original_url.length > 30 ? '...' : ''}</a></td>
-                    <td style="text-align: center;"><span class="klikit-merkki">${link.clicks || 0}</span></td>
-                    <td style="font-size: 0.8rem; color: #a0aec0;">${new Date(link.created_at).toLocaleDateString('en-US')}</td>
-                    <td>
-                        <div style="display: flex; gap: 5px;">
-                            <button class="nappula nappi-pieni nappi-oranssi" onclick="muokkaaLinkkia('${link.domain}', '${link.short_path}', '${link.original_url}')">Edit</button>
-                            <button class="nappula nappi-pieni nappi-puna" onclick="poistaLinkki('${link.domain}', '${link.short_path}')">X</button>
-                        </div>
-                    </td>
-                </tr>`).join('');
-            } else { tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #a0aec0;">No links in this domain yet.</td></tr>`; }
-        }
-
-        async function lataaLinkit() {
-            document.getElementById('sorola-links-table-body').innerHTML = `<tr><td colspan="5" style="text-align: center;"><div class="lataus-spinner"></div></td></tr>`;
-            document.getElementById('srla-srl-links-table-body').innerHTML = `<tr><td colspan="5" style="text-align: center;"><div class="lataus-spinner"></div></td></tr>`;
+        async function muokkaaLinkkia(domain, path, currentUrl) {
+            const newUrl = prompt(`Editing link /${path}\nEnter the new destination URL:`, currentUrl);
+            if (!newUrl || newUrl === currentUrl) return;
             try {
-                const res = await fetch(API_LINKS, { headers: haeOtsakkeet() });
-                if (res.status === 401) return kirjauduUlos();
-                const data = await res.json();
-
-                const sorolaLinkit = (data.sorola || []).map(link => ({ ...link, domain: 'soro.la' }));
-                const srlaLinkit = (data.srla || []).map(link => ({ ...link, domain: 'srla.fi' }));
-                const srlLinkit = (data.srl || []).map(link => ({ ...link, domain: 'srl.la' }));
-                const yhteisetSrlaSrlLinkit = [...srlaLinkit, ...srlLinkit]
-                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-                renderTbody('sorola-links-table-body', sorolaLinkit);
-                renderTbody('srla-srl-links-table-body', yhteisetSrlaSrlLinkit);
-            } catch (e) { naytaIlmoitus("Error while loading links."); }
-        }
-
-        async function luoLinkki() {
-            const domain = document.getElementById('link-domain').value;
-            const orgUrl = document.getElementById('link-original').value;
-            const path = document.getElementById('link-path').value;
-            if(!orgUrl) return naytaIlmoitus("Destination URL is required.");
-            
-            const btn = document.getElementById('btn-luo'); btn.disabled = true; btn.textContent = "Creating...";
-            try {
-                const res = await fetch(API_LINKS, { method: 'POST', headers: haeOtsakkeet(), body: JSON.stringify({ domain: domain, originalURL: orgUrl, path: path }) });
-                if (res.ok) {
-                    const data = await res.json(); naytaIlmoitus(`Link created! (${domain}/${data.path})`, "onnistui");
-                    document.getElementById('link-original').value = ''; document.getElementById('link-path').value = ''; lataaLinkit();
-                } else { const data = await res.json(); naytaIlmoitus(data.error || "Error."); }
-            } catch (e) { naytaIlmoitus("Server error."); } finally { btn.disabled = false; btn.textContent = "Luo"; }
-        }
-
-        async function muokkaaLinkkia(domain, path, oldUrl) {
-            const newUrl = prompt(`Editing link ${domain}/${path}\n\nEnter the new destination URL:`, oldUrl);
-            if (!newUrl || newUrl === oldUrl) return; 
-
-            try {
-                const res = await fetch(API_LINKS, { method: 'PUT', headers: haeOtsakkeet(), body: JSON.stringify({ domain: domain, path: path, newOriginalURL: newUrl }) });
-                if (res.ok) { naytaIlmoitus("Destination URL updated!", "onnistui"); lataaLinkit(); } 
-                else { const data = await res.json(); naytaIlmoitus(data.error || "Update failed."); }
-            } catch(e) { naytaIlmoitus("Server error."); }
+                const res = await fetch('/api/links', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ domain, path, newOriginalURL: newUrl })
+                });
+                if (res.ok) lataaTiedot();
+                else alert('Update failed.');
+            } catch { alert('Server error.'); }
         }
 
         async function poistaLinkki(domain, path) {
-            if(!confirm(`Delete ${domain}/${path}?`)) return;
+            if (!confirm(`Delete /${path}?`)) return;
             try {
-                const res = await fetch(`${API_LINKS}?path=${encodeURIComponent(path)}&domain=${encodeURIComponent(domain)}`, { method: 'DELETE', headers: haeOtsakkeet() });
-                if (res.ok) { naytaIlmoitus("Link deleted.", "onnistui"); lataaLinkit(); }
-            } catch (e) { naytaIlmoitus("Delete failed."); }
+                const res = await fetch(`/api/links?domain=${domain}&path=${path}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaTiedot();
+                else alert('Delete failed.');
+            } catch { alert('Server error.'); }
         }
 
-        // --- KÄYTTÄJÄT ---
-        async function lataaKayttajat() {
-            const tbody = document.getElementById('users-table-body');
+        async function poistaPaste(id) {
+            if (!confirm(`Delete tämä pastebin-teksti?`)) return;
             try {
-                const res = await fetch(API_USERS, { headers: haeOtsakkeet() });
-                const data = await res.json();
-                const omaTunnus = haeOmaTunnus();
-                if (data.users) {
-                    tbody.innerHTML = data.users.map(u => `<tr>
-                        <td><strong>${u.username}</strong> ${u.username === omaTunnus ? '(You)' : ''}</td>
-                        <td style="font-size: 0.8rem; color: #a0aec0;">${new Date(u.created_at).toLocaleDateString('en-US')}</td>
-                        <td>${u.username !== omaTunnus ? `<button class="nappula nappi-pieni nappi-puna" onclick="poistaKayttaja(${u.id}, '${u.username}')">X</button>` : ''}</td>
-                    </tr>`).join('');
-                }
-            } catch (e) { tbody.innerHTML = `<tr><td colspan="3" color="#ef4444">Error</td></tr>`; }
+                const res = await fetch(`/api/pastes?id=${id}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaTiedot();
+                else alert('Delete failed.');
+            } catch { alert('Server error.'); }
         }
 
-        async function poistaKayttaja(id, nimi) {
-            if(!confirm(`Haluatko varmasti poistaa ylläpitäjän: ${nimi}?`)) return;
+        async function poistaKayttaja(id) {
+            if (!confirm(`Delete käyttäjä?`)) return;
             try {
-                const res = await fetch(`${API_USERS}?id=${id}`, { method: 'DELETE', headers: haeOtsakkeet() });
-                if (res.ok) { naytaIlmoitus("User deleted.", "onnistui"); lataaKayttajat(); } 
-                else { const data = await res.json(); naytaIlmoitus(data.error); }
-            } catch (e) { naytaIlmoitus("Delete failed."); }
+                const res = await fetch(`/api/users?id=${id}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaTiedot();
+                else alert('Delete failed.');
+            } catch { alert('Server error.'); }
         }
 
-        // --- KUTSUKOODIT ---
-        async function lataaKutsut() {
-            const tbody = document.getElementById('invites-table-body');
+        async function luoKutsukoodi() {
+            const koodi = document.getElementById('new-invite').value;
+            if (!koodi) return alert('Enter a new invite code.');
             try {
-                const res = await fetch(API_INVITES, { headers: haeOtsakkeet() });
-                const data = await res.json();
-                if (data.invites) {
-                    tbody.innerHTML = data.invites.map(i => `<tr>
-                        <td><strong>${i.code}</strong></td>
-                        <td>${i.is_used ? '<span style="color:#ef4444">Used</span>' : '<span style="color:#4ade80">Available</span>'}</td>
-                        <td style="font-size: 0.8rem; color: #a0aec0;">${new Date(i.created_at).toLocaleDateString('en-US')}</td>
-                        <td><button class="nappula nappi-pieni nappi-puna" onclick="poistaKutsu(${i.id})">X</button></td>
-                    </tr>`).join('');
-                }
-            } catch (e) { tbody.innerHTML = `<tr><td colspan="4" color="#ef4444">Error</td></tr>`; }
-        }
-
-        async function luoKutsu() {
-            const code = document.getElementById('new-invite-code').value;
-            if(!code) return naytaIlmoitus("Enter a new invite code.");
-            try {
-                const res = await fetch(API_INVITES, { method: 'POST', headers: haeOtsakkeet(), body: JSON.stringify({ code }) });
+                const res = await fetch('/api/invites', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ code: koodi })
+                });
                 if (res.ok) {
-                    naytaIlmoitus(`Koodi "${code}" is now active!`, "onnistui");
-                    document.getElementById('new-invite-code').value = ''; lataaKutsut();
-                } else { const data = await res.json(); naytaIlmoitus(data.error); }
-            } catch (e) { naytaIlmoitus("Error while creating the code."); }
+                    document.getElementById('new-invite').value = '';
+                    lataaTiedot();
+                } else alert('Error while creating the code.');
+            } catch { alert('Server error.'); }
         }
 
         async function poistaKutsu(id) {
-            if(!confirm(`Delete this invite code from the system?`)) return;
+            if (!confirm(`Delete this invite code from the system?`)) return;
             try {
-                const res = await fetch(`${API_INVITES}?id=${id}`, { method: 'DELETE', headers: haeOtsakkeet() });
-                if (res.ok) { naytaIlmoitus("Invite code deleted.", "onnistui"); lataaKutsut(); }
-            } catch (e) { naytaIlmoitus("Delete failed."); }
+                const res = await fetch(`/api/invites?id=${id}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaTiedot();
+                else alert('Delete failed.');
+            } catch { alert('Server error.'); }
         }
 
-        // --- VIERASKIRJA ---
-        function escapeHtmlAdmin(str) {
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-        }
-
-        async function lataaVieraskirja() {
-            const tbody = document.getElementById('gb-tbody');
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;"><div class="lataus-spinner"></div></td></tr>`;
+        // --- Vieraskirja ---
+        async function lahetaAdminViesti() {
+            const msg = document.getElementById('admin-gb-message').value;
+            if (!msg) return alert('Kirjoita viesti ensin.');
             try {
-                const res = await fetch(API_GUESTBOOK);
-                if (res.status === 401) return kirjauduUlos();
-                const data = await res.json();
-                const viestit = data.messages || [];
-                if (!viestit.length) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#a0aec0;">Ei vielä viestejä.</td></tr>`;
-                    return;
-                }
-                tbody.innerHTML = viestit.map(v => {
-                    const onYllapito = v.is_admin === 1 || v.is_admin === true;
-                    const nimiSolu = onYllapito
-                        ? `<strong style="color:#ffaa00;">${escapeHtmlAdmin(v.name)}</strong> <span style="font-size:0.75rem;color:#ffaa00;">(YP)</span>`
-                        : escapeHtmlAdmin(v.name);
-                    const viesti = escapeHtmlAdmin(v.message);
-                    const vastaus = v.admin_reply
-                        ? `<span style="color:#ffaa00;font-size:0.85rem;">${escapeHtmlAdmin(v.admin_reply)}</span>`
-                        : `<button class="nappula nappi-pieni nappi-oranssi" onclick="lisaaVastaus(${v.id})">Vastaa</button>`;
-                    const pvm = new Date(v.created_at).toLocaleDateString('fi-FI');
-                    return `<tr>
-                        <td style="white-space:nowrap;">${nimiSolu}</td>
-                        <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${viesti}">${viesti}</td>
-                        <td style="max-width:160px;">${vastaus}</td>
-                        <td style="font-size:0.8rem;color:#a0aec0;white-space:nowrap;">${pvm}</td>
-                        <td><button class="nappula nappi-pieni nappi-puna" onclick="poistaGbViesti(${v.id})">X</button></td>
-                    </tr>`;
-                }).join('');
-            } catch (e) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color:#ef4444;">Virhe ladattaessa vieraskirjaa.</td></tr>`;
-            }
+                const res = await fetch('/api/guestbook', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ action: 'admin_message', name: currentUser, message: msg })
+                });
+                if (res.ok) {
+                    document.getElementById('admin-gb-message').value = '';
+                    lataaTiedot();
+                } else alert('Virhe viestin lähetyksessä.');
+            } catch { alert('Server error.'); }
         }
 
-        async function poistaGbViesti(id) {
+        async function vastaaVieraskirjaan(id) {
+            const vastaus = prompt('Kirjoita ylläpidon vastaus viestiin (tyhjä poistaa vastauksen):');
+            if (vastaus === null) return;
+            try {
+                const res = await fetch('/api/guestbook', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ action: 'reply', id, reply: vastaus })
+                });
+                if (res.ok) lataaTiedot();
+                else alert('Virhe vastauksen tallennuksessa.');
+            } catch { alert('Server error.'); }
+        }
+
+        async function poistaVieraskirjaviesti(id) {
             if (!confirm('Delete tämä viesti pysyvästi?')) return;
             try {
-                const res = await fetch(`${API_GUESTBOOK}?id=${id}`, { method: 'DELETE', headers: haeOtsakkeet() });
-                if (res.status === 401) return kirjauduUlos();
-                if (res.ok) { naytaIlmoitus('Viesti poistettu.', 'onnistui'); lataaVieraskirja(); }
-                else { const data = await res.json(); naytaIlmoitus(data.error || 'Poisto epäonnistui.'); }
-            } catch (e) { naytaIlmoitus('Delete failed.'); }
-        }
-
-        async function lisaaVastaus(id) {
-            const vastaus = prompt('Kirjoita vastaus tälle viestille:');
-            if (!vastaus || !vastaus.trim()) return;
-            try {
-                const res = await fetch(API_GUESTBOOK, {
-                    method: 'PATCH',
-                    headers: haeOtsakkeet(),
-                    body: JSON.stringify({ action: 'reply', id: id, reply: vastaus.trim() })
+                const res = await fetch(`/api/guestbook?id=${id}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
                 });
-                if (res.status === 401) return kirjauduUlos();
-                if (res.ok) { naytaIlmoitus('Vastaus lisätty!', 'onnistui'); lataaVieraskirja(); }
-                else { const data = await res.json(); naytaIlmoitus(data.error || 'Virhe vastauksen lisäyksessä.'); }
-            } catch (e) { naytaIlmoitus('Server error.'); }
+                if (res.ok) lataaTiedot();
+                else alert('Virhe viestin poistossa.');
+            } catch { alert('Server error.'); }
         }
 
-        async function lahetaYllapitoViesti() {
-            const nimi = document.getElementById('gb-admin-nimi').value.trim();
-            const viesti = document.getElementById('gb-admin-viesti').value.trim();
-            if (!nimi) return naytaIlmoitus('Nimi on pakollinen.');
-            if (!viesti) return naytaIlmoitus('Viesti on pakollinen.');
-            const btn = document.getElementById('btn-gb-admin-send');
-            btn.disabled = true; btn.textContent = 'Lähetetään...';
+        // --- DNS Hallinta (Hetzner) ---
+        async function lataaDnsVyohykkeet() {
             try {
-                const res = await fetch(API_GUESTBOOK, {
-                    method: 'PATCH',
-                    headers: haeOtsakkeet(),
-                    body: JSON.stringify({ action: 'admin_message', name: nimi, message: viesti })
-                });
-                if (res.status === 401) return kirjauduUlos();
-                if (res.ok) {
-                    naytaIlmoitus('Ylläpidon viesti lähetetty!', 'onnistui');
-                    document.getElementById('gb-admin-nimi').value = '';
-                    document.getElementById('gb-admin-viesti').value = '';
-                    lataaVieraskirja();
-                } else { const data = await res.json(); naytaIlmoitus(data.error || 'Virhe viestin lähetyksessä.'); }
-            } catch (e) { naytaIlmoitus('Server error.'); }
-            finally { btn.disabled = false; btn.textContent = 'Lähetä ylläpidon viesti'; }
-        }
-        // --- DNS HALLINTA ---
-        let dnsRecordsCache = [];
-
-        async function lataaVyohykkeet() {
-            const select = document.getElementById('dns-zone');
-            try {
-                const res = await fetch(`${API_DNS}/zones`, { headers: haeOtsakkeet() });
-                if (res.status === 401) return kirjauduUlos();
+                const select = document.getElementById('dns-zone-select');
+                const res = await fetch('/api/dns/zones', { headers: { 'Authorization': currentAuthHeader } });
                 const data = await res.json();
-                const zones = data.zones || [];
-                if (!zones.length) {
-                    select.innerHTML = '<option value="" disabled selected>Ei vyöhykkeitä</option>';
-                    return;
+                
+                if (res.ok && data.zones) {
+                    select.innerHTML = '<option value="">-- Valitse domain --</option>';
+                    data.zones.forEach(z => {
+                        select.innerHTML += `<option value="${z.id}">${z.name}</option>`;
+                    });
+                } else {
+                    select.innerHTML = '<option value="">DNS API ei saatavilla</option>';
                 }
-                const prev = select.value;
-                select.innerHTML = zones
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map(z => `<option value="${escapeHtmlAdmin(z.id)}">${escapeHtmlAdmin(z.name)}</option>`)
-                    .join('');
-                if (prev && zones.find(z => z.id === prev)) {
-                    select.value = prev;
-                }
-                lataaDNS();
             } catch (e) {
-                select.innerHTML = '<option value="" disabled selected>Virhe ladattaessa</option>';
+                console.error(e);
             }
         }
 
-        async function lataaDNS() {
-            const tbody = document.getElementById('dns-table-body');
-            const zoneId = document.getElementById('dns-zone').value;
-            if (!zoneId) return;
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;"><div class="lataus-spinner"></div></td></tr>`;
+        async function lataaDnsTietueet() {
+            const zoneId = document.getElementById('dns-zone-select').value;
+            if (!zoneId) return alert('Valitse domain ensin.');
+            currentDnsZoneId = zoneId;
+            
+            document.getElementById('dns-hallinta-alue').classList.remove('hidden');
+            const tbody = document.querySelector('#dns-records-table tbody');
+            tbody.innerHTML = '<tr><td colspan="5">Ladataan...</td></tr>';
+
             try {
-                const res = await fetch(`${API_DNS}?zone_id=${encodeURIComponent(zoneId)}`, { headers: haeOtsakkeet() });
-                if (res.status === 401) return kirjauduUlos();
+                const res = await fetch(`/api/dns?zone_id=${zoneId}`, { headers: { 'Authorization': currentAuthHeader } });
                 const data = await res.json();
-                if (!res.ok) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="color:#ef4444; text-align:center;">${escapeHtmlAdmin(data.error || 'Virhe DNS-tietueiden haussa.')}</td></tr>`;
-                    return;
+                
+                if (res.ok && data.records) {
+                    tbody.innerHTML = '';
+                    data.records.forEach(r => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td><strong>${r.type}</strong></td>
+                                <td>${r.name}</td>
+                                <td><span style="font-family:monospace; color:#4ade80;">${r.value}</span></td>
+                                <td>${r.ttl}</td>
+                                <td>
+                                    <button onclick="poistaDnsTietue('${r.id}')" class="action-btn">Poista</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="5" style="color:red;">${data.error || 'Virhe ladattaessa.'}</td></tr>`;
                 }
-                const tietueet = data.records || [];
-                dnsRecordsCache = tietueet;
-                if (!tietueet.length) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #a0aec0;">Ei DNS-tietueita tässä vyöhykkeessä.</td></tr>`;
-                    return;
-                }
-                tbody.innerHTML = tietueet.map(r => `<tr>
-                    <td><code>${escapeHtmlAdmin(r.name)}</code></td>
-                    <td><strong>${escapeHtmlAdmin(r.type)}</strong></td>
-                    <td style="max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtmlAdmin(r.value)}">${escapeHtmlAdmin(r.value)}</td>
-                    <td style="font-size: 0.85rem; color: #a0aec0;">${r.ttl}</td>
-                    <td>
-                        <div style="display: flex; gap: 5px;">
-                            <button class="nappula nappi-pieni nappi-oranssi" onclick="muokkaaDNSTietue('${escapeHtmlAdmin(r.id)}')">Edit</button>
-                            <button class="nappula nappi-pieni nappi-puna" onclick="poistaDNSTietue('${escapeHtmlAdmin(r.id)}')">X</button>
-                        </div>
-                    </td>
-                </tr>`).join('');
             } catch (e) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color: #ef4444; text-align: center;">Virhe ladattaessa DNS-tietueita.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Server error.</td></tr>`;
             }
         }
 
-        async function luoDNSTietue() {
-            const zoneId = document.getElementById('dns-zone').value;
-            if (!zoneId) return naytaIlmoitus('Valitse ensin DNS-vyöhyke.');
-            const type = document.getElementById('dns-type').value;
-            const name = document.getElementById('dns-name').value.trim();
-            const value = document.getElementById('dns-value').value.trim();
-            const ttl = parseInt(document.getElementById('dns-ttl').value, 10) || 300;
+        async function luoDnsTietue() {
+            if (!currentDnsZoneId) return alert('Valitse domain ensin.');
+            
+            const type = document.getElementById('new-dns-type').value;
+            const name = document.getElementById('new-dns-name').value || '@';
+            const value = document.getElementById('new-dns-value').value;
+            const ttl = document.getElementById('new-dns-ttl').value;
 
-            if (!name || !value) return naytaIlmoitus('Nimi ja arvo ovat pakollisia.');
+            if (!value) return alert('Tietueen arvo (IP/kohde) on pakollinen.');
 
-            const btn = document.getElementById('btn-dns-luo');
-            btn.disabled = true; btn.textContent = 'Creating...';
             try {
-                const res = await fetch(API_DNS, {
+                const res = await fetch('/api/dns', {
                     method: 'POST',
-                    headers: haeOtsakkeet(),
-                    body: JSON.stringify({ zone_id: zoneId, type, name, value, ttl })
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ zone_id: currentDnsZoneId, type, name, value, ttl })
                 });
-                if (res.status === 401) return kirjauduUlos();
-                const data = await res.json();
+                
                 if (res.ok) {
-                    naytaIlmoitus('DNS-tietue luotu!', 'onnistui');
-                    document.getElementById('dns-name').value = '';
-                    document.getElementById('dns-value').value = '';
-                    document.getElementById('dns-ttl').value = '';
-                    lataaDNS();
-                } else {
-                    naytaIlmoitus(data.error || data.message || 'Virhe tietueen luonnissa.');
-                }
-            } catch (e) {
-                naytaIlmoitus('Server error.');
-            } finally {
-                btn.disabled = false; btn.textContent = 'Lisää';
-            }
-        }
-
-        async function muokkaaDNSTietue(id) {
-            const zoneId = document.getElementById('dns-zone').value;
-            const tietue = dnsRecordsCache.find(r => String(r.id) === String(id));
-            if (!tietue) return naytaIlmoitus('Tietuetta ei löydy. Päivitä tiedot ensin.');
-
-            const newValue = prompt(`Muokataan tietuetta ${tietue.type} ${tietue.name}\n\nSyötä uusi arvo:`, tietue.value);
-            if (newValue === null || newValue === tietue.value) return;
-            if (!newValue.trim()) return naytaIlmoitus('Arvo ei voi olla tyhjä.');
-
-            try {
-                const res = await fetch(`${API_DNS}/${encodeURIComponent(id)}`, {
-                    method: 'PUT',
-                    headers: haeOtsakkeet(),
-                    body: JSON.stringify({ zone_id: zoneId, type: tietue.type, name: tietue.name, value: newValue.trim(), ttl: tietue.ttl })
-                });
-                if (res.status === 401) return kirjauduUlos();
-                const data = await res.json();
-                if (res.ok) {
-                    naytaIlmoitus('DNS-tietue päivitetty!', 'onnistui');
-                    lataaDNS();
-                } else {
-                    naytaIlmoitus(data.error || data.message || 'Virhe tietueen päivityksessä.');
-                }
-            } catch (e) {
-                naytaIlmoitus('Server error.');
-            }
-        }
-
-        async function poistaDNSTietue(id) {
-            const tietue = dnsRecordsCache.find(r => String(r.id) === String(id));
-            const nimi = tietue ? tietue.name : id;
-            if (!confirm(`Delete DNS-tietue: ${nimi}?`)) return;
-            try {
-                const res = await fetch(`${API_DNS}/${encodeURIComponent(id)}`, {
-                    method: 'DELETE',
-                    headers: haeOtsakkeet()
-                });
-                if (res.status === 401) return kirjauduUlos();
-                if (res.ok) {
-                    naytaIlmoitus('DNS-tietue poistettu.', 'onnistui');
-                    lataaDNS();
+                    document.getElementById('new-dns-value').value = '';
+                    document.getElementById('new-dns-name').value = '';
+                    lataaDnsTietueet();
                 } else {
                     const data = await res.json();
-                    naytaIlmoitus(data.error || data.message || 'Delete failed.');
+                    alert(data.error || 'Virhe tietueen luonnissa.');
                 }
-            } catch (e) {
-                naytaIlmoitus('Delete failed.');
-            }
+            } catch { alert('Server error.'); }
+        }
+
+        async function poistaDnsTietue(recordId) {
+            if (!confirm('Haluatko varmasti poistaa tämän DNS-tietueen? Tämä voi rikkoa sivuston tai sähköpostin!')) return;
+            try {
+                const res = await fetch(`/api/dns/${recordId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaDnsTietueet();
+                else alert('Delete failed.');
+            } catch { alert('Server error.'); }
         }
     </script>
 </body>

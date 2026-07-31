@@ -32,58 +32,29 @@ const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/
 const MAX_SHARE_FILE_SIZE_BYTES = 1 * 1024 * 1024 * 1024;
 const uploadDir = path.join(__dirname, 'uploads');
 
-// Varmistetaan, että uploads-kansio on olemassa, jottei multer kaadu
+// Varmistetaan, että uploads-kansio on olemassa
 fs.mkdir(uploadDir, { recursive: true }).catch(err => console.error('Uploads-kansion luonti epäonnistui:', err));
 
-// Käytetään dest-asetusta RAM-muistin sijaan, jotta VPS ei kaadu isoissa tiedostoissa!
 const uploadShare = multer({
   dest: uploadDir,
   limits: { fileSize: MAX_SHARE_FILE_SIZE_BYTES }
 });
 
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 300,
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 40,
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-const uploadLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 30,
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-const pageLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 1200,
-  standardHeaders: true,
-  legacyHeaders: false
-});
+// Nopeudet & Rajoitukset (Rate limits)
+const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: true, legacyHeaders: false });
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 40, standardHeaders: true, legacyHeaders: false });
+const uploadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false });
+const pageLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 1200, standardHeaders: true, legacyHeaders: false });
 
 async function resolveStaticHtmlPath(requestPath) {
-  if (typeof requestPath !== 'string') {
-    return null;
-  }
-
+  if (typeof requestPath !== 'string') return null;
   const trimmedPath = requestPath.replace(/^\/+|\/+$/g, '');
-  if (!trimmedPath) return null;
-  if (path.extname(trimmedPath)) return null;
+  if (!trimmedPath || path.extname(trimmedPath)) return null;
 
   const candidatePath = path.resolve(distPath, `${trimmedPath}.html`);
   const relativePath = path.relative(distPath, candidatePath);
 
-  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
-    return null;
-  }
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) return null;
 
   try {
     const stats = await fs.stat(candidatePath);
@@ -95,9 +66,14 @@ async function resolveStaticHtmlPath(requestPath) {
 
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Rajoittimet reiteille
 app.use('/api', apiLimiter);
 app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
+
+// --- TÄRKEÄ KORJAUS: Staattiset tiedostot & tyylit toimitetaan HETI ennen reitityslogiikkaa ---
+app.use(pageLimiter, express.static(distPath));
 
 function luoSatunnainenPolku(pituus = 5) {
   const merkit = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -119,18 +95,14 @@ function hashPassword(password) {
 
 function verifyPassword(password, storedHash) {
   const parts = String(storedHash || '').split('$');
-  if (parts.length !== 5 || parts[0] !== 'pbkdf2') {
-    return false;
-  }
+  if (parts.length !== 5 || parts[0] !== 'pbkdf2') return false;
 
   const iterations = Number.parseInt(parts[1], 10);
   const digest = parts[2];
   const salt = parts[3];
   const expected = parts[4];
 
-  if (!iterations || !digest || !salt || !expected) {
-    return false;
-  }
+  if (!iterations || !digest || !salt || !expected) return false;
 
   const derived = crypto.pbkdf2Sync(password, salt, iterations, expected.length / 2, digest).toString('hex');
   return crypto.timingSafeEqual(Buffer.from(derived, 'hex'), Buffer.from(expected, 'hex'));
@@ -149,17 +121,8 @@ function parseBasicBearer(req) {
   }
 }
 
-function resolveTableByHostname(hostname) {
-  switch (hostname) {
-    case 'soro.la': return 'links';
-    case 'srla.fi': return 'srla_links';
-    case 'srl.la': return 'srl_links';
-    default: return null;
-  }
-}
-
-function resolveTableByDomain(domain) {
-  switch (domain) {
+function resolveTableByDomain(domainOrHost) {
+  switch (domainOrHost) {
     case 'soro.la': return 'links';
     case 'srla.fi': return 'srla_links';
     case 'srl.la': return 'srl_links';
@@ -168,68 +131,23 @@ function resolveTableByDomain(domain) {
 }
 
 async function fetchLinkByPath(table, shortPath) {
-  switch (table) {
-    case 'links':
-      return db.query('SELECT original_url FROM links WHERE short_path = $1 LIMIT 1', [shortPath]);
-    case 'srla_links':
-      return db.query('SELECT original_url FROM srla_links WHERE short_path = $1 LIMIT 1', [shortPath]);
-    case 'srl_links':
-      return db.query('SELECT original_url FROM srl_links WHERE short_path = $1 LIMIT 1', [shortPath]);
-    default:
-      throw new Error('Virheellinen taulu.');
-  }
+  return db.query(`SELECT original_url FROM ${table} WHERE short_path = $1 LIMIT 1`, [shortPath]);
 }
 
 async function incrementLinkClicks(table, shortPath) {
-  switch (table) {
-    case 'links':
-      return db.query('UPDATE links SET clicks = clicks + 1 WHERE short_path = $1', [shortPath]);
-    case 'srla_links':
-      return db.query('UPDATE srla_links SET clicks = clicks + 1 WHERE short_path = $1', [shortPath]);
-    case 'srl_links':
-      return db.query('UPDATE srl_links SET clicks = clicks + 1 WHERE short_path = $1', [shortPath]);
-    default:
-      return Promise.resolve();
-  }
+  return db.query(`UPDATE ${table} SET clicks = clicks + 1 WHERE short_path = $1`, [shortPath]);
 }
 
 async function insertShortLink(table, shortPath, originalUrl) {
-  switch (table) {
-    case 'links':
-      return db.query('INSERT INTO links (short_path, original_url, clicks) VALUES ($1, $2, 0)', [shortPath, originalUrl]);
-    case 'srla_links':
-      return db.query('INSERT INTO srla_links (short_path, original_url, clicks) VALUES ($1, $2, 0)', [shortPath, originalUrl]);
-    case 'srl_links':
-      return db.query('INSERT INTO srl_links (short_path, original_url, clicks) VALUES ($1, $2, 0)', [shortPath, originalUrl]);
-    default:
-      throw new Error('Virheellinen taulu.');
-  }
+  return db.query(`INSERT INTO ${table} (short_path, original_url, clicks) VALUES ($1, $2, 0)`, [shortPath, originalUrl]);
 }
 
 async function updateShortLink(table, shortPath, originalUrl) {
-  switch (table) {
-    case 'links':
-      return db.query('UPDATE links SET original_url = $1 WHERE short_path = $2', [originalUrl, shortPath]);
-    case 'srla_links':
-      return db.query('UPDATE srla_links SET original_url = $1 WHERE short_path = $2', [originalUrl, shortPath]);
-    case 'srl_links':
-      return db.query('UPDATE srl_links SET original_url = $1 WHERE short_path = $2', [originalUrl, shortPath]);
-    default:
-      throw new Error('Virheellinen taulu.');
-  }
+  return db.query(`UPDATE ${table} SET original_url = $1 WHERE short_path = $2`, [originalUrl, shortPath]);
 }
 
 async function deleteShortLink(table, shortPath) {
-  switch (table) {
-    case 'links':
-      return db.query('DELETE FROM links WHERE short_path = $1', [shortPath]);
-    case 'srla_links':
-      return db.query('DELETE FROM srla_links WHERE short_path = $1', [shortPath]);
-    case 'srl_links':
-      return db.query('DELETE FROM srl_links WHERE short_path = $1', [shortPath]);
-    default:
-      throw new Error('Virheellinen taulu.');
-  }
+  return db.query(`DELETE FROM ${table} WHERE short_path = $1`, [shortPath]);
 }
 
 async function haeKayttaja(req) {
@@ -265,42 +183,38 @@ function prefersEnglish(req) {
 
 async function streamS3BodyToResponse(body, res) {
   if (!body) return res.status(404).send('Tiedostoa ei löydy.');
-
   if (typeof body.pipe === 'function') {
     body.on('error', () => res.destroy());
     body.pipe(res);
     return;
   }
-
   if (typeof body.transformToByteArray === 'function') {
     const bytes = await body.transformToByteArray();
     res.send(Buffer.from(bytes));
     return;
   }
-
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
 
-// POMMINVARMA URL-LYHENTIMEN OHITUS
+// URL-LYHENTIMEN OHITUS
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
     const pathname = req.path.replace(/^\/+/, '');
-    const table = resolveTableByHostname(hostname);
+    const table = resolveTableByDomain(hostname);
 
     if (!table) return next();
     if (!pathname) return res.redirect(302, shortenerHomeUrl);
-    
-    // Suojataan omat työkalut lyhentimen sieppaukselta
+
     const reservedPrefixes = [
-        'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 
-        'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat', 
-        'privacy', 'vieraskirja', 'makelink'
+      'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit',
+      'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat',
+      'privacy', 'vieraskirja', 'makelink'
     ];
     const firstSegment = pathname.split('/')[0];
-    
+
     if (reservedPrefixes.includes(firstSegment) || pathname.includes('.')) {
-        return next();
+      return next();
     }
 
     const linkResult = await fetchLinkByPath(table, pathname);
@@ -320,7 +234,6 @@ app.use(async (req, res, next) => {
 app.post('/api/auth', async (req, res) => {
   try {
     const body = req.body || {};
-
     if (body.action === 'login') {
       const { username, password } = body;
       if (!username || !password) return res.status(400).json({ error: 'Tunnus ja salasana vaaditaan.' });
@@ -330,28 +243,19 @@ app.post('/api/auth', async (req, res) => {
       if (user && verifyPassword(password, user.password_hash)) {
         return res.json({ success: true });
       }
-
       return res.status(401).json({ error: 'Väärä käyttäjätunnus tai salasana.' });
     }
 
     if (body.action === 'register') {
       const { inviteCode, username, password } = body;
-      if (!inviteCode || !username || !password) {
-        return res.status(400).json({ error: 'Kaikki kentät vaaditaan.' });
-      }
-      if (username.length < 3 || password.length < 6) {
-        return res.status(400).json({ error: 'Tunnuksen minimipituus 3, salasanan 6 merkkiä.' });
-      }
+      if (!inviteCode || !username || !password) return res.status(400).json({ error: 'Kaikki kentät vaaditaan.' });
+      if (username.length < 3 || password.length < 6) return res.status(400).json({ error: 'Tunnuksen minimipituus 3, salasanan 6 merkkiä.' });
 
       const inviteResult = await db.query('SELECT id FROM invites WHERE code_hash = $1 AND is_used = 0 LIMIT 1', [inviteCode]);
-      if (!inviteResult.rows[0]) {
-        return res.status(400).json({ error: 'Kutsukoodi on virheellinen tai jo käytetty.' });
-      }
+      if (!inviteResult.rows[0]) return res.status(400).json({ error: 'Kutsukoodi on virheellinen tai jo käytetty.' });
 
       const userCheck = await db.query('SELECT id FROM users WHERE username = $1 LIMIT 1', [username]);
-      if (userCheck.rows[0]) {
-        return res.status(400).json({ error: 'Käyttäjätunnus on jo varattu.' });
-      }
+      if (userCheck.rows[0]) return res.status(400).json({ error: 'Käyttäjätunnus on jo varattu.' });
 
       const client = await db.connect();
       try {
@@ -371,12 +275,8 @@ app.post('/api/auth', async (req, res) => {
 
     if (body.action === 'change_password') {
       const { username, oldPassword, newPassword } = body;
-      if (!username || !oldPassword || !newPassword) {
-        return res.status(400).json({ error: 'Kaikki kentät vaaditaan.' });
-      }
-      if (newPassword.length < 6) {
-        return res.status(400).json({ error: 'Uuden salasanan minimipituus on 6 merkkiä.' });
-      }
+      if (!username || !oldPassword || !newPassword) return res.status(400).json({ error: 'Kaikki kentät vaaditaan.' });
+      if (newPassword.length < 6) return res.status(400).json({ error: 'Uuden salasanan minimipituus on 6 merkkiä.' });
 
       const result = await db.query('SELECT id, password_hash FROM users WHERE username = $1 LIMIT 1', [username]);
       const user = result.rows[0];
@@ -431,7 +331,6 @@ app.post('/api/invites', requireAuth, async (req, res) => {
     if (!code || code.length < 3) {
       return res.status(400).json({ error: 'Koodin tulee olla vähintään 3 merkkiä.' });
     }
-
     try {
       await db.query('INSERT INTO invites (code_hash) VALUES ($1)', [code]);
       return res.json({ success: true });
@@ -639,13 +538,8 @@ app.all('/api/lyhennin/create', async (req, res) => {
     let koodi = req.query.code;
     const domain = String(req.query.domain || 'srla.fi').toLowerCase();
 
-    if (!kohdeUrl) {
-      return res.status(400).json({ error: 'URL puuttuu' });
-    }
-
-    if (!['srla.fi', 'srl.la', 'soro.la'].includes(domain)) {
-      return res.status(400).json({ error: 'Virheellinen domain.' });
-    }
+    if (!kohdeUrl) return res.status(400).json({ error: 'URL puuttuu' });
+    if (!['srla.fi', 'srl.la', 'soro.la'].includes(domain)) return res.status(400).json({ error: 'Virheellinen domain.' });
 
     if (!koodi || String(koodi).trim() === '') koodi = luoSatunnainenPolku();
     else koodi = String(koodi).trim().replace(/[^a-zA-Z0-9_-]/g, '');
@@ -655,9 +549,7 @@ app.all('/api/lyhennin/create', async (req, res) => {
     try {
       await insertShortLink(table, koodi, kohdeUrl);
     } catch (error) {
-      if (error.code === '23505') {
-        return res.status(400).json({ error: 'Tämä lyhenne on jo käytössä!' });
-      }
+      if (error.code === '23505') return res.status(400).json({ error: 'Tämä lyhenne on jo käytössä!' });
       throw error;
     }
 
@@ -676,13 +568,11 @@ app.use('/api/dns', requireAuth, dnsRouter);
 app.post('/api/paste', async (req, res) => {
   try {
     const { content } = req.body;
-    if (!content || !content.trim()) {
-      return res.status(400).json({ error: 'Teksti on pakollinen.' });
-    }
+    if (!content || !content.trim()) return res.status(400).json({ error: 'Teksti on pakollinen.' });
     const shortPath = luoSatunnainenPolku(6);
     await db.query('INSERT INTO pastes (short_path, content) VALUES ($1, $2)', [shortPath, content.trim()]);
     return res.json({ success: true, path: shortPath });
-  } catch (error) {
+  } catch {
     return res.status(500).json({ error: 'Palvelinvirhe tallennuksessa.' });
   }
 });
@@ -694,7 +584,7 @@ app.get('/api/paste/:path', async (req, res) => {
     const match = result.rows[0];
     if (!match) return res.status(404).json({ error: 'Tekstiä ei löytynyt.' });
     return res.json({ content: match.content });
-  } catch (error) {
+  } catch {
     return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
 });
@@ -719,7 +609,7 @@ app.delete('/api/pastes', requireAuth, async (req, res) => {
   }
 });
 
-// --- TIEDOSTOLATAUS JA S3 (LEVYVÄLIMUISTI) ---
+// --- TIEDOSTOLATAUS JA S3 ---
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
@@ -733,7 +623,6 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
     const fileName = `${id}.${extension || 'bin'}`;
 
-    // Luodaan stream suoraan levyltä RAM-kaatumisten estämiseksi
     const fileStream = createReadStream(file.path);
 
     await s3.send(new PutObjectCommand({
@@ -752,12 +641,11 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const siteUrl = process.env.SITE_URL
       ? process.env.SITE_URL.replace(/\/$/, '')
       : `${req.protocol}://${req.hostname}`;
-    
+
     return res.json({ url: `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    // Siivotaan kookas väliaikaistiedosto aina pois!
     if (file && file.path) {
       await fs.unlink(file.path).catch(err => console.error("Temp file cleanup error:", err));
     }
@@ -808,9 +696,7 @@ app.get(['/d/:file', '/en/share/d/:file'], async (req, res) => {
     const rawName = metadata.originalname || fileId;
     const originalName = rawName.replace(/[\x00-\x1f\x7f/\\:*?"<>|]/g, '').trim() || 'download';
     res.setHeader('Content-Disposition', contentDisposition(originalName));
-    if (object.ETag) {
-      res.setHeader('ETag', object.ETag);
-    }
+    if (object.ETag) res.setHeader('ETag', object.ETag);
 
     await streamS3BodyToResponse(object.Body, res);
   } catch (error) {
@@ -825,11 +711,10 @@ app.get('/api/download', async (req, res) => {
   res.redirect(`/d/${encodeURIComponent(fileId)}`);
 });
 
-// PASTEBIN KÄYTTÖLIITTYMÄREITTI (/p/:path)
 app.get('/p/:path', async (req, res) => {
   const isEn = prefersEnglish(req);
-  const filePath = isEn 
-    ? path.join(distPath, 'en', 'pastebin', 'view.html') 
+  const filePath = isEn
+    ? path.join(distPath, 'en', 'pastebin', 'view.html')
     : path.join(distPath, 'pastebin', 'lue.html');
   try {
     await fs.access(filePath);
@@ -845,10 +730,8 @@ app.get('/p/:path', async (req, res) => {
   }
 });
 
-// SALATUN PURKUSIVUN REITTI (/s/:file JA /en/share/s/:file)
 app.get(['/s/:file', '/en/share/s/:file'], async (req, res) => {
   const fileId = String(req.params.file || '');
-  
   const isEnPath = req.path.startsWith('/en/');
   const isEn = isEnPath || prefersEnglish(req);
   const errorPath = isEn ? '/en/share/error' : '/jako/error';
@@ -872,17 +755,17 @@ app.get(['/s/:file', '/en/share/s/:file'], async (req, res) => {
       return res.redirect(302, errorPath);
     }
 
-    const filePath = isEn 
-      ? path.join(distPath, 'en', 'share', 'download.html') 
+    const filePath = isEn
+      ? path.join(distPath, 'en', 'share', 'download.html')
       : path.join(distPath, 'jako', 'lataus.html');
-      
+
     try {
       await fs.access(filePath);
       return res.sendFile(filePath);
     } catch {
       return res.sendFile(path.join(distPath, 'jako', 'lataus.html'));
     }
-  } catch (error) {
+  } catch {
     return res.redirect(302, errorPath);
   }
 });
@@ -894,22 +777,18 @@ app.use((error, _req, res, next) => {
     }
     return res.status(400).json({ error: `Lähetysvirhe: ${error.message}` });
   }
-
   if (error) {
     return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
-
   return next();
 });
 
-app.use(pageLimiter, express.static(distPath));
-
+// Kaikki muut reitit ohjataan oikeisiin .html tiedostoihin tai index.html:ään
 app.get('*', pageLimiter, async (req, res) => {
   const staticHtmlPath = await resolveStaticHtmlPath(req.path);
   if (staticHtmlPath) {
     return res.sendFile(staticHtmlPath);
   }
-
   return res.sendFile(path.join(distPath, 'index.html'));
 });
 

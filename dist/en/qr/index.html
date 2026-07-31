@@ -10,12 +10,12 @@
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/qr/">
     <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
-    <meta name="description" content="Create QR codes for free for websites, Wi‑Fi networks, contact details, and more. A fast and easy-to-use QR generator.">
+    <meta name="description" content="Create QR codes for free for websites, Wi Fi networks, contact details, and more. A fast and easy-to-use QR generator.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/en/qr/">
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Sorola QR Code Generator">
-    <meta property="og:description" content="Create QR codes for free for websites, Wi‑Fi networks, and more.">
+    <meta property="og:description" content="Create QR codes for free for websites, Wi Fi networks, and more.">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Sorola QR Code Generator">
     <meta name="twitter:description" content="Create QR codes for free.">
@@ -43,6 +43,13 @@
             height: 100%;
         }
     </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-YNdLPWi1IRdbPeUxj0Qa6.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
@@ -59,13 +66,13 @@
         <a class="language-overlay__link" href="/qr/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/qr/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko">
         <h1 class="otsikko">QR code generator</h1>
 
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Create versatile QR codes! You can share websites, contact details, or even your home Wi‑Fi password.</p>
+            <p style="margin: 0; text-align: center;">Create versatile QR codes! You can share websites, contact details, or even your home Wi Fi password.</p>
         </div>
 
         <main id="paaosio">
@@ -76,7 +83,7 @@
             <select id="qr-tyyppi" class="syote" aria-label="QR code type">
                 <option value="url">Website (URL)</option>
                 <option value="text">Plain text</option>
-                <option value="wifi">Wi‑Fi network</option>
+                <option value="wifi">Wi Fi network</option>
                 <option value="email">Email</option>
                 <option value="phone">Call a number</option>
                 <option value="sms">Send a text message</option>
@@ -91,9 +98,9 @@
             </div>
 
             <div id="kentat-wifi" class="kentta-ryhma">
-                <input type="text" id="val-wifi-ssid" class="syote" placeholder="Network name (SSID)" aria-label="Wi‑Fi network name (SSID)">
-                <input type="text" id="val-wifi-pass" class="syote" placeholder="Password" aria-label="Wi‑Fi password">
-                <select id="val-wifi-type" class="syote" aria-label="Wi‑Fi security type">
+                <input type="text" id="val-wifi-ssid" class="syote" placeholder="Network name (SSID)" aria-label="Wi Fi network name (SSID)">
+                <input type="text" id="val-wifi-pass" class="syote" placeholder="Password" aria-label="Wi Fi password">
+                <select id="val-wifi-type" class="syote" aria-label="Wi Fi security type">
                     <option value="WPA">WPA/WPA2 (most common)</option>
                     <option value="WEP">WEP</option>
                     <option value="nopass">No password</option>
@@ -133,7 +140,7 @@
         </div>
         </main>
 
-        <a href="/en/" class="linkki-takaisin">← Back to home</a>
+        <a href="/en/" class="linkki-takaisin">← Takaisin pääsivulle</a>
     </div>
 
     <script>

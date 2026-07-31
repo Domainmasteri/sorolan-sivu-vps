@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta property="og:url" content="https://sorola.fi/pastebin/lue">
+    <link rel="canonical" href="https://sorola.fi/pastebin/lue">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/pastebin/lue">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/pastebin/view">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/pastebin/lue">
+    <meta charset="UTF-8">
+    <title>Sorolan Pastebin - Katselu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/tyylit/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/tyylit/favicon.svg">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        .koodi-kontti {
+            background: #0b0d13;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-x: auto;
+            text-align: left;
+        }
+        pre { margin: 0; }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/pastebin/lue" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/pastebin/view">🇬🇧</a>
+    </nav>
+    <div class="laatikko" style="max-width: 900px;">
+        <h1 class="otsikko">Pastebin</h1>
+        <div class="osion-tausta">
+            <div class="koodi-kontti">
+                <pre><code id="koodi-alue" class="language-javascript">Ladataan tekstiä...</code></pre>
+            </div>
+            <button id="kopioi-sisalto" class="nappula" style="margin-top: 20px; width: 100%;">Kopioi koko teksti</button>
+        </div>
+        <a href="/pastebin" class="linkki-takaisin">« Luo uusi paste</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Irrotetaan ID pomminvarmasti poistamalla ensin ylimääräinen / lopusta
+            const rawPath = window.location.pathname.replace(/\/+$/, '');
+            const pasteId = rawPath.split('/').pop();
+            const koodiAlue = document.getElementById('koodi-alue');
+
+            try {
+                const res = await fetch(`/api/paste/${pasteId}`);
+                if (!res.ok) throw new Error('Tekstiä ei löytynyt');
+                
+                const data = await res.json();
+                koodiAlue.textContent = data.content;
+                Prism.highlightElement(koodiAlue);
+            } catch (err) {
+                koodiAlue.textContent = "Virhe: Etsimääsi tekstiä ei löytynyt tai se on poistettu.";
+            }
+
+            document.getElementById('kopioi-sisalto').addEventListener('click', (e) => {
+                const text = koodiAlue.textContent;
+                navigator.clipboard.writeText(text);
+                const btn = e.target;
+                const alkuperainen = btn.textContent;
+                btn.textContent = 'Kopioitu!';
+                btn.style.backgroundColor = '#218838';
+                btn.style.color = 'white';
+                setTimeout(() => {
+                    btn.textContent = alkuperainen;
+                    btn.style.backgroundColor = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

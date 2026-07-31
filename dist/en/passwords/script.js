@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Muutetaan napin teksti hetkeksi palautteeksi
             const alkuperainenTeksti = kopioiBtn.textContent;
-            kopioiBtn.textContent = "✅ Copied!";
+            kopioiBtn.textContent = "✅ Kopioitu!";
             kopioiBtn.style.backgroundColor = "#2ed573";
             
             setTimeout(() => {

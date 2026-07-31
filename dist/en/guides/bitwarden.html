@@ -81,10 +81,10 @@
         <a class="language-overlay__link" href="/ohjeet/bitwarden">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/guides/bitwarden" aria-current="page">🇬🇧</a>
     </nav>
-<a href="#paaosio" class="skip-to-content">Skip to content</a>
+<a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
 <div class="laatikko">
-    <h1 class="otsikko">🔒 Bitwarden guide</h1>
+    <h1 class="otsikko">🔒 Bitwarden-ohje</h1>
 
     <div class="osion-tausta" style="text-align:center;">
         <p style="margin:0;">
@@ -94,12 +94,12 @@
 
     <main id="paaosio">
     <div class="osion-tausta ohje-palsta">
-        <h2>📝 Sign-up and server selection
+        <h2>📝 Rekisteröityminen ja palvelimen valinta
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
         </h2>
         <div class="ohje-sisalto">
             <ol>
-                <li>Open <a href="https://vault.bitwarden.com/#/signup" target="_blank" rel="noopener noreferrer">🔒 Bitwarden sign-up page</a> or choose in the app <strong>Create account</strong> (Create account).</li>
+                <li>Open <a href="https://vault.bitwarden.com/#/signup" target="_blank" rel="noopener noreferrer">🔒 Bitwardenin rekisteröitymissivu</a> or choose in the app <strong>Create account</strong> (Create account).</li>
                 <li>Before creating the account, choose either of these server regions: <strong>bitwarden.com (United States)</strong> tai <strong>bitwarden.eu (European Union)</strong>.</li>
                 <li>The EU and US servers are separate. Your account only works on the server where it was created, so use the same server selection in all Bitwarden apps.</li>
                 <li>Enter your email address, your name, and a strong master password.</li>
@@ -134,7 +134,7 @@
                 <li>Open the vault and press <strong>New</strong>, <strong>Add item</strong> or the plus button.</li>
                 <li>Choose an entry type such as <strong>Login</strong>, <strong>Card</strong>, <strong>Identity</strong> tai <strong>Secure note</strong>.</li>
                 <li>Give the entry a clear name.</li>
-                <li>For a login entry, fill in the username, password, and website address (URI). You can generate a strong password with Bitwarden’s password generator.</li>
+                <li>Kirjautumistietueessa täytä käyttäjätunnus, salasana ja verkkosivun osoite eli URI. Voit luoda vahvan salasanan Bitwardenin salasanageneraattorilla.</li>
                 <li>If you want, add a folder, a favorite flag, custom fields, attachments, or a TOTP key.</li>
                 <li>Press <strong>Save</strong>.</li>
             </ol>
@@ -155,13 +155,13 @@
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>🔄 Importing and exporting data
+        <h2>🔄 Tietojen tuonti ja vienti
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
         </h2>
         <div class="ohje-sisalto">
             <h3>Import</h3>
             <ol>
-                <li>Open the web vault and go to <strong>Tools</strong> tai <strong>Settings → Import data</strong>.</li>
+                <li>Open the web vault and go to <strong>Tools</strong> tai <strong>Asetukset → Tuo tietoja</strong>.</li>
                 <li>Choose the program or file format to import from.</li>
                 <li>Select the file to import and start the import.</li>
                 <li>After the import, check that no unnecessary duplicates were created in the vault.</li>
@@ -179,22 +179,22 @@
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>⚡ Autofill settings
+        <h2>⚡ Automaattitäytön asetukset
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
         </h2>
         <div class="ohje-sisalto">
             <h3>In the browser</h3>
             <ol>
                 <li>Install the official Bitwarden extension from your browser’s add-on store.</li>
-                <li>Open the extension’s <strong>Settings → Autofill</strong>.</li>
-                <li>Choose whether you want to show fill suggestions in form fields and autofill data when the page loads. Autofill on page load should be used with care.</li>
-                <li>You can fill a login by opening the extension and choosing the suggested entry or by using your browser’s Bitwarden keyboard shortcut.</li>
+                <li>Open the extension’s <strong>Asetukset → Automaattitäyttö</strong>.</li>
+                <li>Valitse haluatko näyttää täyttöehdotukset lomakekentissä ja täyttää tiedot sivun latautuessa. Sivun latauksessa tapahtuvaa automaattitäyttöä kannattaa käyttää harkiten.</li>
+                <li>Voit täyttää kirjautumisen avaamalla laajennuksen ja valitsemalla ehdotetun tietueen tai käyttämällä selaimen Bitwarden-pikanäppäintä.</li>
                 <li>If the wrong entry appears on a page, check the URI saved in the entry and its matching method.</li>
             </ol>
 
             <h3>On your phone</h3>
             <ol>
-                <li>Open the Bitwarden app’s <strong>Settings → Autofill</strong>.</li>
+                <li>Open the Bitwarden app’s <strong>Asetukset → Automaattitäyttö</strong>.</li>
                 <li>Enable the autofill service and accept the permissions requested by your device.</li>
                 <li>On Android, you can also enable additional methods if standard autofill does not work in all apps.</li>
                 <li>On iPhone, choose Bitwarden as the autofill provider in the device’s password settings.</li>
@@ -208,7 +208,7 @@
         </h2>
         <div class="ohje-sisalto">
             <ul>
-                <li>Use a long and unique master password that you do not use anywhere else.</li>
+                <li>Käytä pitkää ja yksilöllistä pääsalasanaa, jota et käytä missään muualla.</li>
                 <li>Enable <strong>two-step login</strong>. Keep the recovery code separate from the vault.</li>
                 <li>Enable biometric unlock or a PIN in the app only on your own secure device.</li>
                 <li>Set the vault to lock automatically after a short period of inactivity. Signing out removes the local session completely, while locking leaves the encrypted vault on the device.</li>
@@ -220,11 +220,11 @@
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>⏱️ TOTP codes and Bitwarden Authenticator
+        <h2>⏱️ TOTP-koodit ja Bitwarden Authenticator
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>When you add a TOTP key for two-factor verification to a login entry, the one-time codes it generates can also be shown in a separate <strong>Bitwarden Authenticator</strong> app.</p>
+            <p>Kun lisäät kirjautumistietueeseen kaksivaiheisen vahvistuksen TOTP-avaimen, siitä muodostuvat kertakäyttökoodit voidaan näyttää myös erillisessä <strong>Bitwarden Authenticator</strong> app.</p>
             <ol>
                 <li>Install Bitwarden Authenticator on your phone.</li>
                 <li>In the Authenticator settings, enable syncing with the Bitwarden vault and sign in to the same server region as in Password Manager.</li>
@@ -237,7 +237,7 @@
     </main>
 
     <div class="osion-tausta" style="text-align:center;">
-        <a href="/en/guides/" class="nappula1">⬅ Back to guides</a>
+        <a href="/en/guides/" class="nappula1">⬅ Takaisin ohjeisiin</a>
     </div>
 </div>
 
