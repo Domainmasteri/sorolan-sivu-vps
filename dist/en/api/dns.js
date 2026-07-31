@@ -222,7 +222,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   if (!checkApiKey(res)) return;
   try {
-    const zone_id = req.query.zone_id;
+    const zone_id = req.query.zone_id || req.body?.zone_id;
     const recordId = req.params.id;
 
     if (!zone_id) return res.status(400).json({ error: 'zone_id on pakollinen query-parametri poistossa.' });
