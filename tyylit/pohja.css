@@ -15,6 +15,7 @@ body {
     line-height: 1.6;
     /* Estää tekstin koon automaattisen suurentumisen vaaka-asennossa puhelimilla */
     -webkit-text-size-adjust: 100%;
+    overflow-x: hidden; /* Estää lopullisesti sivuttaisen vierityksen */
 }
 
 /* =========================================================
@@ -63,11 +64,9 @@ h3 { font-size: 1.2rem; color: #a0aec0; margin-top: 0; }
     border: 1px solid #4a5568;
     border-radius: 6px;
     color: #e2e8f0;
-    font-size: 1rem;
+    font-size: 16px; /* Tärkeä puhelimilla, jottei selain zoomaa automaattisesti */
     font-family: inherit;
     transition: border-color 0.2s ease;
-    /* Tärkeä puhelimilla, jottei selain zoomaa automaattisesti kenttää klikatessa */
-    font-size: 16px; 
 }
 
 .syote:focus {
@@ -164,12 +163,12 @@ h3 { font-size: 1.2rem; color: #a0aec0; margin-top: 0; }
    MOBIILIOPTIMOINTI (Media Queries)
 ========================================================= */
 @media (max-width: 650px) {
-    /* Pienennetään päälaatikon reunoja puhelimilla */
+    /* Pienennetään päälaatikon reunoja puhelimilla fiksusti */
     .laatikko {
-        margin: 15px auto;
+        margin: 15px; 
+        width: auto;
         padding: 20px 15px;
         border-radius: 8px;
-        width: calc(100% - 30px); /* Jättää 15px reunan kummallekin puolelle */
     }
 
     .osion-tausta {
@@ -177,22 +176,28 @@ h3 { font-size: 1.2rem; color: #a0aec0; margin-top: 0; }
         margin-bottom: 15px;
     }
 
-    .otsikko {
-        font-size: 1.8rem;
-    }
+    /* Otsikot hieman pienemmäksi kapeilla ruuduilla */
+    .otsikko { font-size: 1.8rem; }
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1.1rem; }
 
     /* Pakotetaan rinnakkaiset lomakekentät allekkain puhelimella */
     .flex-form {
         flex-direction: column;
         align-items: stretch;
+        gap: 10px; /* Hallittu väli allekkaisille elementeille */
     }
     
     .flex-form > * {
         width: 100%;
+    }
+
+    /* Napit täyteen leveyteen, jos ovat vierekkäin */
+    .nappula, .nappula1 {
+        width: 100%;
         margin-bottom: 5px;
     }
 
-    /* Etusivun nappilista */
     .nappilista-ul li {
         max-width: 100%; /* Antaa nappien viedä koko leveyden puhelimella */
     }
