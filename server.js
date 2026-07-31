@@ -152,6 +152,16 @@ async function deleteShortLink(table, shortPath) {
   return db.query(`DELETE FROM ${table} WHERE short_path = $1`, [shortPath]);
 }
 
+function isUniqueConstraintError(error) {
+  if (!error) return false;
+  const code = String(error.code || '').toUpperCase();
+  const message = String(error.message || '').toLowerCase();
+  return code === '23505'
+    || code === 'SQLITE_CONSTRAINT_UNIQUE'
+    || code === 'SQLITE_CONSTRAINT_PRIMARYKEY'
+    || message.includes('unique constraint failed');
+}
+
 async function haeKayttaja(req) {
   const parsed = parseBasicBearer(req);
   if (!parsed) return null;
@@ -551,7 +561,7 @@ app.all('/api/lyhennin/create', async (req, res) => {
     try {
       await insertShortLink(table, koodi, kohdeUrl);
     } catch (error) {
-      if (error.code === '23505') return res.status(400).json({ error: 'Tämä lyhenne on jo käytössä!' });
+      if (isUniqueConstraintError(error)) return res.status(400).json({ error: 'Tämä lyhenne on jo käytössä!' });
       throw error;
     }
 
