@@ -104,7 +104,7 @@ app.use(async (req, res, next) => {
     const reservedPrefixes = [
       'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 'styles',
       'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat',
-      'privacy', 'vieraskirja', 'makelink', 'json'
+      'privacy', 'vieraskirja', 'makelink', 'json', 'uuid'
     ];
     const firstSegment = pathname.split('/')[0];
 

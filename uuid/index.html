@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorolan UUID / GUID Generator (v4)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/uuid/">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Luo satunnaisia UUID v4 / GUID -tunnisteita turvallisesti suoraan selaimessa. 1, 5 tai 10 tunnistetta kerralla.">
+    <meta name="keywords" content="UUID, GUID, UUID v4, generaattori, randomUUID, Sorola">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/uuid/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Sorolan UUID / GUID Generator (v4)">
+    <meta property="og:description" content="Luo satunnaiset UUID v4 -tunnisteet selaimessa.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sorolan UUID / GUID Generator (v4)">
+    <meta name="twitter:description" content="Luo satunnaiset UUID v4 -tunnisteet selaimessa.">
+    <style>
+        .toiminto-rivi {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .toiminto-rivi .nappula,
+        .toiminto-rivi .nappula1 {
+            flex: 1;
+            min-width: 100px;
+        }
+        #uuid-tulos {
+            width: 100%;
+            min-height: 220px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            resize: vertical;
+            background: #0b0d13;
+            color: #4ade80;
+            line-height: 1.5;
+        }
+        #tila-viesti {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: none;
+        }
+        #tila-viesti.ok {
+            background: rgba(74, 222, 128, 0.12);
+            border: 1px solid #4ade80;
+            color: #4ade80;
+            display: block;
+        }
+        #tila-viesti.virhe {
+            background: rgba(248, 113, 113, 0.12);
+            border: 1px solid #f87171;
+            color: #f87171;
+            display: block;
+        }
+        .kopioi-btn-kontti {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+        #kopioi-btn {
+            min-width: 220px;
+        }
+    </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-YNdLPWi1IRdbPeUxj0Qa6.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+</head>
+<body>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+    <div class="laatikko" style="max-width: 860px;">
+        <h1 class="otsikko">UUID / GUID Generator (v4)</h1>
+
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Luo satunnaisia UUID v4 -tunnisteita turvallisesti paikallisesti selaimessa (crypto.randomUUID()).</p>
+        </div>
+
+        <main id="paaosio">
+            <div class="osion-tausta">
+                <h2>Luo tunnisteita</h2>
+                <div class="toiminto-rivi">
+                    <button class="nappula" data-maara="1">Luo 1 UUID</button>
+                    <button class="nappula1" data-maara="5" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">Luo 5 UUID:tä</button>
+                    <button class="nappula1" data-maara="10" style="background: #191f2d; color: #60a5fa; border: 1px solid #60a5fa;">Luo 10 UUID:tä</button>
+                </div>
+                <div id="tila-viesti" role="status" aria-live="polite"></div>
+            </div>
+
+            <div class="osion-tausta">
+                <h2>Tulokset</h2>
+                <label for="uuid-tulos" class="sr-only">UUID-tulokset</label>
+                <textarea id="uuid-tulos" class="syote" readonly placeholder="Luodut UUID:t näkyvät tässä..." aria-label="UUID-tulokset" spellcheck="false"></textarea>
+                <div class="kopioi-btn-kontti">
+                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Kopioi leikepöydälle</button>
+                </div>
+            </div>
+        </main>
+
+        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+    </div>
+
+    <script>
+        const tulosEl = document.getElementById('uuid-tulos');
+        const tilaEl = document.getElementById('tila-viesti');
+        const kopiointiBtn = document.getElementById('kopioi-btn');
+
+        function naytaTila(viesti, tyyppi) {
+            tilaEl.textContent = viesti;
+            tilaEl.className = tyyppi;
+        }
+
+        function poistaTila() {
+            tilaEl.textContent = '';
+            tilaEl.className = '';
+        }
+
+        function luoUuidit(maara) {
+            if (!window.crypto || typeof window.crypto.randomUUID !== 'function') {
+                tulosEl.value = '';
+                naytaTila('❌ Selaimesi ei tue crypto.randomUUID()-toimintoa.', 'virhe');
+                return;
+            }
+
+            const uuidit = Array.from({ length: maara }, () => window.crypto.randomUUID());
+            tulosEl.value = uuidit.join('\n');
+            naytaTila(`✅ Luotiin ${maara} UUID-tunnistetta.`, 'ok');
+        }
+
+        document.querySelectorAll('[data-maara]').forEach((painike) => {
+            painike.addEventListener('click', () => {
+                const maara = Number.parseInt(painike.getAttribute('data-maara'), 10);
+                luoUuidit(maara);
+            });
+        });
+
+        kopiointiBtn.addEventListener('click', async () => {
+            const teksti = tulosEl.value.trim();
+            if (!teksti) {
+                naytaTila('⚠️ Ei kopioitavaa – luo UUID ensin.', 'virhe');
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(teksti);
+            } catch {
+                tulosEl.select();
+                document.execCommand('copy');
+            }
+
+            const alkuperainen = kopiointiBtn.textContent;
+            const alkuperainenVari = kopiointiBtn.style.backgroundColor;
+            kopiointiBtn.textContent = '✅ Kopioitu!';
+            kopiointiBtn.style.backgroundColor = '#166534';
+            setTimeout(() => {
+                kopiointiBtn.textContent = alkuperainen;
+                kopiointiBtn.style.backgroundColor = alkuperainenVari;
+            }, 2000);
+
+            poistaTila();
+            naytaTila('✅ UUID:t kopioitu leikepöydälle.', 'ok');
+        });
+    </script>
+</body>
+</html>
