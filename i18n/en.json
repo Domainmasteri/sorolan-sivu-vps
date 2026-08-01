@@ -116,6 +116,7 @@
         "📄 Maken Ansioluettelot": "📄 Markus's CVs",
         "📞 Maken yhteystiedot": "📞 Markus's contact details",
         "📖 Sorolan ohjeita": "📖 Sorola guides",
+        "📖 Vieraskirja": "📖 Guestbook",
         "🔒 Yksityisyyskäytännöt": "🔒 Privacy policies",
         "Hae työkaluja": "Search tools",
         "Perustyökalut": "Basic tools",
@@ -126,12 +127,12 @@
         "🔑 Salasanageneraattori": "🔑 Password generator",
         "📝 Pastebin (Koodinjako)": "📝 Pastebin (Code sharing)",
         "📁 Sorolan tiedostojako": "📁 Sorola file sharing",
-        "📖 Vieraskirja": "📖 Guestbook",
         "✈️ Taven pienoismallikerho": "✈️ Tave's plastic scale models group",
         "🔐 SorolaVault (kutsutut)": "🔐 SorolaVault (invite only)",
         "Ei hakutuloksia.": "No results found.",
         "Edistyneet työkalut": "Advanced tools",
         "Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.": "More powerful helpers for developers and technical needs.",
+        "🌐 Verkkotyökalut": "🌐 Web tools",
         "🔧 JSON-muotoilija &amp; validaattori": "🔧 JSON Formatter &amp; Validator"
       },
       "attributes": {
