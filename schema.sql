@@ -56,4 +56,16 @@ CREATE TABLE IF NOT EXISTS pastes (
 );
 
 
+CREATE TABLE IF NOT EXISTS admin_files (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    s3_key TEXT NOT NULL,
+    original_name TEXT NOT NULL,
+    file_size INTEGER,
+    mime_type TEXT,
+    expires_at INTEGER,
+    max_downloads INTEGER NOT NULL DEFAULT 0,
+    created_by TEXT,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 INSERT OR IGNORE INTO invites (code_hash) VALUES ('root');

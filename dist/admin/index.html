@@ -144,6 +144,46 @@
                 </div>
             </div>
 
+            <!-- Ylläpidon tiedostojako -->
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #34d399;">📁 Ylläpidon tiedostojako</h2>
+                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;">Lataa tiedostoja samaan tallennustilaan kuin käyttäjät, ilman kokorajoituksia.</p>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                    <input type="file" id="admin-file-input" class="syote" style="padding: 8px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 150px;">
+                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;">Voimassaoloaika (päiviä, 0 = ei vanhene)</label>
+                            <input type="number" id="admin-file-expiry" class="syote" value="0" min="0" style="width: 100%;">
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;">Latausmääräraja (0 = rajaton)</label>
+                            <input type="number" id="admin-file-maxdownloads" class="syote" value="0" min="0" style="width: 100%;">
+                        </div>
+                    </div>
+                    <button onclick="lataaTiedosto()" class="nappula1" style="border: 1px solid #34d399; color: #34d399;">📤 Lataa tiedosto</button>
+                </div>
+                <div id="admin-upload-result" style="display: none; background: #0b0d13; border-radius: 8px; padding: 12px; margin-bottom: 15px; word-break: break-all;">
+                    <p style="color: #4ade80; margin: 0 0 6px 0; font-weight: bold;">✅ Tiedosto ladattu!</p>
+                    <p style="margin: 0 0 4px 0; font-size: 0.9rem; color: #a0aec0;">Jakolinkki: <a id="admin-share-url" href="#" target="_blank" style="color: #34d399;"></a></p>
+                    <p style="margin: 0; font-size: 0.9rem; color: #a0aec0;">Suora lataus: <a id="admin-download-url" href="#" target="_blank" style="color: #60a5fa;"></a></p>
+                </div>
+                <div class="table-container">
+                    <table id="admin-files-table">
+                        <thead>
+                            <tr>
+                                <th>Tiedosto</th>
+                                <th>Koko</th>
+                                <th>Vanhenee</th>
+                                <th>Max lataukset</th>
+                                <th>Ladattu</th>
+                                <th>Toiminnot</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Vieraskirjan hallinta -->
             <div class="osion-tausta" style="margin-top: 20px;">
                 <h2 style="color: #f472b6;">📖 Vieraskirja</h2>
@@ -485,6 +525,7 @@
                 console.error(e);
                 alert('Virhe ladattaessa tietoja.');
             }
+            lataaAdminTiedostot();
         }
 
         // --- Linkit ---
@@ -728,6 +769,120 @@
                     headers: { 'Authorization': currentAuthHeader }
                 });
                 if (res.ok) lataaDnsTietueet();
+                else alert('Virhe poistossa.');
+            } catch { alert('Palvelinvirhe.'); }
+        }
+        // --- Ylläpidon tiedostojako ---
+        async function lataaTiedosto() {
+            const fileInput = document.getElementById('admin-file-input');
+            const expiryDays = document.getElementById('admin-file-expiry').value;
+            const maxDownloads = document.getElementById('admin-file-maxdownloads').value;
+            const resultDiv = document.getElementById('admin-upload-result');
+
+            if (!fileInput.files[0]) return alert('Valitse tiedosto ensin.');
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('expiryDays', expiryDays);
+            formData.append('maxDownloads', maxDownloads);
+
+            const btn = event.target;
+            btn.textContent = 'Ladataan...';
+            btn.disabled = true;
+            resultDiv.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/admin/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': currentAuthHeader },
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    resultDiv.style.display = 'block';
+                    const shareEl = document.getElementById('admin-share-url');
+                    const dlEl = document.getElementById('admin-download-url');
+                    shareEl.href = data.shareUrl;
+                    shareEl.textContent = data.shareUrl;
+                    dlEl.href = data.downloadUrl;
+                    dlEl.textContent = data.downloadUrl;
+                    fileInput.value = '';
+                    lataaAdminTiedostot();
+                } else {
+                    alert(data.error || 'Lataus epäonnistui.');
+                }
+            } catch { alert('Palvelinvirhe.'); } finally {
+                btn.textContent = '📤 Lataa tiedosto';
+                btn.disabled = false;
+            }
+        }
+
+        async function lataaAdminTiedostot() {
+            if (!currentAuthHeader) return;
+            try {
+                const res = await fetch('/api/admin/files', { headers: { 'Authorization': currentAuthHeader } });
+                if (!res.ok) return;
+                const data = await res.json();
+                const tbody = document.querySelector('#admin-files-table tbody');
+                tbody.innerHTML = '';
+                if (!data.files.length) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#a0aec0;">Ei ladattuja tiedostoja.</td></tr>`;
+                    return;
+                }
+                const siteOrigin = window.location.origin;
+                data.files.forEach(f => {
+                    const date = new Date(f.created_at).toLocaleDateString('fi-FI');
+                    const sizeStr = formatFileSize(f.file_size);
+                    let expiryStr;
+                    if (!f.expires_at || f.expires_at === 0) {
+                        expiryStr = '<span style="color:#4ade80;">Ei vanhene</span>';
+                    } else {
+                        const expiryDate = new Date(f.expires_at);
+                        const expired = Date.now() > f.expires_at;
+                        expiryStr = expired
+                            ? `<span style="color:#ef4444;">${expiryDate.toLocaleDateString('fi-FI')} (vanhentunut)</span>`
+                            : expiryDate.toLocaleDateString('fi-FI');
+                    }
+                    const maxDl = f.max_downloads === 0 ? '<span style="color:#a0aec0;">Rajaton</span>' : f.max_downloads;
+                    const shareUrl = `${siteOrigin}/s/${encodeURIComponent(f.s3_key)}`;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <a href="${shareUrl}" target="_blank" style="color:#34d399;">${f.original_name}</a>
+                            </td>
+                            <td>${sizeStr}</td>
+                            <td>${expiryStr}</td>
+                            <td>${maxDl}</td>
+                            <td>${date}<br><small style="color:#64748b;">${f.created_by || ''}</small></td>
+                            <td>
+                                <button onclick="kopioiLinkki('${shareUrl}')" class="action-btn edit-btn" style="background:#374151; margin-bottom:4px;">Kopioi</button>
+                                <button onclick="poistaAdminTiedosto(${f.id})" class="action-btn">Poista</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        function formatFileSize(bytes) {
+            if (!bytes) return '–';
+            if (bytes < 1024) return `${bytes} B`;
+            if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+            if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+            return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+        }
+
+        function kopioiLinkki(url) {
+            navigator.clipboard.writeText(url).then(() => alert('Linkki kopioitu leikepöydälle!')).catch(() => alert(url));
+        }
+
+        async function poistaAdminTiedosto(id) {
+            if (!confirm('Poistetaanko tämä tiedosto pysyvästi tallenustilasta?')) return;
+            try {
+                const res = await fetch(`/api/admin/files?id=${id}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaAdminTiedostot();
                 else alert('Virhe poistossa.');
             } catch { alert('Palvelinvirhe.'); }
         }
