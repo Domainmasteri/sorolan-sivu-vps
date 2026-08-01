@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
 import multer from 'multer';
 import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
 import { create as contentDisposition } from 'content-disposition';
 import {
   CopyObjectCommand,
@@ -22,6 +23,7 @@ import { s3, bucketName, ensureBucketExists } from './storage.js';
 import dnsRouter from './api/dns.js';
 
 const app = express();
+app.use(helmet());
 app.set('trust proxy', 1);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
