@@ -493,7 +493,7 @@ app.post('/api/links', requireAuth, async (req, res) => {
       await insertShortLink(table, pathValue, originalURL);
       return res.json({ success: true, path: pathValue, domain });
     } catch (error) {
-      if (error.code === '23505') {
+      if (isUniqueConstraintError(error)) {
         return res.status(400).json({ error: 'Tämä lyhenne on jo käytössä!' });
       }
       throw error;
@@ -564,6 +564,15 @@ app.all('/api/lyhennin/create', async (req, res) => {
 
     if (!kohdeUrl) return res.status(400).json({ error: 'URL puuttuu' });
     if (!['srla.fi', 'srl.la', 'soro.la'].includes(domain)) return res.status(400).json({ error: 'Virheellinen domain.' });
+
+    try {
+      const parsed = new URL(kohdeUrl);
+      if (!['http:', 'https:'].includes(parsed.protocol)) {
+        return res.status(400).json({ error: 'URL:n tulee alkaa http:// tai https://' });
+      }
+    } catch {
+      return res.status(400).json({ error: 'Virheellinen URL-osoite.' });
+    }
 
     if (!koodi || String(koodi).trim() === '') koodi = luoSatunnainenPolku();
     else koodi = String(koodi).trim().replace(/[^a-zA-Z0-9_-]/g, '');
