@@ -37,6 +37,15 @@ const uploadDir = path.join(__dirname, 'uploads');
 // Varmistetaan, että uploads-kansio on olemassa
 fs.mkdir(uploadDir, { recursive: true }).catch(err => console.error('Uploads-kansion luonti epäonnistui:', err));
 
+function validateUploadFilePath(filePath) {
+  const resolvedUploadDir = path.resolve(uploadDir);
+  const resolvedFilePath = path.resolve(filePath);
+  if (!resolvedFilePath.startsWith(resolvedUploadDir + path.sep)) {
+    throw new Error('Virheellinen tiedostopolku.');
+  }
+  return resolvedFilePath;
+}
+
 const uploadShare = multer({
   dest: uploadDir,
   limits: { fileSize: MAX_SHARE_FILE_SIZE_BYTES }
@@ -632,13 +641,15 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
 
   if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
 
+  let safeFilePath = null;
   try {
+    safeFilePath = validateUploadFilePath(file.path);
     const expiresAt = Date.now() + (expiryDays * 24 * 60 * 60 * 1000);
     const id = crypto.randomUUID().split('-')[0];
     const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
     const fileName = `${id}.${extension || 'bin'}`;
 
-    const fileStream = createReadStream(file.path);
+    const fileStream = createReadStream(safeFilePath);
 
     await s3.send(new PutObjectCommand({
       Bucket: bucketName,
@@ -661,9 +672,8 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    if (file && file.path) {
-      await fs.unlink(file.path).catch(err => console.error("Temp file cleanup error:", err));
-    }
+    const pathToClean = safeFilePath || file.path;
+    await fs.unlink(pathToClean).catch(err => console.error("Temp file cleanup error:", err));
   }
 });
 
@@ -793,13 +803,15 @@ app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (re
 
   if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
 
+  let safeFilePath = null;
   try {
+    safeFilePath = validateUploadFilePath(file.path);
     const expiresAt = expiryDays > 0 ? Date.now() + (expiryDays * 24 * 60 * 60 * 1000) : 0;
     const id = crypto.randomUUID().split('-')[0];
     const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
     const fileName = `${id}.${extension || 'bin'}`;
 
-    const fileStream = createReadStream(file.path);
+    const fileStream = createReadStream(safeFilePath);
 
     await s3.send(new PutObjectCommand({
       Bucket: bucketName,
@@ -833,9 +845,8 @@ app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (re
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    if (file && file.path) {
-      await fs.unlink(file.path).catch(err => console.error("Temp file cleanup error:", err));
-    }
+    const pathToClean = safeFilePath || file.path;
+    await fs.unlink(pathToClean).catch(err => console.error("Temp file cleanup error:", err));
   }
 });
 
