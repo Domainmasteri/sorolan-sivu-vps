@@ -5,6 +5,7 @@ export const EN_ROUTE_SEGMENTS = new Map([
   ['hakemus-jakelu', 'delivery-application'],
   ['hakemus-make', 'application-builder'],
   ['jako', 'share'],
+  ['json', 'json-formatter'],
   ['lataus', 'download'],
   ['linkinlyhennin', 'link-shortener'],
   ['lyhennin', 'shortener'],

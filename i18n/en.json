@@ -117,7 +117,8 @@
         "📞 Maken yhteystiedot": "📞 Markus's contact details",
         "📖 Sorolan ohjeita": "📖 Sorola guides",
         "🔒 Yksityisyyskäytännöt": "🔒 Privacy policies",
-        "Työkalut ja sovellukset": "Tools and apps",
+        "Hae työkaluja": "Search tools",
+        "Perustyökalut": "Basic tools",
         "Itse koodatut, nopeat ja ilman mainoksia toimivat apuvälineet digiarjen tueksi.": "Self-built, fast, ad-free helpers for everyday digital life.",
         "📱 Lataa Android-sovellus (.apk)": "📱 Download the Android app (.apk)",
         "📱 QR-koodin luoja": "📱 QR code generator",
@@ -127,13 +128,22 @@
         "📁 Sorolan tiedostojako": "📁 Sorola file sharing",
         "📖 Vieraskirja": "📖 Guestbook",
         "✈️ Taven pienoismallikerho": "✈️ Tave's plastic scale models group",
-        "🔐 SorolaVault (kutsutut)": "🔐 SorolaVault (invite only)"
+        "🔐 SorolaVault (kutsutut)": "🔐 SorolaVault (invite only)",
+        "Ei hakutuloksia.": "No results found.",
+        "Edistyneet työkalut": "Advanced tools",
+        "Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.": "More powerful helpers for developers and technical needs.",
+        "🔧 JSON-muotoilija &amp; validaattori": "🔧 JSON Formatter &amp; Validator"
       },
       "attributes": {
         "Sorola.fi tarjoaa näppärät ja turvalliset työkalut arkeen: nopea linkkilyhennin, väliaikainen tiedostonjako, pastebin sekä selkeät IT-ohjeet ja oppaat.": "Sorola.fi offers handy and secure everyday tools: a fast link shortener, temporary file sharing, pastebin, and clear IT guides and tutorials.",
         "Sorola, IT-työkalut, linkkilyhennin, tiedostonjako, pastebin, tekniset ohjeet, koodaus, web-kehitys, Markus Sorola": "Sorola, IT tools, link shortener, file sharing, pastebin, technical guides, coding, web development, Markus Sorola",
         "Sorola.fi - IT-työkalut ja ohjeet": "Sorola.fi - IT tools and guides",
-        "Kokoelma hyödyllisiä työkaluja: linkkilyhennin, tiedostonjako, pastebin ja tekniset ohjeet.": "A collection of useful tools: a link shortener, file sharing, pastebin, and technical guides."
+        "Kokoelma hyödyllisiä työkaluja: linkkilyhennin, tiedostonjako, pastebin ja tekniset ohjeet.": "A collection of useful tools: a link shortener, file sharing, pastebin, and technical guides.",
+        "Sorolan linkit": "Sorola links",
+        "Perustyökalut": "Basic tools",
+        "Edistyneet työkalut": "Advanced tools",
+        "Hae työkaluja": "Search tools",
+        "Hae työkaluja...": "Search for tools..."
       },
       "raw": {
         "\"description\": \"Sorola.fi tarjoaa hyödyllisiä IT-työkaluja, kuten linkkilyhentimen, tiedostonjaon, koodinjaon ja tekniset ohjeet.\"": "\"description\": \"Sorola.fi offers useful IT tools such as a link shortener, file sharing, code sharing, and technical guides.\""
@@ -345,9 +355,40 @@
         "\"Virhe: Etsimääsi tekstiä ei löytynyt tai se on poistettu.\"": "\"Error: The text you are looking for was not found or has been deleted.\""
       }
     },
+    "json/index.html": {
+      "text": {
+        "Sorolan JSON-muotoilija - Muotoile ja validoi JSON": "Sorola JSON Formatter - Format and validate JSON",
+        "JSON-muotoilija": "JSON Formatter",
+        "Muotoile ja validoi JSON-dataa suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.": "Format and validate JSON data directly in your browser. All processing happens locally – nothing is sent to the server.",
+        "1. Liitä JSON-data": "1. Paste JSON data",
+        "✨ Muotoile": "✨ Format",
+        "📦 Pakkaa": "📦 Minify",
+        "🗑️ Tyhjennä": "🗑️ Clear",
+        "2. Tulos": "2. Result",
+        "Tulos näkyy tässä...": "Result appears here...",
+        "📋 Kopioi leikepöydälle": "📋 Copy to clipboard",
+        "« Takaisin pääsivulle": "« Back to home"
+      },
+      "attributes": {
+        "Muotoile ja validoi JSON-dataa ilmaiseksi suoraan selaimessasi. Nopea ja helppokäyttöinen JSON-muotoilija ja -tarkistaja.": "Format and validate JSON data for free directly in your browser. A fast and easy-to-use JSON formatter and validator.",
+        "JSON muotoilija, JSON validaattori, JSON formatter, JSON validator, Sorola": "JSON formatter, JSON validator, Sorola",
+        "Sorolan JSON-muotoilija": "Sorola JSON Formatter",
+        "Muotoile ja validoi JSON-dataa ilmaiseksi selaimessasi.": "Format and validate JSON data for free in your browser.",
+        "JSON-syöte": "JSON input",
+        "Muotoiltu JSON-tulos": "Formatted JSON result"
+      },
+      "raw": {
+        "'Liitä JSON-datasi tähän, esim. {\"nimi\":\"Testi\",\"arvo\":42}'": "'Paste your JSON data here, e.g. {\"name\":\"Test\",\"value\":42}'",
+        "'⚠️ Syötekenttä on tyhjä.'": "'⚠️ Input field is empty.'",
+        "'✅ JSON on kelvollinen ja muotoiltu onnistuneesti.'": "'✅ JSON is valid and formatted successfully.'",
+        "'❌ Virheellinen JSON: '": "'❌ Invalid JSON: '",
+        "'✅ JSON pakattu onnistuneesti.'": "'✅ JSON minified successfully.'",
+        "'⚠️ Ei kopioitavaa – muotoile ensin JSON.'": "'⚠️ Nothing to copy – format JSON first.'",
+        "'✅ Kopioitu!'": "'✅ Copied!'"
+      }
+    },
     "ohjeet/index.html": {
       "text": {
-        "Tekniset ohjeet ja IT-oppaat - Sorola": "Technical guides and IT tutorials - Sorola",
         "📖 Ohjeet": "📖 Guides",
         "Täältä löydät Sorolan palveluiden käyttöohjeet.": "Here you'll find usage guides for Sorola services.",
         "Salaa tiedostosi ennen niiden tallentamista pilveen.": "Encrypt your files before storing them in the cloud.",
