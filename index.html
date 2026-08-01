@@ -53,6 +53,26 @@
         .nappilista-ul li .nappula1 {
             margin-bottom: 0; /* Poistaa tuplamarginaalin li-elementin sisältä */
         }
+        .nappilista-ul li.piilotettu {
+            display: none;
+        }
+        .haku-kontti {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        #tyokaluhaku {
+            width: 100%;
+            max-width: 340px;
+            box-sizing: border-box;
+        }
+        .ei-tuloksia {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.95rem;
+            padding: 8px 0;
+            display: none;
+        }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
 <script async src="https://plausible.io/js/pa-YNdLPWi1IRdbPeUxj0Qa6.js"></script>
@@ -88,12 +108,19 @@
                     </ul>
                 </nav>
             </div>
-            
+
             <div class="osion-tausta">
-                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Työkalut ja sovellukset</h2>
+                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Hae työkaluja</h2>
+                <div class="haku-kontti">
+                    <input type="search" id="tyokaluhaku" class="syote" placeholder="Hae työkaluja..." aria-label="Hae työkaluja">
+                </div>
+            </div>
+
+            <div class="osion-tausta" id="osio-perustyokalut">
+                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Perustyökalut</h2>
                 <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;">Itse koodatut, nopeat ja ilman mainoksia toimivat apuvälineet digiarjen tueksi.</p>
-                <nav aria-label="Työkalut ja sovellukset">
-                    <ul class="nappilista-ul">
+                <nav aria-label="Perustyökalut">
+                    <ul class="nappilista-ul" id="lista-perustyokalut">
                         <li><a href="https://soro.la/sovellus" target="_blank" rel="noopener noreferrer" class="nappula1">📱 Lataa Android-sovellus (.apk)</a></li>
                         <li><a href="qr" class="nappula1">📱 QR-koodin luoja</a></li>
                         <li><a href="lyhennin" class="nappula1">🔗 Linkin lyhennin</a></li>
@@ -103,9 +130,50 @@
                         <li><a href="jako" class="nappula1">📁 Sorolan tiedostojako</a></li>
                         <li><a href="vieraskirja" class="nappula1">📖 Vieraskirja</a></li>
                     </ul>
+                    <p class="ei-tuloksia" id="ei-tuloksia-perus">Ei hakutuloksia.</p>
+                </nav>
+            </div>
+
+            <div class="osion-tausta" id="osio-edistyneet">
+                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Edistyneet työkalut</h2>
+                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;">Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.</p>
+                <nav aria-label="Edistyneet työkalut">
+                    <ul class="nappilista-ul" id="lista-edistyneet">
+                        <li><a href="json" class="nappula1">🔧 JSON-muotoilija &amp; validaattori</a></li>
+                    </ul>
+                    <p class="ei-tuloksia" id="ei-tuloksia-edistyneet">Ei hakutuloksia.</p>
                 </nav>
             </div>
         </main>
     </div>
+
+    <script>
+        const hakukentta = document.getElementById('tyokaluhaku');
+
+        function suodataLista(listaId, eiTuloksiaId) {
+            const lista = document.getElementById(listaId);
+            const eiTuloksiaEl = document.getElementById(eiTuloksiaId);
+            const hakusana = hakukentta.value.trim().toLowerCase();
+            const rivit = lista.querySelectorAll('li');
+            let loydetty = 0;
+
+            rivit.forEach(rivi => {
+                const teksti = rivi.textContent.trim().toLowerCase();
+                if (!hakusana || teksti.includes(hakusana)) {
+                    rivi.classList.remove('piilotettu');
+                    loydetty++;
+                } else {
+                    rivi.classList.add('piilotettu');
+                }
+            });
+
+            eiTuloksiaEl.style.display = loydetty === 0 ? 'block' : 'none';
+        }
+
+        hakukentta.addEventListener('input', () => {
+            suodataLista('lista-perustyokalut', 'ei-tuloksia-perus');
+            suodataLista('lista-edistyneet', 'ei-tuloksia-edistyneet');
+        });
+    </script>
 </body>
 </html>
