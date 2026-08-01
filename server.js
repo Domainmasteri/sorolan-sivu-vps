@@ -672,8 +672,9 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    const pathToClean = safeFilePath || file.path;
-    await fs.unlink(pathToClean).catch(err => console.error("Temp file cleanup error:", err));
+    if (safeFilePath) {
+      await fs.unlink(safeFilePath).catch(err => console.error("Temp file cleanup error:", err));
+    }
   }
 });
 
@@ -845,8 +846,9 @@ app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (re
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    const pathToClean = safeFilePath || file.path;
-    await fs.unlink(pathToClean).catch(err => console.error("Temp file cleanup error:", err));
+    if (safeFilePath) {
+      await fs.unlink(safeFilePath).catch(err => console.error("Temp file cleanup error:", err));
+    }
   }
 });
 
