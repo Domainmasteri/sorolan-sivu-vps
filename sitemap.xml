@@ -105,4 +105,20 @@
       <priority>0.7</priority>
    </url>
 
+   <!-- JWT-dekooderi -->
+   <url>
+      <loc>https://sorola.fi/jwt/</loc>
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
+   <!-- JWT Decoder (EN) -->
+   <url>
+      <loc>https://sorola.fi/en/jwt-decoder/</loc>
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
 </urlset>

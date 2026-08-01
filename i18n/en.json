@@ -387,6 +387,38 @@
         "'✅ Kopioitu!'": "'✅ Copied!'"
       }
     },
+    "jwt/index.html": {
+      "text": {
+        "Sorolan JWT-dekooderi - Pura ja tarkista JWT-token": "Sorola JWT Decoder - Decode and inspect JWT tokens",
+        "JWT-dekooderi": "JWT Decoder",
+        "Pura JWT-token selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.": "Decode JWT tokens directly in your browser. All processing happens locally – nothing is sent to the server.",
+        "1. Liitä JWT-token": "1. Paste JWT token",
+        "🔓 Pura token": "🔓 Decode token",
+        "🗑️ Tyhjennä": "🗑️ Clear",
+        "2. Header": "2. Header",
+        "Algoritmi ja tokenityyppi": "Algorithm and token type",
+        "3. Payload": "3. Payload",
+        "Token sisältö": "Token contents",
+        "⚠️ Token on vanhentunut!": "⚠️ Token is expired!",
+        "« Takaisin pääsivulle": "« Back to home"
+      },
+      "attributes": {
+        "Pura JWT-token selaimessa. Näe header ja payload muotoiltuna JSON:na. Tarkistaa automaattisesti onko token vanhentunut. Ei palvelinkutsuja.": "Decode JWT tokens directly in your browser. View the header and payload as formatted JSON. Automatically checks if the token is expired. No server calls.",
+        "JWT, JSON Web Token, JWT dekooderi, JWT decoder, token tarkistus, Sorola": "JWT, JSON Web Token, JWT decoder, token inspector, Sorola",
+        "Sorolan JWT-dekooderi": "Sorola JWT Decoder",
+        "Pura JWT-token selaimessa ilman palvelinkutsuja.": "Decode JWT tokens in your browser without any server calls.",
+        "JWT-token": "JWT token",
+        "JWT Header": "JWT Header",
+        "JWT Payload": "JWT Payload"
+      },
+      "raw": {
+        "'⚠️ Syötekenttä on tyhjä.'": "'⚠️ Input field is empty.'",
+        "'❌ Virheellinen JWT: tokenissa tulee olla kolme osaa (header.payload.signature).'": "'❌ Invalid JWT: token must have three parts (header.payload.signature).'",
+        "'❌ Virheellinen JWT: headeria ei voitu purkaa.'": "'❌ Invalid JWT: could not decode the header.'",
+        "'❌ Virheellinen JWT: payloadia ei voitu purkaa.'": "'❌ Invalid JWT: could not decode the payload.'",
+        "'✅ Token purettu onnistuneesti.'": "'✅ Token decoded successfully.'"
+      }
+    },
     "ohjeet/index.html": {
       "text": {
         "📖 Ohjeet": "📖 Guides",

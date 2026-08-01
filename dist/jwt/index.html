@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorolan JWT-dekooderi - Pura ja tarkista JWT-token</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/jwt/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/jwt/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/jwt-decoder/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/jwt/">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Pura JWT-token selaimessa. Näe header ja payload muotoiltuna JSON:na. Tarkistaa automaattisesti onko token vanhentunut. Ei palvelinkutsuja.">
+    <meta name="keywords" content="JWT, JSON Web Token, JWT dekooderi, JWT decoder, token tarkistus, Sorola">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/jwt/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Sorolan JWT-dekooderi">
+    <meta property="og:description" content="Pura JWT-token selaimessa ilman palvelinkutsuja.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sorolan JWT-dekooderi">
+    <meta name="twitter:description" content="Pura JWT-token selaimessa ilman palvelinkutsuja.">
+    <style>
+        #jwt-syote {
+            width: 100%;
+            min-height: 100px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.92rem;
+            resize: vertical;
+            box-sizing: border-box;
+            background: #0b0d13;
+            color: #e2e8f0;
+            line-height: 1.5;
+            word-break: break-all;
+        }
+        .jwt-osa {
+            width: 100%;
+            min-height: 160px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.92rem;
+            resize: vertical;
+            box-sizing: border-box;
+            background: #0b0d13;
+            color: #4ade80;
+            line-height: 1.5;
+        }
+        .toiminto-rivi {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .toiminto-rivi .nappula,
+        .toiminto-rivi .nappula1 {
+            flex: 1;
+            min-width: 120px;
+        }
+        #tila-viesti {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: none;
+        }
+        #tila-viesti.ok {
+            background: rgba(74, 222, 128, 0.12);
+            border: 1px solid #4ade80;
+            color: #4ade80;
+            display: block;
+        }
+        #tila-viesti.virhe {
+            background: rgba(248, 113, 113, 0.12);
+            border: 1px solid #f87171;
+            color: #f87171;
+            display: block;
+        }
+        #tila-viesti.varoitus {
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid #fbbf24;
+            color: #fbbf24;
+            display: block;
+        }
+        .vanhentunut-banneri {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: rgba(248, 113, 113, 0.15);
+            border: 1px solid #f87171;
+            color: #f87171;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        .vanhentunut-banneri.nakyva {
+            display: block;
+        }
+        .osa-otsikko {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+        }
+    </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-YNdLPWi1IRdbPeUxj0Qa6.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/jwt/" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/jwt-decoder/">🇬🇧</a>
+    </nav>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+    <div class="laatikko" style="max-width: 860px;">
+        <h1 class="otsikko">JWT-dekooderi</h1>
+
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Pura JWT-token selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.</p>
+        </div>
+
+        <main id="paaosio">
+            <div class="osion-tausta">
+                <h2>1. Liitä JWT-token</h2>
+                <label for="jwt-syote" class="sr-only">JWT-token</label>
+                <textarea id="jwt-syote" class="syote" placeholder="Liitä JWT-tokenisi tähän, esim. ******" aria-label="JWT-token" spellcheck="false"></textarea>
+
+                <div class="toiminto-rivi">
+                    <button id="pura-btn" class="nappula">🔓 Pura token</button>
+                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Tyhjennä</button>
+                </div>
+
+                <div id="tila-viesti" role="status" aria-live="polite"></div>
+            </div>
+
+            <div id="tulos-osio" style="display: none;">
+                <div id="vanhentunut-banneri" class="vanhentunut-banneri" role="alert">
+                    ⚠️ Token on vanhentunut!
+                </div>
+
+                <div class="osion-tausta">
+                    <h2>2. Header</h2>
+                    <div class="osa-otsikko">Algoritmi ja tokenityyppi</div>
+                    <label for="jwt-header" class="sr-only">JWT Header</label>
+                    <textarea id="jwt-header" class="syote jwt-osa" readonly aria-label="JWT Header" spellcheck="false"></textarea>
+                </div>
+
+                <div class="osion-tausta">
+                    <h2>3. Payload</h2>
+                    <div class="osa-otsikko">Token sisältö</div>
+                    <label for="jwt-payload" class="sr-only">JWT Payload</label>
+                    <textarea id="jwt-payload" class="syote jwt-osa" readonly aria-label="JWT Payload" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </main>
+
+        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+    </div>
+
+    <script>
+        const syoteEl = document.getElementById('jwt-syote');
+        const tilaEl = document.getElementById('tila-viesti');
+        const tulosOsio = document.getElementById('tulos-osio');
+        const headerEl = document.getElementById('jwt-header');
+        const payloadEl = document.getElementById('jwt-payload');
+        const vanhentunutBanneri = document.getElementById('vanhentunut-banneri');
+
+        function naytaTila(viesti, tyyppi) {
+            tilaEl.textContent = viesti;
+            tilaEl.className = tyyppi;
+        }
+
+        function poistaTila() {
+            tilaEl.className = '';
+            tilaEl.textContent = '';
+        }
+
+        function base64UrlDecode(str) {
+            const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            const padded = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
+            const decoded = atob(padded);
+            return decodeURIComponent(
+                decoded.split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
+            );
+        }
+
+        document.getElementById('pura-btn').addEventListener('click', () => {
+            const syote = syoteEl.value.trim();
+            if (!syote) {
+                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
+                tulosOsio.style.display = 'none';
+                return;
+            }
+
+            const osat = syote.split('.');
+            if (osat.length !== 3) {
+                naytaTila('❌ Virheellinen JWT: tokenissa tulee olla kolme osaa (header.payload.signature).', 'virhe');
+                tulosOsio.style.display = 'none';
+                return;
+            }
+
+            let header, payload;
+            try {
+                header = JSON.parse(base64UrlDecode(osat[0]));
+            } catch {
+                naytaTila('❌ Virheellinen JWT: headeria ei voitu purkaa.', 'virhe');
+                tulosOsio.style.display = 'none';
+                return;
+            }
+            try {
+                payload = JSON.parse(base64UrlDecode(osat[1]));
+            } catch {
+                naytaTila('❌ Virheellinen JWT: payloadia ei voitu purkaa.', 'virhe');
+                tulosOsio.style.display = 'none';
+                return;
+            }
+
+            headerEl.value = JSON.stringify(header, null, 2);
+            payloadEl.value = JSON.stringify(payload, null, 2);
+            tulosOsio.style.display = 'block';
+
+            const nyt = Math.floor(Date.now() / 1000);
+            if (typeof payload.exp === 'number' && payload.exp < nyt) {
+                vanhentunutBanneri.classList.add('nakyva');
+                const vanhenemisAika = new Date(payload.exp * 1000).toLocaleString('fi-FI');
+                naytaTila('⚠️ Token on vanhentunut ' + vanhenemisAika + '.', 'varoitus');
+            } else {
+                vanhentunutBanneri.classList.remove('nakyva');
+                naytaTila('✅ Token purettu onnistuneesti.', 'ok');
+            }
+        });
+
+        document.getElementById('tyhjenna-btn').addEventListener('click', () => {
+            syoteEl.value = '';
+            headerEl.value = '';
+            payloadEl.value = '';
+            tulosOsio.style.display = 'none';
+            vanhentunutBanneri.classList.remove('nakyva');
+            poistaTila();
+        });
+    </script>
+</body>
+</html>
