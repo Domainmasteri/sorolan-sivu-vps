@@ -191,6 +191,9 @@ async function insertShortLink(table, shortPath, originalUrl) {
 }
 
 async function updateShortLink(table, shortPath, originalUrl) {
+  if (!/^[a-zA-Z0-9_]+$/.test(table)) {
+    throw new Error('Invalid input');
+  }
   return db.query(`UPDATE ${table} SET original_url = $1 WHERE short_path = $2`, [originalUrl, shortPath]);
 }
 
