@@ -105,4 +105,18 @@
       <priority>0.7</priority>
    </url>
 
+   <!-- Base64 Kooderi / Dekooderi -->
+   <url>
+      <loc>https://sorola.fi/base64/</loc>
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+   <url>
+      <loc>https://sorola.fi/en/base64/</loc>
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
 </urlset>
