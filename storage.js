@@ -1,4 +1,4 @@
-import { S3Client } from '@aws-sdk/client-s3';
+import { CreateBucketCommand, HeadBucketCommand, S3Client } from '@aws-sdk/client-s3';
 
 const required = ['S3_ENDPOINT', 'S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY'];
 for (const key of required) {
@@ -21,4 +21,41 @@ export const bucketName = process.env.BUCKET_NAME;
 
 if (!bucketName) {
   throw new Error('BUCKET_NAME puuttuu ympäristömuuttujista.');
+}
+
+let bucketInitPromise = null;
+
+export async function ensureBucketExists() {
+  if (!bucketInitPromise) {
+    bucketInitPromise = (async () => {
+      try {
+        await s3.send(new HeadBucketCommand({ Bucket: bucketName }));
+      } catch (error) {
+        const statusCode = error?.$metadata?.httpStatusCode;
+        const errorName = String(error?.name || '');
+        const missingBucket = statusCode === 404
+          || errorName === 'NotFound'
+          || errorName === 'NoSuchBucket'
+          || errorName === 'NotFoundException';
+
+        if (!missingBucket) {
+          throw error;
+        }
+
+        try {
+          await s3.send(new CreateBucketCommand({ Bucket: bucketName }));
+        } catch (createError) {
+          const createErrorName = String(createError?.name || '');
+          if (createErrorName !== 'BucketAlreadyOwnedByYou' && createErrorName !== 'BucketAlreadyExists') {
+            throw createError;
+          }
+        }
+      }
+    })().catch((error) => {
+      bucketInitPromise = null;
+      throw error;
+    });
+  }
+
+  await bucketInitPromise;
 }

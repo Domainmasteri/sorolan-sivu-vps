@@ -133,7 +133,7 @@
             <h2>Ready code</h2>
             
             <div id="qr-tulos-laatikko">
-                <img id="qr-kuva" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://soro.la" alt="Generated QR code" loading="lazy">
+                <img id="qr-kuva" src="/api/qr-proxy?data=https%3A%2F%2Fsoro.la&color=000000" alt="Generated QR code" loading="lazy">
             </div>
             
             <button id="lataa-btn" class="nappula" style="background-color: #218838; color: white;">Download as an image (PNG)</button>
@@ -179,8 +179,7 @@
             }
 
             const variHex = document.getElementById('qr-vari').value.replace('#', '');
-            const urlEncodedData = encodeURIComponent(dataString);
-            const uusiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${urlEncodedData}&color=${variHex}`;
+            const uusiUrl = `/api/qr-proxy?data=${encodeURIComponent(dataString)}&color=${encodeURIComponent(variHex)}`;
             document.getElementById('qr-kuva').src = uusiUrl;
         });
 
