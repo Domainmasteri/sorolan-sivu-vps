@@ -5,7 +5,13 @@ import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const databasePath = path.resolve(__dirname, process.env.DATABASE_PATH || 'data/database.sqlite');
+const configuredDatabasePath = String(process.env.DATABASE_PATH || '').trim();
+const defaultDatabasePath = path.join(__dirname, 'data', 'database.sqlite');
+const databasePath = configuredDatabasePath
+  ? (path.isAbsolute(configuredDatabasePath)
+    ? configuredDatabasePath
+    : path.resolve(__dirname, configuredDatabasePath))
+  : defaultDatabasePath;
 const schemaPath = path.resolve(__dirname, 'schema.sql');
 const busyTimeoutMs = Math.max(0, Number.parseInt(process.env.SQLITE_BUSY_TIMEOUT_MS, 10) || 5000);
 

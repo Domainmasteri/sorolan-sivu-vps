@@ -18,7 +18,7 @@ import {
 } from '@aws-sdk/client-s3';
 
 import { db } from './db.js';
-import { s3, bucketName } from './storage.js';
+import { s3, bucketName, ensureBucketExists } from './storage.js';
 import dnsRouter from './api/dns.js';
 
 const app = express();
@@ -85,7 +85,41 @@ app.use('/api', apiLimiter);
 app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
 
-// --- TÄRKEÄ KORJAUS: Staattiset tiedostot & tyylit toimitetaan HETI ennen reitityslogiikkaa ---
+// URL-LYHENTIMEN OHITUS
+app.use(async (req, res, next) => {
+  try {
+    const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
+    const pathname = req.path.replace(/^\/+/, '');
+    const table = resolveTableByDomain(hostname);
+
+    if (!table) return next();
+    if (!pathname) return res.redirect(302, shortenerHomeUrl);
+
+    const reservedPrefixes = [
+      'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 'styles',
+      'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat',
+      'privacy', 'vieraskirja', 'makelink'
+    ];
+    const firstSegment = pathname.split('/')[0];
+
+    if (reservedPrefixes.includes(firstSegment) || pathname.includes('.')) {
+      return next();
+    }
+
+    const linkResult = await fetchLinkByPath(table, pathname);
+    const match = linkResult.rows[0];
+
+    if (!match?.original_url) {
+      return res.redirect(302, shortenerErrorUrl);
+    }
+
+    void incrementLinkClicks(table, pathname).catch(() => {});
+    return res.redirect(302, match.original_url);
+  } catch {
+    return res.redirect(302, shortenerErrorUrl);
+  }
+});
+
 app.use('/styles', pageLimiter, express.static(stylesDir));
 app.use(pageLimiter, express.static(distPath));
 
@@ -164,6 +198,67 @@ async function deleteShortLink(table, shortPath) {
   return db.query(`DELETE FROM ${table} WHERE short_path = $1`, [shortPath]);
 }
 
+function createHttpError(status, message) {
+  const error = new Error(message);
+  error.status = status;
+  return error;
+}
+
+function validateOriginalUrl(originalUrl) {
+  try {
+    const parsed = new URL(String(originalUrl || ''));
+    return ['http:', 'https:'].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
+function sanitizeShortPath(pathValue) {
+  const value = String(pathValue || '').trim().replace(/[^a-zA-Z0-9_-]/g, '');
+  return value || luoSatunnainenPolku();
+}
+
+function resolveShortLinkTarget(domain) {
+  const normalizedDomain = String(domain || 'srla.fi').trim().toLowerCase();
+  const table = resolveTableByDomain(normalizedDomain);
+  if (!table) {
+    throw createHttpError(400, 'Virheellinen domain.');
+  }
+
+  let baseUrl = 'https://srla.fi';
+  if (normalizedDomain === 'srl.la') baseUrl = 'https://srl.la';
+  if (normalizedDomain === 'soro.la') baseUrl = 'https://soro.la';
+
+  return { domain: normalizedDomain, table, baseUrl };
+}
+
+async function createShortLinkEntry({ originalUrl, domain, pathValue }) {
+  if (!originalUrl) {
+    throw createHttpError(400, 'Kohdeosoite puuttuu.');
+  }
+  if (!validateOriginalUrl(originalUrl)) {
+    throw createHttpError(400, 'URL:n tulee alkaa http:// tai https://');
+  }
+
+  const { domain: normalizedDomain, table, baseUrl } = resolveShortLinkTarget(domain);
+  const shortPath = sanitizeShortPath(pathValue);
+
+  if (!shortPath) {
+    throw createHttpError(400, 'Virheellinen lyhenne.');
+  }
+
+  try {
+    await insertShortLink(table, shortPath, originalUrl);
+  } catch (error) {
+    if (isUniqueConstraintError(error)) {
+      throw createHttpError(400, 'Tämä lyhenne on jo käytössä!');
+    }
+    throw error;
+  }
+
+  return { domain: normalizedDomain, path: shortPath, shortUrl: `${baseUrl}/${shortPath}` };
+}
+
 function isUniqueConstraintError(error) {
   if (!error) return false;
   const code = String(error.code || '').toUpperCase();
@@ -219,41 +314,6 @@ async function streamS3BodyToResponse(body, res) {
   }
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
-
-// URL-LYHENTIMEN OHITUS
-app.use(async (req, res, next) => {
-  try {
-    const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
-    const pathname = req.path.replace(/^\/+/, '');
-    const table = resolveTableByDomain(hostname);
-
-    if (!table) return next();
-    if (!pathname) return res.redirect(302, shortenerHomeUrl);
-
-    const reservedPrefixes = [
-      'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 'styles',
-      'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat',
-      'privacy', 'vieraskirja', 'makelink'
-    ];
-    const firstSegment = pathname.split('/')[0];
-
-    if (reservedPrefixes.includes(firstSegment) || pathname.includes('.')) {
-      return next();
-    }
-
-    const linkResult = await fetchLinkByPath(table, pathname);
-    const match = linkResult.rows[0];
-
-    if (!match?.original_url) {
-      return res.redirect(302, shortenerErrorUrl);
-    }
-
-    void incrementLinkClicks(table, pathname).catch(() => {});
-    return res.redirect(302, match.original_url);
-  } catch {
-    return res.redirect(302, shortenerErrorUrl);
-  }
-});
 
 app.post('/api/auth', async (req, res) => {
   try {
@@ -478,27 +538,11 @@ app.get('/api/links', requireAuth, async (_req, res) => {
 
 app.post('/api/links', requireAuth, async (req, res) => {
   try {
-    const { originalURL, domain } = req.body || {};
-    let pathValue = req.body?.path;
-
-    if (!originalURL) return res.status(400).json({ error: 'Kohdeosoite puuttuu.' });
-
-    if (!pathValue || String(pathValue).trim() === '') pathValue = luoSatunnainenPolku();
-    else pathValue = String(pathValue).trim().replace(/[^a-zA-Z0-9_-]/g, '');
-
-    const table = resolveTableByDomain(domain);
-    if (!table) return res.status(400).json({ error: 'Virheellinen domain.' });
-
-    try {
-      await insertShortLink(table, pathValue, originalURL);
-      return res.json({ success: true, path: pathValue, domain });
-    } catch (error) {
-      if (isUniqueConstraintError(error)) {
-        return res.status(400).json({ error: 'Tämä lyhenne on jo käytössä!' });
-      }
-      throw error;
-    }
+    const { originalURL, domain, path: pathValue } = req.body || {};
+    const created = await createShortLinkEntry({ originalUrl: originalURL, domain, pathValue });
+    return res.json({ success: true, path: created.path, domain: created.domain, shortUrl: created.shortUrl });
   } catch (error) {
+    if (error?.status) return res.status(error.status).json({ error: error.message });
     return res.status(500).json({ error: error.message });
   }
 });
@@ -558,39 +602,15 @@ app.all('/api/lyhennin/create', async (req, res) => {
       return res.status(405).json({ error: 'Tuntematon metodi.' });
     }
 
-    const kohdeUrl = req.query.url;
-    let koodi = req.query.code;
-    const domain = String(req.query.domain || 'srla.fi').toLowerCase();
-
-    if (!kohdeUrl) return res.status(400).json({ error: 'URL puuttuu' });
-    if (!['srla.fi', 'srl.la', 'soro.la'].includes(domain)) return res.status(400).json({ error: 'Virheellinen domain.' });
-
-    try {
-      const parsed = new URL(kohdeUrl);
-      if (!['http:', 'https:'].includes(parsed.protocol)) {
-        return res.status(400).json({ error: 'URL:n tulee alkaa http:// tai https://' });
-      }
-    } catch {
-      return res.status(400).json({ error: 'Virheellinen URL-osoite.' });
-    }
-
-    if (!koodi || String(koodi).trim() === '') koodi = luoSatunnainenPolku();
-    else koodi = String(koodi).trim().replace(/[^a-zA-Z0-9_-]/g, '');
-
-    const table = resolveTableByDomain(domain);
-
-    try {
-      await insertShortLink(table, koodi, kohdeUrl);
-    } catch (error) {
-      if (isUniqueConstraintError(error)) return res.status(400).json({ error: 'Tämä lyhenne on jo käytössä!' });
-      throw error;
-    }
-
-    let baseUrl = 'https://srla.fi';
-    if (domain === 'srl.la') baseUrl = 'https://srl.la';
-    if (domain === 'soro.la') baseUrl = 'https://soro.la';
-    return res.json({ success: true, shortUrl: `${baseUrl}/${koodi}` });
+    const source = req.method === 'POST' ? (req.body || {}) : (req.query || {});
+    const created = await createShortLinkEntry({
+      originalUrl: source.url || source.originalURL,
+      domain: source.domain,
+      pathValue: source.code || source.path
+    });
+    return res.json({ success: true, shortUrl: created.shortUrl, path: created.path, domain: created.domain });
   } catch (error) {
+    if (error?.status) return res.status(error.status).json({ error: error.message });
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
 });
@@ -643,6 +663,23 @@ app.delete('/api/pastes', requireAuth, async (req, res) => {
 });
 
 // --- TIEDOSTOLATAUS JA S3 ---
+let uploadBucketReadyPromise = null;
+
+async function ensureUploadBucketReady() {
+  if (!uploadBucketReadyPromise) {
+    uploadBucketReadyPromise = ensureBucketExists()
+      .catch((error) => {
+        uploadBucketReadyPromise = null;
+        throw error;
+      });
+  }
+  await uploadBucketReadyPromise;
+}
+
+void ensureUploadBucketReady().catch((error) => {
+  console.error(`Bucketin varmistus epäonnistui käynnistyksessä: ${error.message}`);
+});
+
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
@@ -652,6 +689,7 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
 
   let safeFilePath = null;
   try {
+    await ensureUploadBucketReady();
     safeFilePath = validateUploadFilePath(file.path);
     const expiresAt = Date.now() + (expiryDays * 24 * 60 * 60 * 1000);
     const id = crypto.randomUUID().split('-')[0];
@@ -815,6 +853,7 @@ app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (re
 
   let safeFilePath = null;
   try {
+    await ensureUploadBucketReady();
     safeFilePath = validateUploadFilePath(file.path);
     const expiresAt = expiryDays > 0 ? Date.now() + (expiryDays * 24 * 60 * 60 * 1000) : 0;
     const id = crypto.randomUUID().split('-')[0];
@@ -885,6 +924,30 @@ app.delete('/api/admin/files', requireAuth, async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/qr-proxy', async (req, res) => {
+  try {
+    const data = String(req.query.data || '').trim();
+    const requestedColor = String(req.query.color || '000000').trim().replace(/^#/, '');
+    const color = /^[0-9a-fA-F]{6}$/.test(requestedColor) ? requestedColor : '000000';
+
+    if (!data) return res.status(400).json({ error: 'QR-data puuttuu.' });
+
+    const upstreamUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(data)}&color=${color}`;
+    const upstream = await fetch(upstreamUrl);
+
+    if (!upstream.ok) {
+      return res.status(502).json({ error: 'QR-koodipalvelu ei vastaa.' });
+    }
+
+    const body = Buffer.from(await upstream.arrayBuffer());
+    res.setHeader('Content-Type', upstream.headers.get('content-type') || 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=300');
+    return res.send(body);
+  } catch (error) {
+    return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   }
 });
 

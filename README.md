@@ -39,12 +39,29 @@ Welcome to the **Sorolan Sivut** repository. This is a side project of our famil
  4. **Run with Docker (Coolify compatible):**
    ```
    docker build -t sorolan-sivu-vps .
-   docker run -p 3000:3000 --env-file .env sorolan-sivu-vps
+   docker run -p 3000:3000 --env-file .env -v $(pwd)/data:/app/data sorolan-sivu-vps
    ```
    *Repository now includes a Dockerfile and can be deployed directly from Git in Coolify.*
+    
+   `docker-compose.yml` example:
+   ```yaml
+   services:
+     sorolan-sivu-vps:
+       build: .
+       ports:
+         - "3000:3000"
+       env_file:
+         - .env
+       volumes:
+         - ./data:/app/data
+       restart: unless-stopped
+   ```
   5. **Local database:**
-   * The VPS server stores app data in a local SQLite file (`data/database.sqlite` by default).
+   * The VPS server stores app data in a local SQLite file (`/app/data/database.sqlite` inside container, `data/database.sqlite` locally by default).
    * Override the file location with `DATABASE_PATH` if needed.
+   * Keep `/app/data` mounted to host to avoid SQLite reset on container restart.
+  6. **Reverse proxy upload limit (important):**
+   * If you run Nginx/Caddy in front of this app, set upload limit to at least **1024 MB** to avoid `413` on `/api/upload` (e.g. Nginx: `client_max_body_size 1024M;`).
 ## 🇫🇮 Suomi
 Tervetuloa **Sorolan Sivut** -repositorioon. Tämä on perheemme sivuprojekti koodaamisen suhteen. Se on laaja, monikielinen verkkoprojekti, joka on suunniteltu Cloudflare Pages -alustalle. Se toimii henkilökohtaisena portaalina ja tarjoaa useita itse koodattuja työkaluja ja oppaita.
 ### ✨ Ominaisuudet & Työkalut
@@ -84,10 +101,27 @@ Tervetuloa **Sorolan Sivut** -repositorioon. Tämä on perheemme sivuprojekti ko
  4. **Aja Dockerilla (Coolify-yhteensopiva):**
    ```
    docker build -t sorolan-sivu-vps .
-   docker run -p 3000:3000 --env-file .env sorolan-sivu-vps
+   docker run -p 3000:3000 --env-file .env -v $(pwd)/data:/app/data sorolan-sivu-vps
    ```
    *Repossa on nyt Dockerfile, joten voit ottaa koodin suoraan Coolifyyn Gitistä.*
+    
+   `docker-compose.yml`-esimerkki:
+   ```yaml
+   services:
+     sorolan-sivu-vps:
+       build: .
+       ports:
+         - "3000:3000"
+       env_file:
+         - .env
+       volumes:
+         - ./data:/app/data
+       restart: unless-stopped
+   ```
   5. **Paikallinen tietokanta:**
-   * VPS-palvelin tallentaa sovelluksen datan paikalliseen SQLite-tiedostoon (`data/database.sqlite` oletuksena).
+   * VPS-palvelin tallentaa sovelluksen datan paikalliseen SQLite-tiedostoon (`/app/data/database.sqlite` kontin sisällä, paikallisesti oletus `data/database.sqlite`).
    * Voit vaihtaa tiedoston sijainnin `DATABASE_PATH`-muuttujalla.
+   * Pidä `/app/data` liitettynä hostiin, jotta tietokanta ei nollaudu kontin uudelleenkäynnistyksessä.
+  6. **Reverse proxy -latausraja (tärkeä):**
+   * Jos kontti on Nginx/Caddy-reverse proxyn takana, aseta vähintään **1024 MB** tiedostokokoraja välttääksesi `/api/upload`-reitillä `413`-virheen (Nginx: `client_max_body_size 1024M;`).
 *Repository maintained by @Domainmasteri*
