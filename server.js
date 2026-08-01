@@ -13,7 +13,8 @@ import {
   DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
-  HeadObjectCommand
+  HeadObjectCommand,
+  ListObjectsV2Command
 } from '@aws-sdk/client-s3';
 
 import { db } from './db.js';
@@ -36,10 +37,21 @@ const uploadDir = path.join(__dirname, 'uploads');
 // Varmistetaan, että uploads-kansio on olemassa
 fs.mkdir(uploadDir, { recursive: true }).catch(err => console.error('Uploads-kansion luonti epäonnistui:', err));
 
+function validateUploadFilePath(filePath) {
+  const resolvedUploadDir = path.resolve(uploadDir);
+  const resolvedFilePath = path.resolve(filePath);
+  if (!resolvedFilePath.startsWith(resolvedUploadDir + path.sep)) {
+    throw new Error('Virheellinen tiedostopolku.');
+  }
+  return resolvedFilePath;
+}
+
 const uploadShare = multer({
   dest: uploadDir,
   limits: { fileSize: MAX_SHARE_FILE_SIZE_BYTES }
 });
+
+const uploadAdmin = multer({ dest: uploadDir });
 
 // Nopeudet & Rajoitukset (Rate limits)
 const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: true, legacyHeaders: false });
@@ -629,13 +641,15 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
 
   if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
 
+  let safeFilePath = null;
   try {
+    safeFilePath = validateUploadFilePath(file.path);
     const expiresAt = Date.now() + (expiryDays * 24 * 60 * 60 * 1000);
     const id = crypto.randomUUID().split('-')[0];
     const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
     const fileName = `${id}.${extension || 'bin'}`;
 
-    const fileStream = createReadStream(file.path);
+    const fileStream = createReadStream(safeFilePath);
 
     await s3.send(new PutObjectCommand({
       Bucket: bucketName,
@@ -658,8 +672,8 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    if (file && file.path) {
-      await fs.unlink(file.path).catch(err => console.error("Temp file cleanup error:", err));
+    if (safeFilePath) {
+      await fs.unlink(safeFilePath).catch(err => console.error("Temp file cleanup error:", err));
     }
   }
 });
@@ -779,6 +793,89 @@ app.get(['/s/:file', '/en/share/s/:file'], async (req, res) => {
     }
   } catch {
     return res.redirect(302, errorPath);
+  }
+});
+
+// --- YLLÄPITÄJÄN TIEDOSTOLATAUS ---
+app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (req, res) => {
+  const file = req.file;
+  const expiryDays = Number.parseInt(req.body?.expiryDays || '0', 10);
+  const maxDownloads = Number.parseInt(req.body?.maxDownloads || '0', 10) || 0;
+
+  if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
+
+  let safeFilePath = null;
+  try {
+    safeFilePath = validateUploadFilePath(file.path);
+    const expiresAt = expiryDays > 0 ? Date.now() + (expiryDays * 24 * 60 * 60 * 1000) : 0;
+    const id = crypto.randomUUID().split('-')[0];
+    const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
+    const fileName = `${id}.${extension || 'bin'}`;
+
+    const fileStream = createReadStream(safeFilePath);
+
+    await s3.send(new PutObjectCommand({
+      Bucket: bucketName,
+      Key: fileName,
+      Body: fileStream,
+      ContentType: file.mimetype || 'application/octet-stream',
+      Metadata: {
+        originalname: file.originalname,
+        expiresat: String(expiresAt),
+        maxdownloads: String(maxDownloads),
+        downloads: '0',
+        isadmin: 'true'
+      }
+    }));
+
+    await db.query(
+      'INSERT INTO admin_files (s3_key, original_name, file_size, mime_type, expires_at, max_downloads, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [fileName, file.originalname, file.size, file.mimetype || 'application/octet-stream', expiresAt || null, maxDownloads, req.user.username]
+    );
+
+    const siteUrl = process.env.SITE_URL
+      ? process.env.SITE_URL.replace(/\/$/, '')
+      : `${req.protocol}://${req.hostname}`;
+
+    return res.json({
+      success: true,
+      shareUrl: `${siteUrl}/s/${encodeURIComponent(fileName)}`,
+      downloadUrl: `${siteUrl}/d/${encodeURIComponent(fileName)}`,
+      id: fileName
+    });
+  } catch (error) {
+    return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
+  } finally {
+    if (safeFilePath) {
+      await fs.unlink(safeFilePath).catch(err => console.error("Temp file cleanup error:", err));
+    }
+  }
+});
+
+app.get('/api/admin/files', requireAuth, async (_req, res) => {
+  try {
+    const result = await db.query('SELECT id, s3_key, original_name, file_size, mime_type, expires_at, max_downloads, created_by, created_at FROM admin_files ORDER BY created_at DESC');
+    res.json({ files: result.rows });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/files', requireAuth, async (req, res) => {
+  try {
+    const idToRemove = Number.parseInt(req.query.id, 10);
+    if (!idToRemove) return res.status(400).json({ error: 'ID puuttuu.' });
+
+    const result = await db.query('SELECT s3_key FROM admin_files WHERE id = $1 LIMIT 1', [idToRemove]);
+    const file = result.rows[0];
+    if (!file) return res.status(404).json({ error: 'Tiedostoa ei löydy.' });
+
+    await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: file.s3_key })).catch(() => {});
+    await db.query('DELETE FROM admin_files WHERE id = $1', [idToRemove]);
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
