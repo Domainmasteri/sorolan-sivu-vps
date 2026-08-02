@@ -80,11 +80,7 @@
         }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
-<script async src="https://plausible.io/js/pa-YNdLPWi1IRdbPeUxj0Qa6.js"></script>
-<script>
-  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-  plausible.init()
-</script>
+<script src="/en/analytics.js"></script>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
@@ -101,7 +97,7 @@
         <a class="language-overlay__link" href="/base64/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/base64/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko" style="max-width: 860px;">
         <h1 class="otsikko">Base64 Encoder / Decoder</h1>
@@ -113,8 +109,8 @@
         <main id="paaosio">
             <div class="osion-tausta">
                 <h2>1. Input</h2>
-                <label for="b64-syote" class="sr-only">Input text</label>
-                <textarea id="b64-syote" class="syote" placeholder="Type or paste your text here..." aria-label="Input text" spellcheck="false"></textarea>
+                <label for="b64-syote" class="sr-only">Syöteteksti</label>
+                <textarea id="b64-syote" class="syote" placeholder="Kirjoita tai liitä teksti tähän..." aria-label="Input text" spellcheck="false"></textarea>
 
                 <div class="toiminto-rivi">
                     <button id="koodaa-btn" class="nappula">🔒 Encode</button>
@@ -127,8 +123,8 @@
 
             <div class="osion-tausta">
                 <h2>2. Result</h2>
-                <label for="b64-tulos" class="sr-only">Result</label>
-                <textarea id="b64-tulos" class="syote" readonly placeholder="Result appears here..." aria-label="Result" spellcheck="false"></textarea>
+                <label for="b64-tulos" class="sr-only">Tulos</label>
+                <textarea id="b64-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Result" spellcheck="false"></textarea>
 
                 <div class="kopioi-btn-kontti">
                     <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Copy to clipboard</button>

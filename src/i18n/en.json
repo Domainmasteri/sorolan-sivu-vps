@@ -133,7 +133,8 @@
         "Edistyneet työkalut": "Advanced tools",
         "Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.": "More powerful helpers for developers and technical needs.",
         "🌐 Verkkotyökalut": "🌐 Web tools",
-        "🔧 JSON-muotoilija &amp; validaattori": "🔧 JSON Formatter &amp; Validator"
+        "🔧 JSON-muotoilija &amp; validaattori": "🔧 JSON Formatter &amp; Validator",
+        "🔐 Base64 Kooderi / Dekooderi": "🔐 Base64 Encoder / Decoder"
       },
       "attributes": {
         "Sorola.fi tarjoaa näppärät ja turvalliset työkalut arkeen: nopea linkkilyhennin, väliaikainen tiedostonjako, pastebin sekä selkeät IT-ohjeet ja oppaat.": "Sorola.fi offers handy and secure everyday tools: a fast link shortener, temporary file sharing, pastebin, and clear IT guides and tutorials.",
