@@ -185,10 +185,16 @@ function resolveTableByDomain(domainOrHost) {
 }
 
 async function fetchLinkByPath(table, shortPath) {
+  if (!/^[a-zA-Z0-9_]+$/.test(table)) {
+    throw new Error('Invalid input');
+  }
   return db.query(`SELECT original_url FROM ${table} WHERE short_path = $1 LIMIT 1`, [shortPath]);
 }
 
 async function incrementLinkClicks(table, shortPath) {
+  if (!/^[a-zA-Z0-9_]+$/.test(table)) {
+    throw new Error('Invalid input');
+  }
   return db.query(`UPDATE ${table} SET clicks = clicks + 1 WHERE short_path = $1`, [shortPath]);
 }
 
