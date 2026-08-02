@@ -5,29 +5,15 @@ import { localizeEnglishRouteSegment } from './route-localization.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
+const SRC = path.join(ROOT, 'src');
 const DIST = path.join(ROOT, 'dist');
-const I18N_DIR = path.join(ROOT, 'i18n');
+const I18N_DIR = path.join(SRC, 'i18n');
 const SITE_ORIGIN = 'https://sorola.fi';
 const SITE_ORIGIN_PATTERN = new RegExp(`${escapeRegExp(SITE_ORIGIN)}(?:/en)?(?:/[^"'\\s<]*)?`, 'g');
 const TEXT_FILE_EXTENSIONS = new Set(['.html', '.js', '.xml', '.txt']);
 const ROOT_ONLY_FILES = new Set(['_headers', 'robots.txt', 'sitemap.xml']);
 const IGNORE_NAMES = new Set([
-  '.git',
-  '.gitignore',
-  'dist',
-  'node_modules',
-  'i18n',
-  'functions',
-  'package.json',
-  'package-lock.json',
-  'build.mjs',
-  'README.md',
-  'route-localization.js',
-  '.env.example',
-  'db.js',
-  'schema.sql',
-  'server.js',
-  'storage.js'
+  'i18n'
 ]);
 const ATTRIBUTE_PATTERN = /(placeholder|aria-label|content|title|alt)=(["'])(.*?)\2/gi;
 const URL_ATTRIBUTE_PATTERN = /\b(href|src|action)=(["'])(.*?)\2/gi;
@@ -40,7 +26,7 @@ const locales = {
 await fs.rm(DIST, { recursive: true, force: true });
 await fs.mkdir(DIST, { recursive: true });
 
-const siteFiles = await collectFiles(ROOT);
+const siteFiles = await collectFiles(SRC);
 
 for (const locale of ['fi', 'en']) {
   const baseDir = locale === 'fi' ? DIST : path.join(DIST, 'en');
@@ -65,7 +51,7 @@ async function collectFiles(startDir) {
     for (const entry of entries) {
       if (IGNORE_NAMES.has(entry.name)) continue;
       const absolutePath = path.join(currentDir, entry.name);
-      const relativePath = path.relative(ROOT, absolutePath).replace(/\\/g, '/');
+      const relativePath = path.relative(startDir, absolutePath).replace(/\\/g, '/');
 
       if (entry.isDirectory()) {
         await walk(absolutePath);
@@ -80,7 +66,7 @@ async function collectFiles(startDir) {
 }
 
 async function writeLocalizedFile(relativePath, locale, baseDir) {
-  const sourcePath = path.join(ROOT, relativePath);
+  const sourcePath = path.join(SRC, relativePath);
   const targetPath = path.join(baseDir, localizeRelativePath(relativePath, locale));
   await fs.mkdir(path.dirname(targetPath), { recursive: true });
 
@@ -374,7 +360,7 @@ function escapeRegExp(value) {
 }
 
 async function writeSitemap() {
-  const sitemapPath = path.join(ROOT, 'sitemap.xml');
+  const sitemapPath = path.join(SRC, 'sitemap.xml');
   const source = await fs.readFile(sitemapPath, 'utf8');
   const blocks = source.match(/<url>[\s\S]*?<\/url>/g) || [];
   const output = [];
