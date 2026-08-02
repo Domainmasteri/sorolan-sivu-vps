@@ -106,11 +106,7 @@
         }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
-<script async src="https://plausible.io/js/pa-YNdLPWi1IRdbPeUxj0Qa6.js"></script>
-<script>
-  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-  plausible.init()
-</script>
+<script src="/en/analytics.js"></script>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
@@ -127,7 +123,7 @@
         <a class="language-overlay__link" href="/jwt/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/jwt-decoder/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko" style="max-width: 860px;">
         <h1 class="otsikko">JWT Decoder</h1>
@@ -139,8 +135,8 @@
         <main id="paaosio">
             <div class="osion-tausta">
                 <h2>1. Paste JWT token</h2>
-                <label for="jwt-syote" class="sr-only">JWT token</label>
-                <textarea id="jwt-syote" class="syote" placeholder="Paste your JWT token here, e.g. ******" aria-label="JWT token" spellcheck="false"></textarea>
+                <label for="jwt-syote" class="sr-only">JWT-token</label>
+                <textarea id="jwt-syote" class="syote" placeholder="Liitä JWT-tokenisi tähän, esim. ******" aria-label="JWT token" spellcheck="false"></textarea>
 
                 <div class="toiminto-rivi">
                     <button id="pura-btn" class="nappula">🔓 Decode token</button>
@@ -239,8 +235,8 @@
             const nyt = Math.floor(Date.now() / 1000);
             if (typeof payload.exp === 'number' && payload.exp < nyt) {
                 vanhentunutBanneri.classList.add('nakyva');
-                const expTime = new Date(payload.exp * 1000).toLocaleString('en-GB');
-                naytaTila('⚠️ Token expired on ' + expTime + '.', 'varoitus');
+                const vanhenemisAika = new Date(payload.exp * 1000).toLocaleString('en-GB');
+                naytaTila('⚠️ Token expired on ' + vanhenemisAika + '.', 'varoitus');
             } else {
                 vanhentunutBanneri.classList.remove('nakyva');
                 naytaTila('✅ Token decoded successfully.', 'ok');

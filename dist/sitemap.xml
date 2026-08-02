@@ -208,4 +208,20 @@
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
    </url>
+<url>
+      <loc>https://sorola.fi/jwt/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/jwt/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/jwt-decoder/" />
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+<url>
+      <loc>https://sorola.fi/en/jwt-decoder/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/jwt/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/jwt-decoder/" />
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
 </urlset>
