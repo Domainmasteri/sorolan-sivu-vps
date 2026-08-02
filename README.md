@@ -35,6 +35,7 @@ Welcome to the **Sorolan Sivut** repository. This is a side project of our famil
    
    ```
    *The compiled site will be output to the /dist directory.*
+   *Source pages, static assets, localization files and sitemap inputs now live under `/src`, while runtime and deployment files stay in the repository root.*
 
  4. **Run with Docker (Coolify compatible):**
    ```
@@ -97,6 +98,7 @@ Tervetuloa **Sorolan Sivut** -repositorioon. Tämä on perheemme sivuprojekti ko
    
    ```
    *Valmis sivusto generoituu /dist -kansioon.*
+   *Sivujen lähdetiedostot, staattiset assetit, lokalisoinnit ja sitemapin syötteet ovat nyt `/src`-kansiossa, kun taas ajonaikaiset ja julkaisuun liittyvät tiedostot jäävät repon juureen.*
 
  4. **Aja Dockerilla (Coolify-yhteensopiva):**
    ```
