@@ -1,0 +1,44 @@
+name: Build and Commit Dist
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - 'dist/**'
+
+jobs:
+  build:
+    name: Käännä ja päivitä dist
+    runs-content: ubuntu-latest
+
+    steps:
+      - name: Hae repon koodi
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Asenna Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Asenna riippuvuudet
+        run: npm ci
+
+      - name: Aja build-skripti
+        run: npm run build
+
+      - name: Kommitoi ja puske dist-kansio takaisin repoon
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/ --force
+          if ! git diff-index --quiet HEAD --; then
+            git commit -m "build: päivitä generoidut dist-tiedostot [skip ci]"
+            git push
+          else
+            echo "Ei muutoksia dist-kansiossa, ei kommitoitavaa."
+          fi
