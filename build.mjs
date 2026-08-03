@@ -12,6 +12,8 @@ const SITE_ORIGIN = 'https://sorola.fi';
 const SITE_ORIGIN_PATTERN = new RegExp(`${escapeRegExp(SITE_ORIGIN)}(?:/en)?(?:/[^"'\\s<]*)?`, 'g');
 const TEXT_FILE_EXTENSIONS = new Set(['.html', '.js', '.xml', '.txt']);
 const ROOT_ONLY_FILES = new Set(['_headers', 'robots.txt', 'sitemap.xml']);
+const DEFAULT_ROBOTS_CONTENT = 'index,follow,max-image-preview:large';
+const PRIVATE_ROBOTS_CONTENT = 'noindex,nofollow,noarchive';
 const IGNORE_NAMES = new Set([
   'i18n'
 ]);
@@ -94,6 +96,7 @@ function localizeHtml(content, relativePath, locale) {
   localized = rewriteDocumentUrls(localized, relativePath, locale);
   localized = setHtmlLanguage(localized, locale);
   localized = rewriteAbsoluteSiteUrls(localized, locale);
+  localized = ensureSeoMetadata(localized, relativePath, locale);
   localized = upsertCanonical(localized, relativePath, locale);
   localized = upsertOgUrl(localized, relativePath, locale);
   localized = upsertAlternateLinks(localized, relativePath);
@@ -274,6 +277,30 @@ function upsertAlternateLinks(content, relativePath) {
   return content.replace(/(<link\s+rel="canonical"[^>]*>)/i, `$1${alternate}`);
 }
 
+function ensureSeoMetadata(content, relativePath, locale) {
+  const title = normalizeWhitespace(decodeHtmlEntities(getTitle(content) || ''));
+  const description = getMetaContentByName(content, 'description') || extractSeoDescription(content, title);
+  const robots = isPrivatePage(relativePath) ? PRIVATE_ROBOTS_CONTENT : DEFAULT_ROBOTS_CONTENT;
+  const ogLocale = locale === 'fi' ? 'fi_FI' : 'en_US';
+
+  let output = content;
+  if (description) {
+    output = upsertMetaName(output, 'description', description);
+  }
+  if (title) {
+    output = upsertMetaProperty(output, 'og:title', title);
+    output = upsertMetaName(output, 'twitter:title', title);
+  }
+  if (description) {
+    output = upsertMetaProperty(output, 'og:description', description);
+    output = upsertMetaName(output, 'twitter:description', description);
+  }
+  output = upsertMetaProperty(output, 'og:locale', ogLocale);
+  output = upsertMetaName(output, 'twitter:card', 'summary');
+  output = upsertMetaName(output, 'robots', robots);
+  return output;
+}
+
 function injectLanguageOverlay(content, relativePath, locale) {
   if (content.includes('language-overlay')) return content;
   const labels = locales[locale].overlay;
@@ -292,6 +319,100 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function getTitle(content) {
+  const match = content.match(/<title>([\s\S]*?)<\/title>/i);
+  return match ? match[1] : '';
+}
+
+function getMetaContentByName(content, name) {
+  const escapedName = escapeRegExp(name);
+  const patterns = [
+    new RegExp(`<meta\\s+[^>]*name=["']${escapedName}["'][^>]*content=["']([^"']*)["'][^>]*>`, 'i'),
+    new RegExp(`<meta\\s+[^>]*content=["']([^"']*)["'][^>]*name=["']${escapedName}["'][^>]*>`, 'i')
+  ];
+  for (const pattern of patterns) {
+    const match = content.match(pattern);
+    if (match) {
+      return normalizeWhitespace(decodeHtmlEntities(match[1]));
+    }
+  }
+  return '';
+}
+
+function upsertMetaName(content, name, value) {
+  const tag = `<meta name="${name}" content="${escapeHtml(value)}">`;
+  const escapedName = escapeRegExp(name);
+  const pattern = new RegExp(`<meta\\s+[^>]*name=["']${escapedName}["'][^>]*>`, 'i');
+  if (pattern.test(content)) {
+    return content.replace(pattern, tag);
+  }
+  return content.replace(/<head>/i, `<head>\n    ${tag}`);
+}
+
+function upsertMetaProperty(content, property, value) {
+  const tag = `<meta property="${property}" content="${escapeHtml(value)}">`;
+  const escapedProperty = escapeRegExp(property);
+  const pattern = new RegExp(`<meta\\s+[^>]*property=["']${escapedProperty}["'][^>]*>`, 'i');
+  if (pattern.test(content)) {
+    return content.replace(pattern, tag);
+  }
+  return content.replace(/<head>/i, `<head>\n    ${tag}`);
+}
+
+function extractSeoDescription(content, title) {
+  const candidateTags = ['h1', 'h2', 'p'];
+  const parts = [];
+
+  for (const tag of candidateTags) {
+    const matches = content.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'));
+    for (const match of matches) {
+      const text = normalizeMetaText(match[1]);
+      if (!text) continue;
+      if (title && text.toLowerCase() === title.toLowerCase()) continue;
+      if (!parts.some((part) => part.toLowerCase() === text.toLowerCase())) {
+        parts.push(text);
+      }
+      if (parts.join(' ').length >= 160) {
+        return truncateDescription([title, ...parts].filter(Boolean).join('. '));
+      }
+    }
+  }
+
+  return truncateDescription([title, ...parts].filter(Boolean).join('. '));
+}
+
+function normalizeMetaText(value) {
+  return normalizeWhitespace(
+    decodeHtmlEntities(value.replace(/<[^>]+>/g, ' '))
+  );
+}
+
+function decodeHtmlEntities(value) {
+  return value
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>');
+}
+
+function truncateDescription(value, maxLength = 160) {
+  const normalized = normalizeWhitespace(value);
+  if (normalized.length <= maxLength) return normalized;
+  const truncated = normalized.slice(0, maxLength + 1);
+  const lastSpace = truncated.lastIndexOf(' ');
+  if (lastSpace > 80) {
+    return `${truncated.slice(0, lastSpace)}…`;
+  }
+  return `${normalized.slice(0, maxLength - 1)}…`;
+}
+
+function isPrivatePage(relativePath) {
+  const webPath = sourceRelativeToWebPath(relativePath).toLowerCase();
+  return webPath === '/admin/' || webPath.startsWith('/admin/') || webPath === '/niko/' || webPath.startsWith('/niko/');
 }
 
 function localizedWebPath(relativePath, locale) {
