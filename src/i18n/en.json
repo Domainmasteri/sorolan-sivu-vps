@@ -29,7 +29,7 @@
         "Uusi salasana": "New password",
         "Uusi uudelleen": "Repeat new password",
         "Paikkakunta:": "Location:",
-        "Sosiaaliset mediat & koodaus": "Social media & coding"
+        "Sosiaaliset mediat & koodaus": "Social media & coding",
         "QR-koodin luojan käyttöohje": "QR code generator guide",
         "Pastebin-palvelun käyttöohje": "Pastebin usage guide",
         "JSON-muotoilijan käyttöohje": "JSON formatter guide",
@@ -926,7 +926,7 @@
         "4. Evästeet ja analytiikka": "4. Cookies and analytics",
         "5. Yhteystiedot": "5. Contact"
       }
-    };
+    },
     "privacy/holvi.html": {
       "text": {
         "Privacy Policy for Sorolan Holvi": "Privacy Policy for Sorola Vault",
