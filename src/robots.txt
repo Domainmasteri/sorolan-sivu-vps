@@ -1,7 +1,9 @@
 User-agent: *
 Disallow: /admin/
+Disallow: /niko/
 Disallow: /Niko/
 Disallow: /en/admin/
+Disallow: /en/niko/
 Disallow: /en/Niko/
 Disallow: /api/
 Disallow: /functions/
