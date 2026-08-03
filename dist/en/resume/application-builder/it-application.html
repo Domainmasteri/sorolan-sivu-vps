@@ -8,20 +8,227 @@
     <link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/application-builder/it-application">
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ansioluettelot/hakemus-make/hakemus-it">
     <meta name="author" content="Sorola.fi">
-    <meta name="twitter:description" content="Job application - Markus Sorola. Open application Tutustu palveluihin ja ohjeisiin Sorola.fissä.">
+    <meta name="twitter:description" content="Job application - Markus Sorola. Markus Sorola Tutustu palveluihin ja ohjeisiin Sorola.fissä.">
     <meta name="twitter:title" content="Job application - Markus Sorola">
     <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:description" content="Job application - Markus Sorola. Open application Tutustu palveluihin ja ohjeisiin Sorola.fissä.">
+    <meta property="og:description" content="Job application - Markus Sorola. Markus Sorola Tutustu palveluihin ja ohjeisiin Sorola.fissä.">
     <meta property="og:title" content="Job application - Markus Sorola">
     <meta property="og:type" content="website">
-    <meta name="description" content="Job application - Markus Sorola. Open application Tutustu palveluihin ja ohjeisiin Sorola.fissä.">
+    <meta name="description" content="Job application - Markus Sorola. Markus Sorola Tutustu palveluihin ja ohjeisiin Sorola.fissä.">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job application - Markus Sorola</title>
-    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/styles/style-hakemus.css">
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/en/analytics.js"></script>
+    <script src="/en/analytics.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #0a0f1e;
+            min-height: 100vh;
+            color: #334155;
+        }
+
+        /* ── LAYOUT ── */
+        .hakemus-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            max-width: 1000px;
+            margin: 2.5rem auto;
+            min-height: calc(100vh - 5rem);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        .hakemus-sidebar {
+            background: linear-gradient(160deg, #1e3a5f 0%, #0f2040 100%);
+            color: #e2e8f0;
+            padding: 80px 24px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .sidebar-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #f8fafc;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .sidebar-role {
+            font-size: 0.8rem;
+            color: #60a5fa;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-top: 4px;
+        }
+
+        .sidebar-block .section-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #60a5fa;
+            margin-bottom: 12px;
+            padding-bottom: 7px;
+            border-bottom: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .sidebar-block p {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-block p strong {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        .sidebar-block a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        .sidebar-block a:hover {
+            text-decoration: underline;
+        }
+
+        .sidebar-block ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .sidebar-block li {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            padding-left: 16px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .sidebar-block li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #60a5fa;
+            font-size: 0.75rem;
+            top: 1px;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .hakemus-main {
+            background: #f8fafc;
+            padding: 44px 44px 48px;
+        }
+
+        .letter-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            border-left: 4px solid #3b82f6;
+            padding-left: 14px;
+        }
+
+        .letter-divider {
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, transparent);
+            border-radius: 2px;
+            margin-bottom: 28px;
+            margin-top: 16px;
+        }
+
+        .letter-body p {
+            font-size: 0.93rem;
+            color: #374151;
+            line-height: 1.75;
+            margin-bottom: 16px;
+        }
+
+        .letter-body ul {
+            margin: 0 0 16px 0;
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .letter-body li {
+            font-size: 0.93rem;
+            color: #374151;
+            line-height: 1.65;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .letter-body li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-size: 0.75rem;
+            top: 3px;
+        }
+
+        .letter-footer {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .letter-footer p {
+            font-size: 0.93rem;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .signature {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .hakemus-wrapper {
+                grid-template-columns: 1fr;
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .hakemus-sidebar {
+                padding: 28px 22px 24px;
+            }
+
+            .hakemus-main {
+                padding: 24px 20px 100px;
+            }
+
+            .letter-title {
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .hakemus-sidebar {
+                padding-top: 80px;
+            }
+        }
+    </style>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
@@ -39,63 +246,66 @@
         <a class="language-overlay__link is-active" href="/en/resume/application-builder/it-application" aria-current="page">🇬🇧</a>
     </nav>
 
-<button class="btn-download" onclick="generatePDF('Markus_Sorola_Open_Application_IT.pdf')">Download PDF</button>
+<div class="hakemus-wrapper">
 
-<div class="hakemus-container" id="hakemus">
-    
-    <div class="sidebar">
-        <h2>Markus Sorola</h2>
-        <p class="title">Open application</p>
-        
-        <h3>Contact details</h3>
-        <p><strong>Email:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
-        <p><strong>Location:</strong><br>Salo</p>
-        <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi/en/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
-
-        <h3>Technical stack</h3>
-        <p>• HTML5 & CSS3<br>• JavaScript & PHP<br>• Linux VPS / Cloud Infra<br>• Git / GitHub / CI-CD<br>• Tietoturva & Automatisointi</p>
-    </div>
-
-    <!-- Pienennettiin paddingia täällä (alkuperäinen oli 3.5rem 3rem) -->
-    <div class="main-content" style="padding: 2.5rem 3rem;">
-        <div class="letter-header" style="justify-content: flex-end; margin-bottom: 2rem;">
-            <div class="date-info">
-                Salo, <span id="current-date"></span>
-            </div>
+    <!-- Sidebar -->
+    <aside class="hakemus-sidebar">
+        <div class="sidebar-block">
+            <p class="sidebar-name">Markus Sorola</p>
+            <p class="sidebar-role">Open application</p>
         </div>
 
-        <!-- Pienennettiin otsikon alaväliä -->
-        <h1 class="application-title" style="margin-bottom: 1.2rem;">Open application – A self-directed specialist in web technologies and infrastructure</h1>
+        <div class="sidebar-block">
+            <h2 class="section-label">Contact details</h2>
+            <p><strong>Email:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+            <p><strong>Location:</strong><br>Salo</p>
+            <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi/en/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+        </div>
+
+        <div class="sidebar-block">
+            <h3 class="section-label">Technical stack</h3>
+            <ul>
+                <li>HTML5 & CSS3</li>
+                <li>JavaScript & PHP</li>
+                <li>Linux VPS / Cloud Infra</li>
+                <li>Git / GitHub / CI-CD</li>
+                <li>Security & automation</li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Letter -->
+    <main class="hakemus-main">
+        <h1 class="letter-title">Open application – A self-directed specialist in web technologies and infrastructure</h1>
+        <div class="letter-divider"></div>
 
         <div class="letter-body">
             <p>Dear recruiter,</p>
-            
+
             <p>I am sending you this open application because I am looking for new challenges in the field and I am highly interested in your company's work. I am a goal-oriented professional with strong logical problem-solving skills, and modern web technologies and infrastructure maintenance are not only core parts of my expertise but also a genuine passion.</p>
-            
+
             <p>I have independently designed and built a comprehensive web infrastructure around my own domains. I am comfortable with both frontend and backend development (HTML, CSS, JavaScript, PHP) and understand deeply how systems communicate with each other. In addition to development work, I handle the setup and maintenance of my own server environment (for example VPS solutions and cloud storage) as well as version control through GitHub. Security, privacy, and process automation are built-in ways of working for me, not just add-on features.</p>
-            
+
             <p>What I bring to a team:</p>
-            <ul style="margin-bottom: 0.8rem;">
+            <ul>
                 <li><strong>Strong technical foundation:</strong> The ability to build and maintain web services all the way from the server layer to the user interface.</li>
                 <li><strong>Logical reasoning:</strong> I enjoy breaking down complex problems and optimizing code.</li>
                 <li><strong>Practical mindset:</strong> I understand how things are coded and how they are kept securely running.</li>
             </ul>
-            
+
             <p>My background as an early-morning delivery worker has taught me precision and the ability to get things done on schedule – qualities that are also highly valuable in demanding IT projects.</p>
-            
-            <p style="margin-bottom: 0;">I would be very happy to discuss further how my technical expertise could meet your company's needs.</p>
+
+            <p>I would be very happy to discuss further how my technical expertise could meet your company's needs.</p>
         </div>
 
-        <!-- Pienennettiin alatunnisteen yläväliä -->
-        <div class="letter-footer" style="padding-top: 1rem;">
+        <div class="letter-footer">
             <p>Kind regards,</p>
             <div class="signature">
                 Markus Sorola
             </div>
         </div>
-    </div>
+    </main>
 </div>
-<script src="/en/resume/application-builder/script-hakemus.js"></script>
 
 </body>
 </html>

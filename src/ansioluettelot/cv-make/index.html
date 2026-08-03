@@ -4,58 +4,309 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markus Sorola - CV</title>
-    <!-- Tuodaan html2pdf.js -kirjasto -->
-    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
-    <!-- Linkitetään oma tyylitiedosto -->
-    <link rel="stylesheet" href="/styles/style.css">
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+    <script src="/analytics.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #0a0f1e;
+            min-height: 100vh;
+            color: #334155;
+        }
+
+        /* ── LAYOUT ── */
+        .cv-wrapper {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            max-width: 1020px;
+            margin: 2.5rem auto;
+            min-height: calc(100vh - 5rem);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        .cv-sidebar {
+            background: linear-gradient(160deg, #1e293b 0%, #0f1f3a 100%);
+            color: #e2e8f0;
+            padding: 80px 26px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            text-align: center;
+        }
+
+        .profile-pic-ring {
+            width: 156px;
+            height: 156px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24, #f59e0b);
+            box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.18), 0 8px 28px rgba(0, 0, 0, 0.4);
+            flex-shrink: 0;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+
+        .profile-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #f8fafc;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        /* Sidebar section headers */
+        .cv-sidebar .section-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #f59e0b;
+            margin-bottom: 12px;
+            padding-bottom: 7px;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .sidebar-block p {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-block p strong {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        .sidebar-block a {
+            color: #f59e0b;
+            text-decoration: none;
+        }
+
+        .sidebar-block a:hover {
+            text-decoration: underline;
+        }
+
+        .sidebar-block ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .sidebar-block li {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            padding-left: 16px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .sidebar-block li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+            font-size: 0.75rem;
+            top: 1px;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .cv-main {
+            background: #f8fafc;
+            padding: 44px 44px 48px;
+        }
+
+        .main-heading {
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: -0.04em;
+            margin-bottom: 6px;
+        }
+
+        .main-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, transparent);
+            border-radius: 2px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #f59e0b;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            padding-bottom: 7px;
+            border-bottom: 2px solid #f59e0b;
+            display: inline-block;
+        }
+
+        .item {
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .item-title {
+            font-size: 0.975rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .item-subtitle {
+            font-size: 0.83rem;
+            color: #64748b;
+            margin: 4px 0 7px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .item-subtitle::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #f59e0b;
+            flex-shrink: 0;
+        }
+
+        .item-desc {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .cv-wrapper {
+                grid-template-columns: 1fr;
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .cv-sidebar {
+                padding: 28px 22px 24px;
+            }
+
+            .profile-section {
+                flex-direction: row;
+                text-align: left;
+                gap: 18px;
+            }
+
+            .profile-pic-ring {
+                width: 96px;
+                height: 96px;
+                flex-shrink: 0;
+            }
+
+            .cv-main {
+                padding: 24px 20px 100px;
+            }
+
+            .main-heading {
+                font-size: 1.6rem;
+            }
+
+            .section-title {
+                margin-top: 24px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .cv-sidebar {
+                /* extra top space so language overlay (fixed, top-left) does not cover profile pic */
+                padding-top: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Nappi joka käynnistää PDF-luonnin -->
-<button class="btn-download" onclick="generatePDF()">Lataa PDF</button>
+<div class="cv-wrapper">
 
-<!-- CV:n alue (Lukittu A4-kokoon) -->
-<div class="cv-container" id="cv">
-    
-    <!-- Vasen palkki -->
-    <div class="sidebar">
-        <!-- VAIHDA TÄHÄN OMAN KUVASI TIEDOSTONIMI (esim. 73854.jpg) -->
-        <img src="cv-kuva.jpg" alt="Profiilikuva" class="profile-pic">
-        
-        <h2>Henkilötiedot</h2>
-        <p><strong>Nimi:</strong> Markus Sorola</p>
-        <p><strong>Sähköposti:</strong> <a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
-        <p><strong>Paikkakunta:</strong> Salo</p>
-        <p><strong>Syntymäaika:</strong> 29. heinäkuuta 1998</p>
-        <p><strong>Verkkosivu:</strong> <a href="https://sorola.fi" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+    <!-- Sidebar -->
+    <aside class="cv-sidebar">
+        <div class="profile-section">
+            <div class="profile-pic-ring">
+                <img src="cv-kuva.jpg" alt="Profiilikuva" class="profile-pic">
+            </div>
+            <p class="profile-name">Markus Sorola</p>
+        </div>
 
-        <h3>Taidot</h3>
-        <ul>
-            <li>palvelimet ja domainit</li>
-            <li>Office- ja toimisto-ohjelmat</li>
-            <li>mobiilineuvonta ja käyttö</li>
-            <li>Jakelu- ja logistiikka</li>
-        </ul>
+        <div class="sidebar-block">
+            <h2 class="section-label">Henkilötiedot</h2>
+            <p><strong>Nimi:</strong> Markus Sorola</p>
+            <p><strong>Sähköposti:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+            <p><strong>Paikkakunta:</strong> Salo</p>
+            <p><strong>Syntymäaika:</strong> 29. heinäkuuta 1998</p>
+            <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+        </div>
 
-        <h3>Kielet</h3>
-        <ul>
-            <li>Suomi</li>
-            <li>English</li>
-        </ul>
+        <div class="sidebar-block">
+            <h3 class="section-label">Taidot</h3>
+            <ul>
+                <li>palvelimet ja domainit</li>
+                <li>Office- ja toimisto-ohjelmat</li>
+                <li>mobiilineuvonta ja käyttö</li>
+                <li>Jakelu- ja logistiikka</li>
+            </ul>
+        </div>
 
-        <h3>Harrastukset</h3>
-        <ul>
-            <li>Tietotekniikka</li>
-            <li>Kielten opiskelu satunnaisesti</li>
-            <li>Kavereiden ja tyttöystävän kanssa ajan vietto</li>
-        </ul>
-    </div>
+        <div class="sidebar-block">
+            <h3 class="section-label">Kielet</h3>
+            <ul>
+                <li>Suomi</li>
+                <li>English</li>
+            </ul>
+        </div>
 
-    <!-- Oikea puoli (Pääsisältö) -->
-    <div class="main-content">
-        <h1>Markus Sorola</h1>
+        <div class="sidebar-block">
+            <h3 class="section-label">Harrastukset</h3>
+            <ul>
+                <li>Tietotekniikka</li>
+                <li>Kielten opiskelu satunnaisesti</li>
+                <li>Kavereiden ja tyttöystävän kanssa ajan vietto</li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="cv-main">
+        <h1 class="main-heading">Markus Sorola</h1>
+        <div class="main-divider"></div>
 
         <h2 class="section-title">Henkilökohtainen tiivistelmä</h2>
         <p class="item-desc">Olen luotettava ja oma-aloitteinen tekijä, jolla on monipuolinen kokemus niin käytännönläheisestä logistiikasta kuin teknisestä ongelmanratkaisustakin. Varhaisjakajana olen oppinut arvostamaan täsmällisyyttä ja optimoimaan prosesseja, ja minulla on erinomainen visuaalis-avaruudellinen muisti. Vapaa-ajallani suunnittelen, koodaan ja ylläpidän laajoja verkkoinfrastruktuureja palvelimineen. Etsin työtä, jossa voin hyödyntää kykyäni hahmottaa isoja kokonaisuuksia ja omaksua nopeasti uusia järjestelmiä – oli kyse sitten lähdekoodista tai monimutkaisista reittikartoista.</p>
@@ -92,10 +343,8 @@
             <div class="item-subtitle">Ihme ja Kumma Tuki Ry, Salo | touko 2021 - loka 2021</div>
             <div class="item-desc">Olin heillä kirpputorimyyjänä jokusen kuukauden, mutta se loppui minulta, kun sain työpaikan Valmetilta. Myöhemmin Ihme ja Kumma teki valitettavasti konkurssin.</div>
         </div>
-    </div>
+    </main>
 </div>
 
-<!-- Linkitetään oma JavaScript-tiedosto -->
-<script src="script.js"></script>
 </body>
 </html>

@@ -820,7 +820,9 @@
         "Jakelu- ja logistiikka-ala": "Distribution and logistics",
         "Kohdennettu hakemus varhaisjakelun, rutiinien hallinnan ja reittisuunnittelun tehtäviin.": "A targeted application for early-morning delivery, routine management, and route planning roles.",
         "IT-ala ja verkkokehitys": "IT and web development",
-        "Kohdennettu hakemus infrastruktuurin, järjestelmänhallinnan ja verkkokehityksen tehtäviin.": "A targeted application for infrastructure, systems administration, and web development roles."
+        "Kohdennettu hakemus infrastruktuurin, järjestelmänhallinnan ja verkkokehityksen tehtäviin.": "A targeted application for infrastructure, systems administration, and web development roles.",
+        "📄 Logistiikan hakemus": "📄 The logistics application",
+        "📄 IT-alan hakemus": "📄 The IT application"
       },
       "attributes": {
         "Täältä löydät Markuksen kohdennetut työhakemuspohjat eri aloille.": "Here you'll find Markus's targeted job application templates for different industries.",
@@ -895,9 +897,6 @@
         "🔹 Tietoturva & Automatisointi": "🔹 Security & Automation",
         "Olen suunnitellut ja rakentanut täysin itsenäisesti kattavan verkkoinfrastruktuurin omien domainieni ympärille. Hallitsen sujuvasti frontend- ja backend-kehityksen (HTML, CSS, JavaScript, PHP) ja ymmärrän syvällisesti, miten järjestelmät keskustelevat keskenään. Kehitystyön lisäksi vastaan oman palvelinympäristöni pystyttämisestä ja ylläpidosta (esim. VPS-ratkaisut ja pilvitallennus) sekä versionhallinnasta GitHubin kautta. Tietoturva, yksityisyydensuoja ja prosessien automatisointi ovat minulle selkärangassa olevia toimintatapoja, eivätkä vain päälle liimattuja ominaisuuksia.": "I have independently designed and built a comprehensive web infrastructure around my own domains. I am comfortable with both frontend and backend development (HTML, CSS, JavaScript, PHP) and understand deeply how systems communicate with each other. In addition to development work, I handle the setup and maintenance of my own server environment (for example VPS solutions and cloud storage) as well as version control through GitHub. Security, privacy, and process automation are built-in ways of working for me, not just add-on features.",
         "Varhaisjakelijan taustani on opettanut minulle täsmällisyyttä ja kykyä viedä asiat maaliin aikataulussa – ominaisuuksia, joista on valtavasti hyötyä myös vaativissa IT-projekteissa.": "My background as an early-morning delivery worker has taught me precision and the ability to get things done on schedule – qualities that are also highly valuable in demanding IT projects."
-      },
-      "raw": {
-        "generatePDF('Markus_Sorola_Avoin_Hakemus_IT.pdf')": "generatePDF('Markus_Sorola_Open_Application_IT.pdf')"
       }
     },
     "ansioluettelot/hakemus-make/hakemus-jakelu.html": {
@@ -926,9 +925,6 @@
         "• Reittien optimointi": "• Route optimization",
         "• Erinomainen reittimuisti": "• Excellent route memory",
         "• Itsenäinen työote": "• Independent work style"
-      },
-      "raw": {
-        "generatePDF('Markus_Sorola_Avoin_Hakemus_Logistiikka.pdf')": "generatePDF('Markus_Sorola_Open_Application_Logistics.pdf')"
       }
     },
     "makelink/index.html": {

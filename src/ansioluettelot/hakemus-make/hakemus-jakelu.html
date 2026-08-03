@@ -4,53 +4,266 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Työhakemus - Markus Sorola</title>
-    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/styles/style-hakemus.css">
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+    <script src="/analytics.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #0a0f1e;
+            min-height: 100vh;
+            color: #334155;
+        }
+
+        /* ── LAYOUT ── */
+        .hakemus-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            max-width: 1000px;
+            margin: 2.5rem auto;
+            min-height: calc(100vh - 5rem);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        .hakemus-sidebar {
+            background: linear-gradient(160deg, #064e3b 0%, #022c22 100%);
+            color: #e2e8f0;
+            padding: 80px 24px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .sidebar-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #f8fafc;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .sidebar-role {
+            font-size: 0.8rem;
+            color: #34d399;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-top: 4px;
+        }
+
+        .sidebar-block .section-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #34d399;
+            margin-bottom: 12px;
+            padding-bottom: 7px;
+            border-bottom: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .sidebar-block p {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-block p strong {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        .sidebar-block a {
+            color: #34d399;
+            text-decoration: none;
+        }
+
+        .sidebar-block a:hover {
+            text-decoration: underline;
+        }
+
+        .sidebar-block ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .sidebar-block li {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            padding-left: 16px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .sidebar-block li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #34d399;
+            font-size: 0.75rem;
+            top: 1px;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .hakemus-main {
+            background: #f8fafc;
+            padding: 44px 44px 48px;
+        }
+
+        .letter-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            border-left: 4px solid #10b981;
+            padding-left: 14px;
+        }
+
+        .letter-divider {
+            height: 2px;
+            background: linear-gradient(90deg, #10b981, transparent);
+            border-radius: 2px;
+            margin-bottom: 28px;
+            margin-top: 16px;
+        }
+
+        .letter-body p {
+            font-size: 0.93rem;
+            color: #374151;
+            line-height: 1.75;
+            margin-bottom: 16px;
+        }
+
+        .letter-body ul {
+            margin: 0 0 16px 0;
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .letter-body li {
+            font-size: 0.93rem;
+            color: #374151;
+            line-height: 1.65;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .letter-body li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-size: 0.75rem;
+            top: 3px;
+        }
+
+        .letter-footer {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .letter-footer p {
+            font-size: 0.93rem;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .signature {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .hakemus-wrapper {
+                grid-template-columns: 1fr;
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .hakemus-sidebar {
+                padding: 28px 22px 24px;
+            }
+
+            .hakemus-main {
+                padding: 24px 20px 100px;
+            }
+
+            .letter-title {
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .hakemus-sidebar {
+                padding-top: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<button class="btn-download" onclick="generatePDF('Markus_Sorola_Avoin_Hakemus_Logistiikka.pdf')">Lataa PDF</button>
+<div class="hakemus-wrapper">
 
-<div class="hakemus-container" id="hakemus">
-    
-    <div class="sidebar theme-green">
-        <h2>Markus Sorola</h2>
-        <p class="title">Avoin hakemus</p>
-        
-        <h3>Yhteystiedot</h3>
-        <p><strong>Sähköposti:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
-        <p><strong>Paikkakunta:</strong><br>Salo</p>
-        <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
-
-        <h3>Ydinosaaminen</h3>
-        <p>• Jakelu ja logistiikka<br>• Reittien optimointi<br>• Erinomainen reittimuisti<br>• Itsenäinen työote</p>
-    </div>
-
-    <div class="main-content">
-        <div class="letter-header" style="justify-content: flex-end;">
-            <div class="date-info">
-                Salo, <span id="current-date"></span>
-            </div>
+    <!-- Sidebar -->
+    <aside class="hakemus-sidebar">
+        <div class="sidebar-block">
+            <p class="sidebar-name">Markus Sorola</p>
+            <p class="sidebar-role">Avoin hakemus</p>
         </div>
 
-        <h1 class="application-title">Avoin työhakemus – Täsmällinen ja reittien hallinnan taitava tekijä</h1>
+        <div class="sidebar-block">
+            <h2 class="section-label">Yhteystiedot</h2>
+            <p><strong>Sähköposti:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+            <p><strong>Paikkakunta:</strong><br>Salo</p>
+            <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+        </div>
+
+        <div class="sidebar-block">
+            <h3 class="section-label">Ydinosaaminen</h3>
+            <ul>
+                <li>Jakelu ja logistiikka</li>
+                <li>Reittien optimointi</li>
+                <li>Erinomainen reittimuisti</li>
+                <li>Itsenäinen työote</li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Letter -->
+    <main class="hakemus-main">
+        <h1 class="letter-title">Avoin työhakemus – Täsmällinen ja reittien hallinnan taitava tekijä</h1>
+        <div class="letter-divider"></div>
 
         <div class="letter-body">
             <p>Hyvä rekrytoija,</p>
-            
+
             <p>Lähetän teille tämän avoimen hakemuksen, sillä etsin uusia haasteita jakelun ja logistiikan parista, ja uskon kokemukseni sopivan erinomaisesti tarpeisiinne. Olen tottunut itsenäiseen, vastuulliseen ja tarkkuutta vaativaan työhön.</p>
-            
+
             <p>Työskentelen tällä hetkellä varhaisjakajana, mikä on opettanut minulle paineensietokykyä ja saumatonta rutiinien hallintaa. Vahvuuteni on poikkeuksellisen hyvä visuaalinen ja numeerinen muisti; opin ja painan mieleeni uudet reitit, asiakastiedot ja jakelulaatikoiden sijainnit erittäin nopeasti ilman jatkuvaa kertaamista. Pystyn optimoimaan ajoreittejä itsenäisesti ja huolehtimaan siitä, että toimitukset ovat perillä täsmällisesti aikataulussa, myös vaativissa sääolosuhteissa ja yöaikaan.</p>
-            
+
             <p>Miksi valita minut?</p>
             <ul>
                 <li><strong>Itsenäisyys ja luotettavuus:</strong> Hoidan annetut tehtävät alusta loppuun ilman jatkuvaa valvontaa.</li>
                 <li><strong>Nopea oppimiskyky:</strong> Hahmottamalla laajoja kokonaisuuksia otan uudet alueet ja reitit haltuun hetkessä.</li>
                 <li><strong>Asenne:</strong> En pelkää fyysistä työtä tai epätyypillisiä työaikoja.</li>
             </ul>
-            
+
             <p>Olen valmis tarttumaan uusiin haasteisiin ja tuomaan mukanani rautaisen työmoraalin. Tulisin mielelläni haastatteluun kertomaan lisää siitä, miten voin olla hyödyksi organisaatiollenne.</p>
         </div>
 
@@ -60,9 +273,8 @@
                 Markus Sorola
             </div>
         </div>
-    </div>
+    </main>
 </div>
-<script src="script-hakemus.js"></script>
 
 </body>
 </html>
