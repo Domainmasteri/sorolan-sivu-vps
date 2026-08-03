@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta property="og:url" content="https://sorola.fi/ohjeet/pastebin">
+    <meta charset="UTF-8">
+    <title>Pastebinin käyttöohje - Sorola</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/pastebin">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Suomenkielinen ohje Sorolan Pastebin-palvelun käyttöön koodin ja tekstin jakamiseksi.">
+    <script src="ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 0; margin-bottom: 0; color: #ffaa00; }
+        .ohje-palsta.auki > h2 { margin-bottom: 16px; }
+        .ohje-toggle { flex: 0 0 auto; width: 34px; height: 34px; border: 1px solid #ffaa00; border-radius: 50%; background: transparent; color: #ffaa00; font: inherit; font-size: 24px; line-height: 1; cursor: pointer; }
+        .ohje-toggle:hover, .ohje-toggle:focus-visible { background: #ffaa00; color: #111; outline: none; }
+        .ohje-sisalto[hidden] { display: none; }
+        .ohje-sisalto > :first-child { margin-top: 0; }
+        .ohje-sisalto > :last-child { margin-bottom: 0; }
+    </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script src="/analytics.js"></script>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/ohjeet/pastebin" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/guides/pastebin">🇬🇧</a>
+    </nav>
+<a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
+<div class="laatikko">
+    <h1 class="otsikko">Pastebin-palvelun käyttöohje</h1>
+    <div class="osion-tausta">
+        <p>Pastebin on työkalu koodinpätkien, logien tai muotoilemattoman tekstin nopeaan jakamiseen.</p>
+    </div>
+    <div class="osion-tausta ohje-palsta">
+        <h2>1. Liitä teksti tai koodi
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Kopioi haluamasi teksti tai ohjelmointikoodi ja liitä se syöttöalueelle.</p>
+        </div>
+    </div>
+    <div class="osion-tausta ohje-palsta">
+        <h2>2. Tallenna ja jaa linkki
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Paina <strong>Tallenna ja luo linkki</strong>. Palvelu tallentaa tekstin ja luo sinulle lyhyen osoitteen, jonka voit kopioida leikepöydälle.</p>
+        </div>
+    </div>
+    <div class="osion-tausta ohje-palsta">
+        <h2>3. Tekstin lukeminen
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Kun vastaanottaja avaa linkin, teksti näytetään selkeässä katselunäkymässä syntaksia korostaen. Vastaanottaja voi kopioida koko sisällön yhdellä painikkeella.</p>
+        </div>
+    </div>
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="../ohjeet/" class="nappula1">Takaisin ohjeisiin</a>
+    </div>
+</div>
+</body>
+</html>
