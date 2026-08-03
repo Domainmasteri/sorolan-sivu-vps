@@ -15,6 +15,7 @@ const ROOT_ONLY_FILES = new Set(['_headers', 'robots.txt', 'sitemap.xml']);
 const IGNORE_NAMES = new Set([
   'i18n'
 ]);
+const PRIVATE_PATH_SEGMENTS = new Set(['admin', 'niko']);
 const ATTRIBUTE_PATTERN = /(placeholder|aria-label|content|title|alt)=(["'])(.*?)\2/gi;
 const URL_ATTRIBUTE_PATTERN = /\b(href|src|action)=(["'])(.*?)\2/gi;
 
@@ -94,8 +95,10 @@ function localizeHtml(content, relativePath, locale) {
   localized = rewriteDocumentUrls(localized, relativePath, locale);
   localized = setHtmlLanguage(localized, locale);
   localized = rewriteAbsoluteSiteUrls(localized, locale);
+  localized = upsertSeoMeta(localized, relativePath, locale);
   localized = upsertCanonical(localized, relativePath, locale);
   localized = upsertOgUrl(localized, relativePath, locale);
+  localized = upsertRobotsDirective(localized, relativePath);
   localized = upsertAlternateLinks(localized, relativePath);
   localized = injectLanguageOverlay(localized, relativePath, locale);
   return localized;
@@ -274,6 +277,92 @@ function upsertAlternateLinks(content, relativePath) {
   return content.replace(/(<link\s+rel="canonical"[^>]*>)/i, `$1${alternate}`);
 }
 
+function upsertSeoMeta(content, relativePath, locale) {
+  const title = extractTagText(content, 'title');
+  const heading = extractTagText(content, 'h1');
+  const paragraph = extractTagText(content, 'p');
+  const baseTitle = title || heading || 'Sorola.fi';
+  const summary = truncateText(paragraph, 100);
+  const localeSuffix = locale === 'en'
+    ? 'useful IT tools, guides, and practical web utilities from Sorola.fi.'
+    : 'hyödyllisiä IT-työkaluja, oppaita ja käytännöllisiä verkkopalveluita Sorola.fissä.';
+  const description = truncateText(
+    summary
+      ? `${baseTitle}. ${summary} Tutustu palveluihin ja ohjeisiin Sorola.fissä.`
+      : `${baseTitle} - ${localeSuffix}`,
+    160
+  );
+
+  content = upsertMetaTagByName(content, 'description', description);
+  content = upsertMetaTagByProperty(content, 'og:type', 'website');
+  content = upsertMetaTagByProperty(content, 'og:title', baseTitle);
+  content = upsertMetaTagByProperty(content, 'og:description', description);
+  content = upsertMetaTagByName(content, 'twitter:card', 'summary_large_image');
+  content = upsertMetaTagByName(content, 'twitter:title', baseTitle);
+  content = upsertMetaTagByName(content, 'twitter:description', description);
+  content = upsertMetaTagByName(content, 'author', 'Sorola.fi');
+  return content;
+}
+
+function upsertRobotsDirective(content, relativePath) {
+  const robotsValue = isPrivatePath(relativePath)
+    ? 'noindex, nofollow, noarchive'
+    : 'index, follow, max-image-preview:large';
+  return upsertMetaTagByName(content, 'robots', robotsValue);
+}
+
+function isPrivatePath(relativePath) {
+  const normalized = relativePath.replace(/\\/g, '/').toLowerCase();
+  const segments = normalized.split('/').filter(Boolean);
+  return segments.some((segment) => PRIVATE_PATH_SEGMENTS.has(segment));
+}
+
+function extractTagText(content, tagName) {
+  const pattern = new RegExp(`<${tagName}\\b[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
+  const match = content.match(pattern);
+  if (!match) return '';
+  return normalizeMetaText(match[1]);
+}
+
+function normalizeMetaText(value) {
+  return value
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function truncateText(value, maxLength) {
+  if (!value || value.length <= maxLength) return value;
+  const slice = value.slice(0, maxLength + 1);
+  const lastSpace = slice.lastIndexOf(' ');
+  const trimmed = lastSpace > 0 ? slice.slice(0, lastSpace) : slice.slice(0, maxLength);
+  return `${trimmed.trim()}…`;
+}
+
+function upsertMetaTagByName(content, name, value) {
+  const tag = `<meta name="${name}" content="${escapeHtmlAttribute(value)}">`;
+  const pattern = new RegExp(`<meta\\s+name=["']${escapeRegExp(name)}["'][^>]*>`, 'i');
+  if (pattern.test(content)) {
+    return content.replace(pattern, tag);
+  }
+  return content.replace(/<head>/i, `<head>\n    ${tag}`);
+}
+
+function upsertMetaTagByProperty(content, property, value) {
+  const tag = `<meta property="${property}" content="${escapeHtmlAttribute(value)}">`;
+  const pattern = new RegExp(`<meta\\s+property=["']${escapeRegExp(property)}["'][^>]*>`, 'i');
+  if (pattern.test(content)) {
+    return content.replace(pattern, tag);
+  }
+  return content.replace(/<head>/i, `<head>\n    ${tag}`);
+}
+
 function injectLanguageOverlay(content, relativePath, locale) {
   if (content.includes('language-overlay')) return content;
   const labels = locales[locale].overlay;
@@ -292,6 +381,14 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function escapeHtmlAttribute(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function localizedWebPath(relativePath, locale) {
