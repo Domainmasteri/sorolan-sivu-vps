@@ -15,7 +15,7 @@
     <meta property="og:url" content="https://sorola.fi/en/guestbook/">
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Guestbook - Sorolan Sakki">
-    <meta property="og:description" content="Jätä terveisesi Sorolan perheelle vieraskirjassa.">
+    <meta property="og:description" content="Leave your greetings for the Sorola family in the guestbook.">
     <style>
         .ilmoitus { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
         .virhe { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
@@ -131,7 +131,7 @@
         <a class="language-overlay__link" href="/vieraskirja/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/guestbook/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
 
     <div class="laatikko" style="max-width: 700px;">
         <h1 class="otsikko">Guestbook</h1>
@@ -143,7 +143,7 @@
         <main id="paaosio">
             <!-- Lomake -->
             <div class="osion-tausta">
-                <h2 style="margin-top: 0; color: #ffaa00; border-bottom: 2px solid #2d3748; padding-bottom: 8px;">✍️ Jätä viesti</h2>
+                <h2 style="margin-top: 0; color: #ffaa00; border-bottom: 2px solid #2d3748; padding-bottom: 8px;">✍️ Leave a message</h2>
                 <div id="lomake-ilmoitus" class="ilmoitus piilotettu"></div>
                 <div class="flex-form">
                     <input type="text" id="gb-nimi" class="syote" placeholder="Your name" maxlength="100" autocomplete="name">
@@ -165,7 +165,7 @@
             </div>
         </main>
 
-        <a href="/en/" class="linkki-takaisin">← Takaisin pääsivulle</a>
+        <a href="/en/" class="linkki-takaisin">← Back to home</a>
     </div>
 
     <script>
@@ -256,16 +256,16 @@
         function renderViestit(viestit) {
             const osio = document.getElementById('viestit-osio');
             if (!viestit || viestit.length === 0) {
-                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;">Ei vielä viestejä. Ole ensimmäinen!</p></div>';
+                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;">No messages yet. Be the first!</p></div>';
                 return;
             }
             osio.innerHTML = viestit.map(v => {
                 const onYllapito = v.is_admin === 1 || v.is_admin === true;
                 const korttiLuokka = onYllapito ? 'viestikortti yllapito-viesti' : 'viestikortti';
-                const merkki = onYllapito ? '<span class="yllapito-merkki">⚡ Ylläpito</span>' : '';
+                const merkki = onYllapito ? '<span class="yllapito-merkki">⚡ Admin</span>' : '';
                 const vastausHtml = v.admin_reply
                     ? `<div class="admin-vastaus">
-                        <div class="admin-vastaus-otsikko">⚡ Ylläpidon vastaus:</div>
+                        <div class="admin-vastaus-otsikko">⚡ Admin reply:</div>
                         <div class="admin-vastaus-teksti">${escapeHtml(v.admin_reply)}</div>
                        </div>`
                     : '';
@@ -298,7 +298,7 @@
                     renderViestit(data.messages || []);
                 } else {
                     document.getElementById('viestit-osio').innerHTML =
-                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Viestejä ei voitu ladata.</p></div>';
+                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Messages could not be loaded.</p></div>';
                 }
             } catch (e) {
                 document.getElementById('viestit-osio').innerHTML =

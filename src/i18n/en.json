@@ -35,8 +35,9 @@
         "JSON-muotoilijan käyttöohje": "JSON formatter guide",
         "Base64-työkalun käyttöohje": "Base64 tool guide",
         "Tietosuojakäytäntö - Sorolan Verkkotyökalut": "Privacy Policy - Sorola Web Tools",
-        "⚡ Verkkotyökalut &amp; Palvelut": "⚡ Web Tools &amp; Services"
-        
+        "⚡ Verkkotyökalut &amp; Palvelut": "⚡ Web Tools &amp; Services",
+        "Hyppää pääsisältöön": "Skip to main content",
+        "← Takaisin pääsivulle": "← Back to home"
       },
       "attributes": {
         "Avaa ohje": "Open guide",
@@ -85,7 +86,8 @@
         "Palvelinvirhe. Yritä uudelleen.": "Server error. Please try again.",
         "👑 Ylläpito": "👑 Admin",
         "💬 Ylläpidon vastaus:": "💬 Admin reply:",
-        "Jätä terveisesi Sorolan perheelle vieraskirjassa. Sana on vapaa!": "Leave your greetings for the Sorola family in the guestbook. All words are welcome!"
+        "Jätä terveisesi Sorolan perheelle vieraskirjassa. Sana on vapaa!": "Leave your greetings for the Sorola family in the guestbook. All words are welcome!",
+        "✍️ Jätä viesti": "✍️ Leave a message"
       },
       "attributes": {
         "Jätä terveisesi Sorolan perheelle vieraskirjassa. Sana on vapaa!": "Leave your greetings for the Sorola family in the guestbook. All words are welcome!",
@@ -93,7 +95,8 @@
         "Arvo uusi laskutoimitus": "Generate a new calculation",
         "Nimesi": "Your name",
         "Viestisi...": "Your message...",
-        "Vastaus": "Answer"
+        "Vastaus": "Answer",
+        "Jätä terveisesi Sorolan perheelle vieraskirjassa.": "Leave your greetings for the Sorola family in the guestbook."
       },
       "raw": {
         "d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })": "d.toLocaleDateString('en-US', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })",
@@ -108,7 +111,11 @@
         "'Viestejä ei voitu ladata.'": "'Messages could not be loaded.'",
         "'Palvelinvirhe viestejä ladattaessa.'": "'Server error while loading messages.'",
         "'Ei vielä viestejä. Ole ensimmäinen!'": "'No messages yet. Be the first!'",
-        "btn.textContent = 'Lähetä viesti'": "btn.textContent = 'Send message'"
+        "btn.textContent = 'Lähetä viesti'": "btn.textContent = 'Send message'",
+        "⚡ Ylläpito": "⚡ Admin",
+        "⚡ Ylläpidon vastaus:": "⚡ Admin reply:",
+        "Ei vielä viestejä. Ole ensimmäinen!": "No messages yet. Be the first!",
+        "Viestejä ei voitu ladata.": "Messages could not be loaded."
       }
     },
     "index.html": {
@@ -330,7 +337,8 @@
         "Teksti tallennettu!": "Text saved!",
         "Jaa alla oleva linkki vastaanottajalle.": "Share the link below with the recipient.",
         "Kopioi linkki": "Copy link",
-        "Luo uusi": "Create new"
+        "Luo uusi": "Create new",
+        "Liitä tekstisi": "Paste your text"
       },
       "attributes": {
         "Jaa koodinpätkiä, logeja ja puhdasta tekstiä nopeasti ja turvallisesti ilman mainoksia. Sorolan Pastebin tarjoaa helpon tavan tekstin jakamiseen.": "Share code snippets, logs, and plain text quickly and securely without ads. Sorola Pastebin offers an easy way to share text.",
@@ -376,7 +384,8 @@
         "2. Tulos": "2. Result",
         "Tulos näkyy tässä...": "Result appears here...",
         "📋 Kopioi leikepöydälle": "📋 Copy to clipboard",
-        "« Takaisin pääsivulle": "« Back to home"
+        "« Takaisin pääsivulle": "« Back to home",
+        "JSON-syöte": "JSON input"
       },
       "attributes": {
         "Muotoile ja validoi JSON-dataa ilmaiseksi suoraan selaimessasi. Nopea ja helppokäyttöinen JSON-muotoilija ja -tarkistaja.": "Format and validate JSON data for free directly in your browser. A fast and easy-to-use JSON formatter and validator.",
@@ -384,7 +393,9 @@
         "Sorolan JSON-muotoilija": "Sorola JSON Formatter",
         "Muotoile ja validoi JSON-dataa ilmaiseksi selaimessasi.": "Format and validate JSON data for free in your browser.",
         "JSON-syöte": "JSON input",
-        "Muotoiltu JSON-tulos": "Formatted JSON result"
+        "Muotoiltu JSON-tulos": "Formatted JSON result",
+        "Tulos näkyy tässä...": "Result appears here...",
+        "Liitä JSON-datasi tähän, esim. {\"nimi\":\"Testi\",\"arvo\":42}": "Paste your JSON data here, e.g. {\"name\":\"Test\",\"value\":42}"
       },
       "raw": {
         "'Liitä JSON-datasi tähän, esim. {\"nimi\":\"Testi\",\"arvo\":42}'": "'Paste your JSON data here, e.g. {\"name\":\"Test\",\"value\":42}'",
@@ -408,7 +419,8 @@
         "2. Tulos": "2. Result",
         "Tulos näkyy tässä...": "Result appears here...",
         "📋 Kopioi leikepöydälle": "📋 Copy to clipboard",
-        "« Takaisin pääsivulle": "« Back to home"
+        "« Takaisin pääsivulle": "« Back to home",
+        "Syöteteksti": "Input text"
       },
       "attributes": {
         "Koodaa ja pura Base64-tekstiä ilmaiseksi suoraan selaimessasi. Täysi UTF-8-tuki. Mitään ei lähetetä palvelimelle.": "Encode and decode Base64 text for free directly in your browser. Full UTF-8 support. Nothing is sent to the server.",
@@ -417,7 +429,9 @@
         "Koodaa ja pura Base64-tekstiä ilmaiseksi selaimessasi.": "Encode and decode Base64 text for free in your browser.",
         "Syöteteksti": "Input text",
         "Tulos": "Result",
-        "Kieli": "Language"
+        "Kieli": "Language",
+        "Kirjoita tai liitä teksti tähän...": "Type or paste your text here...",
+        "Tulos näkyy tässä...": "Result appears here..."
       },
       "raw": {
         "'Kirjoita tai liitä teksti tähän...'": "'Type or paste your text here...'",
@@ -495,7 +509,7 @@
         "Luo jakolinkki ja kopioi se itsellesi. Voit lähettää linkin eteenpäin esimerkiksi sähköpostilla tai pikaviestimellä.": "Create a share link and copy it for yourself. You can forward the link via email or instant messenger, for example."
       }
     },
-   "ohjeet/qr.html": {
+    "ohjeet/qr.html": {
       "text": {
         "QR-koodin luojan käyttöohje - Sorola": "QR code generator guide - Sorola",
         "QR-koodin luojan käyttöohje": "QR code generator guide",
@@ -518,6 +532,9 @@
         "Lataa kuvana (PNG)": "Download as image (PNG)",
         ". Voit käyttää kuvaa esitteissä, verkkosivuilla tai tulosteissa.": ". You can use the image in leaflets, on websites, or in printed materials.",
         "Takaisin ohjeisiin": "Back to guides"
+      },
+      "attributes": {
+        "Suomenkielinen ohje Sorolan QR-koodin luojan käyttöön: verkkosivut, WiFi-verkot, yhteystiedot ja vapaa teksti.": "A guide to using Sorola's QR code generator: websites, Wi-Fi networks, contact details, and plain text."
       }
     },
     "ohjeet/pastebin.html": {
@@ -526,7 +543,13 @@
         "Pastebin on työkalu koodinpätkien, logien tai muotoilemattoman tekstin nopeaan jakamiseen.": "Pastebin is a tool for quickly sharing code snippets, logs, or unformatted text.",
         "1. Liitä teksti tai koodi": "1. Paste text or code",
         "2. Tallenna ja jaa linkki": "2. Save and share link",
-        "3. Tekstin lukeminen": "3. Reading text"
+        "3. Tekstin lukeminen": "3. Reading text",
+        "Kopioi haluamasi teksti tai ohjelmointikoodi ja liitä se syöttöalueelle.": "Copy the text or programming code you want and paste it into the input area.",
+        ". Palvelu tallentaa tekstin ja luo sinulle lyhyen osoitteen, jonka voit kopioida leikepöydälle.": ". The service saves the text and creates a short URL that you can copy to your clipboard.",
+        "Kun vastaanottaja avaa linkin, teksti näytetään selkeässä katselunäkymässä syntaksia korostaen. Vastaanottaja voi kopioida koko sisällön yhdellä painikkeella.": "When the recipient opens the link, the text is displayed in a clean viewing interface with syntax highlighting. The recipient can copy all the content with one button."
+      },
+      "attributes": {
+        "Suomenkielinen ohje Sorolan Pastebin-palvelun käyttöön koodin ja tekstin jakamiseksi.": "A guide to using Sorola Pastebin for sharing code and text."
       }
     },
     "ohjeet/json.html": {
@@ -534,7 +557,14 @@
         "JSON-muotoilijan käyttöohje - Sorola": "JSON formatter guide - Sorola",
         "JSON-muotoilija auttaa tarkistamaan, siistimään ja tiivistämään JSON-muotoista dataa selaimessa ilman tietojen lähettämistä palvelimelle.": "The JSON formatter helps check, clean, and minify JSON data in your browser without sending any data to a server.",
         "1. Liitä syöte": "1. Paste input",
-        "2. Muotoile tai pakkaa": "2. Format or minify"
+        "2. Muotoile tai pakkaa": "2. Format or minify",
+        "Liitä käsittelemätön JSON-raakadata syöttökenttään.": "Paste the raw JSON data into the input field.",
+        "Jäsentää datan luettavaan sisennettyyn muotoon ja tarkistaa syntaksin.": "Parses the data into a readable indented format and validates the syntax.",
+        "Poistaa kaikki välilyönnit ja rivinvaihdot, jolloin data vie mahdollisimman vähän tilaa.": "Removes all spaces and line breaks, making the data as compact as possible.",
+        "Jos JSON-rakenteessa on syntaksivirhe, työkalu ilmoittaa virheen syyn ja sijainnin.": "If the JSON structure contains a syntax error, the tool reports the reason and location of the error."
+      },
+      "attributes": {
+        "Suomenkielinen ohje JSON-muotoilijan ja validaattorin käyttöön selaimessa.": "A guide to using the JSON formatter and validator in your browser."
       }
     },
     "ohjeet/base64.html": {
@@ -542,7 +572,14 @@
         "Base64-kooderin käyttöohje - Sorola": "Base64 encoder guide - Sorola",
         "Base64-kooderilla muunnat tekstiä Base64-muotoon tai purat Base64-merkkijonoja selkokielelle selaimessa.": "With the Base64 encoder you can convert text to Base64 format or decode Base64 strings to readable text in your browser.",
         "1. Koodaus (Encode)": "1. Encoding (Encode)",
-        "2. Purkaminen (Decode)": "2. Decoding (Decode)"
+        "2. Purkaminen (Decode)": "2. Decoding (Decode)",
+        "Syötä tavallista tekstiä syöttökenttään ja paina": "Type regular text into the input field and press",
+        ". Tuloskenttään ilmestyy Base64-muotoon koodattu merkkijono.": ". An encoded Base64 string will appear in the result field.",
+        "Liitä Base64-koodattu merkkijono kenttään ja paina": "Paste the Base64-encoded string into the field and press",
+        ". Työkalu palauttaa alkuperäisen luettavan tekstin UTF-8-merkistöä tukien.": ". The tool returns the original readable text with UTF-8 support."
+      },
+      "attributes": {
+        "Suomenkielinen ohje Base64-kooderin ja -dekooderin käyttöön selaimessa.": "A guide to using the Base64 encoder and decoder in your browser."
       }
     },
     "ohjeet/bitwarden.html": {
@@ -643,7 +680,16 @@
         "Ota Authenticatorin asetuksissa käyttöön synkronointi Bitwarden-holvin kanssa ja kirjaudu samalle palvelinalueelle kuin Password Managerissa.": "In the Authenticator settings, enable syncing with the Bitwarden vault and sign in to the same server region as in Password Manager.",
         "Holviin tallennetut TOTP-koodit näkyvät Authenticatorissa synkronoinnin jälkeen.": "The TOTP codes stored in the vault appear in Authenticator after syncing.",
         "Pidä synkronointi päällä, jotta holviin lisätyt ja muokatut koodit pysyvät ajan tasalla Authenticatorissa.": "Keep syncing enabled so that codes added to or edited in the vault stay up to date in Authenticator.",
-        "Bitwarden-tilin oman kaksivaiheisen kirjautumisen koodia on turvallisinta säilyttää erillään samasta holvista, jonka avaamiseen koodia tarvitaan. Säilytä myös palautuskoodi turvallisesti.": "The code used for Bitwarden account sign-in itself is safest when stored separately from the same vault that requires the code to be opened. Keep the recovery code safe as well."
+        "Bitwarden-tilin oman kaksivaiheisen kirjautumisen koodia on turvallisinta säilyttää erillään samasta holvista, jonka avaamiseen koodia tarvitaan. Säilytä myös palautuskoodi turvallisesti.": "The code used for Bitwarden account sign-in itself is safest when stored separately from the same vault that requires the code to be opened. Keep the recovery code safe as well.",
+        "📝 Rekisteröityminen ja palvelimen valinta": "📝 Sign-up and server selection",
+        "🔒 Bitwardenin rekisteröitymissivu": "🔒 Bitwarden sign-up page",
+        "⚡ Automaattitäytön asetukset": "⚡ Autofill settings",
+        "Asetukset → Automaattitäyttö": "Settings → Autofill",
+        "Kirjautumistietueessa täytä käyttäjätunnus, salasana ja verkkosivun osoite eli URI. Voit luoda vahvan salasanan Bitwardenin salasanageneraattorilla.": "For a login entry, fill in the username, password, and website address (URI). You can generate a strong password with Bitwarden's password generator.",
+        "Valitse haluatko näyttää täyttöehdotukset lomakekentissä ja täyttää tiedot sivun latautuessa. Sivun latauksessa tapahtuvaa automaattitäyttöä kannattaa käyttää harkiten.": "Choose whether you want to show fill suggestions in form fields and autofill data when the page loads. Autofill on page load should be used with care.",
+        "Voit täyttää kirjautumisen avaamalla laajennuksen ja valitsemalla ehdotetun tietueen tai käyttämällä selaimen Bitwarden-pikanäppäintä.": "You can fill a login by opening the extension and choosing the suggested entry or by using your browser's Bitwarden keyboard shortcut.",
+        "Kun lisäät kirjautumistietueeseen kaksivaiheisen vahvistuksen TOTP-avaimen, siitä muodostuvat kertakäyttökoodit voidaan näyttää myös erillisessä": "When you add a TOTP key for two-factor verification to a login entry, the one-time codes it generates can also be shown in a separate",
+        "Käytä pitkää ja yksilöllistä pääsalasanaa, jota et käytä missään muualla.": "Use a long and unique master password that you do not use anywhere else."
       },
       "attributes": {
         "Suomenkielinen Bitwarden-käyttöohje: rekisteröityminen, asennusohjeet selaimeen ja mobiiliin sekä salasanojen tallentaminen turvallisesti.": "Bitwarden guide: sign-up, setup for browsers and mobile, and storing passwords securely.",
@@ -733,7 +779,11 @@
         "Säilytä holvin salasana ja palautusavain turvallisesti. Pilvipalvelu tai Cryptomatorin ylläpito ei voi avata holvia puolestasi.": "Keep the vault password and recovery key safe. Neither the cloud service nor Cryptomator support can open the vault for you.",
         "Älä nimeä uudelleen, siirrä tai muokkaa holvin sisällä olevia salattuja tiedostoja suoraan Google Drivessa.": "Do not rename, move, or edit the encrypted files inside the vault directly in Google Drive.",
         "Varmuuskopioi holvi. Pilvisynkronointi ei yksin korvaa varmuuskopiota.": "Back up the vault. Cloud syncing alone is not a backup.",
-        "Varmista ennen holvin lukitsemista, että tiedostot eivät ole enää auki muissa sovelluksissa.": "Before locking the vault, make sure the files are no longer open in other applications."
+        "Varmista ennen holvin lukitsemista, että tiedostot eivät ole enää auki muissa sovelluksissa.": "Before locking the vault, make sure the files are no longer open in other applications.",
+        "📄 Tiedostojen lisääminen ja muokkaaminen": "📄 Adding and editing files",
+        "⚠️ Tärkeää muistaa": "⚠️ Important things to remember",
+        "Lisää holvi → Luo uusi holvi": "Add vault → Create new vault",
+        "Lisää holvi → Avaa olemassa oleva holvi": "Add vault → Open existing vault"
       },
       "attributes": {
         "Suomenkielinen Cryptomator-käyttöohje: kuinka salata tiedostot ennen pilvipalveluun tallentamista tietokoneella ja mobiililla.": "Cryptomator guide: how to encrypt files before storing them in the cloud on desktop and mobile.",
@@ -816,7 +866,8 @@
         "Kirpputorimyyjä": "Flea market sales assistant",
         "Ihme ja Kumma Tuki Ry, Salo | touko 2021 - loka 2021": "Ihme ja Kumma Tuki Ry, Salo | May 2021 - Oct 2021",
         "Olin heillä kirpputorimyyjänä jokusen kuukauden, mutta se loppui minulta, kun sain työpaikan Valmetilta. Myöhemmin Ihme ja Kumma teki valitettavasti konkurssin.": "I worked there as a flea market sales assistant for a few months until I got a job at Valmet. Later, Ihme ja Kumma unfortunately went bankrupt.",
-        "Sähköposti:": "Email:"
+        "Sähköposti:": "Email:",
+        "Jaan aamuyöllä lehtiä, kirjeitä ja joskus myös paketteja. Yöpostihommaa siis.": "I deliver newspapers, letters, and occasionally parcels in the early hours of the morning."
       },
       "attributes": {
         "Profiilikuva": "Profile picture"
@@ -841,7 +892,9 @@
         "Keskustelisin erittäin mielelläni lisää siitä, miten tekninen osaamiseni vastaisi yrityksenne tarpeita.": "I would be very happy to discuss further how my technical expertise could meet your company's needs.",
         "Sähköposti:": "Email:",
         "🔹 HTML5 & CSS3\n🔹 JavaScript & PHP\n🔹 Linux VPS / Cloud Infra\n🔹 Git / GitHub / CI-CD\n🔹 Tietoturva & Automatisointi": "🔹 HTML5 & CSS3\n🔹 JavaScript & PHP\n🔹 Linux VPS / Cloud Infra\n🔹 Git / GitHub / CI/CD\n🔹 Security & Automation",
-        "🔹 Tietoturva & Automatisointi": "🔹 Security & Automation"
+        "🔹 Tietoturva & Automatisointi": "🔹 Security & Automation",
+        "Olen suunnitellut ja rakentanut täysin itsenäisesti kattavan verkkoinfrastruktuurin omien domainieni ympärille. Hallitsen sujuvasti frontend- ja backend-kehityksen (HTML, CSS, JavaScript, PHP) ja ymmärrän syvällisesti, miten järjestelmät keskustelevat keskenään. Kehitystyön lisäksi vastaan oman palvelinympäristöni pystyttämisestä ja ylläpidosta (esim. VPS-ratkaisut ja pilvitallennus) sekä versionhallinnasta GitHubin kautta. Tietoturva, yksityisyydensuoja ja prosessien automatisointi ovat minulle selkärangassa olevia toimintatapoja, eivätkä vain päälle liimattuja ominaisuuksia.": "I have independently designed and built a comprehensive web infrastructure around my own domains. I am comfortable with both frontend and backend development (HTML, CSS, JavaScript, PHP) and understand deeply how systems communicate with each other. In addition to development work, I handle the setup and maintenance of my own server environment (for example VPS solutions and cloud storage) as well as version control through GitHub. Security, privacy, and process automation are built-in ways of working for me, not just add-on features.",
+        "Varhaisjakelijan taustani on opettanut minulle täsmällisyyttä ja kykyä viedä asiat maaliin aikataulussa – ominaisuuksia, joista on valtavasti hyötyä myös vaativissa IT-projekteissa.": "My background as an early-morning delivery worker has taught me precision and the ability to get things done on schedule – qualities that are also highly valuable in demanding IT projects."
       },
       "raw": {
         "generatePDF('Markus_Sorola_Avoin_Hakemus_IT.pdf')": "generatePDF('Markus_Sorola_Open_Application_IT.pdf')"
@@ -868,7 +921,11 @@
         "Olen valmis tarttumaan uusiin haasteisiin ja tuomaan mukanani rautaisen työmoraalin. Tulisin mielelläni haastatteluun kertomaan lisää siitä, miten voin olla hyödyksi organisaatiollenne.": "I am ready to take on new challenges and bring a strong work ethic with me. I would gladly come to an interview to tell you more about how I could benefit your organization.",
         "Sähköposti:": "Email:",
         "🔹 Jakelu ja logistiikka\n🔹 Reittien optimointi\n🔹 Erinomainen reittimuisti\n🔹 Itsenäinen työote": "🔹 Distribution and logistics\n🔹 Route optimization\n🔹 Excellent route memory\n🔹 Independent work style",
-        "🔹 Itsenäinen työote": "🔹 Independent work style"
+        "🔹 Itsenäinen työote": "🔹 Independent work style",
+        "• Jakelu ja logistiikka": "• Distribution and logistics",
+        "• Reittien optimointi": "• Route optimization",
+        "• Erinomainen reittimuisti": "• Excellent route memory",
+        "• Itsenäinen työote": "• Independent work style"
       },
       "raw": {
         "generatePDF('Markus_Sorola_Avoin_Hakemus_Logistiikka.pdf')": "generatePDF('Markus_Sorola_Open_Application_Logistics.pdf')"
@@ -996,7 +1053,41 @@
         "Uusi uudelleen": "Repeat new password",
         "Vaihda": "Change",
         "Kirjaudu ulos": "Sign out",
-        "« Takaisin etusivulle": "« Back to home"
+        "« Takaisin etusivulle": "« Back to home",
+        "📝 Pastebin-tekstit": "📝 Pastebin entries",
+        "Polku": "Path",
+        "Ote": "Excerpt",
+        "📁 Ylläpidon tiedostojako": "📁 Admin file sharing",
+        "Lataa tiedostoja samaan tallennustilaan kuin käyttäjät, ilman kokorajoituksia.": "Upload files to the same storage as users, without size limits.",
+        "Voimassaoloaika (päiviä, 0 = ei vanhene)": "Validity period (days, 0 = never expires)",
+        "Latausmääräraja (0 = rajaton)": "Download limit (0 = unlimited)",
+        "📤 Lataa tiedosto": "📤 Upload file",
+        "✅ Tiedosto ladattu!": "✅ File uploaded!",
+        "Jakolinkki:": "Share link:",
+        "Suora lataus:": "Direct download:",
+        "Tiedosto": "File",
+        "Koko": "Size",
+        "Vanhenee": "Expires",
+        "Max lataukset": "Max downloads",
+        "Ladattu": "Uploaded",
+        "📖 Vieraskirja": "📖 Guestbook",
+        "Lähetä ilmoitus": "Send announcement",
+        "Ylläpidon vastaus": "Admin reply",
+        "Nimi": "Name",
+        "Viesti": "Message",
+        "Pvm": "Date",
+        "🌐 DNS-hallinta (OVH)": "🌐 DNS management (OVH)",
+        "Valitse hallittava domain:": "Select domain to manage:",
+        "Ladataan vyöhykkeitä...": "Loading zones...",
+        "Hae tietueet": "Fetch records",
+        "Lisää uusi tietue": "Add new record",
+        "Tyyppi": "Type",
+        "Nimi (esim. @, www, api)": "Name (e.g. @, www, api)",
+        "Arvo (IP tai kohde)": "Value (IP or target)",
+        "TTL (s)": "TTL (s)",
+        "Lisää": "Add",
+        "Arvo": "Value",
+        "Aktiiviset linkit (srl.la)": "Active links (srl.la)"
       },
       "raw": {
         "Syötä tunnus ja salasana.": "Enter your username and password.",
@@ -1033,7 +1124,43 @@
         "Poistetaanko tämä kutsukoodi järjestelmästä?": "Delete this invite code from the system?",
         "Kutsukoodi poistettu.": "Invite code deleted.",
         "Virhe.": "Error.",
-        ">Virhe<": ">Error<"
+        ">Virhe<": ">Error<",
+        "Poistetaanko tämä pastebin-teksti?": "Delete this pastebin entry?",
+        "Poistetaanko käyttäjä?": "Delete this user?",
+        "Poistetaanko tämä viesti pysyvästi?": "Delete this message permanently?",
+        "Poistetaanko tämä tiedosto pysyvästi tallenustilasta?": "Delete this file permanently from storage?",
+        "Virhe viestin lähetyksessä.": "Error sending message.",
+        "Kirjoita viesti ensin.": "Write a message first.",
+        "Kirjoita ylläpidon vastaus viestiin (tyhjä poistaa vastauksen):": "Write an admin reply to the message (empty removes the reply):",
+        "Virhe vastauksen tallennuksessa.": "Error saving the reply.",
+        "Virhe viestin poistossa.": "Error deleting the message.",
+        "Haluatko varmasti poistaa tämän DNS-tietueen? Tämä voi rikkoa sivuston tai sähköpostin!": "Are you sure you want to delete this DNS record? This may break the website or email!",
+        "Valitse domain ensin.": "Select a domain first.",
+        "Tietueen arvo (IP/kohde) on pakollinen.": "The record value (IP/target) is required.",
+        "Virhe tietueen luonnissa.": "Error creating the record.",
+        "Virhe ladattaessa.": "Error while loading.",
+        "-- Valitse domain --": "-- Select domain --",
+        "DNS API virhe: ": "DNS API error: ",
+        "DNS API ei saatavilla": "DNS API not available",
+        "DNS API ei vastaa": "DNS API not responding",
+        "Valitse tiedosto ensin.": "Select a file first.",
+        "Lataus epäonnistui.": "Upload failed.",
+        "Linkki kopioitu leikepöydälle!": "Link copied to clipboard!",
+        "Ei ladattuja tiedostoja.": "No uploaded files.",
+        "Ei vanhene": "Never expires",
+        "vanhentunut": "expired",
+        "Rajaton": "Unlimited",
+        ">Kopioi</button>": ">Copy</button>",
+        "Ei vielä pasteja.": "No pastes yet.",
+        "Ei vieraskirjaviestejä.": "No guestbook messages.",
+        "Virhe ladattaessa tietoja.": "Error while loading data.",
+        "Ladataan...": "Loading...",
+        "📤 Lataa tiedosto": "📤 Upload file",
+        "Ei vastausta": "No reply"
+      },
+      "attributes": {
+        "Kirjoita ylläpidon uusi viesti vieraskirjaan...": "Write a new admin message to the guestbook...",
+        "Salasana (min. 6 merkkiä)": "Password (min. 6 characters)"
       }
     },
     "Niko/index.html": {
