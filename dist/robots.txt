@@ -1,5 +1,10 @@
 User-agent: *
 Disallow: /admin/
+Disallow: /en/admin/
+Disallow: /Niko/
+Disallow: /niko/
+Disallow: /en/Niko/
+Disallow: /en/niko/
 Disallow: /api/
 Disallow: /functions/
 Sitemap: https://sorola.fi/sitemap.xml
