@@ -208,4 +208,20 @@
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
    </url>
+<url>
+      <loc>https://sorola.fi/base64/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/base64/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/base64/" />
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+<url>
+      <loc>https://sorola.fi/en/base64/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/base64/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/base64/" />
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
 </urlset>
