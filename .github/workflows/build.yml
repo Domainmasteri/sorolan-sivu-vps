@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     name: Käännä ja päivitä dist
-    runs-content: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Hae repon koodi
