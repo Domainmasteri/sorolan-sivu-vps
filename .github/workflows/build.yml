@@ -8,6 +8,9 @@ on:
     paths-ignore:
       - 'dist/**'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Käännä ja päivitä dist
