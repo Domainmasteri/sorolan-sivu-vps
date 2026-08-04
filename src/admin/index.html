@@ -32,26 +32,26 @@
         
         <div id="login-section" class="osion-tausta">
             <h2 style="color: #4ade80;">Kirjaudu Sisään</h2>
-            <div class="flex-form">
-                <input type="text" id="login-username" class="syote" placeholder="Käyttäjätunnus">
-                <input type="password" id="login-password" class="syote" placeholder="Salasana">
-                <button onclick="login()" class="nappula" style="width: 100%;">Kirjaudu</button>
-            </div>
+            <form onsubmit="event.preventDefault(); login();" class="flex-form">
+                <input type="text" id="login-username" class="syote" placeholder="Käyttäjätunnus" required autocomplete="username">
+                <input type="password" id="login-password" class="syote" placeholder="Salasana" required autocomplete="current-password">
+                <button type="submit" class="nappula" style="width: 100%;">Kirjaudu</button>
+            </form>
             <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
-                <a href="#" onclick="toggleMode()" style="color: #a0aec0;">Eikö sinulla ole tunnusta? Rekisteröidy kutsukoodilla.</a>
+                <a href="#" onclick="toggleMode(); return false;" style="color: #a0aec0;">Eikö sinulla ole tunnusta? Rekisteröidy kutsukoodilla.</a>
             </p>
         </div>
 
         <div id="register-section" class="osion-tausta hidden">
             <h2 style="color: #60a5fa;">Rekisteröidy Kutsukoodilla</h2>
-            <div class="flex-form">
-                <input type="text" id="reg-invite" class="syote" placeholder="Kutsukoodi">
-                <input type="text" id="reg-username" class="syote" placeholder="Haluttu käyttäjätunnus">
-                <input type="password" id="reg-password" class="syote" placeholder="Salasana (min. 6 merkkiä)">
-                <button onclick="register()" class="nappula1" style="width: 100%; border: 1px solid #60a5fa; color: #60a5fa;">Luo tunnus</button>
-            </div>
+            <form onsubmit="event.preventDefault(); register();" class="flex-form">
+                <input type="text" id="reg-invite" class="syote" placeholder="Kutsukoodi" required>
+                <input type="text" id="reg-username" class="syote" placeholder="Haluttu käyttäjätunnus" required autocomplete="username">
+                <input type="password" id="reg-password" class="syote" placeholder="Salasana (min. 6 merkkiä)" required autocomplete="new-password">
+                <button type="submit" class="nappula1" style="width: 100%; border: 1px solid #60a5fa; color: #60a5fa;">Luo tunnus</button>
+            </form>
             <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
-                <a href="#" onclick="toggleMode()" style="color: #a0aec0;">Takaisin kirjautumiseen.</a>
+                <a href="#" onclick="toggleMode(); return false;" style="color: #a0aec0;">Takaisin kirjautumiseen.</a>
             </p>
         </div>
 
@@ -61,7 +61,7 @@
             <!-- Linkkien hallinta -->
             <div class="osion-tausta" style="margin-bottom: 20px;">
                 <h2 style="color: #4ade80;">➕ Uusi oma linkki</h2>
-                <div class="flex-form" style="display: flex; gap: 10px; align-items: flex-end;">
+                <form onsubmit="event.preventDefault(); luoUusiLinkki();" class="flex-form" style="display: flex; gap: 10px; align-items: flex-end;">
                     <div style="flex: 1;">
                         <select id="new-domain" class="syote" style="width: 100%;">
                             <option value="soro.la">soro.la</option>
@@ -70,13 +70,13 @@
                         </select>
                     </div>
                     <div style="flex: 2;">
-                        <input type="text" id="new-url" class="syote" placeholder="Kohdeosoite (https://...)" style="width: 100%;">
+                        <input type="text" id="new-url" class="syote" placeholder="Kohdeosoite (https://...)" style="width: 100%;" required>
                     </div>
                     <div style="flex: 1;">
                         <input type="text" id="new-path" class="syote" placeholder="Lyhenne (tyhjä = satunnainen)" style="width: 100%;">
                     </div>
-                    <button onclick="luoUusiLinkki()" class="nappula">Luo</button>
-                </div>
+                    <button type="submit" id="btn-luo-linkki" class="nappula">Luo</button>
+                </form>
             </div>
 
             <div class="osion-tausta">
@@ -143,7 +143,7 @@
                             <input type="number" id="admin-file-maxdownloads" class="syote" value="0" min="0" style="width: 100%;">
                         </div>
                     </div>
-                    <button onclick="lataaTiedosto()" class="nappula1" style="border: 1px solid #34d399; color: #34d399;">📤 Lataa tiedosto</button>
+                    <button id="btn-lataa-tiedosto" onclick="lataaTiedosto()" class="nappula1" style="border: 1px solid #34d399; color: #34d399;">📤 Lataa tiedosto</button>
                 </div>
                 <div id="admin-upload-result" style="display: none; background: #0b0d13; border-radius: 8px; padding: 12px; margin-bottom: 15px; word-break: break-all;">
                     <p style="color: #4ade80; margin: 0 0 6px 0; font-weight: bold;">✅ Tiedosto ladattu!</p>
@@ -262,12 +262,12 @@
 
             <div class="osion-tausta" style="margin-top: 20px;">
                 <h2 style="color: #9ca3af;">🔑 Vaihda salasana</h2>
-                <div class="flex-form">
-                    <input type="password" id="change-old-password" class="syote" placeholder="Nykyinen salasana" style="margin-bottom: 10px;">
-                    <input type="password" id="change-new-password" class="syote" placeholder="Uusi salasana" style="margin-bottom: 10px;">
-                    <input type="password" id="change-new-password-confirm" class="syote" placeholder="Uusi uudelleen" style="margin-bottom: 10px;">
-                    <button onclick="vaihdaSalasana()" class="nappula" style="width: 100%; background: #4b5563;">Vaihda</button>
-                </div>
+                <form onsubmit="event.preventDefault(); vaihdaSalasana(this.querySelector('button'));" class="flex-form">
+                    <input type="password" id="change-old-password" class="syote" placeholder="Nykyinen salasana" style="margin-bottom: 10px;" required autocomplete="current-password">
+                    <input type="password" id="change-new-password" class="syote" placeholder="Uusi salasana" style="margin-bottom: 10px;" required autocomplete="new-password">
+                    <input type="password" id="change-new-password-confirm" class="syote" placeholder="Uusi uudelleen" style="margin-bottom: 10px;" required autocomplete="new-password">
+                    <button type="submit" class="nappula" style="width: 100%; background: #4b5563;">Vaihda</button>
+                </form>
             </div>
 
             <button onclick="logout()" class="nappula action-btn" style="width: 100%; margin-top: 20px; font-size: 1rem; padding: 12px;">Kirjaudu ulos</button>
@@ -296,7 +296,7 @@
                     body: JSON.stringify({ action: 'login', username: u, password: p })
                 });
                 const data = await res.json();
-                if (data.success) {
+                if (res.ok && data.success) {
                     currentUser = u;
                     currentAuthHeader = 'Bearer ' + data.token;
                     document.getElementById('login-section').classList.add('hidden');
@@ -306,7 +306,10 @@
                 } else {
                     alert(data.error || 'Virheellinen tunnus tai salasana.');
                 }
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { 
+                console.error(e);
+                alert('Palvelinvirhe.'); 
+            }
         }
 
         async function register() {
@@ -321,17 +324,20 @@
                     body: JSON.stringify({ action: 'register', inviteCode: inv, username: u, password: p })
                 });
                 const data = await res.json();
-                if (data.success) {
+                if (res.ok && data.success) {
                     alert('Tunnus luotu! Voit kirjautua sisään.');
                     toggleMode();
                     document.getElementById('login-username').value = u;
                 } else {
                     alert(data.error || 'Rekisteröinti epäonnistui.');
                 }
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { 
+                console.error(e);
+                alert('Palvelinvirhe.'); 
+            }
         }
 
-        async function vaihdaSalasana() {
+        async function vaihdaSalasana(btnEl) {
             const oldP = document.getElementById('change-old-password').value;
             const newP = document.getElementById('change-new-password').value;
             const confirmP = document.getElementById('change-new-password-confirm').value;
@@ -340,16 +346,18 @@
             if (newP !== confirmP) return alert('Uudet salasanat eivät täsmää.');
 
             try {
-                const btn = event.target;
-                btn.textContent = 'Vaihdetaan...';
-                btn.disabled = true;
+                const btn = btnEl || event?.target;
+                if (btn) {
+                    btn.textContent = 'Vaihdetaan...';
+                    btn.disabled = true;
+                }
 
                 const res = await fetch('/api/auth', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'change_password', username: currentUser, oldPassword: oldP, newPassword: newP })
                 });
                 const data = await res.json();
-                if (data.success) {
+                if (res.ok && data.success) {
                     alert('Salasana vaihdettu onnistuneesti!');
                     currentAuthHeader = 'Bearer ' + data.token;
                     document.getElementById('change-old-password').value = '';
@@ -358,9 +366,15 @@
                 } else {
                     alert(data.error || 'Virhe salasanan vaihdossa.');
                 }
-            } catch { alert('Palvelinvirhe.'); } finally {
-                event.target.textContent = 'Vaihda';
-                event.target.disabled = false;
+            } catch (e) { 
+                console.error(e);
+                alert('Palvelinvirhe.'); 
+            } finally {
+                const btn = btnEl || event?.target;
+                if (btn) {
+                    btn.textContent = 'Vaihda';
+                    btn.disabled = false;
+                }
             }
         }
 
@@ -518,9 +532,12 @@
             const path = document.getElementById('new-path').value;
             if (!url) return alert('Kohdeosoite on pakollinen.');
 
+            const btn = document.getElementById('btn-luo-linkki');
             try {
-                event.target.textContent = 'Luodaan...';
-                event.target.disabled = true;
+                if (btn) {
+                    btn.textContent = 'Luodaan...';
+                    btn.disabled = true;
+                }
                 const res = await fetch('/api/links', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
@@ -534,9 +551,14 @@
                     const data = await res.json();
                     alert(data.error || 'Virhe.');
                 }
-            } catch { alert('Palvelinvirhe.'); } finally {
-                event.target.textContent = 'Luo';
-                event.target.disabled = false;
+            } catch (e) { 
+                console.error(e);
+                alert('Palvelinvirhe.'); 
+            } finally {
+                if (btn) {
+                    btn.textContent = 'Luo';
+                    btn.disabled = false;
+                }
             }
         }
 
@@ -551,7 +573,7 @@
                 });
                 if (res.ok) lataaTiedot();
                 else alert('Virhe päivityksessä.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         async function poistaLinkki(domain, path) {
@@ -562,7 +584,7 @@
                 });
                 if (res.ok) lataaTiedot();
                 else alert('Virhe poistossa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         async function poistaPaste(id) {
@@ -573,7 +595,7 @@
                 });
                 if (res.ok) lataaTiedot();
                 else alert('Virhe poistossa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         async function poistaKayttaja(id) {
@@ -584,7 +606,7 @@
                 });
                 if (res.ok) lataaTiedot();
                 else alert('Virhe poistossa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         async function luoKutsukoodi() {
@@ -600,7 +622,7 @@
                     document.getElementById('new-invite').value = '';
                     lataaTiedot();
                 } else alert('Virhe koodin luonnissa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         async function poistaKutsu(id) {
@@ -611,7 +633,7 @@
                 });
                 if (res.ok) lataaTiedot();
                 else alert('Virhe poistossa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         // --- Vieraskirja ---
@@ -628,7 +650,7 @@
                     document.getElementById('admin-gb-message').value = '';
                     lataaTiedot();
                 } else alert('Virhe viestin lähetyksessä.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         async function vastaaVieraskirjaan(id) {
@@ -642,7 +664,7 @@
                 });
                 if (res.ok) lataaTiedot();
                 else alert('Virhe vastauksen tallennuksessa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         async function poistaVieraskirjaviesti(id) {
@@ -653,7 +675,7 @@
                 });
                 if (res.ok) lataaTiedot();
                 else alert('Virhe viestin poistossa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         // --- DNS Hallinta (OVH) ---
@@ -739,7 +761,7 @@
                     const data = await res.json();
                     alert(data.error || 'Virhe tietueen luonnissa.');
                 }
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
 
         async function poistaDnsTietue(recordId) {
@@ -753,8 +775,9 @@
                 });
                 if (res.ok) lataaDnsTietueet();
                 else alert('Virhe poistossa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
+
         // --- Ylläpidon tiedostojako ---
         async function lataaTiedosto() {
             const fileInput = document.getElementById('admin-file-input');
@@ -769,9 +792,11 @@
             formData.append('expiryDays', expiryDays);
             formData.append('maxDownloads', maxDownloads);
 
-            const btn = event.target;
-            btn.textContent = 'Ladataan...';
-            btn.disabled = true;
+            const btn = document.getElementById('btn-lataa-tiedosto');
+            if (btn) {
+                btn.textContent = 'Ladataan...';
+                btn.disabled = true;
+            }
             resultDiv.style.display = 'none';
 
             try {
@@ -781,7 +806,7 @@
                     body: formData
                 });
                 const data = await res.json();
-                if (data.success) {
+                if (res.ok && data.success) {
                     resultDiv.style.display = 'block';
                     const shareEl = document.getElementById('admin-share-url');
                     const dlEl = document.getElementById('admin-download-url');
@@ -794,9 +819,14 @@
                 } else {
                     alert(data.error || 'Lataus epäonnistui.');
                 }
-            } catch { alert('Palvelinvirhe.'); } finally {
-                btn.textContent = '📤 Lataa tiedosto';
-                btn.disabled = false;
+            } catch (e) { 
+                console.error(e);
+                alert('Palvelinvirhe.'); 
+            } finally {
+                if (btn) {
+                    btn.textContent = '📤 Lataa tiedosto';
+                    btn.disabled = false;
+                }
             }
         }
 
@@ -867,7 +897,7 @@
                 });
                 if (res.ok) lataaAdminTiedostot();
                 else alert('Virhe poistossa.');
-            } catch { alert('Palvelinvirhe.'); }
+            } catch (e) { console.error(e); alert('Palvelinvirhe.'); }
         }
     </script>
 </body>
