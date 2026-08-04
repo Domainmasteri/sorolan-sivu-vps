@@ -118,6 +118,7 @@
         "📖 Sorolan ohjeita": "📖 Sorola guides",
         "📖 Vieraskirja": "📖 Guestbook",
         "🔒 Yksityisyyskäytännöt": "🔒 Privacy policies",
+        "📋 Viimeisimmät muutokset": "📋 Latest changes",
         "Hae työkaluja": "Search tools",
         "Perustyökalut": "Basic tools",
         "Itse koodatut, nopeat ja ilman mainoksia toimivat apuvälineet digiarjen tueksi.": "Self-built, fast, ad-free helpers for everyday digital life.",
@@ -587,8 +588,7 @@
       }
     },
     "ohjeet/cryptomator.html": {
-      "text": {
-        "Cryptomator-käyttöohje - Sorola": "Cryptomator guide - Sorola",
+      "text": {        "Cryptomator-käyttöohje - Sorola": "Cryptomator guide - Sorola",
         "🔐 Cryptomator-ohje": "🔐 Cryptomator guide",
         "Cryptomator": "Cryptomator",
         "salaa tiedostot omalla laitteellasi ennen niiden tallentamista pilvipalveluun. Tässä ohjeessa käytetään esimerkkinä Google Drivea. Pilvessä näkyvä holvikansio sisältää salattua tietoa, eikä sen tiedostoja pidä muokata suoraan.": "encrypts files on your own device before they are stored in a cloud service. This guide uses Google Drive as an example. The vault folder you see in the cloud contains encrypted data, and its files should not be edited directly.",
@@ -954,6 +954,51 @@
         "Tervetuloa sivuilleni. Täällä tutkimme arkkityyppistä elämäntapaa ja sen eri ulottuvuuksia.": "Welcome to my pages. Here we explore the archetypal lifestyle and its different dimensions.",
         "Tämä on testisivu": "This is a test page",
         "Linkkejä": "Links"
+      }
+    },
+    "muutokset/index.html": {
+      "text": {
+        "Sorolan Muutosloki - Sivuston päivitykset ja uudet ominaisuudet | Sorola.fi": "Sorola Changelog - Site updates and new features | Sorola.fi",
+        "⚡ Sivuston muutosloki": "⚡ Site changelog",
+        "Tältä sivulta löydät kootusti tietoa sorola.fi-verkkopalvelun ja sen alasivujen tuoreimmista päivityksistä, uusista työkaluista sekä lisätyistä ohjeista.": "Here you'll find a summary of the latest updates, new tools, and added guides for the sorola.fi web service and its subpages.",
+        "4.8.2026 – Uusia ohjeita ja tietosuojaselosteita": "4.8.2026 – New guides and privacy policies",
+        "Lisätty uusia kattavia käyttöohjeita palveluiden ja IT-työkalujen sujuvaan käyttöön.": "Added new comprehensive usage guides for services and IT tools.",
+        "Päivitetty ja lisätty asianmukaiset tietosuojaselosteet verkkotyökaluille ja palveluille.": "Updated and added proper privacy policies for web tools and services.",
+        "3.8.2026 – JSON-muotoilija": "3.8.2026 – JSON Formatter",
+        "Lisätty uusi JSON-muotoilija &amp; validaattori edistyneiden työkalujen joukkoon.": "Added a new JSON Formatter &amp; Validator to the advanced tools.",
+        "Työkalu toimii täysin paikallisesti selaimessa ilman tietojen lähettämistä palvelimelle.": "The tool works entirely locally in the browser without sending any data to the server.",
+        "1.8.2026 – Työkalujen ryhmittely &amp; webtools.sorola.fi": "1.8.2026 – Tool grouping &amp; webtools.sorola.fi",
+        "Työkalut ryhmitelty selkeämmin erikseen perustyökaluihin ja kehittäjille suunnattuihin edistyneisiin työkaluihin.": "Tools grouped more clearly into basic tools and advanced tools for developers.",
+        "Avattu uusi aliverkkotunnus": "Launched a new subdomain",
+        "verkkotyökalukokoelmaa varten.": "for the web tools collection.",
+        "31.7.2026 – Android-sovelluksen julkaisu": "31.7.2026 – Android app release",
+        "Luotu ja julkaistu Sorolan oma Android-sovellus (.apk-lataus), joka helpottaa perustyökalujen käyttöä mobiililaitteilla.": "Sorola's own Android app (.apk download) created and released, making it easier to use the basic tools on mobile devices."
+      },
+      "attributes": {
+        "Sorola.fi-sivuston virallinen muutosloki: katso tuoreimmat päivitykset, lisätyt IT-työkalut, julkaistut sovellukset ja uudet ohjeet.": "Official Sorola.fi changelog: see the latest updates, added IT tools, released apps, and new guides.",
+        "Sorola, muutosloki, päivitykset, changelog, verkkotyökalut, IT-työkalut, ohjeet, Markus Sorola, webtools": "Sorola, changelog, updates, web tools, IT tools, guides, Markus Sorola, webtools",
+        "Sorolan Muutosloki - Sivuston päivitykset ja uudet ominaisuudet": "Sorola Changelog - Site updates and new features",
+        "Katso sorola.fi-verkkopalvelun tuoreimmat päivitykset, uudet työkalut, ohjeet ja ominaisuudet kootusti yhdestä paikasta.": "See the latest updates, new tools, guides, and features for sorola.fi all in one place.",
+        "Katso sorola.fi-verkkopalvelun tuoreimmat päivitykset, uudet työkalut ja ohjeet kootusti.": "See the latest sorola.fi updates, new tools, and guides all in one place.",
+        "Sorolan Muutosloki": "Sorola Changelog",
+        "Sorolan Muutosloki - Sivuston päivitykset": "Sorola Changelog - Site updates",
+        "fi_FI": "en_GB",
+        "Sorolan Muutosloki - Sivuston päivitykset": "Sorola Changelog - Site updates"
+      }
+    },
+    "privacy/index.html": {
+      "text": {
+        "Tietosuojakäytännöt - Sorolan Sakki": "Privacy policies - Sorolan Sakki",
+        "Tietosuoja": "Privacy",
+        "Tältä sivulta löydät Sorolan Sakin selainlaajennusten ja palveluiden viralliset tietosuojakäytännöt.": "Here you'll find the official privacy policies for Sorolan Sakki browser extensions and services.",
+        "🔗 Linkkilyhennin": "🔗 Link Shortener",
+        "🎲 Salasanakone": "🎲 Password Generator",
+        "🔐 Sorolan Holvi": "🔐 Sorolan Holvi"
+      },
+      "attributes": {
+        "Sorolan Sakin palveluiden ja selainlaajennusten viralliset tietosuojakäytännöt.": "Official privacy policies for Sorolan Sakki services and browser extensions.",
+        "Tietosuojakäytännöt - Sorolan Sakki": "Privacy policies - Sorolan Sakki",
+        "Tietosuojakäytännöt": "Privacy policies"
       }
     }
   },

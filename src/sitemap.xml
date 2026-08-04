@@ -113,4 +113,12 @@
       <priority>0.7</priority>
    </url>
 
+   <!-- Muutosloki -->
+   <url>
+      <loc>https://sorola.fi/muutokset</loc>
+      <lastmod>2026-08-04</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.5</priority>
+   </url>
+
 </urlset>
