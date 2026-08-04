@@ -1193,6 +1193,37 @@
         "Sulje ohje": "Close guide",
         "Avaa ohje": "Open guide"
       }
+    },
+    "muutokset/index.html": {
+      "text": {
+        "Sorolan Muutosloki - Sivuston päivitykset ja uudet ominaisuudet | Sorola.fi": "Sorola Changelog - Website updates and new features | Sorola.fi",
+        "Sorola.fi-sivuston virallinen muutosloki: katso tuoreimmat päivitykset, lisätyt IT-työkalut, julkaistut sovellukset ja uudet ohjeet.": "The official changelog of sorola.fi: see the latest updates, added IT tools, released apps, and new guides.",
+        "Sorola, muutosloki, päivitykset, changelog, verkkotyökalut, IT-työkalut, ohjeet, Markus Sorola, webtools": "Sorola, changelog, updates, verkkotyökalut, IT tools, guides, Markus Sorola, webtools",
+        "Sorolan Muutosloki - Sivuston päivitykset ja uudet ominaisuudet": "Sorola Changelog - Website updates and new features",
+        "Katso sorola.fi-verkkopalvelun tuoreimmat päivitykset, uudet työkalut, ohjeet ja ominaisuudet kootusti yhdestä paikasta.": "See the latest updates, new tools, guides, and features of the sorola.fi web service all in one place.",
+        "Sorolan Muutosloki - Sivuston päivitykset": "Sorola Changelog - Website updates",
+        "Katso sorola.fi-verkkopalvelun tuoreimmat päivitykset, uudet työkalut ja ohjeet kootusti.": "See the latest updates, new tools, and guides of the sorola.fi web service at a glance.",
+        "Sorolan Muutosloki": "Sorola Changelog",
+        "⚡ Sivuston muutosloki": "⚡ Website changelog",
+        "Tältä sivulta löydät kootusti tietoa sorola.fi-verkkopalvelun ja sen alasivujen tuoreimmista päivityksistä, uusista työkaluista sekä lisätyistä ohjeista.": "On this page you will find a summary of the latest updates, new tools, and added guides for the sorola.fi web service and its subpages.",
+        "4.8.2026 – Uusia ohjeita ja tietosuojaselosteita": "4.8.2026 – New guides and privacy policies",
+        "Lisätty uusia kattavia käyttöohjeita palveluiden ja IT-työkalujen sujuvaan käyttöön.": "Added new comprehensive usage guides for smooth use of services and IT tools.",
+        "Päivitetty ja lisätty asianmukaiset tietosuojaselosteet verkkotyökaluille ja palveluille.": "Updated and added appropriate privacy policies for web tools and services.",
+        "3.8.2026 – JSON-muotoilija": "3.8.2026 – JSON Formatter",
+        "Lisätty uusi": "Added a new",
+        "edistyneiden työkalujen joukkoon.": "to the advanced tools.",
+        "Työkalu toimii täysin paikallisesti selaimessa ilman tietojen lähettämistä palvelimelle.": "The tool runs entirely locally in the browser without sending any data to the server.",
+        "1.8.2026 – Työkalujen ryhmittely &amp; webtools.sorola.fi": "1.8.2026 – Tool grouping &amp; webtools.sorola.fi",
+        "Työkalut ryhmitelty selkeämmin erikseen": "Tools have been grouped more clearly into separate",
+        "ja kehittäjille suunnattuihin": "and developer-oriented",
+        "Avattu uusi aliverkkotunnus": "Opened a new subdomain",
+        "verkkotyökalukokoelmaa varten.": "for the web tools collection.",
+        "31.7.2026 – Android-sovelluksen julkaisu": "31.7.2026 – Android app release",
+        "Luotu ja julkaistu Sorolan oma Android-sovellus (.apk-lataus), joka helpottaa perustyökalujen käyttöä mobiililaitteilla.": "Created and released Sorola's own Android app (.apk download), which makes it easier to use the basic tools on mobile devices."
+      },
+      "attributes": {
+        "Sorola.fi-sivuston virallinen muutosloki, johon on koottu tuoreimmat verkkotyökalut, päivitykset ja ohjeet.": "The official changelog of sorola.fi, collecting the latest web tools, updates, and guides."
+      }
     }
   }
 }

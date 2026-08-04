@@ -1,9 +1,9 @@
 export const EN_ROUTE_SEGMENTS = new Map([
   ['ansioluettelot', 'resume'],
-  ['cv-make', 'cv-builder'],
+  ['cv-make', 'cv-make'],
   ['hakemus-it', 'it-application'],
   ['hakemus-jakelu', 'delivery-application'],
-  ['hakemus-make', 'application-builder'],
+  ['hakemus-make', 'application-make'],
   ['jako', 'share'],
   ['base64', 'base64'],
   ['base64', 'base64'],
@@ -16,6 +16,7 @@ export const EN_ROUTE_SEGMENTS = new Map([
   ['lue', 'view'],
   ['salasanat', 'passwords'],
   ['tiedostojako', 'file-sharing'],
+  ['muutokset', 'changes'],
   ['vieraskirja', 'guestbook']
 ]);
 
