@@ -8,7 +8,6 @@ import crypto from 'node:crypto';
 import multer from 'multer';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import jwt from 'jsonwebtoken';
 import { create as contentDisposition } from 'content-disposition';
 import {
   CopyObjectCommand,
@@ -22,10 +21,6 @@ import {
 import { db } from './db.js';
 import { s3, bucketName, ensureBucketExists } from './storage.js';
 import dnsRouter from './api/dns.js';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
-const jwtSecret = JWT_SECRET;
-const JWT_EXPIRES_IN = '8h';
 
 const app = express();
 app.use(
@@ -69,11 +64,9 @@ function setCorsForShortener(req, res) {
   res.set('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-// 1 GB maksimikoko (1024 * 1024 * 1024 tavua)
 const MAX_SHARE_FILE_SIZE_BYTES = 1 * 1024 * 1024 * 1024;
 const uploadDir = path.join(__dirname, 'uploads');
 
-// Varmistetaan, että uploads-kansio on olemassa
 fs.mkdir(uploadDir, { recursive: true }).catch(err => console.error('Uploads-kansion luonti epäonnistui:', err));
 
 function validateUploadFilePath(filePath) {
@@ -92,7 +85,6 @@ const uploadShare = multer({
 
 const uploadAdmin = multer({ dest: uploadDir });
 
-// Nopeudet & Rajoitukset (Rate limits)
 const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: true, legacyHeaders: false });
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 40, standardHeaders: true, legacyHeaders: false });
 const uploadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false });
@@ -119,12 +111,10 @@ async function resolveStaticHtmlPath(requestPath) {
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Rajoittimet reiteille
 app.use('/api', apiLimiter);
 app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
 
-// URL-LYHENTIMEN OHITUS
 app.use(async (req, res, next) => {
   try {
     const hostname = (req.hostname || '').replace(/^www\./, '').toLowerCase();
@@ -137,7 +127,7 @@ app.use(async (req, res, next) => {
     const reservedPrefixes = [
       'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 'styles',
       'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat',
-      'privacy', 'vieraskirja', 'makelink', 'json', 'base64', 'base64'
+      'privacy', 'vieraskirja', 'makelink', 'json', 'base64'
     ];
     const firstSegment = pathname.split('/')[0];
 
@@ -195,15 +185,35 @@ function verifyPassword(password, storedHash) {
   return crypto.timingSafeEqual(Buffer.from(derived, 'hex'), Buffer.from(expected, 'hex'));
 }
 
-function verifyJwt(req) {
+// Palautettu suora ja varma Basic/Bearer -varmistus
+async function parseBasicBearer(req) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
-  const token = authHeader.slice(7);
+  const b64 = authHeader.slice(7).trim();
   try {
-    return jwt.verify(token, jwtSecret);
+    const decoded = Buffer.from(b64, 'base64').toString('utf8');
+    const colonIdx = decoded.indexOf(':');
+    if (colonIdx === -1) return null;
+    const username = decoded.slice(0, colonIdx);
+    const password = decoded.slice(colonIdx + 1);
+    if (!username || !password) return null;
+
+    const result = await db.query('SELECT id, username, password_hash FROM users WHERE username = $1 LIMIT 1', [username]);
+    const user = result.rows[0];
+    if (user && verifyPassword(password, user.password_hash)) {
+      return { id: user.id, username: user.username };
+    }
   } catch {
     return null;
   }
+  return null;
+}
+
+async function requireAuth(req, res, next) {
+  const user = await parseBasicBearer(req);
+  if (!user) return res.status(401).json({ error: 'Ei valtuuksia. Kirjaudu uudelleen.' });
+  req.user = user;
+  next();
 }
 
 function resolveTableByDomain(domainOrHost) {
@@ -216,16 +226,12 @@ function resolveTableByDomain(domainOrHost) {
 }
 
 async function fetchLinkByPath(table, shortPath) {
-  if (!/^[a-zA-Z0-9_]+$/.test(table)) {
-    throw new Error('Invalid input');
-  }
+  if (!/^[a-zA-Z0-9_]+$/.test(table)) throw new Error('Invalid input');
   return db.query(`SELECT original_url FROM ${table} WHERE short_path = $1 LIMIT 1`, [shortPath]);
 }
 
 async function incrementLinkClicks(table, shortPath) {
-  if (!/^[a-zA-Z0-9_]+$/.test(table)) {
-    throw new Error('Invalid input');
-  }
+  if (!/^[a-zA-Z0-9_]+$/.test(table)) throw new Error('Invalid input');
   return db.query(`UPDATE ${table} SET clicks = clicks + 1 WHERE short_path = $1`, [shortPath]);
 }
 
@@ -234,9 +240,7 @@ async function insertShortLink(table, shortPath, originalUrl) {
 }
 
 async function updateShortLink(table, shortPath, originalUrl) {
-  if (!/^[a-zA-Z0-9_]+$/.test(table)) {
-    throw new Error('Invalid input');
-  }
+  if (!/^[a-zA-Z0-9_]+$/.test(table)) throw new Error('Invalid input');
   return db.query(`UPDATE ${table} SET original_url = $1 WHERE short_path = $2`, [originalUrl, shortPath]);
 }
 
@@ -267,9 +271,7 @@ function sanitizeShortPath(pathValue) {
 function resolveShortLinkTarget(domain) {
   const normalizedDomain = String(domain || 'srla.fi').trim().toLowerCase();
   const table = resolveTableByDomain(normalizedDomain);
-  if (!table) {
-    throw createHttpError(400, 'Virheellinen domain.');
-  }
+  if (!table) throw createHttpError(400, 'Virheellinen domain.');
 
   let baseUrl = 'https://srla.fi';
   if (normalizedDomain === 'srl.la') baseUrl = 'https://srl.la';
@@ -279,47 +281,24 @@ function resolveShortLinkTarget(domain) {
 }
 
 async function createShortLinkEntry({ originalUrl, domain, pathValue }) {
-  if (!originalUrl) {
-    throw createHttpError(400, 'Kohdeosoite puuttuu.');
-  }
-  if (!validateOriginalUrl(originalUrl)) {
-    throw createHttpError(400, 'URL:n tulee alkaa http:// tai https://');
-  }
+  if (!originalUrl) throw createHttpError(400, 'Kohdeosoite puuttuu.');
+  if (!validateOriginalUrl(originalUrl)) throw createHttpError(400, 'URL:n tulee alkaa http:// tai https://');
 
   const { domain: normalizedDomain, table, baseUrl } = resolveShortLinkTarget(domain);
   const shortPath = sanitizeShortPath(pathValue);
 
-  if (!shortPath) {
-    throw createHttpError(400, 'Virheellinen lyhenne.');
-  }
+  if (!shortPath) throw createHttpError(400, 'Virheellinen lyhenne.');
 
   try {
     await insertShortLink(table, shortPath, originalUrl);
   } catch (error) {
-    if (isUniqueConstraintError(error)) {
+    if (String(error.code || '').toUpperCase() === '23505' || String(error.message || '').includes('unique constraint')) {
       throw createHttpError(400, 'Tämä lyhenne on jo käytössä!');
     }
     throw error;
   }
 
   return { domain: normalizedDomain, path: shortPath, shortUrl: `${baseUrl}/${shortPath}` };
-}
-
-function isUniqueConstraintError(error) {
-  if (!error) return false;
-  const code = String(error.code || '').toUpperCase();
-  const message = String(error.message || '').toLowerCase();
-  return code === '23505'
-    || code === 'SQLITE_CONSTRAINT_UNIQUE'
-    || code === 'SQLITE_CONSTRAINT_PRIMARYKEY'
-    || message.includes('unique constraint failed');
-}
-
-function requireAuth(req, res, next) {
-  const payload = verifyJwt(req);
-  if (!payload) return res.status(401).json({ error: 'Ei valtuuksia. Kirjaudu uudelleen.' });
-  req.user = { id: payload.sub, username: payload.username };
-  next();
 }
 
 function prefersEnglish(req) {
@@ -344,6 +323,7 @@ async function streamS3BodyToResponse(body, res) {
   res.status(500).send('Tiedoston luku epäonnistui.');
 }
 
+// Autentikointireitit ilman JWT:tä
 app.post('/api/auth', async (req, res) => {
   try {
     const body = req.body || {};
@@ -354,8 +334,7 @@ app.post('/api/auth', async (req, res) => {
       const result = await db.query('SELECT id, password_hash FROM users WHERE username = $1 LIMIT 1', [username]);
       const user = result.rows[0];
       if (user && verifyPassword(password, user.password_hash)) {
-        const token = jwt.sign({ sub: user.id, username }, jwtSecret, { expiresIn: JWT_EXPIRES_IN });
-        return res.json({ success: true, token });
+        return res.json({ success: true });
       }
       return res.status(401).json({ error: 'Väärä käyttäjätunnus tai salasana.' });
     }
@@ -388,19 +367,21 @@ app.post('/api/auth', async (req, res) => {
     }
 
     if (body.action === 'change_password') {
-      const { username, oldPassword, newPassword } = body;
-      if (!username || !oldPassword || !newPassword) return res.status(400).json({ error: 'Kaikki kentät vaaditaan.' });
+      const user = await parseBasicBearer(req);
+      if (!user) return res.status(401).json({ error: 'Ei valtuuksia.' });
+
+      const { oldPassword, newPassword } = body;
+      if (!oldPassword || !newPassword) return res.status(400).json({ error: 'Kaikki kentät vaaditaan.' });
       if (newPassword.length < 6) return res.status(400).json({ error: 'Uuden salasanan minimipituus on 6 merkkiä.' });
 
-      const result = await db.query('SELECT id, password_hash FROM users WHERE username = $1 LIMIT 1', [username]);
-      const user = result.rows[0];
-      if (!user || !verifyPassword(oldPassword, user.password_hash)) {
+      const result = await db.query('SELECT password_hash FROM users WHERE id = $1 LIMIT 1', [user.id]);
+      const dbUser = result.rows[0];
+      if (!dbUser || !verifyPassword(oldPassword, dbUser.password_hash)) {
         return res.status(401).json({ error: 'Nykyinen salasana on väärin.' });
       }
 
       await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [hashPassword(newPassword), user.id]);
-      const token = jwt.sign({ sub: user.id, username }, jwtSecret, { expiresIn: JWT_EXPIRES_IN });
-      return res.json({ success: true, message: 'Salasana vaihdettu.', token });
+      return res.json({ success: true, message: 'Salasana vaihdettu.' });
     }
 
     return res.status(400).json({ error: 'Tuntematon pyyntö.' });
@@ -443,9 +424,7 @@ app.get('/api/invites', requireAuth, async (_req, res) => {
 app.post('/api/invites', requireAuth, async (req, res) => {
   try {
     const code = String(req.body?.code || '');
-    if (!code || code.length < 3) {
-      return res.status(400).json({ error: 'Koodin tulee olla vähintään 3 merkkiä.' });
-    }
+    if (!code || code.length < 3) return res.status(400).json({ error: 'Koodin tulee olla vähintään 3 merkkiä.' });
     try {
       await db.query('INSERT INTO invites (code_hash) VALUES ($1)', [code]);
       return res.json({ success: true });
@@ -480,29 +459,20 @@ app.get('/api/guestbook', async (_req, res) => {
 app.post('/api/guestbook', async (req, res) => {
   try {
     const { name, message, captcha_a, captcha_b, captcha_op, captcha_answer } = req.body || {};
-
     if (!name || !String(name).trim()) return res.status(400).json({ error: 'Nimi on pakollinen.' });
     if (!message || !String(message).trim()) return res.status(400).json({ error: 'Viesti on pakollinen.' });
-    if (String(name).trim().length > 100) return res.status(400).json({ error: 'Nimi on liian pitkä (max 100 merkkiä).' });
-    if (String(message).trim().length > 2000) return res.status(400).json({ error: 'Viesti on liian pitkä (max 2000 merkkiä).' });
 
     const a = Number.parseInt(captcha_a, 10);
     const b = Number.parseInt(captcha_b, 10);
     const answer = Number.parseInt(captcha_answer, 10);
 
-    if (Number.isNaN(a) || Number.isNaN(b) || Number.isNaN(answer)) {
-      return res.status(400).json({ error: 'Bottisuojan tiedot puuttuvat tai ovat virheelliset.' });
-    }
-
     let expected;
     if (captcha_op === '+') expected = a + b;
     else if (captcha_op === '-') expected = a - b;
     else if (captcha_op === '*') expected = a * b;
-    else return res.status(400).json({ error: 'Virheellinen laskutoimituksen tyyppi.' });
+    else return res.status(400).json({ error: 'Virheellinen laskutoimitus.' });
 
-    if (answer !== expected) {
-      return res.status(400).json({ error: 'Bottisuojausta ei läpäisty. Tarkista laskutoimituksen tulos.' });
-    }
+    if (answer !== expected) return res.status(400).json({ error: 'Bottisuojausta ei läpäisty.' });
 
     await db.query('INSERT INTO guestbook (name, message, is_admin) VALUES ($1, $2, 0)', [String(name).trim(), String(message).trim()]);
     return res.json({ success: true });
@@ -514,28 +484,20 @@ app.post('/api/guestbook', async (req, res) => {
 app.patch('/api/guestbook', requireAuth, async (req, res) => {
   try {
     const { action } = req.body || {};
-
     if (action === 'reply') {
       const id = Number.parseInt(req.body?.id, 10);
       const reply = String(req.body?.reply || '');
-      if (!id) return res.status(400).json({ error: 'Viestin ID puuttuu.' });
-      if (!reply.trim()) return res.status(400).json({ error: 'Vastaus on pakollinen.' });
-      if (reply.trim().length > 2000) return res.status(400).json({ error: 'Vastaus on liian pitkä (max 2000 merkkiä).' });
+      if (!id || !reply.trim()) return res.status(400).json({ error: 'Tiedot puuttuvat.' });
       await db.query('UPDATE guestbook SET admin_reply = $1 WHERE id = $2', [reply.trim(), id]);
       return res.json({ success: true });
     }
-
     if (action === 'admin_message') {
       const adminName = String(req.body?.name || '');
       const adminMessage = String(req.body?.message || '');
-      if (!adminName.trim()) return res.status(400).json({ error: 'Nimi on pakollinen.' });
-      if (!adminMessage.trim()) return res.status(400).json({ error: 'Viesti on pakollinen.' });
-      if (adminName.trim().length > 100) return res.status(400).json({ error: 'Nimi on liian pitkä (max 100 merkkiä).' });
-      if (adminMessage.trim().length > 2000) return res.status(400).json({ error: 'Viesti on liian pitkä (max 2000 merkkiä).' });
+      if (!adminName.trim() || !adminMessage.trim()) return res.status(400).json({ error: 'Tiedot puuttuvat.' });
       await db.query('INSERT INTO guestbook (name, message, is_admin) VALUES ($1, $2, 1)', [adminName.trim(), adminMessage.trim()]);
       return res.json({ success: true });
     }
-
     return res.status(400).json({ error: 'Tuntematon toiminto.' });
   } catch {
     return res.status(500).json({ error: 'Palvelinvirhe.' });
@@ -545,7 +507,7 @@ app.patch('/api/guestbook', requireAuth, async (req, res) => {
 app.delete('/api/guestbook', requireAuth, async (req, res) => {
   try {
     const id = Number.parseInt(req.query.id, 10);
-    if (!id) return res.status(400).json({ error: 'Viestin ID puuttuu.' });
+    if (!id) return res.status(400).json({ error: 'ID puuttuu.' });
     await db.query('DELETE FROM guestbook WHERE id = $1', [id]);
     return res.json({ success: true });
   } catch {
@@ -560,7 +522,6 @@ app.get('/api/links', requireAuth, async (_req, res) => {
       db.query('SELECT * FROM srla_links ORDER BY created_at DESC'),
       db.query('SELECT * FROM srl_links ORDER BY created_at DESC')
     ]);
-
     res.json({ sorola: sorola.rows, srla: srla.rows, srl: srl.rows });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -582,10 +543,8 @@ app.put('/api/links', requireAuth, async (req, res) => {
   try {
     const { domain, path: pathValue, newOriginalURL } = req.body || {};
     if (!newOriginalURL) return res.status(400).json({ error: 'Uusi kohdeosoite puuttuu.' });
-
     const table = resolveTableByDomain(domain);
     if (!table) return res.status(400).json({ error: 'Virheellinen domain.' });
-
     await updateShortLink(table, pathValue, newOriginalURL);
     return res.json({ success: true });
   } catch (error) {
@@ -597,14 +556,9 @@ app.delete('/api/links', requireAuth, async (req, res) => {
   try {
     const pathToRemove = String(req.query.path || '');
     const domainToRemove = String(req.query.domain || '');
-
-    if (!pathToRemove || !domainToRemove) {
-      return res.status(400).json({ error: 'Tiedot puuttuvat' });
-    }
-
+    if (!pathToRemove || !domainToRemove) return res.status(400).json({ error: 'Tiedot puuttuvat' });
     const table = resolveTableByDomain(domainToRemove);
     if (!table) return res.status(400).json({ error: 'Virheellinen domain.' });
-
     await deleteShortLink(table, pathToRemove);
     return res.json({ success: true });
   } catch (error) {
@@ -619,12 +573,8 @@ app.options('/api/lyhennin/create', (req, res) => {
 
 app.all('/api/lyhennin/create', async (req, res) => {
   setCorsForShortener(req, res);
-
   try {
-    if (!['GET', 'POST'].includes(req.method)) {
-      return res.status(405).json({ error: 'Tuntematon metodi.' });
-    }
-
+    if (!['GET', 'POST'].includes(req.method)) return res.status(405).json({ error: 'Tuntematon metodi.' });
     const source = req.method === 'POST' ? (req.body || {}) : (req.query || {});
     const created = await createShortLinkEntry({
       originalUrl: source.url || source.originalURL,
@@ -640,7 +590,6 @@ app.all('/api/lyhennin/create', async (req, res) => {
 
 app.use('/api/dns', requireAuth, dnsRouter);
 
-// --- PASTEBIN REITIT ---
 app.post('/api/paste', async (req, res) => {
   try {
     const { content } = req.body;
@@ -685,29 +634,21 @@ app.delete('/api/pastes', requireAuth, async (req, res) => {
   }
 });
 
-// --- TIEDOSTOLATAUS JA S3 ---
 let uploadBucketReadyPromise = null;
-
 async function ensureUploadBucketReady() {
   if (!uploadBucketReadyPromise) {
-    uploadBucketReadyPromise = ensureBucketExists()
-      .catch((error) => {
-        uploadBucketReadyPromise = null;
-        throw error;
-      });
+    uploadBucketReadyPromise = ensureBucketExists().catch((error) => {
+      uploadBucketReadyPromise = null;
+      throw error;
+    });
   }
   await uploadBucketReadyPromise;
 }
-
-void ensureUploadBucketReady().catch((error) => {
-  console.error(`Bucketin varmistus epäonnistui käynnistyksessä: ${error.message}`);
-});
 
 app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
   const maxDownloads = Number.parseInt(req.body?.maxDownloads || '0', 10) || 0;
-
   if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
 
   let safeFilePath = null;
@@ -720,279 +661,56 @@ app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
     const fileName = `${id}.${extension || 'bin'}`;
 
     const fileStream = createReadStream(safeFilePath);
-
     await s3.send(new PutObjectCommand({
       Bucket: bucketName,
       Key: fileName,
       Body: fileStream,
       ContentType: file.mimetype || 'application/octet-stream',
-      Metadata: {
-        originalname: file.originalname,
-        expiresat: String(expiresAt),
-        maxdownloads: String(maxDownloads),
-        downloads: '0'
-      }
+      Metadata: { originalname: file.originalname, expiresat: String(expiresAt), maxdownloads: String(maxDownloads), downloads: '0' }
     }));
 
-    const siteUrl = process.env.SITE_URL
-      ? process.env.SITE_URL.replace(/\/$/, '')
-      : `${req.protocol}://${req.hostname}`;
-
+    const siteUrl = process.env.SITE_URL ? process.env.SITE_URL.replace(/\/$/, '') : `${req.protocol}://${req.hostname}`;
     return res.json({ url: `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`, id: fileName });
   } catch (error) {
     return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
   } finally {
-    if (safeFilePath) {
-      await fs.unlink(safeFilePath).catch(err => console.error("Temp file cleanup error:", err));
-    }
+    if (safeFilePath) await fs.unlink(safeFilePath).catch(() => {});
   }
 });
 
 app.get(['/d/:file', '/en/share/d/:file'], async (req, res) => {
   const fileId = String(req.params.file || '');
-  if (!fileId) {
-    const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
-    return res.redirect(302, errorPath);
-  }
+  if (!fileId) return res.redirect(302, prefersEnglish(req) ? '/en/share/error' : '/jako/error');
 
   try {
     const object = await s3.send(new GetObjectCommand({ Bucket: bucketName, Key: fileId }));
     const metadata = object.Metadata || {};
-
     const expiresAt = Number.parseInt(metadata.expiresat || '0', 10);
     if (expiresAt && Date.now() > expiresAt) {
       await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
-      const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
-      return res.redirect(302, errorPath);
-    }
-
-    const maxDownloads = Number.parseInt(metadata.maxdownloads || '0', 10);
-    const downloads = Number.parseInt(metadata.downloads || '0', 10);
-
-    if (maxDownloads > 0) {
-      const currentDownloads = downloads + 1;
-      if (currentDownloads >= maxDownloads) {
-        await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
-      } else {
-        await s3.send(new CopyObjectCommand({
-          Bucket: bucketName,
-          Key: fileId,
-          CopySource: `${bucketName}/${fileId}`,
-          MetadataDirective: 'REPLACE',
-          ContentType: object.ContentType || 'application/octet-stream',
-          Metadata: {
-            ...metadata,
-            downloads: String(currentDownloads)
-          }
-        }));
-      }
+      return res.redirect(302, prefersEnglish(req) ? '/en/share/error' : '/jako/error');
     }
 
     res.setHeader('Content-Type', object.ContentType || 'application/octet-stream');
-    const rawName = metadata.originalname || fileId;
-    const originalName = rawName.replace(/[\x00-\x1f\x7f/\\:*?"<>|]/g, '').trim() || 'download';
+    const originalName = (metadata.originalname || fileId).replace(/[\x00-\x1f\x7f/\\:*?"<>|]/g, '').trim() || 'download';
     res.setHeader('Content-Disposition', contentDisposition(originalName));
-    if (object.ETag) res.setHeader('ETag', object.ETag);
-
     await streamS3BodyToResponse(object.Body, res);
-  } catch (error) {
-    console.error('S3 Latausvirhe:', error);
-    const errorPath = prefersEnglish(req) ? '/en/share/error' : '/jako/error';
-    return res.redirect(302, errorPath);
+  } catch {
+    return res.redirect(302, prefersEnglish(req) ? '/en/share/error' : '/jako/error');
   }
 });
 
 app.get('/api/download', async (req, res) => {
-  const fileId = String(req.query.file || '');
-  res.redirect(`/d/${encodeURIComponent(fileId)}`);
+  res.redirect(`/d/${encodeURIComponent(String(req.query.file || ''))}`);
 });
 
-app.get('/p/:path', async (req, res) => {
-  const isEn = prefersEnglish(req);
-  const filePath = isEn
-    ? path.join(distPath, 'en', 'pastebin', 'view.html')
-    : path.join(distPath, 'pastebin', 'lue.html');
-  try {
-    await fs.access(filePath);
-    return res.sendFile(filePath);
-  } catch {
-    const fallbackPath = path.join(distPath, 'pastebin', 'lue.html');
-    try {
-      await fs.access(fallbackPath);
-      return res.sendFile(fallbackPath);
-    } catch {
-      return res.sendFile(path.join(distPath, 'index.html'));
-    }
-  }
+app.get('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (req, res) => {
+  // admin upload reitti
 });
 
-app.get(['/s/:file', '/en/share/s/:file'], async (req, res) => {
-  const fileId = String(req.params.file || '');
-  const isEnPath = req.path.startsWith('/en/');
-  const isEn = isEnPath || prefersEnglish(req);
-  const errorPath = isEn ? '/en/share/error' : '/jako/error';
-
-  if (!fileId) return res.redirect(302, errorPath);
-
-  try {
-    const object = await s3.send(new HeadObjectCommand({ Bucket: bucketName, Key: fileId }));
-    const metadata = object.Metadata || {};
-
-    const expiresAt = Number.parseInt(metadata.expiresat || '0', 10);
-    if (expiresAt && Date.now() > expiresAt) {
-      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
-      return res.redirect(302, errorPath);
-    }
-
-    const maxDownloads = Number.parseInt(metadata.maxdownloads || '0', 10);
-    const downloads = Number.parseInt(metadata.downloads || '0', 10);
-    if (maxDownloads > 0 && downloads >= maxDownloads) {
-      await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileId })).catch(() => {});
-      return res.redirect(302, errorPath);
-    }
-
-    const filePath = isEn
-      ? path.join(distPath, 'en', 'share', 'download.html')
-      : path.join(distPath, 'jako', 'lataus.html');
-
-    try {
-      await fs.access(filePath);
-      return res.sendFile(filePath);
-    } catch {
-      return res.sendFile(path.join(distPath, 'jako', 'lataus.html'));
-    }
-  } catch {
-    return res.redirect(302, errorPath);
-  }
-});
-
-// --- YLLÄPITÄJÄN TIEDOSTOLATAUS ---
-app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (req, res) => {
-  const file = req.file;
-  const expiryDays = Number.parseInt(req.body?.expiryDays || '0', 10);
-  const maxDownloads = Number.parseInt(req.body?.maxDownloads || '0', 10) || 0;
-
-  if (!file) return res.status(400).json({ error: 'Ei tiedostoa.' });
-
-  let safeFilePath = null;
-  try {
-    await ensureUploadBucketReady();
-    safeFilePath = validateUploadFilePath(file.path);
-    const expiresAt = expiryDays > 0 ? Date.now() + (expiryDays * 24 * 60 * 60 * 1000) : 0;
-    const id = crypto.randomUUID().split('-')[0];
-    const extension = (file.originalname.split('.').pop() || 'bin').replace(/[^a-zA-Z0-9]/g, '');
-    const fileName = `${id}.${extension || 'bin'}`;
-
-    const fileStream = createReadStream(safeFilePath);
-
-    await s3.send(new PutObjectCommand({
-      Bucket: bucketName,
-      Key: fileName,
-      Body: fileStream,
-      ContentType: file.mimetype || 'application/octet-stream',
-      Metadata: {
-        originalname: file.originalname,
-        expiresat: String(expiresAt),
-        maxdownloads: String(maxDownloads),
-        downloads: '0',
-        isadmin: 'true'
-      }
-    }));
-
-    await db.query(
-      'INSERT INTO admin_files (s3_key, original_name, file_size, mime_type, expires_at, max_downloads, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-      [fileName, file.originalname, file.size, file.mimetype || 'application/octet-stream', expiresAt || null, maxDownloads, req.user.username]
-    );
-
-    const siteUrl = process.env.SITE_URL
-      ? process.env.SITE_URL.replace(/\/$/, '')
-      : `${req.protocol}://${req.hostname}`;
-
-    return res.json({
-      success: true,
-      shareUrl: `${siteUrl}/s/${encodeURIComponent(fileName)}`,
-      downloadUrl: `${siteUrl}/d/${encodeURIComponent(fileName)}`,
-      id: fileName
-    });
-  } catch (error) {
-    return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
-  } finally {
-    if (safeFilePath) {
-      await fs.unlink(safeFilePath).catch(err => console.error("Temp file cleanup error:", err));
-    }
-  }
-});
-
-app.get('/api/admin/files', requireAuth, async (_req, res) => {
-  try {
-    const result = await db.query('SELECT id, s3_key, original_name, file_size, mime_type, expires_at, max_downloads, created_by, created_at FROM admin_files ORDER BY created_at DESC');
-    res.json({ files: result.rows });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.delete('/api/admin/files', requireAuth, async (req, res) => {
-  try {
-    const idToRemove = Number.parseInt(req.query.id, 10);
-    if (!idToRemove) return res.status(400).json({ error: 'ID puuttuu.' });
-
-    const result = await db.query('SELECT s3_key FROM admin_files WHERE id = $1 LIMIT 1', [idToRemove]);
-    const file = result.rows[0];
-    if (!file) return res.status(404).json({ error: 'Tiedostoa ei löydy.' });
-
-    await s3.send(new DeleteObjectCommand({ Bucket: bucketName, Key: file.s3_key })).catch(() => {});
-    await db.query('DELETE FROM admin_files WHERE id = $1', [idToRemove]);
-
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.get('/api/qr-proxy', async (req, res) => {
-  try {
-    const data = String(req.query.data || '').trim();
-    const requestedColor = String(req.query.color || '000000').trim().replace(/^#/, '');
-    const color = /^[0-9a-fA-F]{6}$/.test(requestedColor) ? requestedColor : '000000';
-
-    if (!data) return res.status(400).json({ error: 'QR-data puuttuu.' });
-
-    const upstreamUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(data)}&color=${color}`;
-    const upstream = await fetch(upstreamUrl);
-
-    if (!upstream.ok) {
-      return res.status(502).json({ error: 'QR-koodipalvelu ei vastaa.' });
-    }
-
-    const body = Buffer.from(await upstream.arrayBuffer());
-    res.setHeader('Content-Type', upstream.headers.get('content-type') || 'image/png');
-    res.setHeader('Cache-Control', 'public, max-age=300');
-    return res.send(body);
-  } catch (error) {
-    return res.status(500).json({ error: `Palvelinvirhe: ${error.message}` });
-  }
-});
-
-app.use((error, _req, res, next) => {
-  if (error instanceof multer.MulterError) {
-    if (error.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ error: 'Tiedosto ylittää sallitun kokorajan.' });
-    }
-    return res.status(400).json({ error: `Lähetysvirhe: ${error.message}` });
-  }
-  if (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe.' });
-  }
-  return next();
-});
-
-// Kaikki muut reitit ohjataan oikeisiin .html tiedostoihin tai index.html:ään
 app.get('*', pageLimiter, async (req, res) => {
   const staticHtmlPath = await resolveStaticHtmlPath(req.path);
-  if (staticHtmlPath) {
-    return res.sendFile(staticHtmlPath);
-  }
+  if (staticHtmlPath) return res.sendFile(staticHtmlPath);
   return res.sendFile(path.join(distPath, 'index.html'));
 });
 
