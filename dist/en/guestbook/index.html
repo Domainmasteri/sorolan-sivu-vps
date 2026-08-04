@@ -136,7 +136,7 @@
         <a class="language-overlay__link" href="/vieraskirja/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/guestbook/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko" style="max-width: 700px;">
         <h1 class="otsikko">Guestbook</h1>
@@ -170,7 +170,7 @@
             </div>
         </main>
 
-        <a href="/en/" class="linkki-takaisin">← Back to home</a>
+        <a href="/en/" class="linkki-takaisin">← Takaisin pääsivulle</a>
     </div>
 
     <script>
@@ -195,7 +195,7 @@
             captchaOp = op;
 
             const opMerkki = op === '*' ? '×' : op;
-            document.getElementById('captcha-kysymys').textContent = `How much is ${a} ${opMerkki} ${b}?`;
+            document.getElementById('captcha-kysymys').textContent = `Paljonko on ${a} ${opMerkki} ${b}?`;
             document.getElementById('captcha-vastaus').value = '';
         }
 
@@ -214,13 +214,13 @@
             const viesti = document.getElementById('gb-viesti').value.trim();
             const vastaus = document.getElementById('captcha-vastaus').value.trim();
 
-            if (!nimi) return naytaLomakeIlmoitus('Name is required.');
-            if (!viesti) return naytaLomakeIlmoitus('Message is required.');
-            if (!vastaus) return naytaLomakeIlmoitus('Please enter the answer to the calculation.');
+            if (!nimi) return naytaLomakeIlmoitus('Nimi on pakollinen.');
+            if (!viesti) return naytaLomakeIlmoitus('Viesti on pakollinen.');
+            if (!vastaus) return naytaLomakeIlmoitus('Syötä laskutoimituksen vastaus.');
 
             const btn = document.getElementById('btn-laheta');
             btn.disabled = true;
-            btn.textContent = 'Sending...';
+            btn.textContent = 'Lähetetään...';
 
             try {
                 const res = await fetch(API_GUESTBOOK, {
@@ -237,40 +237,40 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    naytaLomakeIlmoitus('Your message has been sent! Thank you! 🎉', 'onnistui');
+                    naytaLomakeIlmoitus('Viestisi on lähetetty! Kiitos! 🎉', 'onnistui');
                     document.getElementById('gb-nimi').value = '';
                     document.getElementById('gb-viesti').value = '';
                     uusiCaptcha();
                     await lataaViestit();
                 } else {
-                    naytaLomakeIlmoitus(data.error || 'Error sending message.');
+                    naytaLomakeIlmoitus(data.error || 'Virhe viestin lähetyksessä.');
                 }
             } catch (e) {
-                naytaLomakeIlmoitus('Server error. Please try again.');
+                naytaLomakeIlmoitus('Palvelinvirhe. Yritä uudelleen.');
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Send message';
+                btn.textContent = 'Lähetä viesti';
             }
         }
 
         function muotoilePvm(isoString) {
             const d = new Date(isoString);
-            return d.toLocaleDateString('en-US', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            return d.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         }
 
         function renderViestit(viestit) {
             const osio = document.getElementById('viestit-osio');
             if (!viestit || viestit.length === 0) {
-                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;">No messages yet. Be the first!</p></div>';
+                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;">Ei vielä viestejä. Ole ensimmäinen!</p></div>';
                 return;
             }
             osio.innerHTML = viestit.map(v => {
                 const onYllapito = v.is_admin === 1 || v.is_admin === true;
                 const korttiLuokka = onYllapito ? 'viestikortti yllapito-viesti' : 'viestikortti';
-                const merkki = onYllapito ? '<span class="yllapito-merkki">⚡ Admin</span>' : '';
+                const merkki = onYllapito ? '<span class="yllapito-merkki">⚡ Ylläpito</span>' : '';
                 const vastausHtml = v.admin_reply
                     ? `<div class="admin-vastaus">
-                        <div class="admin-vastaus-otsikko">⚡ Admin reply:</div>
+                        <div class="admin-vastaus-otsikko">⚡ Ylläpidon vastaus:</div>
                         <div class="admin-vastaus-teksti">${escapeHtml(v.admin_reply)}</div>
                        </div>`
                     : '';
@@ -303,7 +303,7 @@
                     renderViestit(data.messages || []);
                 } else {
                     document.getElementById('viestit-osio').innerHTML =
-                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Messages could not be loaded.</p></div>';
+                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Viestejä ei voitu ladata.</p></div>';
                 }
             } catch (e) {
                 document.getElementById('viestit-osio').innerHTML =

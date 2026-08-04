@@ -4,22 +4,22 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta property="og:url" content="https://sorola.fi/en/share/">
     <meta name="author" content="Sorola.fi">
-    <meta name="twitter:description" content="Sorola File Sharing - Share and send files securely. Share files securely. You can optionally enable your browser's end-to-end encryption. The maximum… Tutustu…">
-    <meta name="twitter:title" content="Sorola File Sharing - Share and send files securely">
+    <meta name="twitter:description" content="Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti. Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän……">
+    <meta name="twitter:title" content="Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti">
     <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:description" content="Sorola File Sharing - Share and send files securely. Share files securely. You can optionally enable your browser's end-to-end encryption. The maximum… Tutustu…">
-    <meta property="og:title" content="Sorola File Sharing - Share and send files securely">
+    <meta property="og:description" content="Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti. Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän……">
+    <meta property="og:title" content="Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti">
     <meta property="og:type" content="website">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorola File Sharing - Share and send files securely</title>
+    <title>Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti</title>
     <link rel="canonical" href="https://sorola.fi/en/share/">
     <link rel="alternate" hreflang="fi" href="https://sorola.fi/jako/">
     <link rel="alternate" hreflang="en" href="https://sorola.fi/en/share/">
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/jako/">
     <link rel="stylesheet" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Sorola File Sharing - Share and send files securely. Share files securely. You can optionally enable your browser's end-to-end encryption. The maximum… Tutustu…">
+    <meta name="description" content="Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti. Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän……">
     <script src="https://unpkg.com/lucide@0.511.0/dist/umd/lucide.min.js"></script>
     <style>
         #dropzone {
@@ -61,57 +61,57 @@
         <a class="language-overlay__link" href="/jako/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/share/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
     <div class="laatikko">
         <h1 class="otsikko">Sorola Share</h1>
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Share files securely. You can optionally enable your browser's end-to-end encryption. The maximum allowed file size is 1 GB.</p>
+            <p style="margin: 0; text-align: center;">Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän -salauksen. Suurin sallittu tiedostokoko on 1 Gt.</p>
         </div>
         <main id="paaosio">
             <div class="osion-tausta">
-                <h2>Settings</h2>
+                <h2>Asetukset</h2>
                 <div class="flex-form">
                     <div style="flex: 1; min-width: 200px;">
-                        <label for="expiryDays" style="display:block; font-size:0.9rem; color:#a0aec0; margin-bottom:8px; font-weight:bold;">Retention time:</label>
+                        <label for="expiryDays" style="display:block; font-size:0.9rem; color:#a0aec0; margin-bottom:8px; font-weight:bold;">Säilytysaika:</label>
                         <select id="expiryDays" class="syote" style="width: 100%; box-sizing: border-box;">
-                            <option value="1">1 day</option>
-                            <option value="3">3 days</option>
-                            <option value="7" selected>7 days (maximum)</option>
+                            <option value="1">1 pv</option>
+                            <option value="3">3 pv</option>
+                            <option value="7" selected>7 pv (maksimi)</option>
                         </select>
                     </div>
                     <div style="flex: 1; min-width: 200px;">
-                        <label for="maxDownloads" style="display:block; font-size:0.9rem; color:#a0aec0; margin-bottom:8px; font-weight:bold;">Download limit (0 = unlimited):</label>
+                        <label for="maxDownloads" style="display:block; font-size:0.9rem; color:#a0aec0; margin-bottom:8px; font-weight:bold;">Latausrajoitus (0 = rajaton):</label>
                         <input type="number" id="maxDownloads" class="syote" value="0" min="0" style="width: 100%; box-sizing: border-box;" />
                     </div>
                 </div>
                 <label class="asetus-rivi-flex">
                     <input type="checkbox" id="encryptCheckbox">
-                    Encrypt file in browser (AES-256)
+                    Salaa tiedosto selaimessa (AES-256)
                 </label>
             </div>
             <div class="osion-tausta">
-                <h2>Upload a file</h2>
+                <h2>Lataa tiedosto</h2>
                 <div id="dropzone">
                     <input type="file" id="fileInput" style="display: none;" />
                     <div id="dropzone-content">
                         <i data-lucide="upload-cloud" class="lucide-icon-large"></i>
-                        <p style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #e2e8f0;">Drag a file here</p>
-                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #a0aec0;">or click to upload from your device</p>
+                        <p style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #e2e8f0;">Raahaa tiedosto tähän</p>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #a0aec0;">tai klikkaa ladataksesi laitteeltasi</p>
                     </div>
                     <div id="loading" style="display: none; flex-direction: column; align-items: center;">
                         <i data-lucide="loader-2" class="lucide-icon-large lataus-spinner" style="color: #ffaa00;"></i>
-                        <p id="loading-text" style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #ffaa00;">Uploading to the cloud...</p>
+                        <p id="loading-text" style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #ffaa00;">Ladataan pilveen...</p>
                     </div>
                 </div>
             </div>
             <div id="result" class="osion-tausta" style="display: none; text-align: center;">
-                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;">File uploaded successfully!</h2>
-                <p style="margin-bottom: 20px; color: #a0aec0;">Share the link below with the recipient.</p>
-                <input type="text" id="shareLink" class="syote" readonly aria-label="Share link" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px;" />
-                <button id="copyBtn" class="nappula" style="width: 100%; max-width: 300px;">Copy link</button>
+                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;">Tiedosto ladattu onnistuneesti!</h2>
+                <p style="margin-bottom: 20px; color: #a0aec0;">Jaa alla oleva linkki vastaanottajalle.</p>
+                <input type="text" id="shareLink" class="syote" readonly aria-label="Jakolinkki" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px;" />
+                <button id="copyBtn" class="nappula" style="width: 100%; max-width: 300px;">Kopioi linkki</button>
             </div>
         </main>
-        <a href="/en/" class="linkki-takaisin">« Back to home</a>
+        <a href="/en/" class="linkki-takaisin">« Takaisin pääsivulle</a>
     </div>
     <script>
         lucide.createIcons();
@@ -140,7 +140,7 @@
         async function handleUpload(file) {
             const MAX_SIZE_MB = 1024;
             if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-                alert(`The file is too large! The maximum allowed size is ${MAX_SIZE_MB} MB.`);
+                alert(`Tiedosto on liian suuri! Sallittu maksimikoko on ${MAX_SIZE_MB} MB.`);
                 return;
             }
 
@@ -159,7 +159,7 @@
 
             try {
                 if (isEncrypted) {
-                    loadingText.textContent = 'Encrypting in browser...';
+                    loadingText.textContent = 'Salataan selaimessa...';
                     const cryptoKey = await window.crypto.subtle.generateKey(
                         { name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]
                     );
@@ -177,7 +177,7 @@
                     finalFilename = file.name + '.enc';
                 }
 
-                loadingText.textContent = 'Uploading to cloud...';
+                loadingText.textContent = 'Ladataan pilveen...';
                 const formData = new FormData();
                 formData.append('file', uploadBlob, finalFilename);
                 formData.append('expiryDays', expiryDays);
@@ -185,7 +185,7 @@
 
                 const response = await fetch('/api/upload', { method: 'POST', body: formData });
                 const data = await response.json();
-                if (!response.ok) throw new Error(data.error || 'Upload failed.');
+                if (!response.ok) throw new Error(data.error || 'Lataus epäonnistui.');
 
                 // Tunnistetaan kieli ja ohjataan lyhyisiin reitteihin oikealla kielellä!
                 const isEn = window.location.pathname.includes('/en/');
@@ -200,7 +200,7 @@
 
                 result.style.display = 'block';
             } catch (error) {
-                alert('Error: ' + error.message);
+                alert('Virhe: ' + error.message);
             } finally {
                 loading.style.display = 'none';
                 dropzoneContent.style.display = 'block';

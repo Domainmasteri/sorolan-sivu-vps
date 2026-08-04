@@ -4,7 +4,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Sorola.fi">
     <meta charset="UTF-8">
-    <title>Sorola Pastebin - Share text and code securely</title>
+    <title>Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/en/pastebin/">
     <link rel="alternate" hreflang="fi" href="https://sorola.fi/pastebin/">
@@ -14,18 +14,18 @@
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     
     <!-- SEO-optimoinnit -->
-    <meta name="description" content="Sorola Pastebin - Share text and code securely. Share code snippets, logs, or plain text quickly without breaking formatting. Tutustu palveluihin ja ohjeisiin…">
-    <meta name="keywords" content="pastebin, code sharing, text sharing, sorola, code, logs, coding, ad-free">
+    <meta name="description" content="Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti. Jaa koodinpätkiä, logeja tai puhdasta tekstiä nopeasti ilman muotoilun rikkoutumista. Tutustu…">
+    <meta name="keywords" content="pastebin, koodinjako, tekstinjako, sorola, koodi, logit, koodaus, ilman mainoksia">
     
     <!-- Some-esikatselut -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/en/pastebin/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorola Pastebin - Share text and code securely">
-    <meta property="og:description" content="Sorola Pastebin - Share text and code securely. Share code snippets, logs, or plain text quickly without breaking formatting. Tutustu palveluihin ja ohjeisiin…">
+    <meta property="og:title" content="Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti">
+    <meta property="og:description" content="Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti. Jaa koodinpätkiä, logeja tai puhdasta tekstiä nopeasti ilman muotoilun rikkoutumista. Tutustu…">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Sorola Pastebin - Share text and code securely">
-    <meta name="twitter:description" content="Sorola Pastebin - Share text and code securely. Share code snippets, logs, or plain text quickly without breaking formatting. Tutustu palveluihin ja ohjeisiin…">
+    <meta name="twitter:title" content="Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti">
+    <meta name="twitter:description" content="Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti. Jaa koodinpätkiä, logeja tai puhdasta tekstiä nopeasti ilman muotoilun rikkoutumista. Tutustu…">
 
     <style>
         #paste-content {
@@ -58,43 +58,43 @@
         <a class="language-overlay__link" href="/pastebin/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/pastebin/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
     <div class="laatikko" style="max-width: 800px;">
         <h1 class="otsikko">Pastebin</h1>
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Share code snippets, logs, or plain text quickly without breaking formatting.</p>
+            <p style="margin: 0; text-align: center;">Jaa koodinpätkiä, logeja tai puhdasta tekstiä nopeasti ilman muotoilun rikkoutumista.</p>
         </div>
         
         <main id="paaosio">
             <div class="osion-tausta" id="syotto-alue">
                 <div class="flex-form">
-                    <label for="paste-content" class="sr-only">Paste your text</label>
-                    <textarea id="paste-content" class="syote" placeholder="Paste code or text here..."></textarea>
+                    <label for="paste-content" class="sr-only">Liitä tekstisi</label>
+                    <textarea id="paste-content" class="syote" placeholder="Liitä koodi tai teksti tähän..."></textarea>
                 </div>
-                <button id="tallenna-btn" class="nappula" style="width: 100%;">Save and create link</button>
+                <button id="tallenna-btn" class="nappula" style="width: 100%;">Tallenna ja luo linkki</button>
             </div>
 
             <div class="osion-tausta" id="tulos-alue" style="text-align: center;">
-                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;">Text saved!</h2>
-                <p style="color: #a0aec0; margin-bottom: 15px;">Share the link below with the recipient.</p>
-                <input type="text" id="paste-linkki" class="syote" readonly aria-label="Pastebin link" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; margin-bottom: 15px;">
+                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;">Teksti tallennettu!</h2>
+                <p style="color: #a0aec0; margin-bottom: 15px;">Jaa alla oleva linkki vastaanottajalle.</p>
+                <input type="text" id="paste-linkki" class="syote" readonly aria-label="Pastebin linkki" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; margin-bottom: 15px;">
                 <div class="flex-form">
-                    <button id="kopioi-btn" class="nappula" style="flex: 1;">Copy link</button>
-                    <button id="uusi-btn" class="nappula1" style="flex: 1; background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">Create new</button>
+                    <button id="kopioi-btn" class="nappula" style="flex: 1;">Kopioi linkki</button>
+                    <button id="uusi-btn" class="nappula1" style="flex: 1; background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">Luo uusi</button>
                 </div>
             </div>
         </main>
-        <a href="/en/" class="linkki-takaisin">« Back to home</a>
+        <a href="/en/" class="linkki-takaisin">« Takaisin pääsivulle</a>
     </div>
     
     <script>
         document.getElementById('tallenna-btn').addEventListener('click', async () => {
             const content = document.getElementById('paste-content').value;
-            if (!content.trim()) return alert('Text field is empty!');
+            if (!content.trim()) return alert('Tekstikenttä on tyhjä!');
             
             const btn = document.getElementById('tallenna-btn');
             btn.disabled = true;
-            btn.textContent = 'Saving...';
+            btn.textContent = 'Tallennetaan...';
 
             try {
                 const res = await fetch('/api/paste', {
@@ -109,13 +109,13 @@
                     document.getElementById('tulos-alue').style.display = 'block';
                     document.getElementById('paste-linkki').value = window.location.origin + '/p/' + data.path;
                 } else {
-                    alert(data.error || 'Error while saving');
+                    alert(data.error || 'Virhe tallennuksessa');
                 }
             } catch (e) {
-                alert('Server error in connection.');
+                alert('Palvelinvirhe yhteydessä.');
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Save and create link';
+                btn.textContent = 'Tallenna ja luo linkki';
             }
         });
 

@@ -8,15 +8,15 @@
     <link rel="alternate" hreflang="en" href="https://sorola.fi/en/pastebin/view">
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/pastebin/lue">
     <meta name="author" content="Sorola.fi">
-    <meta name="twitter:description" content="Sorola Pastebin - View - useful IT tools, guides, and practical web utilities from Sorola.fi.">
-    <meta name="twitter:title" content="Sorola Pastebin - View">
+    <meta name="twitter:description" content="Sorolan Pastebin - Katselu - useful IT tools, guides, and practical web utilities from Sorola.fi.">
+    <meta name="twitter:title" content="Sorolan Pastebin - Katselu">
     <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:description" content="Sorola Pastebin - View - useful IT tools, guides, and practical web utilities from Sorola.fi.">
-    <meta property="og:title" content="Sorola Pastebin - View">
+    <meta property="og:description" content="Sorolan Pastebin - Katselu - useful IT tools, guides, and practical web utilities from Sorola.fi.">
+    <meta property="og:title" content="Sorolan Pastebin - Katselu">
     <meta property="og:type" content="website">
-    <meta name="description" content="Sorola Pastebin - View - useful IT tools, guides, and practical web utilities from Sorola.fi.">
+    <meta name="description" content="Sorolan Pastebin - Katselu - useful IT tools, guides, and practical web utilities from Sorola.fi.">
     <meta charset="UTF-8">
-    <title>Sorola Pastebin - View</title>
+    <title>Sorolan Pastebin - Katselu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
@@ -54,11 +54,11 @@
         <h1 class="otsikko">Pastebin</h1>
         <div class="osion-tausta">
             <div class="koodi-kontti">
-                <pre><code id="koodi-alue" class="language-javascript">Loading text...</code></pre>
+                <pre><code id="koodi-alue" class="language-javascript">Ladataan tekstiä...</code></pre>
             </div>
-            <button id="kopioi-sisalto" class="nappula" style="margin-top: 20px; width: 100%;">Copy all text</button>
+            <button id="kopioi-sisalto" class="nappula" style="margin-top: 20px; width: 100%;">Kopioi koko teksti</button>
         </div>
-        <a href="/en/pastebin" class="linkki-takaisin">« Create new paste</a>
+        <a href="/en/pastebin" class="linkki-takaisin">« Luo uusi paste</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js" integrity="sha384-DLX96w7/1q8CY3tN4eR0Nn7K1f2GhJ2/A3ZfTKUm7n0J966auAcNt7r9GEYhr8F0" crossorigin="anonymous"></script>
@@ -71,13 +71,13 @@
 
             try {
                 const res = await fetch(`/api/paste/${pasteId}`);
-                if (!res.ok) throw new Error('Text not found');
+                if (!res.ok) throw new Error('Tekstiä ei löytynyt');
                 
                 const data = await res.json();
                 koodiAlue.textContent = data.content;
                 Prism.highlightElement(koodiAlue);
             } catch (err) {
-                koodiAlue.textContent = "Error: The text you are looking for was not found or has been deleted.";
+                koodiAlue.textContent = "Virhe: Etsimääsi tekstiä ei löytynyt tai se on poistettu.";
             }
 
             document.getElementById('kopioi-sisalto').addEventListener('click', (e) => {

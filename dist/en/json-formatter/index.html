@@ -4,7 +4,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Sorola.fi">
     <meta charset="UTF-8">
-    <title>Sorola JSON Formatter - Format and validate JSON</title>
+    <title>Sorolan JSON-muotoilija - Muotoile ja validoi JSON</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/en/json-formatter/">
     <link rel="alternate" hreflang="fi" href="https://sorola.fi/json/">
@@ -12,16 +12,16 @@
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/json/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Sorola JSON Formatter - Format and validate JSON. Format and validate JSON data directly in your browser. All processing happens locally – nothing is… Tutustu…">
-    <meta name="keywords" content="JSON formatter, JSON validator, Sorola">
+    <meta name="description" content="Sorolan JSON-muotoilija - Muotoile ja validoi JSON. Muotoile ja validoi JSON-dataa suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti –… Tutustu…">
+    <meta name="keywords" content="JSON muotoilija, JSON validaattori, JSON formatter, JSON validator, Sorola">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/en/json-formatter/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorola JSON Formatter - Format and validate JSON">
-    <meta property="og:description" content="Sorola JSON Formatter - Format and validate JSON. Format and validate JSON data directly in your browser. All processing happens locally – nothing is… Tutustu…">
+    <meta property="og:title" content="Sorolan JSON-muotoilija - Muotoile ja validoi JSON">
+    <meta property="og:description" content="Sorolan JSON-muotoilija - Muotoile ja validoi JSON. Muotoile ja validoi JSON-dataa suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti –… Tutustu…">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Sorola JSON Formatter - Format and validate JSON">
-    <meta name="twitter:description" content="Sorola JSON Formatter - Format and validate JSON. Format and validate JSON data directly in your browser. All processing happens locally – nothing is… Tutustu…">
+    <meta name="twitter:title" content="Sorolan JSON-muotoilija - Muotoile ja validoi JSON">
+    <meta name="twitter:description" content="Sorolan JSON-muotoilija - Muotoile ja validoi JSON. Muotoile ja validoi JSON-dataa suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti –… Tutustu…">
     <style>
         #json-syote,
         #json-tulos {
@@ -99,42 +99,42 @@
         <a class="language-overlay__link" href="/json/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/json-formatter/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko" style="max-width: 860px;">
-        <h1 class="otsikko">JSON Formatter</h1>
+        <h1 class="otsikko">JSON-muotoilija</h1>
 
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Format and validate JSON data directly in your browser. All processing happens locally – nothing is sent to the server.</p>
+            <p style="margin: 0; text-align: center;">Muotoile ja validoi JSON-dataa suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.</p>
         </div>
 
         <main id="paaosio">
             <div class="osion-tausta">
-                <h2>1. Paste JSON data</h2>
-                <label for="json-syote" class="sr-only">JSON input</label>
-                <textarea id="json-syote" class="syote" placeholder='Paste your JSON data here, e.g. {"name":"Test","value":42}' aria-label="JSON input" spellcheck="false"></textarea>
+                <h2>1. Liitä JSON-data</h2>
+                <label for="json-syote" class="sr-only">JSON-syöte</label>
+                <textarea id="json-syote" class="syote" placeholder='Liitä JSON-datasi tähän, esim. {"nimi":"Testi","arvo":42}' aria-label="JSON-syöte" spellcheck="false"></textarea>
 
                 <div class="toiminto-rivi">
-                    <button id="muotoile-btn" class="nappula">✨ Format</button>
-                    <button id="pakkaa-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">📦 Minify</button>
-                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Clear</button>
+                    <button id="muotoile-btn" class="nappula">✨ Muotoile</button>
+                    <button id="pakkaa-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">📦 Pakkaa</button>
+                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Tyhjennä</button>
                 </div>
 
                 <div id="tila-viesti" role="status" aria-live="polite"></div>
             </div>
 
             <div class="osion-tausta">
-                <h2>2. Result</h2>
+                <h2>2. Tulos</h2>
                 <label for="json-tulos" class="sr-only">Muotoiltu JSON-tulos</label>
-                <textarea id="json-tulos" class="syote" readonly placeholder="Result appears here..." aria-label="Formatted JSON result" spellcheck="false"></textarea>
+                <textarea id="json-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Muotoiltu JSON-tulos" spellcheck="false"></textarea>
 
                 <div class="kopioi-btn-kontti">
-                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Copy to clipboard</button>
+                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Kopioi leikepöydälle</button>
                 </div>
             </div>
         </main>
 
-        <a href="/en/" class="linkki-takaisin">« Back to home</a>
+        <a href="/en/" class="linkki-takaisin">« Takaisin pääsivulle</a>
     </div>
 
     <script>
@@ -156,7 +156,7 @@
         document.getElementById('muotoile-btn').addEventListener('click', () => {
             const syote = syoteEl.value.trim();
             if (!syote) {
-                naytaTila('⚠️ Input field is empty.', 'virhe');
+                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
                 return;
             }
             try {
@@ -164,29 +164,29 @@
                 const muotoiltu = JSON.stringify(parsittu, null, 2);
                 tulosEl.value = muotoiltu;
                 tulosEl.className = 'syote';
-                naytaTila('✅ JSON is valid and formatted successfully.', 'ok');
+                naytaTila('✅ JSON on kelvollinen ja muotoiltu onnistuneesti.', 'ok');
             } catch (e) {
                 tulosEl.value = '';
                 tulosEl.className = 'syote virhe';
-                naytaTila('❌ Invalid JSON: ' + e.message, 'virhe');
+                naytaTila('❌ Virheellinen JSON: ' + e.message, 'virhe');
             }
         });
 
         document.getElementById('pakkaa-btn').addEventListener('click', () => {
             const syote = syoteEl.value.trim();
             if (!syote) {
-                naytaTila('⚠️ Input field is empty.', 'virhe');
+                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
                 return;
             }
             try {
                 const parsittu = JSON.parse(syote);
                 tulosEl.value = JSON.stringify(parsittu);
                 tulosEl.className = 'syote';
-                naytaTila('✅ JSON minified successfully.', 'ok');
+                naytaTila('✅ JSON pakattu onnistuneesti.', 'ok');
             } catch (e) {
                 tulosEl.value = '';
                 tulosEl.className = 'syote virhe';
-                naytaTila('❌ Invalid JSON: ' + e.message, 'virhe');
+                naytaTila('❌ Virheellinen JSON: ' + e.message, 'virhe');
             }
         });
 
@@ -200,7 +200,7 @@
         kopiointiBtn.addEventListener('click', async () => {
             const teksti = tulosEl.value;
             if (!teksti) {
-                naytaTila('⚠️ Nothing to copy – format JSON first.', 'virhe');
+                naytaTila('⚠️ Ei kopioitavaa – muotoile ensin JSON.', 'virhe');
                 return;
             }
             try {
@@ -211,7 +211,7 @@
             }
             const alkuperainen = kopiointiBtn.textContent;
             const alkuperainenVari = kopiointiBtn.style.backgroundColor;
-            kopiointiBtn.textContent = '✅ Copied!';
+            kopiointiBtn.textContent = '✅ Kopioitu!';
             kopiointiBtn.style.backgroundColor = '#166534';
             setTimeout(() => {
                 kopiointiBtn.textContent = alkuperainen;

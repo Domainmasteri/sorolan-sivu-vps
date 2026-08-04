@@ -4,7 +4,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Sorola.fi">
     <meta charset="UTF-8">
-    <title>Sorola Base64 Encoder – Encode and Decode Base64</title>
+    <title>Sorolan Base64 Kooderi – Koodaa ja pura Base64</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/en/base64/">
     <link rel="alternate" hreflang="fi" href="https://sorola.fi/base64/">
@@ -12,16 +12,16 @@
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/base64/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Sorola Base64 Encoder – Encode and Decode Base64. Encode or decode Base64 text directly in your browser. All processing happens locally – nothing is… Tutustu…">
-    <meta name="keywords" content="Base64, encoder, decoder, Base64 encode, Base64 decode, UTF-8, Sorola">
+    <meta name="description" content="Sorolan Base64 Kooderi – Koodaa ja pura Base64. Koodaa tai pura Base64-tekstiä suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti –… Tutustu…">
+    <meta name="keywords" content="Base64, kooderi, dekooderi, Base64 encode, Base64 decode, UTF-8, Sorola">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/en/base64/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorola Base64 Encoder – Encode and Decode Base64">
-    <meta property="og:description" content="Sorola Base64 Encoder – Encode and Decode Base64. Encode or decode Base64 text directly in your browser. All processing happens locally – nothing is… Tutustu…">
+    <meta property="og:title" content="Sorolan Base64 Kooderi – Koodaa ja pura Base64">
+    <meta property="og:description" content="Sorolan Base64 Kooderi – Koodaa ja pura Base64. Koodaa tai pura Base64-tekstiä suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti –… Tutustu…">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Sorola Base64 Encoder – Encode and Decode Base64">
-    <meta name="twitter:description" content="Sorola Base64 Encoder – Encode and Decode Base64. Encode or decode Base64 text directly in your browser. All processing happens locally – nothing is… Tutustu…">
+    <meta name="twitter:title" content="Sorolan Base64 Kooderi – Koodaa ja pura Base64">
+    <meta name="twitter:description" content="Sorolan Base64 Kooderi – Koodaa ja pura Base64. Koodaa tai pura Base64-tekstiä suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti –… Tutustu…">
     <style>
         #b64-syote,
         #b64-tulos {
@@ -99,42 +99,42 @@
         <a class="language-overlay__link" href="/base64/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/base64/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko" style="max-width: 860px;">
-        <h1 class="otsikko">Base64 Encoder / Decoder</h1>
+        <h1 class="otsikko">Base64 Kooderi / Dekooderi</h1>
 
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Encode or decode Base64 text directly in your browser. All processing happens locally – nothing is sent to the server.</p>
+            <p style="margin: 0; text-align: center;">Koodaa tai pura Base64-tekstiä suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.</p>
         </div>
 
         <main id="paaosio">
             <div class="osion-tausta">
-                <h2>1. Input</h2>
-                <label for="b64-syote" class="sr-only">Input text</label>
-                <textarea id="b64-syote" class="syote" placeholder="Type or paste your text here..." aria-label="Input text" spellcheck="false"></textarea>
+                <h2>1. Syöte</h2>
+                <label for="b64-syote" class="sr-only">Syöteteksti</label>
+                <textarea id="b64-syote" class="syote" placeholder="Kirjoita tai liitä teksti tähän..." aria-label="Syöteteksti" spellcheck="false"></textarea>
 
                 <div class="toiminto-rivi">
-                    <button id="koodaa-btn" class="nappula">🔒 Encode</button>
-                    <button id="pura-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">🔓 Decode</button>
-                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Clear</button>
+                    <button id="koodaa-btn" class="nappula">🔒 Koodaa (Encode)</button>
+                    <button id="pura-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">🔓 Pura (Decode)</button>
+                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Tyhjennä</button>
                 </div>
 
                 <div id="tila-viesti" role="status" aria-live="polite"></div>
             </div>
 
             <div class="osion-tausta">
-                <h2>2. Result</h2>
+                <h2>2. Tulos</h2>
                 <label for="b64-tulos" class="sr-only">Tulos</label>
-                <textarea id="b64-tulos" class="syote" readonly placeholder="Result appears here..." aria-label="Result" spellcheck="false"></textarea>
+                <textarea id="b64-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Tulos" spellcheck="false"></textarea>
 
                 <div class="kopioi-btn-kontti">
-                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Copy to clipboard</button>
+                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Kopioi leikepöydälle</button>
                 </div>
             </div>
         </main>
 
-        <a href="/en/" class="linkki-takaisin">« Back to home</a>
+        <a href="/en/" class="linkki-takaisin">« Takaisin pääsivulle</a>
     </div>
 
     <script>
@@ -156,36 +156,36 @@
         document.getElementById('koodaa-btn').addEventListener('click', () => {
             const syote = syoteEl.value;
             if (!syote) {
-                naytaTila('⚠️ Input field is empty.', 'virhe');
+                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
                 return;
             }
             try {
                 const koodattu = btoa(encodeURIComponent(syote).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16))));
                 tulosEl.value = koodattu;
                 tulosEl.className = 'syote';
-                naytaTila('✅ Text encoded successfully.', 'ok');
+                naytaTila('✅ Teksti koodattu onnistuneesti.', 'ok');
             } catch (e) {
                 tulosEl.value = '';
                 tulosEl.className = 'syote virhe';
-                naytaTila('❌ Encoding failed: ' + e.message, 'virhe');
+                naytaTila('❌ Koodaus epäonnistui: ' + e.message, 'virhe');
             }
         });
 
         document.getElementById('pura-btn').addEventListener('click', () => {
             const syote = syoteEl.value.trim();
             if (!syote) {
-                naytaTila('⚠️ Input field is empty.', 'virhe');
+                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
                 return;
             }
             try {
                 const purettu = decodeURIComponent(atob(syote).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
                 tulosEl.value = purettu;
                 tulosEl.className = 'syote';
-                naytaTila('✅ Base64 decoded successfully.', 'ok');
+                naytaTila('✅ Base64 purettu onnistuneesti.', 'ok');
             } catch (e) {
                 tulosEl.value = '';
                 tulosEl.className = 'syote virhe';
-                naytaTila('❌ Decoding failed: Input is not valid Base64.', 'virhe');
+                naytaTila('❌ Purku epäonnistui: Syöte ei ole kelvollista Base64-tekstiä.', 'virhe');
             }
         });
 
@@ -199,7 +199,7 @@
         kopiointiBtn.addEventListener('click', async () => {
             const teksti = tulosEl.value;
             if (!teksti) {
-                naytaTila('⚠️ Nothing to copy – encode or decode text first.', 'virhe');
+                naytaTila('⚠️ Ei kopioitavaa – koodaa tai pura ensin teksti.', 'virhe');
                 return;
             }
             try {
@@ -210,7 +210,7 @@
             }
             const alkuperainen = kopiointiBtn.textContent;
             const alkuperainenVari = kopiointiBtn.style.backgroundColor;
-            kopiointiBtn.textContent = '✅ Copied!';
+            kopiointiBtn.textContent = '✅ Kopioitu!';
             kopiointiBtn.style.backgroundColor = '#166534';
             setTimeout(() => {
                 kopiointiBtn.textContent = alkuperainen;

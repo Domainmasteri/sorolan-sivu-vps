@@ -4,7 +4,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Sorola.fi">
     <meta charset="UTF-8">
-    <title>Sorola Link Shortener - Secure URL shortener</title>
+    <title>Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/en/shortener/">
     <link rel="alternate" hreflang="fi" href="https://sorola.fi/lyhennin/">
@@ -13,17 +13,17 @@
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     
-    <meta name="description" content="Sorola Link Shortener - Secure URL shortener. If you have a really long link, you can paste it here and turn it into a shorter one. Tutustu palveluihin ja…">
-    <meta name="keywords" content="link shortener, URL shortener, short link, secure short link, Sorola">
+    <meta name="description" content="Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä. Jos sinulla on jokin todella pitkä linkki, voit kopioida sen tähän, ja tehdä siitä lyhyemmän. Tutustu…">
+    <meta name="keywords" content="linkkilyhennin, URL lyhennin, lyhytlinkki, URL shortener, Sorola">
     
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/en/shortener/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorola Link Shortener - Secure URL shortener">
-    <meta property="og:description" content="Sorola Link Shortener - Secure URL shortener. If you have a really long link, you can paste it here and turn it into a shorter one. Tutustu palveluihin ja…">
+    <meta property="og:title" content="Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä">
+    <meta property="og:description" content="Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä. Jos sinulla on jokin todella pitkä linkki, voit kopioida sen tähän, ja tehdä siitä lyhyemmän. Tutustu…">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Sorola Link Shortener - Secure URL shortener">
-    <meta name="twitter:description" content="Sorola Link Shortener - Secure URL shortener. If you have a really long link, you can paste it here and turn it into a shorter one. Tutustu palveluihin ja…">
+    <meta name="twitter:title" content="Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä">
+    <meta name="twitter:description" content="Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä. Jos sinulla on jokin todella pitkä linkki, voit kopioida sen tähän, ja tehdä siitä lyhyemmän. Tutustu…">
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/en/analytics.js"></script>
     
@@ -43,18 +43,18 @@
         <a class="language-overlay__link" href="/lyhennin/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/shortener/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko">
-        <h1 class="otsikko">URL Shortener</h1>
+        <h1 class="otsikko">URL-Lyhentäjä</h1>
         
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">If you have a really long link, you can paste it here and turn it into a shorter one.</p>
+            <p style="margin: 0; text-align: center;">Jos sinulla on jokin todella pitkä linkki, voit kopioida sen tähän, ja tehdä siitä lyhyemmän.</p>
         </div>
 
         <main id="paaosio">
         <div class="osion-tausta">
-            <h2>Create a short link</h2>
+            <h2>Luo Lyhytlinkki</h2>
             <form id="lyhennin-lomake" class="flex-form">
                 <label for="domain-syote" class="sr-only">Lyhytlinkin domain</label>
                 <select id="domain-syote" class="syote" name="domain" style="flex: 0.35; min-width: 120px;" aria-label="Lyhytlinkin domain">
@@ -62,25 +62,25 @@
                     <option value="srla.fi">srla.fi</option>
                     <option value="srl.la">srl.la</option>
                 </select>
-                <label for="url-syote" class="sr-only">URL to shorten</label>
-                <input type="url" id="url-syote" class="syote" name="url" placeholder="http(s)://" pattern="https?://.+" required aria-label="URL to shorten">
-                <button type="submit" class="nappula">Shorten link</button>
+                <label for="url-syote" class="sr-only">Lyhennettävä URL-osoite</label>
+                <input type="url" id="url-syote" class="syote" name="url" placeholder="http(s)://" pattern="https?://.+" required aria-label="Lyhennettävä URL-osoite">
+                <button type="submit" class="nappula">Lyhennä linkki</button>
             </form>
 
             <div id="tulos-alue" style="display: none; width: 100%; text-align: center; margin-top: 20px;">
-                <p style="color: #ffaa00; margin-bottom: 15px; font-weight: bold; font-size: 1.2rem;">Your link is ready!</p>
+                <p style="color: #ffaa00; margin-bottom: 15px; font-weight: bold; font-size: 1.2rem;">Linkki on valmis!</p>
                 
-                <input type="text" id="lyhennetty-url" class="syote" style="text-align: center; margin-bottom: 15px;" readonly aria-label="Shortened URL">
+                <input type="text" id="lyhennetty-url" class="syote" style="text-align: center; margin-bottom: 15px;" readonly aria-label="Lyhennetty URL-osoite">
                 
                 <div class="flex-form">
-                    <button id="kopioi-btn" class="nappula" type="button">Copy link</button>
-                    <a href="/en/qr" class="nappula" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">Open the QR code generator</a>
+                    <button id="kopioi-btn" class="nappula" type="button">Kopioi linkki</button>
+                    <a href="/en/qr" class="nappula" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">QR-Koodin luojaan</a>
                 </div>
             </div>
         </div>
         </main>
 
-        <a href="/en/" class="linkki-takaisin">← Back to home</a>
+        <a href="/en/" class="linkki-takaisin">← Takaisin pääsivulle</a>
     </div>
 
     <script src="/en/shortener/script.js"></script>

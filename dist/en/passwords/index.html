@@ -4,7 +4,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Sorola.fi">
     <meta charset="UTF-8">
-    <title>Sorola Password Generator - Create strong passwords</title>
+    <title>Sorolan Salasanakone - Luo vahvoja salasanoja</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/en/passwords/">
     <link rel="alternate" hreflang="fi" href="https://sorola.fi/salasanat/">
@@ -12,15 +12,15 @@
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/salasanat/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Sorola Password Generator - Create strong passwords. Create strong and secure passwords to improve resistance against cracking. Choose the length and… Tutustu…">
+    <meta name="description" content="Sorolan Salasanakone - Luo vahvoja salasanoja. Luo vahvoja ja turvallisia salasanoja murtovarmuuden parantamiseksi. Valitse pituus ja merkit alta. Tutustu…">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/en/passwords/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorola Password Generator - Create strong passwords">
-    <meta property="og:description" content="Sorola Password Generator - Create strong passwords. Create strong and secure passwords to improve resistance against cracking. Choose the length and… Tutustu…">
+    <meta property="og:title" content="Sorolan Salasanakone - Luo vahvoja salasanoja">
+    <meta property="og:description" content="Sorolan Salasanakone - Luo vahvoja salasanoja. Luo vahvoja ja turvallisia salasanoja murtovarmuuden parantamiseksi. Valitse pituus ja merkit alta. Tutustu…">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Sorola Password Generator - Create strong passwords">
-    <meta name="twitter:description" content="Sorola Password Generator - Create strong passwords. Create strong and secure passwords to improve resistance against cracking. Choose the length and… Tutustu…">
+    <meta name="twitter:title" content="Sorolan Salasanakone - Luo vahvoja salasanoja">
+    <meta name="twitter:description" content="Sorolan Salasanakone - Luo vahvoja salasanoja. Luo vahvoja ja turvallisia salasanoja murtovarmuuden parantamiseksi. Valitse pituus ja merkit alta. Tutustu…">
     <style>
         /* Salasanakoneen omat mukautetut asettelut uuteen teemaan sopiviksi */
         .asetus-rivi {
@@ -80,60 +80,60 @@
         <a class="language-overlay__link" href="/salasanat/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/passwords/" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko">
-        <h1 class="otsikko">Password generator</h1>
+        <h1 class="otsikko">Salasanakone</h1>
 
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Create strong and secure passwords to improve resistance against cracking. Choose the length and character types below.</p>
+            <p style="margin: 0; text-align: center;">Luo vahvoja ja turvallisia salasanoja murtovarmuuden parantamiseksi. Valitse pituus ja merkit alta.</p>
         </div>
 
         <main id="paaosio">
         <div class="osion-tausta">
-            <h2>1. Adjust the settings</h2>
+            <h2>1. Muokkaa asetuksia</h2>
             
             <div class="slider-kontti">
-                <label for="pituus-slider">Password length: <span id="pituus-arvo" style="color: #ffaa00; font-weight: bold;">16</span> characters</label>
+                <label for="pituus-slider">Salasanan pituus: <span id="pituus-arvo" style="color: #ffaa00; font-weight: bold;">16</span> merkkiä</label>
                 <input type="range" id="pituus-slider" min="6" max="32" value="16">
             </div>
 
             <label class="asetus-rivi">
                 <input type="checkbox" id="pienet-kirjaimet" checked>
-                Include lowercase letters (a-z)
+                Sisällytä pieniä kirjaimia (a-z)
             </label>
             
             <label class="asetus-rivi">
                 <input type="checkbox" id="isot-kirjaimet" checked>
-                Include uppercase letters (A-Z)
+                Sisällytä isoja kirjaimia (A-Z)
             </label>
             
             <label class="asetus-rivi">
                 <input type="checkbox" id="numerot" checked>
-                Include numbers (0-9)
+                Sisällytä numeroita (0-9)
             </label>
             
             <label class="asetus-rivi">
                 <input type="checkbox" id="erikoismerkit" checked>
-                Include special characters (!@#$%)
+                Sisällytä erikoismerkkejä (!@#$%)
             </label>
 
-            <button id="luo-btn" class="nappula" style="margin-top: 15px;">🎲 Generate a new password</button>
+            <button id="luo-btn" class="nappula" style="margin-top: 15px;">🎲 Arvo uusi salasana</button>
         </div>
 
         <div class="osion-tausta" style="text-align: center;">
-            <h2>Ready password</h2>
+            <h2>Valmis salasana</h2>
             
             <div style="margin-bottom: 20px;">
-                <label for="valmis-salasana" class="sr-only">Generated password</label>
-                <input type="text" id="valmis-salasana" class="syote" readonly placeholder="Press the Generate button" aria-label="Generated password">
+                <label for="valmis-salasana" class="sr-only">Generoitu salasana</label>
+                <input type="text" id="valmis-salasana" class="syote" readonly placeholder="Paina Arvo-nappia" aria-label="Generoitu salasana">
             </div>
             
-            <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Copy to clipboard</button>
+            <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Kopioi leikepöydälle</button>
         </div>
         </main>
 
-        <a href="/en/" class="linkki-takaisin">← Back to home</a>
+        <a href="/en/" class="linkki-takaisin">← Takaisin pääsivulle</a>
     </div>
 
     <script src="/en/passwords/script.js"></script>
