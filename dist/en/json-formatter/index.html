@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorola JSON Formatter - Format and validate JSON</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/en/json-formatter/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/json/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/json-formatter/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/json/">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Format and validate JSON data for free directly in your browser. A fast and easy-to-use JSON formatter and validator.">
+    <meta name="keywords" content="JSON formatter, JSON validator, Sorola">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/en/json-formatter/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Sorola JSON Formatter">
+    <meta property="og:description" content="Format and validate JSON data for free in your browser.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sorola JSON Formatter">
+    <meta name="twitter:description" content="Format and validate JSON data for free in your browser.">
+    <style>
+        #json-syote,
+        #json-tulos {
+            width: 100%;
+            min-height: 220px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.92rem;
+            resize: vertical;
+            box-sizing: border-box;
+            background: #0b0d13;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+        #json-tulos {
+            color: #4ade80;
+        }
+        #json-tulos.virhe {
+            color: #f87171;
+        }
+        .toiminto-rivi {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .toiminto-rivi .nappula,
+        .toiminto-rivi .nappula1 {
+            flex: 1;
+            min-width: 120px;
+        }
+        #tila-viesti {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: none;
+        }
+        #tila-viesti.ok {
+            background: rgba(74, 222, 128, 0.12);
+            border: 1px solid #4ade80;
+            color: #4ade80;
+            display: block;
+        }
+        #tila-viesti.virhe {
+            background: rgba(248, 113, 113, 0.12);
+            border: 1px solid #f87171;
+            color: #f87171;
+            display: block;
+        }
+        .kopioi-btn-kontti {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        #kopioi-btn {
+            min-width: 180px;
+        }
+    </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+<script src="/en/analytics.js"></script>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language">
+        <span class="language-overlay__label">Language</span>
+        <a class="language-overlay__link" href="/json/">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/json-formatter/" aria-current="page">🇬🇧</a>
+    </nav>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+    <div class="laatikko" style="max-width: 860px;">
+        <h1 class="otsikko">JSON Formatter</h1>
+
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Format and validate JSON data directly in your browser. All processing happens locally – nothing is sent to the server.</p>
+        </div>
+
+        <main id="paaosio">
+            <div class="osion-tausta">
+                <h2>1. Paste JSON data</h2>
+                <label for="json-syote" class="sr-only">JSON-syöte</label>
+                <textarea id="json-syote" class="syote" placeholder='Paste your JSON data here, e.g. {"name":"Test","value":42}' aria-label="JSON input" spellcheck="false"></textarea>
+
+                <div class="toiminto-rivi">
+                    <button id="muotoile-btn" class="nappula">✨ Format</button>
+                    <button id="pakkaa-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">📦 Minify</button>
+                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Clear</button>
+                </div>
+
+                <div id="tila-viesti" role="status" aria-live="polite"></div>
+            </div>
+
+            <div class="osion-tausta">
+                <h2>2. Result</h2>
+                <label for="json-tulos" class="sr-only">Muotoiltu JSON-tulos</label>
+                <textarea id="json-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Formatted JSON result" spellcheck="false"></textarea>
+
+                <div class="kopioi-btn-kontti">
+                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Copy to clipboard</button>
+                </div>
+            </div>
+        </main>
+
+        <a href="/en/" class="linkki-takaisin">« Back to home</a>
+    </div>
+
+    <script>
+        const syoteEl = document.getElementById('json-syote');
+        const tulosEl = document.getElementById('json-tulos');
+        const tilaEl = document.getElementById('tila-viesti');
+        const kopiointiBtn = document.getElementById('kopioi-btn');
+
+        function naytaTila(viesti, tyyppi) {
+            tilaEl.textContent = viesti;
+            tilaEl.className = tyyppi;
+        }
+
+        function poistaTila() {
+            tilaEl.className = '';
+            tilaEl.textContent = '';
+        }
+
+        document.getElementById('muotoile-btn').addEventListener('click', () => {
+            const syote = syoteEl.value.trim();
+            if (!syote) {
+                naytaTila('⚠️ Input field is empty.', 'virhe');
+                return;
+            }
+            try {
+                const parsittu = JSON.parse(syote);
+                const muotoiltu = JSON.stringify(parsittu, null, 2);
+                tulosEl.value = muotoiltu;
+                tulosEl.className = 'syote';
+                naytaTila('✅ JSON is valid and formatted successfully.', 'ok');
+            } catch (e) {
+                tulosEl.value = '';
+                tulosEl.className = 'syote virhe';
+                naytaTila('❌ Invalid JSON: ' + e.message, 'virhe');
+            }
+        });
+
+        document.getElementById('pakkaa-btn').addEventListener('click', () => {
+            const syote = syoteEl.value.trim();
+            if (!syote) {
+                naytaTila('⚠️ Input field is empty.', 'virhe');
+                return;
+            }
+            try {
+                const parsittu = JSON.parse(syote);
+                tulosEl.value = JSON.stringify(parsittu);
+                tulosEl.className = 'syote';
+                naytaTila('✅ JSON minified successfully.', 'ok');
+            } catch (e) {
+                tulosEl.value = '';
+                tulosEl.className = 'syote virhe';
+                naytaTila('❌ Invalid JSON: ' + e.message, 'virhe');
+            }
+        });
+
+        document.getElementById('tyhjenna-btn').addEventListener('click', () => {
+            syoteEl.value = '';
+            tulosEl.value = '';
+            tulosEl.className = 'syote';
+            poistaTila();
+        });
+
+        kopiointiBtn.addEventListener('click', async () => {
+            const teksti = tulosEl.value;
+            if (!teksti) {
+                naytaTila('⚠️ Nothing to copy – format JSON first.', 'virhe');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(teksti);
+            } catch {
+                tulosEl.select();
+                document.execCommand('copy');
+            }
+            const alkuperainen = kopiointiBtn.textContent;
+            const alkuperainenVari = kopiointiBtn.style.backgroundColor;
+            kopiointiBtn.textContent = '✅ Copied!';
+            kopiointiBtn.style.backgroundColor = '#166534';
+            setTimeout(() => {
+                kopiointiBtn.textContent = alkuperainen;
+                kopiointiBtn.style.backgroundColor = alkuperainenVari;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

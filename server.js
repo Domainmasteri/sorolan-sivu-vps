@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
 import multer from 'multer';
 import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
 import { create as contentDisposition } from 'content-disposition';
 import {
   CopyObjectCommand,
@@ -22,6 +23,11 @@ import { s3, bucketName, ensureBucketExists } from './storage.js';
 import dnsRouter from './api/dns.js';
 
 const app = express();
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 app.set('trust proxy', 1);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -98,7 +104,7 @@ app.use(async (req, res, next) => {
     const reservedPrefixes = [
       'api', 'p', 's', 'd', 'jako', 'en', 'pastebin', 'tyylit', 'styles',
       'admin', 'ohjeet', 'ansioluettelot', 'qr', 'salasanat',
-      'privacy', 'vieraskirja', 'makelink'
+      'privacy', 'vieraskirja', 'makelink', 'json', 'base64', 'base64'
     ];
     const firstSegment = pathname.split('/')[0];
 
@@ -191,6 +197,9 @@ async function insertShortLink(table, shortPath, originalUrl) {
 }
 
 async function updateShortLink(table, shortPath, originalUrl) {
+  if (!/^[a-zA-Z0-9_]+$/.test(table)) {
+    throw new Error('Invalid input');
+  }
   return db.query(`UPDATE ${table} SET original_url = $1 WHERE short_path = $2`, [originalUrl, shortPath]);
 }
 

@@ -192,4 +192,36 @@
       <changefreq>yearly</changefreq>
       <priority>0.4</priority>
    </url>
+<url>
+      <loc>https://sorola.fi/json/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/json/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/json-formatter/" />
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+<url>
+      <loc>https://sorola.fi/en/json-formatter/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/json/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/json-formatter/" />
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+<url>
+      <loc>https://sorola.fi/base64/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/base64/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/base64/" />
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+<url>
+      <loc>https://sorola.fi/en/base64/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/base64/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/base64/" />
+      <lastmod>2026-08-01</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
 </urlset>

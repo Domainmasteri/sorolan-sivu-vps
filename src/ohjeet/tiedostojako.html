@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tiedostonjaon käyttöohje</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <script src="ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #ffaa00;
+        }
+
+        .ohje-palsta.auki > h2 {
+            margin-bottom: 16px;
+        }
+
+        .ohje-toggle {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ffaa00;
+            border-radius: 50%;
+            background: transparent;
+            color: #ffaa00;
+            font: inherit;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .ohje-toggle:hover,
+        .ohje-toggle:focus-visible {
+            background: #ffaa00;
+            color: #111;
+            outline: none;
+        }
+
+        .ohje-sisalto[hidden] {
+            display: none;
+        }
+
+        .ohje-sisalto > :first-child {
+            margin-top: 0;
+        }
+
+        .ohje-sisalto > :last-child {
+            margin-bottom: 0;
+        }
+    </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+<script src="/analytics.js"></script>
+</head>
+<body>
+
+<div class="laatikko">
+    <h1 class="otsikko">📁 Tiedostonjaon käyttö</h1>
+
+    <div class="osion-tausta">
+        <p>Tiedostonjakopalvelun avulla voit jakaa tiedostoja turvallisesti määrittämällä niille tarvittaessa latausrajoituksen ja vanhenemisajan.</p>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>1. Valitse tiedosto
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Aloita valitsemalla laitteeltasi tiedosto, jonka haluat jakaa vastaanottajalle.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>2. Aseta rajoitukset (Valinnainen)
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Voit parantaa jaon turvallisuutta asettamalla sille rajoituksia:</p>
+            <ul>
+                <li><strong>Latausrajoitus:</strong> Määritä, kuinka monta kertaa tiedosto voidaan ladata ennen kuin linkki lakkaa toimimasta.</li>
+                <li><strong>Vanhenemisaika:</strong> Aseta aikaraja, jonka umpeuduttua tiedostoa ei voi enää ladata.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>3. Luo ja jaa linkki
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Luo jakolinkki ja kopioi se itsellesi. Voit lähettää linkin eteenpäin esimerkiksi sähköpostilla tai pikaviestimellä.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="../ohjeet/" class="nappula1">⬅ Takaisin ohjeisiin</a>
+    </div>
+</div>
+
+</body>
+</html>

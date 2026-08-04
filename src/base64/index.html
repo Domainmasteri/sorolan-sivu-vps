@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorolan Base64 Kooderi – Koodaa ja pura Base64</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/base64/">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi suoraan selaimessasi. Täysi UTF-8-tuki. Mitään ei lähetetä palvelimelle.">
+    <meta name="keywords" content="Base64, kooderi, dekooderi, Base64 encode, Base64 decode, UTF-8, Sorola">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/base64/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="Sorolan Base64 Kooderi">
+    <meta property="og:description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi selaimessasi.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sorolan Base64 Kooderi">
+    <meta name="twitter:description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi selaimessasi.">
+    <style>
+        #b64-syote,
+        #b64-tulos {
+            width: 100%;
+            min-height: 160px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.92rem;
+            resize: vertical;
+            box-sizing: border-box;
+            background: #0b0d13;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+        #b64-tulos {
+            color: #4ade80;
+        }
+        #b64-tulos.virhe {
+            color: #f87171;
+        }
+        .toiminto-rivi {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .toiminto-rivi .nappula,
+        .toiminto-rivi .nappula1 {
+            flex: 1;
+            min-width: 120px;
+        }
+        #tila-viesti {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: none;
+        }
+        #tila-viesti.ok {
+            background: rgba(74, 222, 128, 0.12);
+            border: 1px solid #4ade80;
+            color: #4ade80;
+            display: block;
+        }
+        #tila-viesti.virhe {
+            background: rgba(248, 113, 113, 0.12);
+            border: 1px solid #f87171;
+            color: #f87171;
+            display: block;
+        }
+        .kopioi-btn-kontti {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        #kopioi-btn {
+            min-width: 180px;
+        }
+    </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+<script src="/analytics.js"></script>
+</head>
+<body>
+    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+    <div class="laatikko" style="max-width: 860px;">
+        <h1 class="otsikko">Base64 Kooderi / Dekooderi</h1>
+
+        <div class="osion-tausta">
+            <p style="margin: 0; text-align: center;">Koodaa tai pura Base64-tekstiä suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.</p>
+        </div>
+
+        <main id="paaosio">
+            <div class="osion-tausta">
+                <h2>1. Syöte</h2>
+                <label for="b64-syote" class="sr-only">Syöteteksti</label>
+                <textarea id="b64-syote" class="syote" placeholder="Kirjoita tai liitä teksti tähän..." aria-label="Syöteteksti" spellcheck="false"></textarea>
+
+                <div class="toiminto-rivi">
+                    <button id="koodaa-btn" class="nappula">🔒 Koodaa (Encode)</button>
+                    <button id="pura-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">🔓 Pura (Decode)</button>
+                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Tyhjennä</button>
+                </div>
+
+                <div id="tila-viesti" role="status" aria-live="polite"></div>
+            </div>
+
+            <div class="osion-tausta">
+                <h2>2. Tulos</h2>
+                <label for="b64-tulos" class="sr-only">Tulos</label>
+                <textarea id="b64-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Tulos" spellcheck="false"></textarea>
+
+                <div class="kopioi-btn-kontti">
+                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Kopioi leikepöydälle</button>
+                </div>
+            </div>
+        </main>
+
+        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+    </div>
+
+    <script>
+        const syoteEl = document.getElementById('b64-syote');
+        const tulosEl = document.getElementById('b64-tulos');
+        const tilaEl = document.getElementById('tila-viesti');
+        const kopiointiBtn = document.getElementById('kopioi-btn');
+
+        function naytaTila(viesti, tyyppi) {
+            tilaEl.textContent = viesti;
+            tilaEl.className = tyyppi;
+        }
+
+        function poistaTila() {
+            tilaEl.className = '';
+            tilaEl.textContent = '';
+        }
+
+        document.getElementById('koodaa-btn').addEventListener('click', () => {
+            const syote = syoteEl.value;
+            if (!syote) {
+                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
+                return;
+            }
+            try {
+                const koodattu = btoa(encodeURIComponent(syote).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16))));
+                tulosEl.value = koodattu;
+                tulosEl.className = 'syote';
+                naytaTila('✅ Teksti koodattu onnistuneesti.', 'ok');
+            } catch (e) {
+                tulosEl.value = '';
+                tulosEl.className = 'syote virhe';
+                naytaTila('❌ Koodaus epäonnistui: ' + e.message, 'virhe');
+            }
+        });
+
+        document.getElementById('pura-btn').addEventListener('click', () => {
+            const syote = syoteEl.value.trim();
+            if (!syote) {
+                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
+                return;
+            }
+            try {
+                const purettu = decodeURIComponent(atob(syote).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+                tulosEl.value = purettu;
+                tulosEl.className = 'syote';
+                naytaTila('✅ Base64 purettu onnistuneesti.', 'ok');
+            } catch (e) {
+                tulosEl.value = '';
+                tulosEl.className = 'syote virhe';
+                naytaTila('❌ Purku epäonnistui: Syöte ei ole kelvollista Base64-tekstiä.', 'virhe');
+            }
+        });
+
+        document.getElementById('tyhjenna-btn').addEventListener('click', () => {
+            syoteEl.value = '';
+            tulosEl.value = '';
+            tulosEl.className = 'syote';
+            poistaTila();
+        });
+
+        kopiointiBtn.addEventListener('click', async () => {
+            const teksti = tulosEl.value;
+            if (!teksti) {
+                naytaTila('⚠️ Ei kopioitavaa – koodaa tai pura ensin teksti.', 'virhe');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(teksti);
+            } catch {
+                tulosEl.select();
+                document.execCommand('copy');
+            }
+            const alkuperainen = kopiointiBtn.textContent;
+            const alkuperainenVari = kopiointiBtn.style.backgroundColor;
+            kopiointiBtn.textContent = '✅ Kopioitu!';
+            kopiointiBtn.style.backgroundColor = '#166534';
+            setTimeout(() => {
+                kopiointiBtn.textContent = alkuperainen;
+                kopiointiBtn.style.backgroundColor = alkuperainenVari;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
