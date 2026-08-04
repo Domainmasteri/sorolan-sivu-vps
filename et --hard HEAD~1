@@ -1,0 +1,98 @@
+[33m11f0267[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfix/aikido-security-updates[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m build: päivitä generoidut dist-tiedostot [skip ci]
+[33m181d2a8[m Refactor forms and enhance error handling
+[33m7691a09[m Merge pull request #39 from Domainmasteri/copilot/update-authentication-and-csp
+[33ma882dfb[m fix: use fallback JWT_SECRET for CI compatibility
+[33ma0064ad[m security: replace ****** with JWT, enable CSP, restrict CORS origins
+[33m0dfd92a[m build: päivitä generoidut dist-tiedostot [skip ci]
+[33m184907b[m Update English translations in en.json
+[33m4a4e25f[m Add JSON Formatter & Validator translations
+[33mfb4c2e7[m build: päivitä generoidut dist-tiedostot [skip ci]
+[33me79aa86[m Merge pull request #38 from Domainmasteri/copilot/fix-kayntaa-ja-pitaka-dist
+[33m13b4d12[m fix: add contents write permission to build workflow
+[33m6ad6fae[m Initial plan
+[33m7b15664[m Add files via upload
+[33m3056666[m Add files via upload
+[33meb19e3f[m Add files via upload
+[33m031c832[m Add files via upload
+[33m2e91dd1[m Merge pull request #37 from Domainmasteri/copilot/add-new-translations-to-changelog
+[33mb20d5aa[m Fix Make nickname routes: cv-builder -> cv-make, application-builder -> application-make
+[33m0b0e7ce[m Add muutokset -> changes route localization for English
+[33m6b293cd[m Add muutokset/index.html translations to en.json and fi.json
+[33m8156f4e[m Add latest changes banner to index.html
+[33md5f3d15[m Add changelog page for Sorola.fi updates
+[33mdbd3975[m Merge pull request #36 from Domainmasteri/copilot/delete-scripts-from-cv-and-job-pages
+[33ma120c84[m fix: rewrite CV and job application pages — scripts removed, embedded CSS, responsive design
+[33mabe0900[m Merge pull request #35 from Domainmasteri/copilot/fix-bugged-cv
+[33m8c3700c[m Merge pull request #34 from Domainmasteri/copilot/modify-meta-tags-and-robots
+[33m6c1f105[m Merge remote-tracking branch 'origin/master' into copilot/modify-meta-tags-and-robots
+[33m4e22712[m Rebuild CV pages without injected scripts
+[33mf820056[m Remove injected scripts from CV page source
+[33m339aa77[m Merge pull request #33 from Domainmasteri/copilot/modify-indexing-private-paths
+[33m720a9f4[m Rebuild dist with SEO metadata and private noindex directives
+[33m29daf12[m chore: rebuild SEO metadata output
+[33mb0d0586[m Add SEO meta injection and private noindex rules
+[33m1ac21c4[m feat: add SEO metadata generation
+[33m8d20393[m Merge pull request #32 from Domainmasteri/copilot/fix-untranslated-texts
+[33mc10ff1f[m fix: translate all remaining Finnish texts in English locale
+[33m8204ba5[m Merge pull request #31 from Domainmasteri/copilot/check-translations-and-bug-fixes
+[33mf0306dc[m Fix QR guide download, add missing privacy pages, add missing translations
+[33mc939b79[m Merge pull request #30 from Domainmasteri/copilot/fix-github-actions-job-failure
+[33m25d0031[m[33m ([m[1;31morigin/copilot/fix-github-actions-job-failure[m[33m)[m Fix JSON syntax error in en.json: add missing comma after Password generator property
+[33mee9fd80[m Initial plan
+[33m8395d94[m Remove emojis from privacy links in index.html
+[33mbdfa7ec[m Fix JSON formatting in en.json
+[33m08d733c[m Add usage guides for QR code, Pastebin, JSON, and Base64
+[33m4e05abc[m Add multiple new sections to index.html
+[33m657f54c[m Add privacy policy page for Sorola's web tools
+[33ma832b4a[m Add Base64 encoder user guide in HTML format
+[33ma3f1d45[m Create JSON formatter user guide in json.html
+[33m737537e[m Add Pastebin usage guide in Finnish
+[33m928be0b[m Add QR code generator usage instructions
+[33meb8f659[m Fix typo in build.yml for runs-on key
+[33ma205e26[m Add GitHub Actions workflow for build and commit
+[33m64b7d1c[m Merge pull request #23 from Domainmasteri/copilot/base64-tool-implementation
+[33m49b039c[m Merge pull request #29 from Domainmasteri/fix/aikido-security-sast-79405844-4nra
+[33mc8a5b90[m[33m ([m[1;31morigin/fix/aikido-security-sast-79405844-4nra[m[33m)[m fix(security): autofix Potential SQL injection via string-based query concatenation
+[33m5209dfe[m[33m ([m[1;31morigin/copilot/base64-tool-implementation[m[33m)[m refactor: migrate base64 tool to src/ structure, rebuild dist/
+[33m8d2ad03[m Merge remote-tracking branch 'origin/master' into copilot/base64-tool-implementation
+[33m24b0a99[m Merge pull request #28 from Domainmasteri/copilot/restructure-file-architecture
+[33m33208f8[m[33m ([m[1;31morigin/copilot/restructure-file-architecture[m[33m)[m Add SRI to external scripts
+[33m38f9e16[m Move site sources under src
+[33m35b061c[m Merge pull request #27 from Domainmasteri/copilot/replace-analytical-code
+[33m24e60da[m[33m ([m[1;31morigin/copilot/replace-analytical-code[m[33m)[m refactor: extract Plausible analytics snippet into analytics.js
+[33md0d412c[m Add Guestbook entry to English translations
+[33m6ef52f0[m Add guestbook link to index.html
+[33mb635197[m Merge pull request #26 from Domainmasteri/copilot/add-analytics-script-to-html
+[33mb4b1d63[m[33m ([m[1;31morigin/copilot/add-analytics-script-to-html[m[33m)[m Add Plausible analytics script to all HTML files that were missing it
+[33m1e7e657[m feat: add Base64 Encode/Decode tool (fi/en)
+[33m0d20dc1[m Merge pull request #22 from Domainmasteri/copilot/add-json-formatter-validator
+[33m98c1ddf[m[33m ([m[1;31morigin/copilot/add-json-formatter-validator[m[33m)[m feat: add JSON Formatter tool, search bar, Perustyökalut/Edistyneet sections with FI/EN i18n
+[33mf386f7f[m Update helmet middleware configuration
+[33m0a85562[m Merge pull request #21 from Domainmasteri/fix/aikido-security-updates
+[33ma0e4c9d[m Merge pull request #19 from Domainmasteri/fix/aikido-security-sast-78846870-hvar
+[33m4bb9bc8[m Merge pull request #20 from Domainmasteri/fix/aikido-security-sast-78847263-apzr
+[33m01c5b73[m fix(security): autofix Potential SQL injection via string-based query concatenation
+[33mae2bbe4[m fix(security): autofix Express is not emitting security headers
+[33m2ff95bc[m[33m ([m[1;32mmaster[m[33m)[m Merge pull request #18 from Domainmasteri/copilot/fix-server-js-middleware-order
+[33mc95e3cf[m[33m ([m[1;31morigin/copilot/fix-server-js-middleware-order[m[33m)[m Sync built QR pages with proxy download changes
+[33m2f84e98[m Implement routing, QR proxy, bucket auto-create, and docs fixes
+[33m1b34fd3[m Merge pull request #17 from Domainmasteri/copilot/confirm-link-shortener-functionality
+[33m4b3b11e[m[33m ([m[1;31morigin/copilot/confirm-link-shortener-functionality[m[33m)[m Fix admin duplicate-link error code and add URL scheme validation to shortener
+[33m4517a8e[m Merge pull request #16 from Domainmasteri/copilot/add-admin-file-upload-to-storage
+[33md6d4cf4[m[33m ([m[1;31morigin/copilot/add-admin-file-upload-to-storage[m[33m)[m Remove file.path taint from fs.unlink to fix CodeQL path injection
+[33m6b2e946[m Fix path injection security issues and confirm link shortener integrity
+[33m0856c5c[m Fix broken link and add admin file upload feature
+[33m482ddd8[m Merge pull request #15 from Domainmasteri/copilot/check-link-shortener-errors
+[33md1c4bf0[m[33m ([m[1;31morigin/copilot/check-link-shortener-errors[m[33m)[m Validate shortener fix and project build
+[33m37e65bd[m Handle duplicate short-code errors across DB backends
+[33mbe48d17[m sivuhomma
+[33ma27d6d8[m Merge pull request #14 from Domainmasteri/copilot/refactor-css-and-favicon-paths
+[33m8fd6c78[m[33m ([m[1;31morigin/copilot/refactor-css-and-favicon-paths[m[33m)[m fix: restore DNS admin actions and error visibility
+[33m249536f[m build: regenerate dist with /styles asset links
+[33m5a5a99b[m refactor: serve shared styles from /opt/sorola/styles
+[33m2442daf[m päivitetty dns-hallinta
+[33m812234a[m päivitetty dns-hallinta
+[33m28cc2fe[m backend korjauksia
+[33m3b09665[m Merge branch 'master' of https://github.com/Domainmasteri/sorolan-sivu-vps
+[33m8173af3[m Korjattu sivuston mobiiliystävällisyys
+[33m199c135[m Update styles for mo
