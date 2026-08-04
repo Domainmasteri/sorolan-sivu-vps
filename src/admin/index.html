@@ -291,14 +291,22 @@
             if (!u || !p) return alert('Syötä tunnus ja salasana.');
             
             try {
+                // Luodaan suoraan vanha Bearer base64(tunnus:salasana)
+                const credentials = btoa(u + ':' + p);
+                const authHeader = 'Bearer ' + credentials;
+
                 const res = await fetch('/api/auth', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    method: 'POST', 
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
+                    },
                     body: JSON.stringify({ action: 'login', username: u, password: p })
                 });
                 const data = await res.json();
-                if (res.ok && data.success) {
+                if (res.ok) {
                     currentUser = u;
-                    currentAuthHeader = 'Bearer ' + data.token;
+                    currentAuthHeader = authHeader;
                     document.getElementById('login-section').classList.add('hidden');
                     document.getElementById('dashboard-section').classList.remove('hidden');
                     lataaTiedot();
@@ -311,6 +319,7 @@
                 alert('Palvelinvirhe.'); 
             }
         }
+
 
         async function register() {
             const inv = document.getElementById('reg-invite').value;
