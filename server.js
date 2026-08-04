@@ -8,6 +8,7 @@ import crypto from 'node:crypto';
 import multer from 'multer';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
+import jwt from 'jsonwebtoken';
 import { create as contentDisposition } from 'content-disposition';
 import {
   CopyObjectCommand,
@@ -22,10 +23,30 @@ import { db } from './db.js';
 import { s3, bucketName, ensureBucketExists } from './storage.js';
 import dnsRouter from './api/dns.js';
 
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret || jwtSecret.length < 32) {
+  console.error('FATAL: JWT_SECRET environment variable is missing or too short (min 32 chars).');
+  process.exit(1);
+}
+const JWT_EXPIRES_IN = '8h';
+
 const app = express();
 app.use(
   helmet({
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        connectSrc: ["'self'"],
+        fontSrc: ["'self'", 'data:'],
+        objectSrc: ["'none'"],
+        frameAncestors: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+      },
+    },
   })
 );
 app.set('trust proxy', 1);
@@ -35,6 +56,21 @@ const distPath = path.join(__dirname, 'dist');
 const stylesDir = process.env.STYLES_DIR || '/opt/sorola/styles';
 const shortenerHomeUrl = process.env.SHORTENER_HOME_URL || 'https://sorola.fi/lyhennin';
 const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/lyhennin/error';
+
+const shortenerAllowedOrigins = (process.env.SHORTENER_ALLOWED_ORIGINS || 'https://sorola.fi,https://soro.la,https://srla.fi,https://srl.la')
+  .split(',')
+  .map(o => o.trim())
+  .filter(Boolean);
+
+function setCorsForShortener(req, res) {
+  const origin = req.headers.origin || '';
+  if (shortenerAllowedOrigins.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+    res.set('Vary', 'Origin');
+  }
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+}
 
 // 1 GB maksimikoko (1024 * 1024 * 1024 tavua)
 const MAX_SHARE_FILE_SIZE_BYTES = 1 * 1024 * 1024 * 1024;
@@ -162,14 +198,12 @@ function verifyPassword(password, storedHash) {
   return crypto.timingSafeEqual(Buffer.from(derived, 'hex'), Buffer.from(expected, 'hex'));
 }
 
-function parseBasicBearer(req) {
+function verifyJwt(req) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.slice(7);
   try {
-    const decoded = Buffer.from(authHeader.slice(7), 'base64').toString('utf8');
-    const [username, password] = decoded.split(':');
-    if (!username || !password) return null;
-    return { username, password };
+    return jwt.verify(token, jwtSecret);
   } catch {
     return null;
   }
@@ -284,28 +318,11 @@ function isUniqueConstraintError(error) {
     || message.includes('unique constraint failed');
 }
 
-async function haeKayttaja(req) {
-  const parsed = parseBasicBearer(req);
-  if (!parsed) return null;
-
-  const result = await db.query('SELECT id, username, password_hash FROM users WHERE username = $1 LIMIT 1', [parsed.username]);
-  const user = result.rows[0];
-  if (!user || !verifyPassword(parsed.password, user.password_hash)) {
-    return null;
-  }
-
-  return { id: user.id, username: user.username };
-}
-
-async function requireAuth(req, res, next) {
-  try {
-    const user = await haeKayttaja(req);
-    if (!user) return res.status(401).json({ error: 'Ei valtuuksia. Kirjaudu uudelleen.' });
-    req.user = user;
-    next();
-  } catch (error) {
-    res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
-  }
+function requireAuth(req, res, next) {
+  const payload = verifyJwt(req);
+  if (!payload) return res.status(401).json({ error: 'Ei valtuuksia. Kirjaudu uudelleen.' });
+  req.user = { id: payload.sub, username: payload.username };
+  next();
 }
 
 function prefersEnglish(req) {
@@ -337,10 +354,11 @@ app.post('/api/auth', async (req, res) => {
       const { username, password } = body;
       if (!username || !password) return res.status(400).json({ error: 'Tunnus ja salasana vaaditaan.' });
 
-      const result = await db.query('SELECT password_hash FROM users WHERE username = $1 LIMIT 1', [username]);
+      const result = await db.query('SELECT id, password_hash FROM users WHERE username = $1 LIMIT 1', [username]);
       const user = result.rows[0];
       if (user && verifyPassword(password, user.password_hash)) {
-        return res.json({ success: true });
+        const token = jwt.sign({ sub: user.id, username }, jwtSecret, { expiresIn: JWT_EXPIRES_IN });
+        return res.json({ success: true, token });
       }
       return res.status(401).json({ error: 'Väärä käyttäjätunnus tai salasana.' });
     }
@@ -384,7 +402,8 @@ app.post('/api/auth', async (req, res) => {
       }
 
       await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [hashPassword(newPassword), user.id]);
-      return res.json({ success: true, message: 'Salasana vaihdettu.' });
+      const token = jwt.sign({ sub: user.id, username }, jwtSecret, { expiresIn: JWT_EXPIRES_IN });
+      return res.json({ success: true, message: 'Salasana vaihdettu.', token });
     }
 
     return res.status(400).json({ error: 'Tuntematon pyyntö.' });
@@ -596,21 +615,13 @@ app.delete('/api/links', requireAuth, async (req, res) => {
   }
 });
 
-app.options('/api/lyhennin/create', (_req, res) => {
-  res.set({
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  });
+app.options('/api/lyhennin/create', (req, res) => {
+  setCorsForShortener(req, res);
   res.status(204).send();
 });
 
 app.all('/api/lyhennin/create', async (req, res) => {
-  res.set({
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  });
+  setCorsForShortener(req, res);
 
   try {
     if (!['GET', 'POST'].includes(req.method)) {
