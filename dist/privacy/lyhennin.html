@@ -2,16 +2,16 @@
 <html lang="fi">
 <head>
     <meta property="og:url" content="https://sorola.fi/privacy/lyhennin">
+    <meta charset="UTF-8">
+    <title>Tietosuojakäytäntö - Sorolan Linkkilyhennin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/privacy/lyhennin">
     <link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/lyhennin">
     <link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/shortener">
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/privacy/lyhennin">
-    <meta charset="UTF-8">
-    <title>Tietosuojakäytäntö - Sorolan Linkkilyhennin</title>
-    <style>
-        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; background: #0b0d13; color: #e2e8f0; }
-        h1, h2 { color: #ffaa00; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Official privacy policy for the Sorola Linkkilyhennin browser extension.">
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/analytics.js"></script>
 
@@ -30,27 +30,47 @@
         <a class="language-overlay__link is-active" href="/privacy/lyhennin" aria-current="page">🇫🇮</a>
         <a class="language-overlay__link" href="/en/privacy/shortener">🇬🇧</a>
     </nav>
-    <h1>Sorolan Linkkilyhentimen tietosuojakäytäntö</h1>
-    <p><strong>Voimaantulopäivä:</strong> Toukokuu 2026</p>
+    <a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
+    <div class="laatikko" style="max-width: 750px; width: 95%;">
+        <h1 class="otsikko">Sorolan Linkkilyhentimen tietosuojakäytäntö</h1>
 
-    <h2>1. Johdanto</h2>
-    <p>Sorola Linkkilyhennin ("laajennus") on sitoutunut suojaamaan käyttäjien yksityisyyttä. Tämä tietosuojakäytäntö kertoo, miten laajennus käsittelee tietoja.</p>
+        <main id="paaosio">
+            <div class="osion-tausta">
+                <p><strong>Voimaantulopäivä:</strong> Toukokuu 2026</p>
+            </div>
 
-    <h2>2. Tietojen kerääminen ja käyttö</h2>
-    <p>Laajennus tarvitsee <code>activeTab</code> -oikeuden toimiakseen. Kun käyttäjä napsauttaa laajennuksen kuvaketta, se lukee aktiivisen selaimen välilehden URL-osoitteen ja lähettää sen käyttäjän määrittämään srla.fi-rajapintaan linkin lyhentämistä varten.</p>
-    <ul>
-        <li><strong>Ei seurantaa:</strong> Laajennus ei seuraa selaushistoriaasi, valvo toimintaasi eikä kerää analytiikkaa.</li>
-        <li><strong>Ei henkilötietoja:</strong> Laajennus ei kerää eikä tallenna henkilötietoja, käyttäjätilejä tai evästeitä.</li>
-        <li><strong>Ei tietojen säilytystä:</strong> Aktiivisen välilehden URL-osoite käsitellään reaaliaikaisesti eikä sitä välimuistita tai tallenneta paikallisesti laajennukseen.</li>
-    </ul>
+            <div class="osion-tausta">
+                <h2 style="color:#ffaa00;">1. Johdanto</h2>
+                <p>Sorola Linkkilyhennin ("laajennus") on sitoutunut suojaamaan käyttäjien yksityisyyttä. Tämä tietosuojakäytäntö kertoo, miten laajennus käsittelee tietoja.</p>
+            </div>
 
-    <h2>3. Tietojen jakaminen ja kolmannet osapuolet</h2>
-    <p>Emme myy, vaihda tai vuokraa käyttäjätietoja kolmansille osapuolille. Tiedot välitetään ainoastaan omaan suojattuun Cloudflare Worker -päätepisteeseesi (srla.fi) lyhytlinkin luomiseksi.</p>
+            <div class="osion-tausta">
+                <h2 style="color:#ffaa00;">2. Tietojen kerääminen ja käyttö</h2>
+                <p>Laajennus tarvitsee <code>activeTab</code> -oikeuden toimiakseen. Kun käyttäjä napsauttaa laajennuksen kuvaketta, se lukee aktiivisen selaimen välilehden URL-osoitteen ja lähettää sen käyttäjän määrittämään srla.fi-rajapintaan linkin lyhentämistä varten.</p>
+                <ul>
+                    <li><strong>Ei seurantaa:</strong> Laajennus ei seuraa selaushistoriaasi, valvo toimintaasi eikä kerää analytiikkaa.</li>
+                    <li><strong>Ei henkilötietoja:</strong> Laajennus ei kerää eikä tallenna henkilötietoja, käyttäjätilejä tai evästeitä.</li>
+                    <li><strong>Ei tietojen säilytystä:</strong> Aktiivisen välilehden URL-osoite käsitellään reaaliaikaisesti eikä sitä välimuistita tai tallenneta paikallisesti laajennukseen.</li>
+                </ul>
+            </div>
 
-    <h2>4. Tietoturva</h2>
-    <p>Laajennus kommunikoi ainoastaan turvallisten, salattujen HTTPS-yhteyksien kautta. Se ei lataa tai suorita etäskriptejä, joten selaimessasi ajettava koodi on täysin paikallinen ja turvallinen.</p>
+            <div class="osion-tausta">
+                <h2 style="color:#ffaa00;">3. Tietojen jakaminen ja kolmannet osapuolet</h2>
+                <p>Emme myy, vaihda tai vuokraa käyttäjätietoja kolmansille osapuolille. Tiedot välitetään ainoastaan omaan suojattuun Cloudflare Worker -päätepisteeseesi (srla.fi) lyhytlinkin luomiseksi.</p>
+            </div>
 
-    <h2>5. Yhteystiedot</h2>
-    <p>Jos sinulla on kysyttävää tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi</p>
+            <div class="osion-tausta">
+                <h2 style="color:#ffaa00;">4. Tietoturva</h2>
+                <p>Laajennus kommunikoi ainoastaan turvallisten, salattujen HTTPS-yhteyksien kautta. Se ei lataa tai suorita etäskriptejä, joten selaimessasi ajettava koodi on täysin paikallinen ja turvallinen.</p>
+            </div>
+
+            <div class="osion-tausta">
+                <h2 style="color:#ffaa00;">5. Yhteystiedot</h2>
+                <p>Jos sinulla on kysyttävää tietosuojakäytännöstä, voit ottaa yhteyttä osoitteeseen: contact.make@sorola.fi</p>
+            </div>
+        </main>
+
+        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+    </div>
 </body>
 </html>
