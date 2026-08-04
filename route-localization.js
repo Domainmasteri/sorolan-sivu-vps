@@ -16,6 +16,7 @@ export const EN_ROUTE_SEGMENTS = new Map([
   ['lue', 'view'],
   ['salasanat', 'passwords'],
   ['tiedostojako', 'file-sharing'],
+  ['muutokset', 'changes'],
   ['vieraskirja', 'guestbook']
 ]);
 
