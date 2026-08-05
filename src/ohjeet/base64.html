@@ -2,7 +2,7 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Base64 Kooderin käyttöohje - Sorola</title>
+    <title data-i18n="ohjeet.base64_kooderin_käyttöohje_sorola">Base64 Kooderin käyttöohje - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/ohjeet/base64">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
@@ -12,7 +12,7 @@
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://sorola.fi/ohjeet/base64">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Base64 Kooderin käyttöohje - Sorola">
+    <meta property="og:title" content="Base64 Kooderin käyttöohje - Sorola" data-i18n-attr-content="ohjeet.base64_kooderin_käyttöohje_sorola">
     <meta property="og:description" content="Suomenkielinen ohje Base64-tekstin koodaukseen ja purkamiseen Sorolan Base64 Koodeilla.">
     <script src="ohjehaitari.js" defer></script>
     <style>
@@ -67,69 +67,69 @@
 <script src="/analytics.js"></script>
 </head>
 <body>
-<a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+<a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_pääsisältöön">Hyppää pääsisältöön</a>
 
 <div class="laatikko">
-    <h1 class="otsikko">🔐 Base64 Kooderin ohje</h1>
+    <h1 class="otsikko" data-i18n="ohjeet.base64_kooderin_ohje">🔐 Base64 Kooderin ohje</h1>
 
     <div class="osion-tausta" style="text-align:center;">
-        <p style="margin:0;">
+        <p style="margin:0;" data-i18n="ohjeet.sorolan_base64_kooderilla_voit_koodata_tekstiä_bas">
             Sorolan Base64 Kooderilla voit koodata tekstiä Base64-muotoon tai purkaa Base64-datan takaisin luettavaksi tekstiksi. Työkalu toimii täysin offline-tilassa — mitään ei lähetetä palvelimelle.
         </p>
     </div>
 
     <main id="paaosio">
     <div class="osion-tausta ohje-palsta">
-        <h2>Mikä on Base64?
-            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        <h2 data-i18n="ohjeet.mikä_on_base64">Mikä on Base64?
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Base64 on koodausmenetelmä, jolla binääridata tai teksti muunnetaan ASCII-merkkijonoksi. Sitä käytetään usein tiedonvälityksessä, esimerkiksi sähköpostin liitetiedostoissa, HTTP-autentikoinnissa ja tietokantakenttien tallennuksessa.</p>
+            <p data-i18n="ohjeet.base64_on_koodausmenetelmä_jolla_binääridata_tai_tek">Base64 on koodausmenetelmä, jolla binääridata tai teksti muunnetaan ASCII-merkkijonoksi. Sitä käytetään usein tiedonvälityksessä, esimerkiksi sähköpostin liitetiedostoissa, HTTP-autentikoinnissa ja tietokantakenttien tallennuksessa.</p>
             <p><strong>Huomio:</strong> Base64 ei ole salausta — koodattu data on helposti purettavissa. Älä käytä sitä arkaluonteisten tietojen suojaamiseen.</p>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>1. Koodaa teksti Base64-muotoon
-            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        <h2 data-i18n="ohjeet.base64_koodaa_teksti_base64muotoon">1. Koodaa teksti Base64-muotoon
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
             <ol>
-                <li>Kirjoita tai liitä muunnettava teksti syötekenttään.</li>
+                <li data-i18n="ohjeet.kirjoita_tai_liitä_muunnettava_teksti_syötekenttään">Kirjoita tai liitä muunnettava teksti syötekenttään.</li>
                 <li>Paina <strong>🔒 Koodaa (Encode)</strong>.</li>
-                <li>Koodattu Base64-teksti ilmestyy tuloskenttään.</li>
+                <li data-i18n="ohjeet.koodattu_base64teksti_ilmestyy_tuloskenttään">Koodattu Base64-teksti ilmestyy tuloskenttään.</li>
                 <li>Paina <strong>Kopioi leikepöydälle</strong> käyttääksesi tulosta.</li>
             </ol>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>2. Pura Base64-teksti
-            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        <h2 data-i18n="ohjeet.base64_pura_base64teksti">2. Pura Base64-teksti
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
             <ol>
-                <li>Liitä Base64-merkkijono syötekenttään.</li>
+                <li data-i18n="ohjeet.liitä_base64merkkijono_syötekenttään">Liitä Base64-merkkijono syötekenttään.</li>
                 <li>Paina <strong>🔓 Pura (Decode)</strong>.</li>
-                <li>Alkuperäinen teksti ilmestyy tuloskenttään.</li>
-                <li>Jos syöte ei ole kelvollista Base64-tekstiä, työkalu näyttää virheilmoituksen.</li>
+                <li data-i18n="ohjeet.alkuperäinen_teksti_ilmestyy_tuloskenttään">Alkuperäinen teksti ilmestyy tuloskenttään.</li>
+                <li data-i18n="ohjeet.jos_syöte_ei_ole_kelvollista_base64tekstiä_työkal">Jos syöte ei ole kelvollista Base64-tekstiä, työkalu näyttää virheilmoituksen.</li>
             </ol>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>Tietosuoja
-            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        <h2 data-i18n="common.tietosuoja">Tietosuoja
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Base64 Kooderi toimii kokonaan paikallisesti selaimessasi. Syöttämäsi teksti ei koskaan poistu laitteeltasi.</p>
-            <p><a href="/privacy/base64">Lue tietosuojakäytäntö →</a></p>
+            <p data-i18n="ohjeet.base64_kooderi_toimii_kokonaan_paikallisesti_selai">Base64 Kooderi toimii kokonaan paikallisesti selaimessasi. Syöttämäsi teksti ei koskaan poistu laitteeltasi.</p>
+            <p><a href="/privacy/base64" data-i18n="ohjeet.lue_tietosuojakäytäntö">Lue tietosuojakäytäntö →</a></p>
         </div>
     </div>
     </main>
 
     <div class="osion-tausta" style="text-align:center;">
-        <a href="../ohjeet/" class="nappula1">⬅ Takaisin ohjeisiin</a>
+        <a href="../ohjeet/" class="nappula1" data-i18n="common.takaisin_ohjeisiin">⬅ Takaisin ohjeisiin</a>
     </div>
 </div>
 

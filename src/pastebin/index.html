@@ -2,27 +2,27 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti</title>
+    <title data-i18n="pastebin.sorolan_pastebin_jaa_tekstiä_ja_koodia_turvallises">Sorolan Pastebin - Jaa tekstiä ja koodia turvallisesti</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/pastebin/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     
     <!-- SEO-optimoinnit -->
-    <meta name="description" content="Jaa koodinpätkiä, logeja ja puhdasta tekstiä nopeasti ja turvallisesti ilman mainoksia. Sorolan Pastebin tarjoaa helpon tavan tekstin jakamiseen.">
-    <meta name="keywords" content="pastebin, koodinjako, tekstinjako, sorola, koodi, logit, koodaus, ilman mainoksia">
+    <meta name="description" content="Jaa koodinpätkiä, logeja ja puhdasta tekstiä nopeasti ja turvallisesti ilman mainoksia. Sorolan Pastebin tarjoaa helpon tavan tekstin jakamiseen." data-i18n-attr-content="pastebin.jaa_koodinpätkiä_logeja_ja_puhdasta_tekstiä_nopeas">
+    <meta name="keywords" content="pastebin, koodinjako, tekstinjako, sorola, koodi, logit, koodaus, ilman mainoksia" data-i18n-attr-content="pastebin.pastebin_koodinjako_tekstinjako_sorola_koodi_logit">
     
     <!-- Some-esikatselut -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/pastebin/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorolan Pastebin - Jaa tekstiä ja koodia">
-    <meta property="og:description" content="Jaa koodinpätkiä ja tekstiä nopeasti, helposti ja ilman mainoksia.">
-        <meta property="og:locale" content="fi_FI">
+    <meta property="og:title" content="Sorolan Pastebin - Jaa tekstiä ja koodia" data-i18n-attr-content="pastebin.sorolan_pastebin_jaa_tekstiä_ja_koodia">
+    <meta property="og:description" content="Jaa koodinpätkiä ja tekstiä nopeasti, helposti ja ilman mainoksia." data-i18n-attr-content="pastebin.jaa_koodinpätkiä_ja_tekstiä_nopeasti_helposti_ja_i">
+        <meta property="og:locale" content="fi_FI" data-i18n-attr-content="muutokset.fi_fi">
     <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Sorolan Pastebin">
-    <meta name="twitter:description" content="Jaa koodinpätkiä ja tekstiä nopeasti ja ilman mainoksia.">
+    <meta name="twitter:title" content="Sorolan Pastebin" data-i18n-attr-content="pastebin.sorolan_pastebin">
+    <meta name="twitter:description" content="Jaa koodinpätkiä ja tekstiä nopeasti ja ilman mainoksia." data-i18n-attr-content="pastebin.jaa_koodinpätkiä_ja_tekstiä_nopeasti_ja_ilman_main">
 
     <style>
         #paste-content {
@@ -54,33 +54,33 @@
     </script>
 </head>
 <body>
-    <a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
+    <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_sisältöön">Hyppää sisältöön</a>
     <div class="laatikko" style="max-width: 800px;">
-        <h1 class="otsikko">Pastebin</h1>
+        <h1 class="otsikko" data-i18n="pastebin.pastebin">Pastebin</h1>
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Jaa koodinpätkiä, logeja tai puhdasta tekstiä nopeasti ilman muotoilun rikkoutumista.</p>
+            <p style="margin: 0; text-align: center;" data-i18n="pastebin.jaa_koodinpätkiä_logeja_tai_puhdasta_tekstiä_nopea">Jaa koodinpätkiä, logeja tai puhdasta tekstiä nopeasti ilman muotoilun rikkoutumista.</p>
         </div>
         
         <main id="paaosio">
             <div class="osion-tausta" id="syotto-alue">
                 <div class="flex-form">
-                    <label for="paste-content" class="sr-only">Liitä tekstisi</label>
-                    <textarea id="paste-content" class="syote" placeholder="Liitä koodi tai teksti tähän..."></textarea>
+                    <label for="paste-content" class="sr-only" data-i18n="pastebin.liitä_tekstisi">Liitä tekstisi</label>
+                    <textarea id="paste-content" class="syote" placeholder="Liitä koodi tai teksti tähän..." data-i18n-attr-placeholder="pastebin.liitä_koodi_tai_teksti_tähän"></textarea>
                 </div>
-                <button id="tallenna-btn" class="nappula" style="width: 100%;">Tallenna ja luo linkki</button>
+                <button id="tallenna-btn" class="nappula" style="width: 100%;" data-i18n="pastebin.tallenna_ja_luo_linkki">Tallenna ja luo linkki</button>
             </div>
 
             <div class="osion-tausta" id="tulos-alue" style="text-align: center;">
-                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;">Teksti tallennettu!</h2>
-                <p style="color: #a0aec0; margin-bottom: 15px;">Jaa alla oleva linkki vastaanottajalle.</p>
-                <input type="text" id="paste-linkki" class="syote" readonly aria-label="Pastebin linkki" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; margin-bottom: 15px;">
+                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;" data-i18n="pastebin.teksti_tallennettu">Teksti tallennettu!</h2>
+                <p style="color: #a0aec0; margin-bottom: 15px;" data-i18n="jako.jaa_alla_oleva_linkki_vastaanottajalle">Jaa alla oleva linkki vastaanottajalle.</p>
+                <input type="text" id="paste-linkki" class="syote" readonly aria-label="Pastebin linkki" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; margin-bottom: 15px;" data-i18n-attr-aria-label="pastebin.pastebin_linkki">
                 <div class="flex-form">
-                    <button id="kopioi-btn" class="nappula" style="flex: 1;">Kopioi linkki</button>
-                    <button id="uusi-btn" class="nappula1" style="flex: 1; background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">Luo uusi</button>
+                    <button id="kopioi-btn" class="nappula" style="flex: 1;" data-i18n="lyhennin.kopioi_linkki">Kopioi linkki</button>
+                    <button id="uusi-btn" class="nappula1" style="flex: 1; background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;" data-i18n="pastebin.luo_uusi">Luo uusi</button>
                 </div>
             </div>
         </main>
-        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+        <a href="../" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle">« Takaisin pääsivulle</a>
     </div>
     
     <script>

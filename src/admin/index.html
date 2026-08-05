@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorolan Sakki - Hallintapaneeli</title>
+    <title data-i18n="admin.sorolan_sakki_hallintapaneeli">Sorolan Sakki - Hallintapaneeli</title>
     <link rel="stylesheet" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     <style>
@@ -28,39 +28,39 @@
 </head>
 <body>
     <div class="laatikko" id="app-container">
-        <h1 class="otsikko" style="margin-bottom: 10px;">Hallintapaneeli</h1>
+        <h1 class="otsikko" style="margin-bottom: 10px;" data-i18n="admin.hallintapaneeli">Hallintapaneeli</h1>
         
         <div id="login-section" class="osion-tausta">
-            <h2 style="color: #4ade80;">Kirjaudu Sisään</h2>
+            <h2 style="color: #4ade80;" data-i18n="admin.kirjaudu_sisään">Kirjaudu Sisään</h2>
             <div class="flex-form">
-                <input type="text" id="login-username" class="syote" placeholder="Käyttäjätunnus">
-                <input type="password" id="login-password" class="syote" placeholder="Salasana">
-                <button onclick="login()" class="nappula" style="width: 100%;">Kirjaudu</button>
+                <input type="text" id="login-username" class="syote" placeholder="Käyttäjätunnus" data-i18n-attr-placeholder="common.käyttäjätunnus">
+                <input type="password" id="login-password" class="syote" placeholder="Salasana" data-i18n-attr-placeholder="common.salasana">
+                <button onclick="login()" class="nappula" style="width: 100%;" data-i18n="admin.kirjaudu">Kirjaudu</button>
             </div>
             <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
-                <a href="#" onclick="toggleMode()" style="color: #a0aec0;">Eikö sinulla ole tunnusta? Rekisteröidy kutsukoodilla.</a>
+                <a href="#" onclick="toggleMode()" style="color: #a0aec0;" data-i18n="admin.eikö_sinulla_ole_tunnusta_rekisteröidy_kutsukoodil">Eikö sinulla ole tunnusta? Rekisteröidy kutsukoodilla.</a>
             </p>
         </div>
 
         <div id="register-section" class="osion-tausta hidden">
-            <h2 style="color: #60a5fa;">Rekisteröidy Kutsukoodilla</h2>
+            <h2 style="color: #60a5fa;" data-i18n="admin.rekisteröidy_kutsukoodilla">Rekisteröidy Kutsukoodilla</h2>
             <div class="flex-form">
-                <input type="text" id="reg-invite" class="syote" placeholder="Kutsukoodi">
-                <input type="text" id="reg-username" class="syote" placeholder="Haluttu käyttäjätunnus">
-                <input type="password" id="reg-password" class="syote" placeholder="Salasana (min. 6 merkkiä)">
-                <button onclick="register()" class="nappula1" style="width: 100%; border: 1px solid #60a5fa; color: #60a5fa;">Luo tunnus</button>
+                <input type="text" id="reg-invite" class="syote" placeholder="Kutsukoodi" data-i18n-attr-placeholder="common.kutsukoodi">
+                <input type="text" id="reg-username" class="syote" placeholder="Haluttu käyttäjätunnus" data-i18n-attr-placeholder="common.haluttu_käyttäjätunnus">
+                <input type="password" id="reg-password" class="syote" placeholder="Salasana (min. 6 merkkiä)" data-i18n-attr-placeholder="admin.salasana_min_6_merkkiä">
+                <button onclick="register()" class="nappula1" style="width: 100%; border: 1px solid #60a5fa; color: #60a5fa;" data-i18n="admin.luo_tunnus">Luo tunnus</button>
             </div>
             <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
-                <a href="#" onclick="toggleMode()" style="color: #a0aec0;">Takaisin kirjautumiseen.</a>
+                <a href="#" onclick="toggleMode()" style="color: #a0aec0;" data-i18n="admin.takaisin_kirjautumiseen">Takaisin kirjautumiseen.</a>
             </p>
         </div>
 
         <div id="dashboard-section" class="hidden">
-            <button onclick="lataaTiedot()" class="nappula1" style="margin-bottom: 20px; width: 100%;">Päivitä Tiedot 🔄</button>
+            <button onclick="lataaTiedot()" class="nappula1" style="margin-bottom: 20px; width: 100%;" data-i18n="admin.päivitä_tiedot">Päivitä Tiedot 🔄</button>
 
             <!-- Linkkien hallinta -->
             <div class="osion-tausta" style="margin-bottom: 20px;">
-                <h2 style="color: #4ade80;">➕ Uusi oma linkki</h2>
+                <h2 style="color: #4ade80;" data-i18n="admin.uusi_oma_linkki">➕ Uusi oma linkki</h2>
                 <div class="flex-form" style="display: flex; gap: 10px; align-items: flex-end;">
                     <div style="flex: 1;">
                         <select id="new-domain" class="syote" style="width: 100%;">
@@ -70,30 +70,30 @@
                         </select>
                     </div>
                     <div style="flex: 2;">
-                        <input type="text" id="new-url" class="syote" placeholder="Kohdeosoite (https://...)" style="width: 100%;">
+                        <input type="text" id="new-url" class="syote" placeholder="Kohdeosoite (https://...)" style="width: 100%;" data-i18n-attr-placeholder="common.kohdeosoite_https">
                     </div>
                     <div style="flex: 1;">
-                        <input type="text" id="new-path" class="syote" placeholder="Lyhenne (tyhjä = satunnainen)" style="width: 100%;">
+                        <input type="text" id="new-path" class="syote" placeholder="Lyhenne (tyhjä = satunnainen)" style="width: 100%;" data-i18n-attr-placeholder="common.lyhenne_tyhjä_satunnainen">
                     </div>
-                    <button onclick="luoUusiLinkki()" class="nappula">Luo</button>
+                    <button onclick="luoUusiLinkki()" class="nappula" data-i18n="admin.luo">Luo</button>
                 </div>
             </div>
 
             <div class="osion-tausta">
-                <h2 style="color: #ffaa00;">Aktiiviset linkit (soro.la)</h2>
+                <h2 style="color: #ffaa00;" data-i18n="admin.aktiiviset_linkit_sorola">Aktiiviset linkit (soro.la)</h2>
                 <div class="table-container">
                     <table id="sorola-table">
-                        <thead><tr><th>Lyhytosoite</th><th>Kohdeosoite</th><th>Klikit</th><th>Luotu</th><th>Toiminnot</th></tr></thead>
+                        <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
 
             <div class="osion-tausta">
-                <h2 style="color: #60a5fa;">Aktiiviset linkit (srla.fi)</h2>
+                <h2 style="color: #60a5fa;" data-i18n="admin.aktiiviset_linkit_srlafi">Aktiiviset linkit (srla.fi)</h2>
                 <div class="table-container">
                     <table id="srla-table">
-                        <thead><tr><th>Lyhytosoite</th><th>Kohdeosoite</th><th>Klikit</th><th>Luotu</th><th>Toiminnot</th></tr></thead>
+                        <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -103,7 +103,7 @@
                 <h2 style="color: #a78bfa;">Aktiiviset linkit (srl.la)</h2>
                 <div class="table-container">
                     <table id="srlla-table">
-                        <thead><tr><th>Lyhytosoite</th><th>Kohdeosoite</th><th>Klikit</th><th>Luotu</th><th>Toiminnot</th></tr></thead>
+                        <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -118,8 +118,8 @@
                             <tr>
                                 <th>Polku</th>
                                 <th>Ote</th>
-                                <th>Luotu</th>
-                                <th>Toiminnot</th>
+                                <th data-i18n="admin.luotu">Luotu</th>
+                                <th data-i18n="admin.toiminnot">Toiminnot</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -129,17 +129,17 @@
 
             <!-- Ylläpidon tiedostojako -->
             <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #34d399;">📁 Ylläpidon tiedostojako</h2>
-                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;">Lataa tiedostoja samaan tallennustilaan kuin käyttäjät, ilman kokorajoituksia.</p>
+                <h2 style="color: #34d399;" data-i18n="admin.ylläpidon_tiedostojako">📁 Ylläpidon tiedostojako</h2>
+                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;" data-i18n="admin.lataa_tiedostoja_samaan_tallennustilaan">Lataa tiedostoja samaan tallennustilaan kuin käyttäjät, ilman kokorajoituksia.</p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
                     <input type="file" id="admin-file-input" class="syote" style="padding: 8px;">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 150px;">
-                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;">Voimassaoloaika (päiviä, 0 = ei vanhene)</label>
+                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;" data-i18n="admin.voimassaoloaika_päiviä">Voimassaoloaika (päiviä, 0 = ei vanhene)</label>
                             <input type="number" id="admin-file-expiry" class="syote" value="0" min="0" style="width: 100%;">
                         </div>
                         <div style="flex: 1; min-width: 150px;">
-                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;">Latausmääräraja (0 = rajaton)</label>
+                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;" data-i18n="admin.latausmääräraja">Latausmääräraja (0 = rajaton)</label>
                             <input type="number" id="admin-file-maxdownloads" class="syote" value="0" min="0" style="width: 100%;">
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                                 <th>Vanhenee</th>
                                 <th>Max lataukset</th>
                                 <th>Ladattu</th>
-                                <th>Toiminnot</th>
+                                <th data-i18n="admin.toiminnot">Toiminnot</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -169,14 +169,14 @@
 
             <!-- Vieraskirjan hallinta -->
             <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #f472b6;">📖 Vieraskirja</h2>
+                <h2 style="color: #f472b6;" data-i18n="index.vieraskirja">📖 Vieraskirja</h2>
                 <div class="flex-form" style="margin-bottom: 15px;">
-                    <input type="text" id="admin-gb-message" class="syote" placeholder="Kirjoita ylläpidon uusi viesti vieraskirjaan..." style="flex: 2;">
-                    <button onclick="lahetaAdminViesti()" class="nappula1" style="flex: 1; border: 1px solid #f472b6; color: #f472b6; background: transparent;">Lähetä ilmoitus</button>
+                    <input type="text" id="admin-gb-message" class="syote" placeholder="Kirjoita ylläpidon uusi viesti vieraskirjaan..." style="flex: 2;" data-i18n-attr-placeholder="admin.kirjoita_ylläpidon_uusi_viesti">
+                    <button onclick="lahetaAdminViesti()" class="nappula1" style="flex: 1; border: 1px solid #f472b6; color: #f472b6; background: transparent;" data-i18n="admin.lähetä_ilmoitus">Lähetä ilmoitus</button>
                 </div>
                 <div class="table-container">
                     <table id="guestbook-table">
-                        <thead><tr><th>Nimi</th><th>Viesti</th><th>Ylläpidon vastaus</th><th>Pvm</th><th>Toiminnot</th></tr></thead>
+                        <thead><tr><th data-i18n="admin.nimi">Nimi</th><th data-i18n="admin.viesti">Viesti</th><th data-i18n="admin.ylläpidon_vastaus">Ylläpidon vastaus</th><th data-i18n="admin.pvm">Pvm</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -186,93 +186,93 @@
             <div class="osion-tausta" style="margin-top: 20px;">
                 <h2 style="color: #60a5fa;">🌐 DNS-hallinta (OVH)</h2>
                 <div style="margin-bottom: 15px;">
-                    <label for="dns-zone-select" style="display:block; color:#a0aec0; margin-bottom:5px; font-size:0.9rem;">Valitse hallittava domain:</label>
+                    <label for="dns-zone-select" style="display:block; color:#a0aec0; margin-bottom:5px; font-size:0.9rem;" data-i18n="admin.valitse_hallittava_domain">Valitse hallittava domain:</label>
                     <div style="display:flex; gap:10px;">
                         <select id="dns-zone-select" class="syote" style="flex: 1;">
-                            <option value="">Ladataan vyöhykkeitä...</option>
+                            <option value="" data-i18n="admin.ladataan_vyöhykkeitä">Ladataan vyöhykkeitä...</option>
                         </select>
-                        <button onclick="lataaDnsTietueet()" class="nappula1" style="width: auto;">Hae tietueet</button>
+                        <button onclick="lataaDnsTietueet()" class="nappula1" style="width: auto;" data-i18n="admin.hae_tietueet">Hae tietueet</button>
                     </div>
                 </div>
 
-                <div id="dns-hallinta-alue" class="hidden">
-                    <div class="dns-tietue-tila">
-                        <h3 style="color:#4ade80; margin-bottom:10px;">Lisää uusi tietue</h3>
-                        <div class="dns-input-rivi">
-                            <div style="flex: 0.5;">
-                                <label style="font-size:0.8rem; color:#a0aec0;">Tyyppi</label>
-                                <select id="new-dns-type" class="syote">
-                                    <option value="A">A</option>
-                                    <option value="AAAA">AAAA</option>
-                                    <option value="CNAME">CNAME</option>
-                                    <option value="MX">MX</option>
-                                    <option value="TXT">TXT</option>
-                                    <option value="SRV">SRV</option>
-                                </select>
+                    <div id="dns-hallinta-alue" class="hidden">
+                        <div class="dns-tietue-tila">
+                            <h3 style="color:#4ade80; margin-bottom:10px;" data-i18n="admin.lisää_uusi_tietue">Lisää uusi tietue</h3>
+                            <div class="dns-input-rivi">
+                                <div style="flex: 0.5;">
+                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.tyyppi">Tyyppi</label>
+                                    <select id="new-dns-type" class="syote">
+                                        <option value="A">A</option>
+                                        <option value="AAAA">AAAA</option>
+                                        <option value="CNAME">CNAME</option>
+                                        <option value="MX">MX</option>
+                                        <option value="TXT">TXT</option>
+                                        <option value="SRV">SRV</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.nimi_esim_www_api">Nimi (esim. @, www, api)</label>
+                                    <input type="text" id="new-dns-name" class="syote" placeholder="@">
+                                </div>
+                                <div style="flex: 2;">
+                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.arvo_ip_tai_kohde">Arvo (IP tai kohde)</label>
+                                    <input type="text" id="new-dns-value" class="syote" placeholder="1.2.3.4">
+                                </div>
+                                <div style="flex: 0.5;">
+                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.ttl_s">TTL (s)</label>
+                                    <input type="number" id="new-dns-ttl" class="syote" value="300">
+                                </div>
+                                <button onclick="luoDnsTietue()" class="nappula" style="width:auto; height: 44px; margin-bottom: 2px;" data-i18n="admin.lisää">Lisää</button>
                             </div>
-                            <div style="flex: 1;">
-                                <label style="font-size:0.8rem; color:#a0aec0;">Nimi (esim. @, www, api)</label>
-                                <input type="text" id="new-dns-name" class="syote" placeholder="@">
-                            </div>
-                            <div style="flex: 2;">
-                                <label style="font-size:0.8rem; color:#a0aec0;">Arvo (IP tai kohde)</label>
-                                <input type="text" id="new-dns-value" class="syote" placeholder="1.2.3.4">
-                            </div>
-                            <div style="flex: 0.5;">
-                                <label style="font-size:0.8rem; color:#a0aec0;">TTL (s)</label>
-                                <input type="number" id="new-dns-ttl" class="syote" value="300">
-                            </div>
-                            <button onclick="luoDnsTietue()" class="nappula" style="width:auto; height: 44px; margin-bottom: 2px;">Lisää</button>
+                        </div>
+
+                        <div class="table-container">
+                            <table id="dns-records-table">
+                                <thead><tr><th data-i18n="admin.tyyppi">Tyyppi</th><th data-i18n="admin.nimi">Nimi</th><th data-i18n="admin.arvo">Arvo</th><th data-i18n="admin.ttl">TTL</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
-
-                    <div class="table-container">
-                        <table id="dns-records-table">
-                            <thead><tr><th>Tyyppi</th><th>Nimi</th><th>Arvo</th><th>TTL</th><th>Toiminnot</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
 
             <!-- Käyttäjät & Kutsut -->
             <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #f472b6;">👑 Ylläpitäjät</h2>
+                <h2 style="color: #f472b6;" data-i18n="admin.ylläpitäjät">👑 Ylläpitäjät</h2>
                 <div class="table-container">
                     <table id="users-table">
-                        <thead><tr><th>Tunnus</th><th>Luotu</th><th>Toiminnot</th></tr></thead>
+                        <thead><tr><th data-i18n="admin.tunnus">Tunnus</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
 
             <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #fbbf24;">🎟️ Kutsukoodit</h2>
+                <h2 style="color: #fbbf24;" data-i18n="admin.kutsukoodit">🎟️ Kutsukoodit</h2>
                 <div class="flex-form" style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <input type="text" id="new-invite" class="syote" placeholder="Uusi koodisana" style="flex: 1;">
-                    <button onclick="luoKutsukoodi()" class="nappula1" style="border: 1px solid #fbbf24; color: #fbbf24;">Luo</button>
+                    <input type="text" id="new-invite" class="syote" placeholder="Uusi koodisana" style="flex: 1;" data-i18n-attr-placeholder="common.uusi_koodisana">
+                    <button onclick="luoKutsukoodi()" class="nappula1" style="border: 1px solid #fbbf24; color: #fbbf24;" data-i18n="admin.luo">Luo</button>
                 </div>
                 <div class="table-container">
                     <table id="invites-table">
-                        <thead><tr><th>Koodi</th><th>Tila</th><th>Luotu</th><th>Toiminnot</th></tr></thead>
+                        <thead><tr><th data-i18n="admin.koodi">Koodi</th><th data-i18n="admin.tila">Tila</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
 
             <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #9ca3af;">🔑 Vaihda salasana</h2>
+                <h2 style="color: #9ca3af;" data-i18n="admin.vaihda_salasana">🔑 Vaihda salasana</h2>
                 <div class="flex-form">
-                    <input type="password" id="change-old-password" class="syote" placeholder="Nykyinen salasana" style="margin-bottom: 10px;">
-                    <input type="password" id="change-new-password" class="syote" placeholder="Uusi salasana" style="margin-bottom: 10px;">
-                    <input type="password" id="change-new-password-confirm" class="syote" placeholder="Uusi uudelleen" style="margin-bottom: 10px;">
-                    <button onclick="vaihdaSalasana()" class="nappula" style="width: 100%; background: #4b5563;">Vaihda</button>
+                    <input type="password" id="change-old-password" class="syote" placeholder="Nykyinen salasana" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.nykyinen_salasana">
+                    <input type="password" id="change-new-password" class="syote" placeholder="Uusi salasana" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.uusi_salasana">
+                    <input type="password" id="change-new-password-confirm" class="syote" placeholder="Uusi uudelleen" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.uusi_uudelleen">
+                    <button onclick="vaihdaSalasana()" class="nappula" style="width: 100%; background: #4b5563;" data-i18n="admin.vaihda">Vaihda</button>
                 </div>
             </div>
 
-            <button onclick="logout()" class="nappula action-btn" style="width: 100%; margin-top: 20px; font-size: 1rem; padding: 12px;">Kirjaudu ulos</button>
+            <button onclick="logout()" class="nappula action-btn" style="width: 100%; margin-top: 20px; font-size: 1rem; padding: 12px;" data-i18n="admin.kirjaudu_ulos">Kirjaudu ulos</button>
         </div>
-        <a href="/" class="linkki-takaisin" style="margin-top: 20px; display: block; text-align: center;">« Takaisin etusivulle</a>
+        <a href="/" class="linkki-takaisin" style="margin-top: 20px; display: block; text-align: center;" data-i18n="admin.takaisin_etusivulle">« Takaisin etusivulle</a>
     </div>
 
     <script>
@@ -377,7 +377,7 @@
             const tbody = document.querySelector(`#${tableId} tbody`);
             tbody.innerHTML = '';
             if (!links.length) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#a0aec0;">Ei vielä linkkejä domainissa.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#a0aec0;" data-i18n="admin_raw.ei_vielä_linkkejä_domainissa">Ei vielä linkkejä domainissa.</td></tr>`;
                 return;
             }
             links.forEach(link => {
@@ -392,8 +392,8 @@
                         <td>${link.clicks}</td>
                         <td>${date}</td>
                         <td>
-                            <button onclick="muokkaaLinkkia('${domain}', '${link.short_path}', '${link.original_url}')" class="action-btn edit-btn">Muokkaa</button>
-                            <button onclick="poistaLinkki('${domain}', '${link.short_path}')" class="action-btn">Poista</button>
+                            <button onclick="muokkaaLinkkia('${domain}', '${link.short_path}', '${link.original_url}')" class="action-btn edit-btn" data-i18n="ohjeet.muokkaa">Muokkaa</button>
+                            <button onclick="poistaLinkki('${domain}', '${link.short_path}')" class="action-btn" data-i18n="ohjeet.poista">Poista</button>
                         </td>
                     </tr>
                 `;
@@ -430,7 +430,7 @@
                                     <td><a href="/p/${p.short_path}" target="_blank" style="color:#4ade80;">/p/${p.short_path}</a></td>
                                     <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${snippet}</td>
                                     <td>${date}</td>
-                                    <td><button onclick="poistaPaste(${p.id})" class="action-btn">Poista</button></td>
+                                    <td><button onclick="poistaPaste(${p.id})" class="action-btn" data-i18n="ohjeet.poista">Poista</button></td>
                                 </tr>
                             `;
                         });
@@ -458,7 +458,7 @@
                                     <td>${date}</td>
                                     <td>
                                         ${!m.is_admin ? `<button onclick="vastaaVieraskirjaan(${m.id})" class="action-btn edit-btn">Vastaa</button>` : ''}
-                                        <button onclick="poistaVieraskirjaviesti(${m.id})" class="action-btn">Poista</button>
+                                        <button onclick="poistaVieraskirjaviesti(${m.id})" class="action-btn" data-i18n="ohjeet.poista">Poista</button>
                                     </td>
                                 </tr>
                             `;
@@ -477,9 +477,9 @@
                         const isMe = u.username === currentUser;
                         tbody.innerHTML += `
                             <tr>
-                                <td>${u.username} ${isMe ? '<span style="color:#4ade80; font-size:0.8rem;">(Sinä)</span>' : ''}</td>
+                                <td>${u.username} ${isMe ? '<span style="color:#4ade80; font-size:0.8rem;" data-i18n="admin_raw.sinä">(Sinä)</span>' : ''}</td>
                                 <td>${date}</td>
-                                <td>${!isMe ? `<button onclick="poistaKayttaja(${u.id})" class="action-btn">Poista</button>` : ''}</td>
+                                <td>${!isMe ? `<button onclick="poistaKayttaja(${u.id})" class="action-btn" data-i18n="ohjeet.poista">Poista</button>` : ''}</td>
                             </tr>
                         `;
                     });
@@ -493,13 +493,13 @@
                     tbody.innerHTML = '';
                     data.invites.forEach(i => {
                         const date = new Date(i.created_at).toLocaleDateString('fi-FI');
-                        const status = i.is_used ? '<span style="color:#ef4444;">Käytetty</span>' : '<span style="color:#4ade80;">Vapaa</span>';
+                        const status = i.is_used ? '<span style="color:#ef4444;" data-i18n="admin_raw.käytetty">Käytetty</span>' : '<span style="color:#4ade80;" data-i18n="admin_raw.vapaa">Vapaa</span>';
                         tbody.innerHTML += `
                             <tr>
                                 <td style="font-family: monospace;">${i.code}</td>
                                 <td>${status}</td>
                                 <td>${date}</td>
-                                <td><button onclick="poistaKutsu(${i.id})" class="action-btn">Poista</button></td>
+                                <td><button onclick="poistaKutsu(${i.id})" class="action-btn" data-i18n="ohjeet.poista">Poista</button></td>
                             </tr>
                         `;
                     });
@@ -701,7 +701,7 @@
                                 <td><span style="font-family:monospace; color:#4ade80;">${r.value}</span></td>
                                 <td>${r.ttl}</td>
                                 <td>
-                                    <button onclick="poistaDnsTietue('${r.id}')" class="action-btn">Poista</button>
+                                    <button onclick="poistaDnsTietue('${r.id}')" class="action-btn" data-i18n="ohjeet.poista">Poista</button>
                                 </td>
                             </tr>
                         `;
@@ -710,7 +710,7 @@
                     tbody.innerHTML = `<tr><td colspan="5" style="color:red;">${data.error || 'Virhe ladattaessa.'}</td></tr>`;
                 }
             } catch (e) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Palvelinvirhe.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="color:red;" data-i18n="admin_raw.palvelinvirhe">Palvelinvirhe.</td></tr>`;
             }
         }
 
@@ -839,7 +839,7 @@
                             <td>${date}<br><small style="color:#64748b;">${f.created_by || ''}</small></td>
                             <td>
                                 <button onclick="kopioiLinkki('${shareUrl}')" class="action-btn edit-btn" style="background:#374151; margin-bottom:4px;">Kopioi</button>
-                                <button onclick="poistaAdminTiedosto(${f.id})" class="action-btn">Poista</button>
+                                <button onclick="poistaAdminTiedosto(${f.id})" class="action-btn" data-i18n="ohjeet.poista">Poista</button>
                             </td>
                         </tr>
                     `;

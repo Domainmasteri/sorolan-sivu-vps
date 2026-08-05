@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markus Sorola - CV</title>
+    <title data-i18n="ansioluettelot.markus_sorola_cv">Markus Sorola - CV</title>
     <!-- Tuodaan html2pdf.js -kirjasto -->
     <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
     <!-- Linkitetään oma tyylitiedosto -->
@@ -14,7 +14,7 @@
 <body>
 
 <!-- Nappi joka käynnistää PDF-luonnin -->
-<button class="btn-download" onclick="generatePDF()">Lataa PDF</button>
+<button class="btn-download" onclick="generatePDF()" data-i18n="common.lataa_pdf">Lataa PDF</button>
 
 <!-- CV:n alue (Lukittu A4-kokoon) -->
 <div class="cv-container" id="cv">
@@ -22,34 +22,34 @@
     <!-- Vasen palkki -->
     <div class="sidebar">
         <!-- VAIHDA TÄHÄN OMAN KUVASI TIEDOSTONIMI (esim. 73854.jpg) -->
-        <img src="cv-kuva.jpg" alt="Profiilikuva" class="profile-pic">
+        <img src="cv-kuva.jpg" alt="Profiilikuva" class="profile-pic" data-i18n-attr-alt="ansioluettelot.profiilikuva">
         
-        <h2>Henkilötiedot</h2>
+        <h2 data-i18n="ansioluettelot.henkilötiedot">Henkilötiedot</h2>
         <p><strong>Nimi:</strong> Markus Sorola</p>
         <p><strong>Sähköposti:</strong> <a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
         <p><strong>Paikkakunta:</strong> Salo</p>
         <p><strong>Syntymäaika:</strong> 29. heinäkuuta 1998</p>
         <p><strong>Verkkosivu:</strong> <a href="https://sorola.fi" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
 
-        <h3>Taidot</h3>
+        <h3 data-i18n="ansioluettelot.taidot">Taidot</h3>
         <ul>
-            <li>palvelimet ja domainit</li>
-            <li>Office- ja toimisto-ohjelmat</li>
-            <li>mobiilineuvonta ja käyttö</li>
-            <li>Jakelu- ja logistiikka</li>
+            <li data-i18n="ansioluettelot.palvelimet_ja_domainit">palvelimet ja domainit</li>
+            <li data-i18n="ansioluettelot.office_ja_toimistoohjelmat">Office- ja toimisto-ohjelmat</li>
+            <li data-i18n="ansioluettelot.mobiilineuvonta_ja_käyttö">mobiilineuvonta ja käyttö</li>
+            <li data-i18n="ansioluettelot.jakelu_ja_logistiikka">Jakelu- ja logistiikka</li>
         </ul>
 
-        <h3>Kielet</h3>
+        <h3 data-i18n="ansioluettelot.kielet">Kielet</h3>
         <ul>
-            <li>Suomi</li>
+            <li data-i18n="ansioluettelot.suomi">Suomi</li>
             <li>English</li>
         </ul>
 
-        <h3>Harrastukset</h3>
+        <h3 data-i18n="ansioluettelot.harrastukset">Harrastukset</h3>
         <ul>
-            <li>Tietotekniikka</li>
-            <li>Kielten opiskelu satunnaisesti</li>
-            <li>Kavereiden ja tyttöystävän kanssa ajan vietto</li>
+            <li data-i18n="ansioluettelot.tietotekniikka">Tietotekniikka</li>
+            <li data-i18n="ansioluettelot.kielten_opiskelu_satunnaisesti">Kielten opiskelu satunnaisesti</li>
+            <li data-i18n="ansioluettelot.kavereiden_ja_tyttöystävän_kanssa_ajan_vietto">Kavereiden ja tyttöystävän kanssa ajan vietto</li>
         </ul>
     </div>
 
@@ -57,10 +57,10 @@
     <div class="main-content">
         <h1>Markus Sorola</h1>
 
-        <h2 class="section-title">Henkilökohtainen tiivistelmä</h2>
-        <p class="item-desc">Olen luotettava ja oma-aloitteinen tekijä, jolla on monipuolinen kokemus niin käytännönläheisestä logistiikasta kuin teknisestä ongelmanratkaisustakin. Varhaisjakajana olen oppinut arvostamaan täsmällisyyttä ja optimoimaan prosesseja, ja minulla on erinomainen visuaalis-avaruudellinen muisti. Vapaa-ajallani suunnittelen, koodaan ja ylläpidän laajoja verkkoinfrastruktuureja palvelimineen. Etsin työtä, jossa voin hyödyntää kykyäni hahmottaa isoja kokonaisuuksia ja omaksua nopeasti uusia järjestelmiä – oli kyse sitten lähdekoodista tai monimutkaisista reittikartoista.</p>
+        <h2 class="section-title" data-i18n="ansioluettelot.henkilökohtainen_tiivistelmä">Henkilökohtainen tiivistelmä</h2>
+        <p class="item-desc" data-i18n="ansioluettelot.olen_luotettava_ja_omaaloitteinen_tekijä_jolla_on">Olen luotettava ja oma-aloitteinen tekijä, jolla on monipuolinen kokemus niin käytännönläheisestä logistiikasta kuin teknisestä ongelmanratkaisustakin. Varhaisjakajana olen oppinut arvostamaan täsmällisyyttä ja optimoimaan prosesseja, ja minulla on erinomainen visuaalis-avaruudellinen muisti. Vapaa-ajallani suunnittelen, koodaan ja ylläpidän laajoja verkkoinfrastruktuureja palvelimineen. Etsin työtä, jossa voin hyödyntää kykyäni hahmottaa isoja kokonaisuuksia ja omaksua nopeasti uusia järjestelmiä – oli kyse sitten lähdekoodista tai monimutkaisista reittikartoista.</p>
 
-        <h2 class="section-title">Koulutus</h2>
+        <h2 class="section-title" data-i18n="ansioluettelot.koulutus">Koulutus</h2>
         <div class="item">
             <div class="item-title">Puhtaus- ja kiinteistöpalvelualan perustutkinto</div>
             <div class="item-subtitle">Ammattiopisto Spesia, Turku | huhti 2019 - huhti 2021</div>
@@ -76,7 +76,7 @@
             <div class="item-subtitle">Armfeltin Koulu, Salo | touko 2016</div>
         </div>
 
-        <h2 class="section-title">Työkokemus</h2>
+        <h2 class="section-title" data-i18n="ansioluettelot.työkokemus">Työkokemus</h2>
         <div class="item">
             <div class="item-title">Varhaisjakaja</div>
             <div class="item-subtitle">Varsinais-Suomen Tietojakelu Oy, Salo | kesä 2023 - Kuluva</div>

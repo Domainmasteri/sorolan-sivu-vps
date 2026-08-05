@@ -2,23 +2,23 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Sorolan Base64 Kooderi – Koodaa ja pura Base64</title>
+    <title data-i18n="base64.sorolan_base64_kooderi_koodaa_ja_pura_base64">Sorolan Base64 Kooderi – Koodaa ja pura Base64</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/base64/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi suoraan selaimessasi. Täysi UTF-8-tuki. Mitään ei lähetetä palvelimelle.">
-    <meta name="keywords" content="Base64, kooderi, dekooderi, Base64 encode, Base64 decode, UTF-8, Sorola">
+    <meta name="description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi suoraan selaimessasi. Täysi UTF-8-tuki. Mitään ei lähetetä palvelimelle." data-i18n-attr-content="base64.koodaa_ja_pura_base64tekstiä_ilmaiseksi_suoraan_se">
+    <meta name="keywords" content="Base64, kooderi, dekooderi, Base64 encode, Base64 decode, UTF-8, Sorola" data-i18n-attr-content="base64.base64_kooderi_dekooderi_base64_encode_base64_deco">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/base64/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorolan Base64 Kooderi">
-    <meta property="og:description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi selaimessasi.">
-        <meta property="og:locale" content="fi_FI">
+    <meta property="og:title" content="Sorolan Base64 Kooderi" data-i18n-attr-content="base64.sorolan_base64_kooderi">
+    <meta property="og:description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi selaimessasi." data-i18n-attr-content="base64.koodaa_ja_pura_base64tekstiä_ilmaiseksi_selaimessa">
+        <meta property="og:locale" content="fi_FI" data-i18n-attr-content="muutokset.fi_fi">
     <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Sorolan Base64 Kooderi">
-    <meta name="twitter:description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi selaimessasi.">
+    <meta name="twitter:title" content="Sorolan Base64 Kooderi" data-i18n-attr-content="base64.sorolan_base64_kooderi">
+    <meta name="twitter:description" content="Koodaa ja pura Base64-tekstiä ilmaiseksi selaimessasi." data-i18n-attr-content="base64.koodaa_ja_pura_base64tekstiä_ilmaiseksi_selaimessa">
     <style>
         #b64-syote,
         #b64-tulos {
@@ -95,42 +95,42 @@
     </script>
 </head>
 <body>
-    <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+    <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_pääsisältöön">Hyppää pääsisältöön</a>
 
     <div class="laatikko" style="max-width: 860px;">
-        <h1 class="otsikko">Base64 Kooderi / Dekooderi</h1>
+        <h1 class="otsikko" data-i18n="base64.base64_kooderi_dekooderi">Base64 Kooderi / Dekooderi</h1>
 
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Koodaa tai pura Base64-tekstiä suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.</p>
+            <p style="margin: 0; text-align: center;" data-i18n="base64.koodaa_tai_pura_base64tekstiä_suoraan_selaimessasi">Koodaa tai pura Base64-tekstiä suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.</p>
         </div>
 
         <main id="paaosio">
             <div class="osion-tausta">
-                <h2>1. Syöte</h2>
-                <label for="b64-syote" class="sr-only">Syöteteksti</label>
-                <textarea id="b64-syote" class="syote" placeholder="Kirjoita tai liitä teksti tähän..." aria-label="Syöteteksti" spellcheck="false"></textarea>
+                <h2 data-i18n="base64.1_syöte">1. Syöte</h2>
+                <label for="b64-syote" class="sr-only" data-i18n="base64.syöteteksti">Syöteteksti</label>
+                <textarea id="b64-syote" class="syote" placeholder="Kirjoita tai liitä teksti tähän..." aria-label="Syöteteksti" spellcheck="false" data-i18n-attr-placeholder="base64.kirjoita_tai_liitä_teksti_tähän" data-i18n-attr-aria-label="base64.syöteteksti"></textarea>
 
                 <div class="toiminto-rivi">
-                    <button id="koodaa-btn" class="nappula">🔒 Koodaa (Encode)</button>
-                    <button id="pura-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">🔓 Pura (Decode)</button>
-                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Tyhjennä</button>
+                    <button id="koodaa-btn" class="nappula" data-i18n="base64.koodaa_encode">🔒 Koodaa (Encode)</button>
+                    <button id="pura-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;" data-i18n="base64.pura_decode">🔓 Pura (Decode)</button>
+                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;" data-i18n="json.tyhjennä">🗑️ Tyhjennä</button>
                 </div>
 
                 <div id="tila-viesti" role="status" aria-live="polite"></div>
             </div>
 
             <div class="osion-tausta">
-                <h2>2. Tulos</h2>
-                <label for="b64-tulos" class="sr-only">Tulos</label>
-                <textarea id="b64-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Tulos" spellcheck="false"></textarea>
+                <h2 data-i18n="json.2_tulos">2. Tulos</h2>
+                <label for="b64-tulos" class="sr-only" data-i18n="base64.tulos">Tulos</label>
+                <textarea id="b64-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Tulos" spellcheck="false" data-i18n-attr-placeholder="json.tulos_näkyy_tässä" data-i18n-attr-aria-label="base64.tulos"></textarea>
 
                 <div class="kopioi-btn-kontti">
-                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Kopioi leikepöydälle</button>
+                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;" data-i18n="salasanat.kopioi_leikepöydälle">📋 Kopioi leikepöydälle</button>
                 </div>
             </div>
         </main>
 
-        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+        <a href="../" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle">« Takaisin pääsivulle</a>
     </div>
 
     <script>
