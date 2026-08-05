@@ -15,13 +15,21 @@ const ROOT_ONLY_FILES = new Set(['_headers', 'robots.txt', 'sitemap.xml']);
 const IGNORE_NAMES = new Set([
   'i18n'
 ]);
+// data-i18n="key" → translate element text content by key
+const DATA_I18N_PATTERN = /(<[^>]+\sdata-i18n="([^"]+)"[^>]*>)([\s\S]*?)(<\/[a-z][a-z0-9]*>)/gi;
+// data-i18n-attr-NAME="key" → translate attribute value by key
+const DATA_I18N_ATTR_PATTERN = /\sdata-i18n-attr-([a-z-]+)="([^"]+)"/gi;
 const ATTRIBUTE_PATTERN = /(placeholder|aria-label|content|title|alt)=(["'])(.*?)\2/gi;
 const URL_ATTRIBUTE_PATTERN = /\b(href|src|action)=(["'])(.*?)\2/gi;
 
+// Key-based translation tables: flat { key: translated_text }
 const locales = {
   fi: JSON.parse(await fs.readFile(path.join(I18N_DIR, 'fi.json'), 'utf8')),
   en: JSON.parse(await fs.readFile(path.join(I18N_DIR, 'en.json'), 'utf8'))
 };
+
+// Translation metadata: norm_to_key (fi_norm → key), html_raw, js_raw page maps
+const meta = JSON.parse(await fs.readFile(path.join(I18N_DIR, 'meta.json'), 'utf8'));
 
 await fs.rm(DIST, { recursive: true, force: true });
 await fs.mkdir(DIST, { recursive: true });
@@ -88,8 +96,9 @@ async function writeLocalizedFile(relativePath, locale, baseDir) {
 }
 
 function localizeHtml(content, relativePath, locale) {
-  const rules = getRules(locales[locale].html, relativePath);
+  const rules = getRules(relativePath, locale);
   let localized = translateHtmlStructure(content, rules);
+  localized = translateDataI18nAttributes(localized, locale);
   localized = applyRawReplacements(localized, rules.raw);
   localized = rewriteDocumentUrls(localized, relativePath, locale);
   localized = setHtmlLanguage(localized, locale);
@@ -102,18 +111,103 @@ function localizeHtml(content, relativePath, locale) {
 }
 
 function localizeJs(content, relativePath, locale) {
-  const rules = getRules(locales[locale].js, relativePath);
+  const rules = getRules(relativePath, locale);
   return applyRawReplacements(content, rules.raw);
 }
 
-function getRules(section = {}, relativePath) {
-  const common = section.__all__ || {};
-  const specific = section[relativePath] || {};
-  return {
-    text: { ...(common.text || {}), ...(specific.text || {}) },
-    attributes: { ...(common.attributes || {}), ...(specific.attributes || {}) },
-    raw: { ...(common.raw || {}), ...(specific.raw || {}) }
-  };
+/**
+ * Build translation rules for a given page and locale.
+ *
+ * The translation JSON files use a flat key→value format (key-based system).
+ * The metadata file (meta.json) provides:
+ *   - norm_to_key: fi_norm → key  (for backward-compat text matching)
+ *   - html_raw: page → { fi_exact → key }  (raw string replacements)
+ *   - js_raw:   page → { fi_exact → key }  (raw JS string replacements)
+ *
+ * For each locale, the translated value is locales[locale][key].
+ * Finnish (fi) is the source language; for the fi locale we return the fi
+ * translation (which matches the source text, so no visible change).
+ */
+function getRules(relativePath, locale) {
+  const translations = locales[locale];
+
+  // Text / attribute rules: fi_norm → translated_text (via key lookup)
+  const text = {};
+  const attributes = {};
+  for (const [fiNorm, key] of Object.entries(meta.norm_to_key)) {
+    const translated = translations[key];
+    if (translated !== undefined) {
+      text[fiNorm] = translated;
+      attributes[fiNorm] = translated;
+    }
+  }
+
+  // Raw replacement rules: fi_exact → translated_exact (via key lookup)
+  const raw = {};
+  const commonRaw = meta.html_raw['__all__'] || {};
+  const pageRaw = meta.html_raw[relativePath] || {};
+  for (const [fiExact, key] of Object.entries({ ...commonRaw, ...pageRaw })) {
+    const translated = translations[key];
+    if (translated !== undefined) {
+      raw[fiExact] = translated;
+    }
+  }
+  // JS raw (used when localizeJs is called)
+  const jsRaw = meta.js_raw[relativePath] || {};
+  for (const [fiExact, key] of Object.entries(jsRaw)) {
+    const translated = translations[key];
+    if (translated !== undefined) {
+      raw[fiExact] = translated;
+    }
+  }
+
+  return { text, attributes, raw };
+}
+
+/**
+ * Apply key-based translations to elements with data-i18n="key" (text content)
+ * and data-i18n-attr-NAME="key" (attribute values).
+ * These attributes are stripped from the output.
+ */
+function translateDataI18nAttributes(content, locale) {
+  const translations = locales[locale];
+
+  // Replace text content of elements with data-i18n="key"
+  let result = content.replace(DATA_I18N_PATTERN, (match, openTag, key, innerContent, closeTag) => {
+    const translated = translations[key];
+    if (translated === undefined) return match;
+    const cleanOpen = openTag.replace(/\s+data-i18n="[^"]*"/, '');
+    return `${cleanOpen}${translated}${closeTag}`;
+  });
+
+  // Replace attribute values specified by data-i18n-attr-NAME="key"
+  // Process tag by tag to correctly associate attributes
+  result = result.replace(/<[a-z][^>]*data-i18n-attr-[a-z-]+="[^"]*"[^>]*>/gi, (tag) => {
+    const attrKeyPairs = [];
+    let attrMatch;
+    DATA_I18N_ATTR_PATTERN.lastIndex = 0;
+    while ((attrMatch = DATA_I18N_ATTR_PATTERN.exec(tag)) !== null) {
+      attrKeyPairs.push({ attrName: attrMatch[1], key: attrMatch[2] });
+    }
+    if (attrKeyPairs.length === 0) return tag;
+
+    // Strip all data-i18n-attr-* attributes
+    let updated = tag.replace(/\s+data-i18n-attr-[a-z-]+="[^"]*"/gi, '');
+
+    // Replace the actual attribute values
+    for (const { attrName, key } of attrKeyPairs) {
+      const translated = translations[key];
+      if (translated === undefined) continue;
+      const escapedName = attrName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      updated = updated.replace(
+        new RegExp(`(${escapedName}=)(["']).*?\\2`, 'i'),
+        (m, prefix, quote) => `${prefix}${quote}${translated}${quote}`
+      );
+    }
+    return updated;
+  });
+
+  return result;
 }
 
 function translateHtmlStructure(content, rules) {
@@ -276,10 +370,10 @@ function upsertAlternateLinks(content, relativePath) {
 
 function injectLanguageOverlay(content, relativePath, locale) {
   if (content.includes('language-overlay')) return content;
-  const labels = locales[locale].overlay;
+  const overlayLabel = locales[locale]['overlay.label'] || (locale === 'fi' ? 'Kieli' : 'Language');
   const fiHref = localizedWebPath(relativePath, 'fi');
   const enHref = localizedWebPath(relativePath, 'en');
-  const overlay = `\n    <nav class="language-overlay" aria-label="${escapeHtml(labels.label)}">\n        <span class="language-overlay__label">${escapeHtml(labels.label)}</span>\n        <a class="language-overlay__link${locale === 'fi' ? ' is-active' : ''}" href="${fiHref}"${locale === 'fi' ? ' aria-current="page"' : ''}>🇫🇮</a>\n        <a class="language-overlay__link${locale === 'en' ? ' is-active' : ''}" href="${enHref}"${locale === 'en' ? ' aria-current="page"' : ''}>🇬🇧</a>\n    </nav>`;
+  const overlay = `\n    <nav class="language-overlay" aria-label="${escapeHtml(overlayLabel)}">\n        <span class="language-overlay__label">${escapeHtml(overlayLabel)}</span>\n        <a class="language-overlay__link${locale === 'fi' ? ' is-active' : ''}" href="${fiHref}"${locale === 'fi' ? ' aria-current="page"' : ''}>🇫🇮</a>\n        <a class="language-overlay__link${locale === 'en' ? ' is-active' : ''}" href="${enHref}"${locale === 'en' ? ' aria-current="page"' : ''}>🇬🇧</a>\n    </nav>`;
   const style = `\n    <style>\n        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }\n        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }\n        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }\n        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }\n        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }\n        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }\n    </style>`;
   content = content.replace(/<\/head>/i, `${style}\n</head>`);
   return content.replace(/<body([^>]*)>/i, `<body$1>${overlay}`);
