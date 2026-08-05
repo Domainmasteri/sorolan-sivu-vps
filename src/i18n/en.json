@@ -1098,8 +1098,9 @@
   "ohjeet.api_tilaus_kuvaus": "API keys are free for developers. Send an email to contact.make@sorola.fi and briefly describe how you plan to use the key.",
   "ohjeet.api_avaimen_käyttö": "3. Using the API key in requests",
   "ohjeet.api_käytä_otsikkoa": "Send the issued key in the HTTP header with every request:",
-  "ohjeet.api_query_varaohje": "If needed, you can also send the key as a query parameter in the form ?api_key=avain_tähän, but the safest option is always the HTTP header.",
+  "ohjeet.api_query_varaohje": "If needed, you can also send the key as a query parameter in the form ?api_key=your_key_here, but the safest option is always the HTTP header.",
   "muutokset.582026_api_avaimet": "5 Aug 2026 – API keys and admin panel refresh",
   "muutokset.api_avaimet_lisatty": "Added API key management, usage tracking, and an API guide page for public endpoints.",
-  "muutokset.dns_hallinta_poistettu": "Removed DNS management from the admin panel as it is no longer needed."
+  "muutokset.dns_hallinta_poistettu": "Removed DNS management from the admin panel as it is no longer needed.",
+  "admin.ei_vielä_käytetty": "Not used yet"
 }

@@ -89,11 +89,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiLimiter);
 app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
-app.use('/api', (req, res, next) => {
+app.use(['/api/lyhennin', '/api/paste', '/api/upload'], (req, res, next) => {
   res.set({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-API-Key'
+    'Access-Control-Allow-Headers': 'Content-Type, X-API-Key'
   });
 
   if (req.method === 'OPTIONS') {
@@ -483,8 +483,8 @@ app.post('/api/admin/api-keys', requireAuth, async (req, res) => {
       apiKey = crypto.randomBytes(24).toString('hex');
     } while ((await db.query('SELECT id FROM api_keys WHERE api_key = $1 LIMIT 1', [apiKey])).rows[0]);
 
-    const result = await db.query('INSERT INTO api_keys (api_key, owner_name) VALUES ($1, $2)', [apiKey, ownerName]);
-    return res.json({ success: true, apiKey: { id: result.lastInsertRowid, api_key: apiKey, owner_name: ownerName, is_active: 1 } });
+    await db.query('INSERT INTO api_keys (api_key, owner_name) VALUES ($1, $2)', [apiKey, ownerName]);
+    return res.json({ success: true, apiKey: { api_key: apiKey, owner_name: ownerName, is_active: 1 } });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -508,7 +508,6 @@ app.delete('/api/admin/api-keys', requireAuth, async (req, res) => {
   try {
     const id = Number.parseInt(req.query.id, 10);
     if (!id) return res.status(400).json({ error: 'API-avaimen ID puuttuu.' });
-    await db.query('DELETE FROM api_key_usage WHERE api_key_id = $1', [id]);
     await db.query('DELETE FROM api_keys WHERE id = $1', [id]);
     return res.json({ success: true });
   } catch (error) {

@@ -333,6 +333,19 @@
             document.getElementById('login-password').value = '';
         }
 
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function t(fiText, enText) {
+            return document.documentElement.lang === 'en' ? enText : fiText;
+        }
+
         function renderLinkTable(tableId, links, domain) {
             const tbody = document.querySelector(`#${tableId} tbody`);
             tbody.innerHTML = '';
@@ -632,18 +645,18 @@
                 }
                 data.apiKeys.forEach((item) => {
                     const createdAt = new Date(item.created_at).toLocaleDateString('fi-FI');
-                    const lastUsed = item.last_used_at ? new Date(item.last_used_at).toLocaleString('fi-FI') : 'Ei vielä käytetty';
+                    const lastUsed = item.last_used_at ? new Date(item.last_used_at).toLocaleString('fi-FI') : t('Ei vielä käytetty', 'Not used yet');
                     const maskedKey = `${item.api_key.slice(0, 8)}…${item.api_key.slice(-4)}`;
-                    const activeLabel = Number(item.is_active) === 1 ? 'Aktiivinen' : 'Pois käytöstä';
-                    const toggleLabel = Number(item.is_active) === 1 ? 'Poista käytöstä' : 'Aktivoi';
+                    const activeLabel = Number(item.is_active) === 1 ? t('Aktiivinen', 'Active') : t('Pois käytöstä', 'Disabled');
+                    const toggleLabel = Number(item.is_active) === 1 ? t('Poista käytöstä', 'Disable') : t('Aktivoi', 'Activate');
                     tbody.innerHTML += `
                         <tr>
-                            <td>${item.owner_name}</td>
-                            <td style="font-family: monospace;">${maskedKey}</td>
-                            <td>${activeLabel}</td>
-                            <td>${item.usage_count}</td>
-                            <td>${lastUsed}</td>
-                            <td>${createdAt}</td>
+                            <td>${escapeHtml(item.owner_name)}</td>
+                            <td style="font-family: monospace;">${escapeHtml(maskedKey)}</td>
+                            <td>${escapeHtml(activeLabel)}</td>
+                            <td>${escapeHtml(item.usage_count)}</td>
+                            <td>${escapeHtml(lastUsed)}</td>
+                            <td>${escapeHtml(createdAt)}</td>
                             <td>
                                 <button onclick="vaihdaApiAvaimenTila(${item.id}, ${Number(item.is_active) === 1 ? 0 : 1})" class="action-btn edit-btn" style="background:#374151;">${toggleLabel}</button>
                                 <button onclick="poistaApiAvain(${item.id})" class="action-btn" data-i18n="ohjeet.poista">Poista</button>
@@ -731,7 +744,6 @@
                     dlEl.textContent = data.downloadUrl;
                     fileInput.value = '';
                     lataaAdminTiedostot();
-            lataaApiAvaimet();
                 } else {
                     alert(data.error || 'Lataus epäonnistui.');
                 }

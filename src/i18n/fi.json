@@ -1101,5 +1101,6 @@
   "ohjeet.api_query_varaohje": "Tarvittaessa avaimen voi toimittaa myös query-parametrina muodossa ?api_key=avain_tähän, mutta turvallisin tapa on käyttää aina HTTP-otsikkoa.",
   "muutokset.582026_api_avaimet": "5.8.2026 – API-avaimet ja hallintapaneelin uudistus",
   "muutokset.api_avaimet_lisatty": "Lisätty API-avainten hallinta, käyttöseuranta ja API-ohjesivu julkisille rajapinnoille.",
-  "muutokset.dns_hallinta_poistettu": "Poistettu DNS-hallinta admin-paneelista tarpeettomana ominaisuutena."
+  "muutokset.dns_hallinta_poistettu": "Poistettu DNS-hallinta admin-paneelista tarpeettomana ominaisuutena.",
+  "admin.ei_vielä_käytetty": "Ei vielä käytetty"
 }
