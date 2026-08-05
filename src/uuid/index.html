@@ -2,14 +2,24 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title data-i18n="uuid.sivun_otsikko">UUID/GUID v4 Generaattori | Sorola.fi</title>
+    <title data-i18n="uuid.title">UUID/GUID v4 Generaattori | Sorola.fi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/uuid">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     
-    <meta name="description" content="Luo standardinmukaisia UUID v4 / GUID -tunnisteita suoraan selaimessasi ilman tietojen lähettämistä palvelimelle." data-i18n-attr-content="uuid.kuvaus">
+    <meta name="description" content="Luo standardinmukaisia UUID v4 / GUID -tunnisteita suoraan selaimessasi ilman tietojen lähettämistä palvelimelle." data-i18n-attr-content="uuid.meta_description">
+    <meta name="keywords" content="uuid, guid, generaattori, v4, satunnainen, tunniste, selainpohjainen, sorola" data-i18n-attr-content="uuid.meta_keywords">
+    <meta name="author" content="Markus Sorola">
     <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/uuid">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="UUID/GUID v4 Generaattori | Sorola.fi" data-i18n-attr-content="uuid.title">
+    <meta property="og:description" content="Luo standardinmukaisia UUID v4 / GUID -tunnisteita suoraan selaimessasi." data-i18n-attr-content="uuid.meta_description">
+    
+    <script src="/analytics.js"></script>
 </head>
 <body>
     <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_sisältöön">Hyppää sisältöön</a>
@@ -26,7 +36,6 @@
         </div>
 
         <main id="paaosio">
-            <!-- Generointikontrollit -->
             <div class="osion-tausta">
                 <label for="uuid-count" style="display: block; margin-bottom: 8px; font-weight: bold;" data-i18n="uuid.maara_label">
                     Generoitava määrä (1–50 kpl):
@@ -39,7 +48,6 @@
                 </div>
             </div>
 
-            <!-- Tulosalue -->
             <div class="osion-tausta">
                 <label for="uuid-tulos" style="display: block; margin-bottom: 8px; font-weight: bold;" data-i18n="uuid.tulos_label">
                     Generoidut tunnisteet:
@@ -54,7 +62,6 @@
                 </div>
             </div>
 
-            <!-- Linkit ohjeisiin ja tietosuojaan -->
             <div class="osion-tausta flex-form" style="text-align: center; justify-content: center;">
                 <a href="/ohjeet/uuid" class="linkki-takaisin" style="margin: 0;" data-i18n="uuid.lue_ohjeet">📖 Käyttöohjeet</a>
                 <a href="/privacy/uuid" class="linkki-takaisin" style="margin: 0;" data-i18n="uuid.lue_tietosuoja">🔒 Tietosuojaseloste</a>
@@ -107,3 +114,4 @@
     </script>
 </body>
 </html>
+
