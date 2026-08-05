@@ -8,8 +8,12 @@ on:
 
 jobs:
   gemini-coder:
-    # Aja vain jos uudessa issuessa tai kommentissa lukee "/gemini"
-    if: contains(github.event.issue.body, '/gemini') || contains(github.event.comment.body, '/gemini')
+    # Aja jos kommentissa tai uudessa issuessa on jokin tuetuista komennoista
+    if: |
+      contains(github.event.issue.body, '/gemini') || contains(github.event.comment.body, '/gemini') ||
+      contains(github.event.issue.body, '/fix') || contains(github.event.comment.body, '/fix') ||
+      contains(github.event.issue.body, '/seo') || contains(github.event.comment.body, '/seo') ||
+      contains(github.event.issue.body, '/i18n') || contains(github.event.comment.body, '/i18n')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -30,32 +34,46 @@ jobs:
       - name: Run Gemini AI Agent
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          # Nappaa tekstin joko kommentista tai suoraan issuen rungosta
           PROMPT_TEXT: ${{ github.event.comment.body || github.event.issue.body }}
         run: |
           # Asennetaan Aider-tekoälyagentti
           pip install --quiet aider-chat
 
-          # 1. Siivotaan "/gemini"-sana pois viestistä, jotta Aider ei luule sitä omaksi komennokseen
-          CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/gemini//ig' | xargs)
+          # Tunnistetaan komento ja annetaan Geminille rooli & lisäohje
+          if echo "$PROMPT_TEXT" | grep -qi "/seo"; then
+            ROOLI="Olet SEO-asiantuntija. Analysoi ja optimoi sivuston meta-kuvaukset, canonical-linkit, OpenGraph-tagit, hakusanat sekä schema.org JSON-LD -datatyypit. Älä muuta koodin logiikkaa, vain hakukonenäkyvyyttä."
+            CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/seo//ig' | xargs)
+          elif echo "$PROMPT_TEXT" | grep -qi "/i18n"; then
+            ROOLI="Olet käännös- ja lokalisaatioasiantuntija. Analysoi src/i18n/en.json sekä kaikki src/-kansion HTML-tiedostot. Varmista, että kaikki suomenkieliset lauseet ja tagien väliin jäävät tekstipätkät kääntyvät virheettömästi ja oikeassa muodossa."
+            CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/i18n//ig' | xargs)
+          elif echo "$PROMPT_TEXT" | grep -qi "/fix"; then
+            ROOLI="Olet kokenut senior-tason ohjelmistokehittäjä. Korjaa kuvattu bugi tai ongelma koodista puhtaasti ja tehokkaasti rikkomatta sivuston tyyliä, ulkoasua tai muita toiminnallisuuksia."
+            CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/fix//ig' | xargs)
+          else
+            ROOLI="Olet ammattitaitoinen web-kehittäjä. Toteuta käyttäjän pyytämä muutos sivuston koodiin huolellisesti ja puhtaasti."
+            CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/gemini//ig' | xargs)
+          fi
 
-          # 2. Ajetaan Gemini puhtaalla viestillä ja turvallisilla toimivilla lipuilla
+          # Yhdistetään rooliohje ja käyttäjän oma viesti
+          FINAL_MESSAGE="$ROOLI Käyttäjän pyyntö ja huomiot: $CLEAN_PROMPT"
+
+          # Ajetaan Gemini yhdistetyllä komennolla ja roolilla
           aider --model gemini/gemini-2.5-pro \
-                --message "$CLEAN_PROMPT" \
+                --message "$FINAL_MESSAGE" \
                 --yes-always \
                 --no-git
 
-          # 3. Varmistetaan, ettei repon juureen jää mitään Aiderin lokitiedostoja sotkemaan PR:ää
+          # Siivotaan Aiderin historiatiedostot repon juuresta
           rm -f .aider*
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "feat(ai): Geminin tekemä koodimuutos issueen #${{ github.event.issue.number }}"
+          commit-message: "feat(ai): Geminin automaattinen muutos (#${{ github.event.issue.number }})"
           branch: "ai/gemini-fix-${{ github.event.issue.number }}"
-          title: "🤖 Gemini AI: Korjaus issueen #${{ github.event.issue.number }}"
+          title: "🤖 Gemini AI: Päivitys issueen #${{ github.event.issue.number }}"
           body: |
-            Tämä Pull Request on luotu automaattisesti Geminin avulla.
+            Tämä Pull Request on luotu automaattisesti Geminin komentoagentilla.
             
             Liittyy issueen #${{ github.event.issue.number }}.
