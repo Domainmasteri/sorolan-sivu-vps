@@ -89,7 +89,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiLimiter);
 app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
-app.use(['/api/lyhennin', '/api/paste', '/api/upload'], (req, res, next) => {
+app.use(['/api/lyhennin', '/api/paste', '/api/upload', '/api/config'], (req, res, next) => {
   res.set({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
@@ -334,6 +334,51 @@ async function trackApiKeyUsage(apiKeyId) {
   await db.query('INSERT INTO api_key_usage (api_key_id) VALUES ($1)', [apiKeyId]);
 }
 
+const TOOL_KEY_NAMES = ['shortener', 'pastebin', 'share', 'mobile_app'];
+const PUBLIC_TOOL_KEY_NAMES = ['shortener', 'pastebin', 'share'];
+
+function isValidToolName(toolName) {
+  return TOOL_KEY_NAMES.includes(String(toolName || '').trim());
+}
+
+function normalizeToolName(toolName) {
+  return String(toolName || '').trim();
+}
+
+async function getToolApiKeys(toolNames = TOOL_KEY_NAMES) {
+  const placeholders = toolNames.map((_, index) => `$${index + 1}`).join(', ');
+  const result = await db.query(
+    `SELECT tool_name, api_key, updated_at FROM tool_api_keys WHERE tool_name IN (${placeholders}) ORDER BY tool_name ASC`,
+    toolNames
+  );
+
+  const rowsByName = new Map(result.rows.map((row) => [row.tool_name, row]));
+  return toolNames.map((toolName) => ({
+    tool_name: toolName,
+    api_key: rowsByName.get(toolName)?.api_key || '',
+    updated_at: rowsByName.get(toolName)?.updated_at || null
+  }));
+}
+
+async function getPublicToolKeysMap() {
+  const keys = await getToolApiKeys(PUBLIC_TOOL_KEY_NAMES);
+  return keys.reduce((acc, item) => {
+    acc[item.tool_name] = item.api_key || '';
+    return acc;
+  }, {});
+}
+
+async function upsertToolApiKey(toolName, apiKey) {
+  await db.query(
+    `INSERT INTO tool_api_keys (tool_name, api_key, updated_at)
+     VALUES ($1, $2, CURRENT_TIMESTAMP)
+     ON CONFLICT(tool_name)
+     DO UPDATE SET api_key = excluded.api_key, updated_at = CURRENT_TIMESTAMP`,
+    [toolName, apiKey]
+  );
+}
+
+
 function apiKeyUsageMiddleware(req, res, next) {
   res.on('finish', () => {
     if (req.apiKey?.id && res.statusCode < 400) {
@@ -423,6 +468,45 @@ app.post('/api/auth', async (req, res) => {
     }
 
     return res.status(400).json({ error: 'Tuntematon pyyntö.' });
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+  }
+});
+
+
+app.get('/api/config/public-keys', async (_req, res) => {
+  try {
+    const publicKeys = await getPublicToolKeysMap();
+    return res.json(publicKeys);
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+  }
+});
+
+app.get('/api/admin/tool-keys', requireAuth, async (_req, res) => {
+  try {
+    const toolKeys = await getToolApiKeys();
+    return res.json({ toolKeys });
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+  }
+});
+
+app.put('/api/admin/tool-keys', requireAuth, async (req, res) => {
+  try {
+    const toolName = normalizeToolName(req.body?.tool_name);
+    const apiKey = String(req.body?.api_key || '').trim();
+
+    if (!isValidToolName(toolName)) {
+      return res.status(400).json({ error: 'Virheellinen työkalun nimi.' });
+    }
+
+    if (!apiKey) {
+      return res.status(400).json({ error: 'API-avain puuttuu.' });
+    }
+
+    await upsertToolApiKey(toolName, apiKey);
+    return res.json({ success: true });
   } catch (error) {
     return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
   }
