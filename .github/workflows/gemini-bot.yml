@@ -1,0 +1,53 @@
+name: Gemini AI Coder Bot
+
+on:
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created]
+
+jobs:
+  gemini-coder:
+    # Aja vain jos kommentissa tai uudessa issuessa lukee "/gemini"
+    if: contains(github.event.issue.body, '/gemini') || contains(github.event.comment.body, '/gemini')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Gemini AI Agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          # Asennetaan kevyt tekoäly-CLI taustalle (esim. virallinen @google/generative-ai tai avoin CLI)
+          npm install -g @google/generative-ai
+          
+          # Tähän tulee agentti, joka ottaa vastaan Issuen tekstin, muokkaa tiedostoja ja tekee branchin
+          echo "Gemini kuuntelee... (Tähän kytketään haluttu open-source Gemini action scripti)"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "feat(ai): Geminin tekemä koodimuutos issueen #${{ github.event.issue.number }}"
+          branch: "ai/gemini-fix-${{ github.event.issue.number }}"
+          title: "🤖 Gemini AI: Korjaus issueen #${{ github.event.issue.number }}"
+          body: |
+            Tämä Pull Request on luotu automaattisesti Geminin avulla.
+            
+            Liittyy issueen #${{ github.event.issue.number }}.
