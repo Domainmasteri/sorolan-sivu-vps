@@ -36,13 +36,18 @@ jobs:
           # Asennetaan Aider-tekoälyagentti taustalle
           pip install --quiet aider-chat
 
-          # Ajetaan Gemini muokkaamaan tiedostoja ohjeistuksen perusteella
-          # --yes hyväksyy tekoälyn ehdottamat muutokset automaattisesti
-          # --no-git jättää kommitoinnin ja PR:n teon seuraavalle askeleelle
+          # 1. Siivotaan "/gemini"-sana pois viestistä, jotta Aider ei luule sitä omaksi komennokseen
+          CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/gemini//ig' | xargs)
+
+          # 2. Ajetaan Gemini puhtaalla viestillä ja estetään historiatiedostojen tallennus
           aider --model gemini/gemini-2.5-pro \
-                --message "$PROMPT_TEXT" \
+                --message "$CLEAN_PROMPT" \
                 --yes \
-                --no-git
+                --no-git \
+                --no-history
+
+          # 3. Varmistetaan vielä, ettei repon juureen jää mitään Aiderin lokitiedostoja sotkemaan PR:ää
+          rm -f .aider*
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
