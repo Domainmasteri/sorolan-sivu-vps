@@ -19,25 +19,43 @@
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Sorola.fi - IT tools and guides">
     <meta property="og:description" content="A collection of useful tools: a link shortener, file sharing, pastebin, and technical guides.">
+        <meta property="og:locale" content="fi_FI">
+    <meta property="og:image" content="https://sorola.fi/en/styles/og-image.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Sorola.fi - IT tools and guides">
     <meta name="twitter:description" content="A collection of useful tools: a link shortener, file sharing, pastebin, and technical guides.">
 
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Sorolan Sakki",
-      "url": "https://sorola.fi/en/",
-      "description": "Sorola.fi offers useful IT tools such as a link shortener, file sharing, code sharing, and technical guides.",
-      "founder": {
-        "@type": "Person",
-        "name": "Markus Sorola"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Sorolan Sakki",
+        "url": "https://sorola.fi/en/",
+        "description": "Sorola.fi offers useful IT tools such as a link shortener, file sharing, code sharing, and technical guides.",
+        "founder": {
+          "@type": "Person",
+          "name": "Markus Sorola"
+        },
+        "sameAs": [
+          "https://github.com/Domainmasteri"
+        ]
       },
-      "sameAs": [
-        "https://github.com/Domainmasteri"
-      ]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Sorolan Sakki",
+        "url": "https://sorola.fi/en/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://sorola.fi/en/?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
     </script>
     <style>
         .nappilista-ul {

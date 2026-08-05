@@ -21,6 +21,8 @@
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Sorola Pastebin - Share text and code">
     <meta property="og:description" content="Share code snippets and text quickly, easily, and without ads.">
+        <meta property="og:locale" content="fi_FI">
+    <meta property="og:image" content="https://sorola.fi/en/styles/og-image.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Sorola Pastebin">
     <meta name="twitter:description" content="Share code snippets and text quickly and without ads.">
@@ -40,6 +42,19 @@
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/en/analytics.js"></script>
 
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Sorolan Pastebin",
+      "url": "https://sorola.fi/en/pastebin/",
+      "description": "Jaa koodinpätkiä, logeja ja puhdasta tekstiä nopeasti ja turvallisesti ilman mainoksia.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+    }
+    </script>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }

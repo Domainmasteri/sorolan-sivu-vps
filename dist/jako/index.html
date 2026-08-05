@@ -17,6 +17,8 @@
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Sorolan Tiedostonjako - Jaa tiedostoja turvallisesti">
     <meta property="og:description" content="Jaa tiedostoja turvallisesti latausrajoituksilla, vanhenemisajoilla ja selainpohjaisella salauksella.">
+        <meta property="og:locale" content="fi_FI">
+    <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Sorolan Tiedostonjako">
     <meta name="twitter:description" content="Jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla.">
@@ -45,6 +47,19 @@
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/analytics.js"></script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Sorolan Tiedostonjako",
+      "url": "https://sorola.fi/jako/",
+      "description": "Jaa tiedostoja turvallisesti latausrajoituksilla, vanhenemisajoilla ja selainpohjaisella AES-256-salauksella.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+    }
+    </script>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
