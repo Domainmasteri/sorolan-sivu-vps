@@ -146,7 +146,8 @@
         "Perustyökalut": "Basic tools",
         "Edistyneet työkalut": "Advanced tools",
         "Hae työkaluja": "Search tools",
-        "Hae työkaluja...": "Search for tools..."
+        "Hae työkaluja...": "Search for tools...",
+        "Viimeisin päivitys": "Latest update"
       },
       "raw": {
         "\"description\": \"Sorola.fi tarjoaa hyödyllisiä IT-työkaluja, kuten linkkilyhentimen, tiedostonjaon, koodinjaon ja tekniset ohjeet.\"": "\"description\": \"Sorola.fi offers useful IT tools such as a link shortener, file sharing, code sharing, and technical guides.\""
