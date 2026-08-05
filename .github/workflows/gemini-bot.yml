@@ -1,79 +1,69 @@
-name: Gemini AI Coder Bot
+name: AI Coder (Gemini)
 
 on:
   issues:
-    types: [opened, edited]
-  issue_comment:
-    types: [created]
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
 
 jobs:
-  gemini-coder:
-    # Aja jos kommentissa tai uudessa issuessa on jokin tuetuista komennoista
-    if: |
-      contains(github.event.issue.body, '/gemini') || contains(github.event.comment.body, '/gemini') ||
-      contains(github.event.issue.body, '/fix') || contains(github.event.comment.body, '/fix') ||
-      contains(github.event.issue.body, '/seo') || contains(github.event.comment.body, '/seo') ||
-      contains(github.event.issue.body, '/i18n') || contains(github.event.comment.body, '/i18n')
+  generate-code:
+    # Liipaistuu vain kun Issueen lisätään label "ai-code"
+    if: github.event.label.name == 'ai-code'
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Aider tarvitsee git-historiaa ymmärtääkseen repon rakenteen
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Run Gemini AI Agent
+      - name: Install Aider
+        run: |
+          pip install --upgrade aider-chat
+
+      - name: Run Aider with Gemini
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          PROMPT_TEXT: ${{ github.event.comment.body || github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          # Asennetaan Aider-tekoälyagentti
-          pip install --quiet aider-chat
-
-          # Tunnistetaan komento ja annetaan Geminille rooli & lisäohje
-          if echo "$PROMPT_TEXT" | grep -qi "/seo"; then
-            ROOLI="Olet SEO-asiantuntija. Analysoi ja optimoi sivuston meta-kuvaukset, canonical-linkit, OpenGraph-tagit, hakusanat sekä schema.org JSON-LD -datatyypit. Älä muuta koodin logiikkaa, vain hakukonenäkyvyyttä."
-            CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/seo//ig' | xargs)
-          elif echo "$PROMPT_TEXT" | grep -qi "/i18n"; then
-            ROOLI="Olet käännös- ja lokalisaatioasiantuntija. Analysoi src/i18n/en.json sekä kaikki src/-kansion HTML-tiedostot. Varmista, että kaikki suomenkieliset lauseet ja tagien väliin jäävät tekstipätkät kääntyvät virheettömästi ja oikeassa muodossa."
-            CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/i18n//ig' | xargs)
-          elif echo "$PROMPT_TEXT" | grep -qi "/fix"; then
-            ROOLI="Olet kokenut senior-tason ohjelmistokehittäjä. Korjaa kuvattu bugi tai ongelma koodista puhtaasti ja tehokkaasti rikkomatta sivuston tyyliä, ulkoasua tai muita toiminnallisuuksia."
-            CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/fix//ig' | xargs)
-          else
-            ROOLI="Olet ammattitaitoinen web-kehittäjä. Toteuta käyttäjän pyytämä muutos sivuston koodiin huolellisesti ja puhtaasti."
-            CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/gemini//ig' | xargs)
-          fi
-
-          # Yhdistetään rooliohje ja käyttäjän oma viesti
-          FINAL_MESSAGE="$ROOLI Käyttäjän pyyntö ja huomiot: $CLEAN_PROMPT"
-
-          # Ajetaan Gemini yhdistetyllä komennolla ja roolilla
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Aider muokkaa tai luo tiedostot Issuen ohjeen mukaan ilman suoraa committia
           aider --model gemini/gemini-2.5-pro \
-                --message "$FINAL_MESSAGE" \
+                --message "Tehtävä: $ISSUE_TITLE. Lisätiedot: $ISSUE_BODY" \
                 --yes-always \
-                --no-git
-
-          # Siivotaan Aiderin historiatiedostot repon juuresta
-          rm -f .aider*
+                --no-auto-commits
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "feat(ai): Geminin automaattinen muutos (#${{ github.event.issue.number }})"
-          branch: "ai/gemini-fix-${{ github.event.issue.number }}"
-          title: "🤖 Gemini AI: Päivitys issueen #${{ github.event.issue.number }}"
+          branch: ai-feature/issue-${{ github.event.issue.number }}
+          title: "AI: ${{ github.event.issue.title }}"
           body: |
-            Tämä Pull Request on luotu automaattisesti Geminin komentoagentilla.
+            Tämä Pull Request on generoitu automaattisesti Issuen #${{ github.event.issue.number }} pohjalta.
             
-            Liittyy issueen #${{ github.event.issue.number }}.
+            **Pyyntö:**
+            > ${{ github.event.issue.body }}
+          labels: ai-generated
+          delete-branch: true
+
+      - name: Comment on Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🤖 Valmista! Koodi on generoitu ja uusi Pull Request on avattu tarkistettavaksi.'
+            })
