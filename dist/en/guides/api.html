@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta property="og:url" content="https://sorola.fi/en/shortener/error">
     <meta charset="UTF-8">
-    <title>Sorola - Error</title>
+    <title>API guide - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/en/shortener/error">
-    <link rel="alternate" hreflang="fi" href="https://sorola.fi/lyhennin/error">
-    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/shortener/error">
-    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/lyhennin/error">
+    <link rel="canonical" href="https://sorola.fi/en/guides/api">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/api">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/api">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/api">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Lyhytlinkkiä ei löydy. Se on voinut vanhentua tai olla virheellinen.">
-    <meta name="robots" content="noindex, follow">
-    <!-- Privacy-friendly analytics by Plausible -->
-<script src="/en/analytics.js"></script>
+    <meta name="description" content="Ohje Sorolan API-avaimen tilaamiseen ja käyttöön julkisissa API-pyynnöissä.">
+    <meta name="keywords" content="API-avain, API-ohje, CORS, Sorola API, kehittäjäohje">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/en/guides/api">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="API guide - Sorola">
+    <meta property="og:description" content="Tilaa ilmainen API-avain ja opi käyttämään Sorolan julkisia API-reittejä turvallisesti.">
+    <script src="/en/guides/ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:0; margin-bottom:0; color:#ffaa00; }
+        .ohje-palsta.auki > h2 { margin-bottom:16px; }
+        .ohje-toggle { flex:0 0 auto; width:34px; height:34px; border:1px solid #ffaa00; border-radius:50%; background:transparent; color:#ffaa00; font:inherit; font-size:24px; line-height:1; cursor:pointer; }
+        .ohje-toggle:hover, .ohje-toggle:focus-visible { background:#ffaa00; color:#111; outline:none; }
+        .ohje-sisalto[hidden] { display:none; }
+        .ohje-sisalto > :first-child { margin-top:0; }
+        .ohje-sisalto > :last-child { margin-bottom:0; }
+    </style>
+    <script src="/en/analytics.js"></script>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
@@ -86,24 +99,43 @@
 <body>
     <nav class="language-overlay" aria-label="Language" id="lang-overlay" title="Drag to move">
         <span class="language-overlay__label language-overlay__handle">Language</span>
-        <a class="language-overlay__link" href="/lyhennin/error">🇫🇮</a>
-        <a class="language-overlay__link is-active" href="/en/shortener/error" aria-current="page">🇬🇧</a>
+        <a class="language-overlay__link" href="/ohjeet/api">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/guides/api" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Skip to content</a>
-    <div class="laatikko">
-        <h1 class="otsikko">URL Shortener</h1>
-        
-        <div id="paaosio" class="palsta" style="text-align: center; padding: 30px;">
-            <h2 style="color: #ffaa00; margin-bottom: 15px;">Oops, the link could not be found</h2>
-            <p class="saate" style="margin-bottom: 25px;">
-                Sorry, the short link you were looking for was not found on the server or it has expired.
-            </p>
-
-            <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
-                <a href="/en/shortener" class="nappula" style="width: 220px; text-decoration: none;">Go back to the shortener</a>
-                <a href="/en/" class="nappula1" style="width: 220px; text-decoration: none;">Back to home</a>
+<a href="#paaosio" class="skip-to-content">Skip to main content</a>
+<div class="laatikko">
+    <h1 class="otsikko">🧩 API guide</h1>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">Sorola's public API routes use API keys so the service stays secure, abuse is reduced, and usage can be tracked reliably.</p>
+    </div>
+    <main id="paaosio">
+        <div class="osion-tausta ohje-palsta">
+            <h2>1. Why is an API key required?</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p>An API key ensures automated requests come from identified users. This helps prevent spam requests, manage load, and disable an abused key without shutting down the whole service.</p>
             </div>
         </div>
+        <div class="osion-tausta ohje-palsta">
+            <h2>2. How to request an API key</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p>API keys are free for developers. Send an email to contact.make@sorola.fi and briefly describe how you plan to use the key.</a> ja kerro lyhyesti, mihin käyttöön tarvitset avaimen.</p>
+            </div>
+        </div>
+        <div class="osion-tausta ohje-palsta">
+            <h2>3. Using the API key in requests</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p>Send the issued key in the HTTP header with every request:</p>
+                <pre style="background:#0b0d13;padding:10px;border-radius:6px;overflow:auto;"><code>X-API-Key: avain_tähän</code></pre>
+                <p>If needed, you can also send the key as a query parameter in the form ?api_key=your_key_here, but the safest option is always the HTTP header.</code>, mutta turvallisin tapa on käyttää aina HTTP-otsikkoa.</p>
+            </div>
+        </div>
+    </main>
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="/en/guides/" class="nappula1">« Back to guides</a>
     </div>
+</div>
 </body>
 </html>

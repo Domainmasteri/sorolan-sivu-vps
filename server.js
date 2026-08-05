@@ -20,7 +20,6 @@ import {
 
 import { db } from './db.js';
 import { s3, bucketName, ensureBucketExists } from './storage.js';
-import dnsRouter from './api/dns.js';
 
 const app = express();
 app.use(
@@ -90,6 +89,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiLimiter);
 app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
+app.use(['/api/lyhennin', '/api/paste', '/api/upload'], (req, res, next) => {
+  res.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, X-API-Key'
+  });
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).send();
+  }
+
+  return next();
+});
 
 // URL-LYHENTIMEN OHITUS
 app.use(async (req, res, next) => {
@@ -302,6 +314,35 @@ async function requireAuth(req, res, next) {
   }
 }
 
+async function requireApiKey(req, res, next) {
+  try {
+    const apiKey = String(req.headers['x-api-key'] || req.query?.api_key || '').trim();
+    if (!apiKey) return res.status(401).json({ error: 'API-avain puuttuu.' });
+
+    const result = await db.query('SELECT id, owner_name FROM api_keys WHERE api_key = $1 AND is_active = 1 LIMIT 1', [apiKey]);
+    const key = result.rows[0];
+    if (!key) return res.status(403).json({ error: 'Virheellinen API-avain.' });
+
+    req.apiKey = key;
+    return next();
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+  }
+}
+
+async function trackApiKeyUsage(apiKeyId) {
+  await db.query('INSERT INTO api_key_usage (api_key_id) VALUES ($1)', [apiKeyId]);
+}
+
+function apiKeyUsageMiddleware(req, res, next) {
+  res.on('finish', () => {
+    if (req.apiKey?.id && res.statusCode < 400) {
+      void trackApiKeyUsage(req.apiKey.id).catch(() => {});
+    }
+  });
+  next();
+}
+
 function prefersEnglish(req) {
   const header = req.headers['accept-language'];
   if (!header) return false;
@@ -406,6 +447,71 @@ app.delete('/api/users', requireAuth, async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/admin/api-keys', requireAuth, async (_req, res) => {
+  try {
+    const keys = await db.query(`
+      SELECT
+        k.id,
+        k.api_key,
+        k.owner_name,
+        k.is_active,
+        k.created_at,
+        COUNT(u.id) AS usage_count,
+        MAX(u.used_at) AS last_used_at
+      FROM api_keys k
+      LEFT JOIN api_key_usage u ON u.api_key_id = k.id
+      GROUP BY k.id, k.api_key, k.owner_name, k.is_active, k.created_at
+      ORDER BY k.created_at DESC
+    `);
+    return res.json({ apiKeys: keys.rows });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/api-keys', requireAuth, async (req, res) => {
+  try {
+    const ownerName = String(req.body?.ownerName || '').trim();
+    if (!ownerName) return res.status(400).json({ error: 'Omistajan nimi puuttuu.' });
+    if (ownerName.length > 100) return res.status(400).json({ error: 'Omistajan nimi on liian pitkä.' });
+
+    let apiKey;
+    do {
+      apiKey = crypto.randomBytes(24).toString('hex');
+    } while ((await db.query('SELECT id FROM api_keys WHERE api_key = $1 LIMIT 1', [apiKey])).rows[0]);
+
+    await db.query('INSERT INTO api_keys (api_key, owner_name) VALUES ($1, $2)', [apiKey, ownerName]);
+    return res.json({ success: true, apiKey: { api_key: apiKey, owner_name: ownerName, is_active: 1 } });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch('/api/admin/api-keys', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.body?.id, 10);
+    const isActive = Number.parseInt(req.body?.isActive, 10);
+    if (!id) return res.status(400).json({ error: 'API-avaimen ID puuttuu.' });
+    if (![0, 1].includes(isActive)) return res.status(400).json({ error: 'Virheellinen tila.' });
+
+    await db.query('UPDATE api_keys SET is_active = $1 WHERE id = $2', [isActive, id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/api-keys', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.query.id, 10);
+    if (!id) return res.status(400).json({ error: 'API-avaimen ID puuttuu.' });
+    await db.query('DELETE FROM api_keys WHERE id = $1', [id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -590,22 +696,7 @@ app.delete('/api/links', requireAuth, async (req, res) => {
   }
 });
 
-app.options('/api/lyhennin/create', (_req, res) => {
-  res.set({
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  });
-  res.status(204).send();
-});
-
-app.all('/api/lyhennin/create', async (req, res) => {
-  res.set({
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  });
-
+app.all('/api/lyhennin/create', requireApiKey, apiKeyUsageMiddleware, async (req, res) => {
   try {
     if (!['GET', 'POST'].includes(req.method)) {
       return res.status(405).json({ error: 'Tuntematon metodi.' });
@@ -624,10 +715,9 @@ app.all('/api/lyhennin/create', async (req, res) => {
   }
 });
 
-app.use('/api/dns', requireAuth, dnsRouter);
 
 // --- PASTEBIN REITIT ---
-app.post('/api/paste', async (req, res) => {
+app.post('/api/paste', requireApiKey, apiKeyUsageMiddleware, async (req, res) => {
   try {
     const { content } = req.body;
     if (!content || !content.trim()) return res.status(400).json({ error: 'Teksti on pakollinen.' });
@@ -689,7 +779,7 @@ void ensureUploadBucketReady().catch((error) => {
   console.error(`Bucketin varmistus epäonnistui käynnistyksessä: ${error.message}`);
 });
 
-app.post('/api/upload', uploadShare.single('file'), async (req, res) => {
+app.post('/api/upload', requireApiKey, apiKeyUsageMiddleware, uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
   const maxDownloads = Number.parseInt(req.body?.maxDownloads || '0', 10) || 0;
