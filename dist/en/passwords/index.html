@@ -80,17 +80,75 @@
     </script>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__handle { cursor: grab; }
+        .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
         @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
     </style>
+    <script>
+    (function(){
+      var STORAGE_KEY='lang-overlay-pos';
+      function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
+      function applyPos(el,x,y){
+        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+      }
+      function restorePos(el){
+        try{
+          var s=sessionStorage.getItem(STORAGE_KEY);
+          if(!s)return;
+          var p=JSON.parse(s);
+          applyPos(el,clamp(p.x,0,window.innerWidth-el.offsetWidth),clamp(p.y,0,window.innerHeight-el.offsetHeight));
+        }catch(e){}
+      }
+      document.addEventListener('DOMContentLoaded',function(){
+        var el=document.getElementById('lang-overlay');
+        if(!el)return;
+        restorePos(el);
+        var handle=el.querySelector('.language-overlay__handle');
+        if(!handle)handle=el;
+        var startX,startY,origX,origY,dragging=false;
+        function onStart(e){
+          if(e.target.closest('a'))return;
+          dragging=true;
+          var rect=el.getBoundingClientRect();
+          origX=rect.left; origY=rect.top;
+          startX=e.touches?e.touches[0].clientX:e.clientX;
+          startY=e.touches?e.touches[0].clientY:e.clientY;
+          el.style.transition='none';
+          e.preventDefault();
+        }
+        function onMove(e){
+          if(!dragging)return;
+          var cx=e.touches?e.touches[0].clientX:e.clientX;
+          var cy=e.touches?e.touches[0].clientY:e.clientY;
+          var nx=clamp(origX+(cx-startX),0,window.innerWidth-el.offsetWidth);
+          var ny=clamp(origY+(cy-startY),0,window.innerHeight-el.offsetHeight);
+          applyPos(el,nx,ny);
+          e.preventDefault();
+        }
+        function onEnd(){
+          if(!dragging)return;
+          dragging=false;
+          el.style.transition='';
+          try{var r=el.getBoundingClientRect();sessionStorage.setItem(STORAGE_KEY,JSON.stringify({x:r.left,y:r.top}));}catch(e){}
+        }
+        handle.addEventListener('mousedown',onStart);
+        handle.addEventListener('touchstart',onStart,{passive:false});
+        document.addEventListener('mousemove',onMove);
+        document.addEventListener('touchmove',onMove,{passive:false});
+        document.addEventListener('mouseup',onEnd);
+        document.addEventListener('touchend',onEnd);
+      });
+    })();
+    </script>
 </head>
 <body>
-    <nav class="language-overlay" aria-label="Language">
-        <span class="language-overlay__label">Language</span>
+    <nav class="language-overlay" aria-label="Language" id="lang-overlay" title="Drag to move">
+        <span class="language-overlay__label language-overlay__handle">Language</span>
         <a class="language-overlay__link" href="/salasanat/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/passwords/" aria-current="page">🇬🇧</a>
     </nav>
@@ -146,6 +204,11 @@
             <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Copy to clipboard</button>
         </div>
         </main>
+
+        <div class="osion-tausta flex-form" style="text-align: center; justify-content: center;">
+            <a href="/en/guides/passwords" class="linkki-takaisin" style="margin: 0;">📖 User Instructions</a>
+            <a href="/en/privacy/passwords" class="linkki-takaisin" style="margin: 0;">🔒 Privacy Policy</a>
+        </div>
 
         <a href="/en/" class="linkki-takaisin">← Back to home</a>
     </div>

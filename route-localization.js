@@ -17,7 +17,8 @@ export const EN_ROUTE_SEGMENTS = new Map([
   ['salasanat', 'passwords'],
   ['tiedostojako', 'file-sharing'],
   ['vieraskirja', 'guestbook'],
-  ['muutokset', 'changes']
+  ['muutokset', 'changes'],
+  ['uuid', 'uuid']
 ]);
 
 export function localizeEnglishRouteSegment(segment) {
