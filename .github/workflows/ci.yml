@@ -1,0 +1,23 @@
+name: CI Build Check
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      # Tähän tulee projektisi build-komennot. Esimerkiksi:
+      # - name: Setup Node
+      #   uses: actions/setup-node@v4
+      # - name: Install and Build
+      #   run: |
+      #     npm install
+      #     npm run build
+      
+      - name: Ilmoita onnistumisesta
+        run: echo "Build meni läpi puhtaasti!"
+        
