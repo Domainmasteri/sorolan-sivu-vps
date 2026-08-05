@@ -38,11 +38,15 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Aider muokkaa tai luo tiedostot Issuen ohjeen mukaan ilman suoraa committia
+          # Syötetään repon tiedostot kontekstiksi ($(git ls-files)) ja pakotetaan tiedostojen luonti
           aider --model gemini/gemini-2.5-pro \
-                --message "Tehtävä: $ISSUE_TITLE. Lisätiedot: $ISSUE_BODY" \
+                --message "TEHTÄVÄ: $ISSUE_TITLE. OHJEET: $ISSUE_BODY. TÄRKEÄÄ: Luo tarvittavat uudet .html, .js, .css ja .md -tiedostot suoraan projektiin ja muokkaa CHANGELOG.md-tiedostoa." \
                 --yes-always \
-                --no-auto-commits
+                --no-auto-commits \
+                $(git ls-files)
+          
+          # Varmistetaan, että kaikki uudet ja muokatut tiedostot lisätään PR:ää varten
+          git add -A
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
