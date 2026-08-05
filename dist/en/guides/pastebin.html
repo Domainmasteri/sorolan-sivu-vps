@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Linkinlyhentimen käyttöohje - Sorola</title>
+    <title>Pastebin guide - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/en/guides/link-shortener">
-    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/linkinlyhennin">
-    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/link-shortener">
-    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/linkinlyhennin">
-    <link rel="stylesheet" href="/styles/pohja.css">
+    <link rel="canonical" href="https://sorola.fi/en/guides/pastebin">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/pastebin">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Suomenkielinen ohje Sorolan linkinlyhentimen käyttöön: luo lyhyitä ja helposti jaettavia linkkejä URL-osoitteista.">
-    <meta name="keywords" content="linkinlyhennin, URL-lyhennin, lyhytlinkki, lyhytosoite, URL shortener, käyttöohje, Sorola">
+    <meta name="description" content="Suomenkielinen ohje Sorolan Pastebinin käyttöön: jaa koodia ja tekstiä helposti väliaikaisilla linkeillä.">
+    <meta name="keywords" content="pastebin, koodinjako, tekstinjako, väliaikainen linkki, käyttöohje, Sorola">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://sorola.fi/en/guides/link-shortener">
+    <meta property="og:url" content="https://sorola.fi/en/guides/pastebin">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Linkinlyhentimen käyttöohje - Sorola">
-    <meta property="og:description" content="Suomenkielinen ohje lyhytlinkkien luomiseen Sorolan linkinlyhentimellä.">
+    <meta property="og:title" content="Pastebinin käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje koodin ja tekstin jakamiseen Sorolan Pastebin-palvelulla.">
     <script src="/en/guides/ohjehaitari.js" defer></script>
     <style>
         .ohje-palsta > h2 {
@@ -81,54 +81,50 @@
 <body>
     <nav class="language-overlay" aria-label="Language">
         <span class="language-overlay__label">Language</span>
-        <a class="language-overlay__link" href="/ohjeet/linkinlyhennin">🇫🇮</a>
-        <a class="language-overlay__link is-active" href="/en/guides/link-shortener" aria-current="page">🇬🇧</a>
+        <a class="language-overlay__link" href="/ohjeet/pastebin">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/guides/pastebin" aria-current="page">🇬🇧</a>
     </nav>
-
 <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
 <div class="laatikko">
-    <h1 class="otsikko">🔗 Using the link shortener</h1>
+    <h1 class="otsikko">📝 Pastebin guide</h1>
 
-    <div class="osion-tausta">
-        <p>With Sorola's link shortener you can turn long URLs into shorter links that are easier to share.</p>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Sorola Pastebin is a fast and simple way to share code, logs, or other text with temporary links. No registration required.
+        </p>
     </div>
 
     <main id="paaosio">
-
     <div class="osion-tausta ohje-palsta">
-        <h2>1. Enter the long address
+        <h2>1. Write or paste text
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Paste the web page address you want into the field.</p>
-            <p><strong>Example:</strong></p>
-            <code>https://esimerkki.fi/todella/pitka/osoite/joka/on/hankala/jakaa</code>
+            <p>Kirjoita tai liitä haluamasi teksti tai koodi tekstikenttään. Voit halutessasi valita ohjelmointikielen syntaksin korostusta varten.</p>
+            <p><strong>Huomio:</strong> Älä liitä salasanoja, API-avaimia tai muita arkaluonteisia tietoja Pastebiniin — paste-linkit ovat julkisia ja kuka tahansa, jolla on linkki, voi lukea sisällön.</p>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>2. Create a short link
+        <h2>2. Create and share the link
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Click the "Create link" button.</p>
-            <p>The service will automatically create a short address.</p>
+            <ol>
+                <li>Paina <strong>Create paste</strong> -painiketta.</li>
+                <li>Palvelu luo automaattisesti uniikin linkin pasteellesi.</li>
+                <li>Kopioi linkki ja jaa se esimerkiksi sähköpostissa, pikaviestimessä tai GitHub-issuessa.</li>
+            </ol>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>3. Share the link
+        <h2>3. Read an existing paste
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>You can share the short link, for example:</p>
-            <ul>
-                <li>By email</li>
-                <li>On social media</li>
-                <li>In a QR code</li>
-                <li>In text messages</li>
-            </ul>
+            <p>Avaa sinulle jaettu paste-linkki selaimessa. Teksti näkyy luettavana sivuna. Paste säilyy palvelimella määritetyn ajan, jonka jälkeen se poistetaan automaattisesti.</p>
         </div>
     </div>
 
@@ -137,8 +133,8 @@
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Open guide">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>The link shortener does not change the content of the original page. The short link only redirects to the original address.</p>
-            <p><a href="/en/privacy/shortener">Lue tietosuojakäytäntö →</a></p>
+            <p>Paste content is stored on the server temporarily until it expires. Content is not encrypted at rest — do not store sensitive data in pastes.</p>
+            <p><a href="/en/privacy/pastebin">Lue tietosuojakäytäntö →</a></p>
         </div>
     </div>
     </main>

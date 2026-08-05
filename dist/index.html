@@ -12,7 +12,7 @@
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     
     <meta name="description" content="Sorola.fi tarjoaa näppärät ja turvalliset työkalut arkeen: nopea linkkilyhennin, väliaikainen tiedostonjako, pastebin sekä selkeät IT-ohjeet ja oppaat.">
-    <meta name="keywords" content="Sorola, IT-työkalut, linkkilyhennin, tiedostonjako, pastebin, tekniset ohjeet, koodaus, web-kehitys, Markus Sorola">
+    <meta name="keywords" content="Sorola, Sorolan Sakki, IT-työkalut, linkkilyhennin, tiedostonjako, pastebin, QR-koodi, JSON-muotoilija, Base64, salasanageneraattori, tekniset ohjeet, koodaus, web-kehitys, Markus Sorola">
     
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/">
@@ -54,7 +54,7 @@
             margin-bottom: 12px;
         }
         .nappilista-ul li .nappula1 {
-            margin-bottom: 0; /* Poistaa tuplamarginaalin li-elementin sisältä */
+            margin-bottom: 0;
         }
         .nappilista-ul li.piilotettu {
             display: none;
@@ -75,6 +75,28 @@
             font-size: 0.95rem;
             padding: 8px 0;
             display: none;
+        }
+        .muutos-banneri {
+            background-color: #1a1e29;
+            border: 1px solid #ffaa00;
+            border-left: 5px solid #ffaa00;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin: 15px auto 20px auto;
+            max-width: 600px;
+            font-size: 0.95rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .muutos-banneri a {
+            color: #ffaa00;
+            font-weight: 700;
+            text-decoration: underline;
+            margin-left: 8px;
+            display: inline-block;
+        }
+        .muutos-banneri a:hover {
+            color: #ffc44d;
         }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
@@ -99,6 +121,11 @@
     <div class="laatikko">
         <h1 class="otsikko">Sorolan Sakki</h1>
         <h2 style="font-weight: 700; text-align: center;">Tervetuloa Sorolan nettisivuille!</h2><br>
+        
+        <div class="muutos-banneri" role="region" aria-label="Viimeisin päivitys">
+            ⚡ <strong>Viimeisin muutos (5.8.2026):</strong> Ohjeet ja tietosuojaselosteet kaikille työkaluille!
+            <a href="muutokset">Katso muutosloki →</a>
+        </div>
         
         <div class="osion-tausta" style="text-align: center;">
             <h3 style="text-decoration: underline;">Mikä on sorola.fi?</h3><br>

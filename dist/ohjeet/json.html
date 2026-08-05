@@ -2,21 +2,21 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Tiedostonjaon käyttöohje - Sorola</title>
+    <title>JSON-muotoilijan käyttöohje - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/file-sharing">
-    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="stylesheet" href="/styles/pohja.css">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/json">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/json">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/json-formatter">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/json">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Suomenkielinen ohje Sorolan tiedostonjaon käyttöön: jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla.">
-    <meta name="keywords" content="tiedostonjako, jaa tiedostoja, väliaikainen linkki, latausrajoitus, vanhenemisaika, käyttöohje, Sorola">
+    <meta name="description" content="Suomenkielinen ohje Sorolan JSON-muotoilijan käyttöön: muotoile ja validoi JSON-dataa suoraan selaimessasi.">
+    <meta name="keywords" content="JSON muotoilija, JSON validaattori, JSON formatter, JSON validator, käyttöohje, Sorola">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://sorola.fi/ohjeet/tiedostojako">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/json">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Tiedostonjaon käyttöohje - Sorola">
-    <meta property="og:description" content="Suomenkielinen ohje tiedostojen turvalliseen jakamiseen Sorolan tiedostonjakopalvelulla.">
+    <meta property="og:title" content="JSON-muotoilijan käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje JSON-datan muotoiluun ja validointiin Sorolan JSON-muotoilijalla.">
     <script src="ohjehaitari.js" defer></script>
     <style>
         .ohje-palsta > h2 {
@@ -81,49 +81,51 @@
 <body>
     <nav class="language-overlay" aria-label="Kieli">
         <span class="language-overlay__label">Kieli</span>
-        <a class="language-overlay__link is-active" href="/ohjeet/tiedostojako" aria-current="page">🇫🇮</a>
-        <a class="language-overlay__link" href="/en/guides/file-sharing">🇬🇧</a>
+        <a class="language-overlay__link is-active" href="/ohjeet/json" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/guides/json-formatter">🇬🇧</a>
     </nav>
-
 <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
 <div class="laatikko">
-    <h1 class="otsikko">📁 Tiedostonjaon käyttö</h1>
+    <h1 class="otsikko">🔧 JSON-muotoilijan ohje</h1>
 
-    <div class="osion-tausta">
-        <p>Tiedostonjakopalvelun avulla voit jakaa tiedostoja turvallisesti määrittämällä niille tarvittaessa latausrajoituksen ja vanhenemisajan.</p>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Sorolan JSON-muotoilijalla voit muotoilla pakkaamattoman JSON-datan helppolukuiseksi tai pakata sen yhteen riviin. Työkalu toimii täysin paikallisesti selaimessasi.
+        </p>
     </div>
 
     <main id="paaosio">
-
     <div class="osion-tausta ohje-palsta">
-        <h2>1. Valitse tiedosto
+        <h2>1. Liitä JSON-data
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Aloita valitsemalla laitteeltasi tiedosto, jonka haluat jakaa vastaanottajalle.</p>
+            <p>Liitä tai kirjoita JSON-datasi syötekenttään. Esimerkki:</p>
+            <pre style="background:#0b0d13;padding:10px;border-radius:6px;overflow:auto;"><code>{"nimi":"Testi","arvo":42,"lista":[1,2,3]}</code></pre>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>2. Aseta rajoitukset (Valinnainen)
+        <h2>2. Muotoile tai pakkaa
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Voit parantaa jaon turvallisuutta asettamalla sille rajoituksia:</p>
             <ul>
-                <li><strong>Latausrajoitus:</strong> Määritä, kuinka monta kertaa tiedosto voidaan ladata ennen kuin linkki lakkaa toimimasta.</li>
-                <li><strong>Vanhenemisaika:</strong> Aseta aikaraja, jonka umpeuduttua tiedostoa ei voi enää ladata.</li>
+                <li><strong>Muotoile:</strong> Lisää sisennykset ja rivinvaihdot — tekee JSONista helppolukuista.</li>
+                <li><strong>Pakkaa:</strong> Poistaa turhat välilyönnit ja rivinvaihdot — pienentää datan kokoa.</li>
+                <li><strong>Tyhjennä:</strong> Tyhjentää molemmat kentät.</li>
             </ul>
+            <p>Jos JSON-data on virheellinen, työkalu näyttää virheilmoituksen virheen sijainnin kanssa.</p>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>3. Luo ja jaa linkki
+        <h2>3. Kopioi tulos
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Luo jakolinkki ja kopioi se itsellesi. Voit lähettää linkin eteenpäin esimerkiksi sähköpostilla tai pikaviestimellä.</p>
+            <p>Paina <strong>Kopioi leikepöydälle</strong> -painiketta kopioidaksesi muotoillun tai pakatun JSONin käyttövalmiiksi.</p>
         </div>
     </div>
 
@@ -132,8 +134,8 @@
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Ladatut tiedostot tallennetaan palvelimelle väliaikaisesti, kunnes ne vanhenevat tai latausrajoitus täyttyy. Tiedostoja ei salata palvelimella ellei selainsalausta ole otettu käyttöön.</p>
-            <p><a href="/privacy/jako">Lue tietosuojakäytäntö →</a></p>
+            <p>JSON-muotoilija toimii kokonaan paikallisesti selaimessasi. Syöttämäsi data ei koskaan poistu laitteeltasi.</p>
+            <p><a href="/privacy/json">Lue tietosuojakäytäntö →</a></p>
         </div>
     </div>
     </main>

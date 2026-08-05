@@ -2,21 +2,21 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Tiedostonjaon käyttöohje - Sorola</title>
+    <title>Pastebinin käyttöohje - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/file-sharing">
-    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="stylesheet" href="/styles/pohja.css">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/pastebin">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Suomenkielinen ohje Sorolan tiedostonjaon käyttöön: jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla.">
-    <meta name="keywords" content="tiedostonjako, jaa tiedostoja, väliaikainen linkki, latausrajoitus, vanhenemisaika, käyttöohje, Sorola">
+    <meta name="description" content="Suomenkielinen ohje Sorolan Pastebinin käyttöön: jaa koodia ja tekstiä helposti väliaikaisilla linkeillä.">
+    <meta name="keywords" content="pastebin, koodinjako, tekstinjako, väliaikainen linkki, käyttöohje, Sorola">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://sorola.fi/ohjeet/tiedostojako">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/pastebin">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Tiedostonjaon käyttöohje - Sorola">
-    <meta property="og:description" content="Suomenkielinen ohje tiedostojen turvalliseen jakamiseen Sorolan tiedostonjakopalvelulla.">
+    <meta property="og:title" content="Pastebinin käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje koodin ja tekstin jakamiseen Sorolan Pastebin-palvelulla.">
     <script src="ohjehaitari.js" defer></script>
     <style>
         .ohje-palsta > h2 {
@@ -81,49 +81,50 @@
 <body>
     <nav class="language-overlay" aria-label="Kieli">
         <span class="language-overlay__label">Kieli</span>
-        <a class="language-overlay__link is-active" href="/ohjeet/tiedostojako" aria-current="page">🇫🇮</a>
-        <a class="language-overlay__link" href="/en/guides/file-sharing">🇬🇧</a>
+        <a class="language-overlay__link is-active" href="/ohjeet/pastebin" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/guides/pastebin">🇬🇧</a>
     </nav>
-
 <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
 <div class="laatikko">
-    <h1 class="otsikko">📁 Tiedostonjaon käyttö</h1>
+    <h1 class="otsikko">📝 Pastebinin ohje</h1>
 
-    <div class="osion-tausta">
-        <p>Tiedostonjakopalvelun avulla voit jakaa tiedostoja turvallisesti määrittämällä niille tarvittaessa latausrajoituksen ja vanhenemisajan.</p>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Sorolan Pastebin on nopea ja yksinkertainen tapa jakaa koodia, lokeja tai muuta tekstiä väliaikaisilla linkeillä. Ei vaadi rekisteröitymistä.
+        </p>
     </div>
 
     <main id="paaosio">
-
     <div class="osion-tausta ohje-palsta">
-        <h2>1. Valitse tiedosto
+        <h2>1. Kirjoita tai liitä teksti
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Aloita valitsemalla laitteeltasi tiedosto, jonka haluat jakaa vastaanottajalle.</p>
+            <p>Kirjoita tai liitä haluamasi teksti tai koodi tekstikenttään. Voit halutessasi valita ohjelmointikielen syntaksin korostusta varten.</p>
+            <p><strong>Huomio:</strong> Älä liitä salasanoja, API-avaimia tai muita arkaluonteisia tietoja Pastebiniin — paste-linkit ovat julkisia ja kuka tahansa, jolla on linkki, voi lukea sisällön.</p>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>2. Aseta rajoitukset (Valinnainen)
+        <h2>2. Luo ja jaa linkki
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Voit parantaa jaon turvallisuutta asettamalla sille rajoituksia:</p>
-            <ul>
-                <li><strong>Latausrajoitus:</strong> Määritä, kuinka monta kertaa tiedosto voidaan ladata ennen kuin linkki lakkaa toimimasta.</li>
-                <li><strong>Vanhenemisaika:</strong> Aseta aikaraja, jonka umpeuduttua tiedostoa ei voi enää ladata.</li>
-            </ul>
+            <ol>
+                <li>Paina <strong>Luo paste</strong> -painiketta.</li>
+                <li>Palvelu luo automaattisesti uniikin linkin pasteellesi.</li>
+                <li>Kopioi linkki ja jaa se esimerkiksi sähköpostissa, pikaviestimessä tai GitHub-issuessa.</li>
+            </ol>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>3. Luo ja jaa linkki
+        <h2>3. Lue olemassa oleva paste
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Luo jakolinkki ja kopioi se itsellesi. Voit lähettää linkin eteenpäin esimerkiksi sähköpostilla tai pikaviestimellä.</p>
+            <p>Avaa sinulle jaettu paste-linkki selaimessa. Teksti näkyy luettavana sivuna. Paste säilyy palvelimella määritetyn ajan, jonka jälkeen se poistetaan automaattisesti.</p>
         </div>
     </div>
 
@@ -132,8 +133,8 @@
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Ladatut tiedostot tallennetaan palvelimelle väliaikaisesti, kunnes ne vanhenevat tai latausrajoitus täyttyy. Tiedostoja ei salata palvelimella ellei selainsalausta ole otettu käyttöön.</p>
-            <p><a href="/privacy/jako">Lue tietosuojakäytäntö →</a></p>
+            <p>Paste-sisältö tallennetaan palvelimelle väliaikaisesti, kunnes se vanhenee. Sisältöä ei salata palvelimella — älä tallenna arkaluonteisia tietoja pastehin.</p>
+            <p><a href="/privacy/pastebin">Lue tietosuojakäytäntö →</a></p>
         </div>
     </div>
     </main>

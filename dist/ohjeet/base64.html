@@ -2,21 +2,21 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Tiedostonjaon käyttöohje - Sorola</title>
+    <title>Base64 Kooderin käyttöohje - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/file-sharing">
-    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/tiedostojako">
-    <link rel="stylesheet" href="/styles/pohja.css">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/base64">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/base64">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/base64">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/base64">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Suomenkielinen ohje Sorolan tiedostonjaon käyttöön: jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla.">
-    <meta name="keywords" content="tiedostonjako, jaa tiedostoja, väliaikainen linkki, latausrajoitus, vanhenemisaika, käyttöohje, Sorola">
+    <meta name="description" content="Suomenkielinen ohje Sorolan Base64 Kooderin käyttöön: koodaa ja pura Base64-tekstiä suoraan selaimessasi.">
+    <meta name="keywords" content="Base64, kooderi, dekooderi, Base64 encode, Base64 decode, käyttöohje, Sorola">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://sorola.fi/ohjeet/tiedostojako">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/base64">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Tiedostonjaon käyttöohje - Sorola">
-    <meta property="og:description" content="Suomenkielinen ohje tiedostojen turvalliseen jakamiseen Sorolan tiedostonjakopalvelulla.">
+    <meta property="og:title" content="Base64 Kooderin käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje Base64-tekstin koodaukseen ja purkamiseen Sorolan Base64 Koodeilla.">
     <script src="ohjehaitari.js" defer></script>
     <style>
         .ohje-palsta > h2 {
@@ -81,49 +81,56 @@
 <body>
     <nav class="language-overlay" aria-label="Kieli">
         <span class="language-overlay__label">Kieli</span>
-        <a class="language-overlay__link is-active" href="/ohjeet/tiedostojako" aria-current="page">🇫🇮</a>
-        <a class="language-overlay__link" href="/en/guides/file-sharing">🇬🇧</a>
+        <a class="language-overlay__link is-active" href="/ohjeet/base64" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/guides/base64">🇬🇧</a>
     </nav>
-
 <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
 <div class="laatikko">
-    <h1 class="otsikko">📁 Tiedostonjaon käyttö</h1>
+    <h1 class="otsikko">🔐 Base64 Kooderin ohje</h1>
 
-    <div class="osion-tausta">
-        <p>Tiedostonjakopalvelun avulla voit jakaa tiedostoja turvallisesti määrittämällä niille tarvittaessa latausrajoituksen ja vanhenemisajan.</p>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Sorolan Base64 Kooderilla voit koodata tekstiä Base64-muotoon tai purkaa Base64-datan takaisin luettavaksi tekstiksi. Työkalu toimii täysin offline-tilassa — mitään ei lähetetä palvelimelle.
+        </p>
     </div>
 
     <main id="paaosio">
-
     <div class="osion-tausta ohje-palsta">
-        <h2>1. Valitse tiedosto
+        <h2>Mikä on Base64?
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Aloita valitsemalla laitteeltasi tiedosto, jonka haluat jakaa vastaanottajalle.</p>
+            <p>Base64 on koodausmenetelmä, jolla binääridata tai teksti muunnetaan ASCII-merkkijonoksi. Sitä käytetään usein tiedonvälityksessä, esimerkiksi sähköpostin liitetiedostoissa, HTTP-autentikoinnissa ja tietokantakenttien tallennuksessa.</p>
+            <p><strong>Huomio:</strong> Base64 ei ole salausta — koodattu data on helposti purettavissa. Älä käytä sitä arkaluonteisten tietojen suojaamiseen.</p>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>2. Aseta rajoitukset (Valinnainen)
+        <h2>1. Koodaa teksti Base64-muotoon
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Voit parantaa jaon turvallisuutta asettamalla sille rajoituksia:</p>
-            <ul>
-                <li><strong>Latausrajoitus:</strong> Määritä, kuinka monta kertaa tiedosto voidaan ladata ennen kuin linkki lakkaa toimimasta.</li>
-                <li><strong>Vanhenemisaika:</strong> Aseta aikaraja, jonka umpeuduttua tiedostoa ei voi enää ladata.</li>
-            </ul>
+            <ol>
+                <li>Kirjoita tai liitä muunnettava teksti syötekenttään.</li>
+                <li>Paina <strong>🔒 Koodaa (Encode)</strong>.</li>
+                <li>Koodattu Base64-teksti ilmestyy tuloskenttään.</li>
+                <li>Paina <strong>Kopioi leikepöydälle</strong> käyttääksesi tulosta.</li>
+            </ol>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>3. Luo ja jaa linkki
+        <h2>2. Pura Base64-teksti
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Luo jakolinkki ja kopioi se itsellesi. Voit lähettää linkin eteenpäin esimerkiksi sähköpostilla tai pikaviestimellä.</p>
+            <ol>
+                <li>Liitä Base64-merkkijono syötekenttään.</li>
+                <li>Paina <strong>🔓 Pura (Decode)</strong>.</li>
+                <li>Alkuperäinen teksti ilmestyy tuloskenttään.</li>
+                <li>Jos syöte ei ole kelvollista Base64-tekstiä, työkalu näyttää virheilmoituksen.</li>
+            </ol>
         </div>
     </div>
 
@@ -132,8 +139,8 @@
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Ladatut tiedostot tallennetaan palvelimelle väliaikaisesti, kunnes ne vanhenevat tai latausrajoitus täyttyy. Tiedostoja ei salata palvelimella ellei selainsalausta ole otettu käyttöön.</p>
-            <p><a href="/privacy/jako">Lue tietosuojakäytäntö →</a></p>
+            <p>Base64 Kooderi toimii kokonaan paikallisesti selaimessasi. Syöttämäsi teksti ei koskaan poistu laitteeltasi.</p>
+            <p><a href="/privacy/base64">Lue tietosuojakäytäntö →</a></p>
         </div>
     </div>
     </main>
