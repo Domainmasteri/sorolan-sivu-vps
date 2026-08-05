@@ -75,7 +75,3 @@ CREATE TABLE IF NOT EXISTS api_keys (
     is_active INTEGER NOT NULL DEFAULT 1,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
--- Lisätään oletuksena oma mobiilisovelluksesi avain
-INSERT OR IGNORE INTO api_keys (api_key, owner_name) 
-VALUES ('sorola_app_virallinen_avain_tähän', 'Sorolan Työkalut -mobiilisovellus');
