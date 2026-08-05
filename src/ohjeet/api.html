@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="ohjeet.api_käyttöohje_sorola">API-käyttöohje - Sorola</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/api">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Ohje Sorolan API-avaimen tilaamiseen ja käyttöön julkisissa API-pyynnöissä.">
+    <meta name="keywords" content="API-avain, API-ohje, CORS, Sorola API, kehittäjäohje">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/api">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="API-käyttöohje - Sorola" data-i18n-attr-content="ohjeet.api_käyttöohje_sorola">
+    <meta property="og:description" content="Tilaa ilmainen API-avain ja opi käyttämään Sorolan julkisia API-reittejä turvallisesti.">
+    <script src="ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:0; margin-bottom:0; color:#ffaa00; }
+        .ohje-palsta.auki > h2 { margin-bottom:16px; }
+        .ohje-toggle { flex:0 0 auto; width:34px; height:34px; border:1px solid #ffaa00; border-radius:50%; background:transparent; color:#ffaa00; font:inherit; font-size:24px; line-height:1; cursor:pointer; }
+        .ohje-toggle:hover, .ohje-toggle:focus-visible { background:#ffaa00; color:#111; outline:none; }
+        .ohje-sisalto[hidden] { display:none; }
+        .ohje-sisalto > :first-child { margin-top:0; }
+        .ohje-sisalto > :last-child { margin-bottom:0; }
+    </style>
+    <script src="/analytics.js"></script>
+</head>
+<body>
+<a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_pääsisältöön">Hyppää pääsisältöön</a>
+<div class="laatikko">
+    <h1 class="otsikko" data-i18n="ohjeet.api_ohje">🧩 API-ohje</h1>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;" data-i18n="ohjeet.api_ohje_intro">Sorolan julkiset API-reitit käyttävät API-avainta, jotta palvelu pysyy turvallisena, väärinkäyttö vähenee ja käyttöä voidaan seurata luotettavasti.</p>
+    </div>
+    <main id="paaosio">
+        <div class="osion-tausta ohje-palsta">
+            <h2 data-i18n="ohjeet.miksi_api_avain_vaaditaan">1. Miksi API-avain vaaditaan?
+                <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p data-i18n="ohjeet.api_avain_syy">API-avain varmistaa, että automaattiset pyynnöt tulevat tunnistetuilta käyttäjiltä. Näin voidaan estää roskapyyntöjä, hallita kuormaa ja tarvittaessa sulkea väärinkäytetty avain ilman että koko palvelu menee kiinni.</p>
+            </div>
+        </div>
+        <div class="osion-tausta ohje-palsta">
+            <h2 data-i18n="ohjeet.näin_tilaat_api_avaimen">2. Näin tilaat API-avaimen
+                <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p data-i18n="ohjeet.api_tilaus_kuvaus">API-avain on kehittäjille ilmainen. Lähetä sähköpostia osoitteeseen <a href="mailto:contact.make@sorola.fi">contact.make@sorola.fi</a> ja kerro lyhyesti, mihin käyttöön tarvitset avaimen.</p>
+            </div>
+        </div>
+        <div class="osion-tausta ohje-palsta">
+            <h2 data-i18n="ohjeet.api_avaimen_käyttö">3. API-avaimen käyttö pyynnöissä
+                <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p data-i18n="ohjeet.api_käytä_otsikkoa">Lähetä saatu avain HTTP-otsikossa jokaisen pyynnön mukana:</p>
+                <pre style="background:#0b0d13;padding:10px;border-radius:6px;overflow:auto;"><code>X-API-Key: avain_tähän</code></pre>
+                <p data-i18n="ohjeet.api_query_varaohje">Tarvittaessa avaimen voi toimittaa myös query-parametrina muodossa <code>?api_key=avain_tähän</code>, mutta turvallisin tapa on käyttää aina HTTP-otsikkoa.</p>
+            </div>
+        </div>
+    </main>
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="../ohjeet/" class="nappula1" data-i18n="common.takaisin_ohjeisiin">⬅ Takaisin ohjeisiin</a>
+    </div>
+</div>
+</body>
+</html>

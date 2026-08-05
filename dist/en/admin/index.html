@@ -23,30 +23,26 @@
         .edit-btn:hover { background: #2563eb; }
         .hidden { display: none !important; }
         #app-container { max-width: 1000px; margin: 0 auto; }
-        /* DNS Admin Styles */
-        .dns-tietue-tila { background: #0b0d13; padding: 15px; border-radius: 8px; margin-top: 15px; }
-        .dns-input-rivi { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; }
-        .dns-input-rivi > div { flex: 1; min-width: 120px; }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/en/analytics.js"></script>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{
@@ -259,57 +255,24 @@
                 </div>
             </div>
 
-            <!-- DNS Hallinta -->
+            <!-- API-avaimet -->
             <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #60a5fa;">🌐 DNS-hallinta (OVH)</h2>
-                <div style="margin-bottom: 15px;">
-                    <label for="dns-zone-select" style="display:block; color:#a0aec0; margin-bottom:5px; font-size:0.9rem;">Select managed domain:</label>
-                    <div style="display:flex; gap:10px;">
-                        <select id="dns-zone-select" class="syote" style="flex: 1;">
-                            <option value="">Loading zones...</option>
-                        </select>
-                        <button onclick="lataaDnsTietueet()" class="nappula1" style="width: auto;">Fetch records</button>
-                    </div>
+                <h2 style="color: #38bdf8;">🗝️ API keys</h2>
+                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;">Manage access to public API routes and monitor usage per key.</p>
+                <div class="flex-form" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="text" id="new-api-owner" class="syote" placeholder="Key owner" style="flex: 1;">
+                    <button onclick="luoApiAvain()" class="nappula1" style="border: 1px solid #38bdf8; color: #38bdf8;">Create API key</button>
                 </div>
-
-                    <div id="dns-hallinta-alue" class="hidden">
-                        <div class="dns-tietue-tila">
-                            <h3 style="color:#4ade80; margin-bottom:10px;">Add new record</h3>
-                            <div class="dns-input-rivi">
-                                <div style="flex: 0.5;">
-                                    <label style="font-size:0.8rem; color:#a0aec0;">Type</label>
-                                    <select id="new-dns-type" class="syote">
-                                        <option value="A">A</option>
-                                        <option value="AAAA">AAAA</option>
-                                        <option value="CNAME">CNAME</option>
-                                        <option value="MX">MX</option>
-                                        <option value="TXT">TXT</option>
-                                        <option value="SRV">SRV</option>
-                                    </select>
-                                </div>
-                                <div style="flex: 1;">
-                                    <label style="font-size:0.8rem; color:#a0aec0;">Name (e.g. @, www, api)</label>
-                                    <input type="text" id="new-dns-name" class="syote" placeholder="@">
-                                </div>
-                                <div style="flex: 2;">
-                                    <label style="font-size:0.8rem; color:#a0aec0;">Value (IP or target)</label>
-                                    <input type="text" id="new-dns-value" class="syote" placeholder="1.2.3.4">
-                                </div>
-                                <div style="flex: 0.5;">
-                                    <label style="font-size:0.8rem; color:#a0aec0;">TTL (s)</label>
-                                    <input type="number" id="new-dns-ttl" class="syote" value="300">
-                                </div>
-                                <button onclick="luoDnsTietue()" class="nappula" style="width:auto; height: 44px; margin-bottom: 2px;">Add</button>
-                            </div>
-                        </div>
-
-                        <div class="table-container">
-                            <table id="dns-records-table">
-                                <thead><tr><th>Type</th><th>Name</th><th>Value</th><th>TTL</th><th>Actions</th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div id="api-key-result" style="display:none; background: #0b0d13; border-radius: 8px; padding: 12px; margin-bottom: 15px; word-break: break-all;">
+                    <p style="color: #4ade80; margin: 0 0 6px 0; font-weight: bold;">✅ API key created!</p>
+                    <p style="margin: 0; font-size: 0.9rem; color: #a0aec0;"><span>Store the key securely:</span> <code id="api-key-value"></code></p>
+                </div>
+                <div class="table-container">
+                    <table id="api-keys-table">
+                        <thead><tr><th>Owner</th><th>API key</th><th>Status</th><th>Usage count</th><th>Last used</th><th>Created</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Käyttäjät & Kutsut -->
@@ -355,7 +318,6 @@
     <script>
         let currentUser = null;
         let currentAuthHeader = null;
-        let currentDnsZoneId = null;
 
         function toggleMode() {
             document.getElementById('login-section').classList.toggle('hidden');
@@ -379,7 +341,6 @@
                     document.getElementById('login-section').classList.add('hidden');
                     document.getElementById('dashboard-section').classList.remove('hidden');
                     lataaTiedot();
-                    lataaDnsVyohykkeet();
                 } else {
                     alert(data.error || 'Invalid username or password.');
                 }
@@ -444,7 +405,6 @@
         function logout() {
             currentUser = null;
             currentAuthHeader = null;
-            currentDnsZoneId = null;
             document.getElementById('dashboard-section').classList.add('hidden');
             document.getElementById('login-section').classList.remove('hidden');
             document.getElementById('login-password').value = '';
@@ -586,6 +546,7 @@
                 alert('Virhe ladattaessa tietoja.');
             }
             lataaAdminTiedostot();
+            lataaApiAvaimet();
         }
 
         // --- Linkit ---
@@ -733,105 +694,84 @@
             } catch { alert('Server error.'); }
         }
 
-        // --- DNS Hallinta (OVH) ---
-        async function lataaDnsVyohykkeet() {
-            const select = document.getElementById('dns-zone-select');
+        // --- API-avaimet ---
+        async function lataaApiAvaimet() {
+            if (!currentAuthHeader) return;
             try {
-                const res = await fetch('/api/dns/zones', { headers: { 'Authorization': currentAuthHeader } });
+                const res = await fetch('/api/admin/api-keys', { headers: { 'Authorization': currentAuthHeader } });
+                if (!res.ok) return;
                 const data = await res.json();
-                
-                if (res.ok && data.zones) {
-                    select.innerHTML = '<option value="">-- Valitse domain --</option>';
-                    data.zones.forEach(z => {
-                        select.innerHTML += `<option value="${z.id}">${z.name}</option>`;
-                    });
-                } else {
-                    const errorText = data?.error ? `DNS API virhe: ${data.error}` : 'DNS API ei saatavilla';
-                    select.innerHTML = `<option value="">${errorText}</option>`;
+                const tbody = document.querySelector('#api-keys-table tbody');
+                tbody.innerHTML = '';
+                if (!data.apiKeys.length) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#a0aec0;">Ei API-avaimia.</td></tr>`;
+                    return;
                 }
-            } catch (e) {
-                select.innerHTML = '<option value="">DNS API ei vastaa</option>';
-                console.error(e);
-            }
+                data.apiKeys.forEach((item) => {
+                    const createdAt = new Date(item.created_at).toLocaleDateString('fi-FI');
+                    const lastUsed = item.last_used_at ? new Date(item.last_used_at).toLocaleString('fi-FI') : 'Ei vielä käytetty';
+                    const maskedKey = `${item.api_key.slice(0, 8)}…${item.api_key.slice(-4)}`;
+                    const activeLabel = Number(item.is_active) === 1 ? 'Aktiivinen' : 'Pois käytöstä';
+                    const toggleLabel = Number(item.is_active) === 1 ? 'Poista käytöstä' : 'Aktivoi';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${item.owner_name}</td>
+                            <td style="font-family: monospace;">${maskedKey}</td>
+                            <td>${activeLabel}</td>
+                            <td>${item.usage_count}</td>
+                            <td>${lastUsed}</td>
+                            <td>${createdAt}</td>
+                            <td>
+                                <button onclick="vaihdaApiAvaimenTila(${item.id}, ${Number(item.is_active) === 1 ? 0 : 1})" class="action-btn edit-btn" style="background:#374151;">${toggleLabel}</button>
+                                <button onclick="poistaApiAvain(${item.id})" class="action-btn">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (e) { console.error(e); }
         }
 
-        async function lataaDnsTietueet() {
-            const zoneId = document.getElementById('dns-zone-select').value;
-            if (!zoneId) return alert('Valitse domain ensin.');
-            currentDnsZoneId = zoneId;
-            
-            document.getElementById('dns-hallinta-alue').classList.remove('hidden');
-            const tbody = document.querySelector('#dns-records-table tbody');
-            tbody.innerHTML = '<tr><td colspan="5">Ladataan...</td></tr>';
-
+        async function luoApiAvain() {
+            const ownerName = document.getElementById('new-api-owner').value.trim();
+            if (!ownerName) return alert('Avaimen omistaja puuttuu.');
             try {
-                const res = await fetch(`/api/dns?zone_id=${zoneId}`, { headers: { 'Authorization': currentAuthHeader } });
-                const data = await res.json();
-                
-                if (res.ok && data.records) {
-                    tbody.innerHTML = '';
-                    data.records.forEach(r => {
-                        tbody.innerHTML += `
-                            <tr>
-                                <td><strong>${r.type}</strong></td>
-                                <td>${r.name}</td>
-                                <td><span style="font-family:monospace; color:#4ade80;">${r.value}</span></td>
-                                <td>${r.ttl}</td>
-                                <td>
-                                    <button onclick="poistaDnsTietue('${r.id}')" class="action-btn">Delete</button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    tbody.innerHTML = `<tr><td colspan="5" style="color:red;">${data.error || 'Virhe ladattaessa.'}</td></tr>`;
-                }
-            } catch (e) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Server error.</td></tr>`;
-            }
-        }
-
-        async function luoDnsTietue() {
-            if (!currentDnsZoneId) return alert('Valitse domain ensin.');
-            
-            const type = document.getElementById('new-dns-type').value;
-            const name = document.getElementById('new-dns-name').value || '@';
-            const value = document.getElementById('new-dns-value').value;
-            const ttl = document.getElementById('new-dns-ttl').value;
-
-            if (!value) return alert('Tietueen arvo (IP/kohde) on pakollinen.');
-
-            try {
-                const res = await fetch('/api/dns', {
+                const res = await fetch('/api/admin/api-keys', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
-                    body: JSON.stringify({ zone_id: currentDnsZoneId, type, name, value, ttl })
+                    body: JSON.stringify({ ownerName })
                 });
-                
-                if (res.ok) {
-                    document.getElementById('new-dns-value').value = '';
-                    document.getElementById('new-dns-name').value = '';
-                    lataaDnsTietueet();
-                } else {
-                    const data = await res.json();
-                    alert(data.error || 'Virhe tietueen luonnissa.');
-                }
+                const data = await res.json();
+                if (!res.ok) return alert(data.error || 'Virhe API-avaimen luonnissa.');
+                document.getElementById('new-api-owner').value = '';
+                document.getElementById('api-key-value').textContent = data.apiKey.api_key;
+                document.getElementById('api-key-result').style.display = 'block';
+                lataaApiAvaimet();
             } catch { alert('Server error.'); }
         }
 
-        async function poistaDnsTietue(recordId) {
-            if (!confirm('Haluatko varmasti poistaa tämän DNS-tietueen? Tämä voi rikkoa sivuston tai sähköpostin!')) return;
+        async function vaihdaApiAvaimenTila(id, isActive) {
             try {
-                const zoneId = currentDnsZoneId || document.getElementById('dns-zone-select').value;
-                if (!zoneId) return alert('Valitse domain ensin.');
-                const res = await fetch(`/api/dns/${recordId}?zone_id=${encodeURIComponent(zoneId)}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': currentAuthHeader }
+                const res = await fetch('/api/admin/api-keys', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ id, isActive })
                 });
-                if (res.ok) lataaDnsTietueet();
+                if (res.ok) lataaApiAvaimet();
+                else alert('Virhe API-avaimen päivityksessä.');
+            } catch { alert('Server error.'); }
+        }
+
+        async function poistaApiAvain(id) {
+            if (!confirm('Delete tämä API-avain pysyvästi?')) return;
+            try {
+                const res = await fetch(`/api/admin/api-keys?id=${id}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) lataaApiAvaimet();
                 else alert('Delete failed.');
             } catch { alert('Server error.'); }
         }
+
         // --- Ylläpidon tiedostojako ---
         async function lataaTiedosto() {
             const fileInput = document.getElementById('admin-file-input');
@@ -868,6 +808,7 @@
                     dlEl.textContent = data.downloadUrl;
                     fileInput.value = '';
                     lataaAdminTiedostot();
+            lataaApiAvaimet();
                 } else {
                     alert(data.error || 'Lataus epäonnistui.');
                 }

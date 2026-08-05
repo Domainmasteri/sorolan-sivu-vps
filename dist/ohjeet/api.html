@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 <html lang="fi">
 <head>
-    <meta property="og:url" content="https://sorola.fi/lyhennin/error">
     <meta charset="UTF-8">
-    <title>Sorola - Virhe</title>
+    <title>API-käyttöohje - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/lyhennin/error">
-    <link rel="alternate" hreflang="fi" href="https://sorola.fi/lyhennin/error">
-    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/shortener/error">
-    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/lyhennin/error">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/api">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/api">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/api">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/api">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Lyhytlinkkiä ei löydy. Se on voinut vanhentua tai olla virheellinen.">
-    <meta name="robots" content="noindex, follow">
-    <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+    <meta name="description" content="Ohje Sorolan API-avaimen tilaamiseen ja käyttöön julkisissa API-pyynnöissä.">
+    <meta name="keywords" content="API-avain, API-ohje, CORS, Sorola API, kehittäjäohje">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/api">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="API-käyttöohje - Sorola">
+    <meta property="og:description" content="Tilaa ilmainen API-avain ja opi käyttämään Sorolan julkisia API-reittejä turvallisesti.">
+    <script src="ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:0; margin-bottom:0; color:#ffaa00; }
+        .ohje-palsta.auki > h2 { margin-bottom:16px; }
+        .ohje-toggle { flex:0 0 auto; width:34px; height:34px; border:1px solid #ffaa00; border-radius:50%; background:transparent; color:#ffaa00; font:inherit; font-size:24px; line-height:1; cursor:pointer; }
+        .ohje-toggle:hover, .ohje-toggle:focus-visible { background:#ffaa00; color:#111; outline:none; }
+        .ohje-sisalto[hidden] { display:none; }
+        .ohje-sisalto > :first-child { margin-top:0; }
+        .ohje-sisalto > :last-child { margin-bottom:0; }
+    </style>
+    <script src="/analytics.js"></script>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
@@ -86,24 +99,43 @@
 <body>
     <nav class="language-overlay" aria-label="Kieli" id="lang-overlay" title="Siirrä kielen vaihtaja">
         <span class="language-overlay__label language-overlay__handle">Kieli</span>
-        <a class="language-overlay__link is-active" href="/lyhennin/error" aria-current="page">🇫🇮</a>
-        <a class="language-overlay__link" href="/en/shortener/error">🇬🇧</a>
+        <a class="language-overlay__link is-active" href="/ohjeet/api" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/guides/api">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
-    <div class="laatikko">
-        <h1 class="otsikko">URL-Lyhentäjä</h1>
-        
-        <div id="paaosio" class="palsta" style="text-align: center; padding: 30px;">
-            <h2 style="color: #ffaa00; margin-bottom: 15px;">Hups, linkkiä ei löydy</h2>
-            <p class="saate" style="margin-bottom: 25px;">
-                Pahoittelut, etsimääsi lyhytosoitetta ei löytynyt palvelimelta tai se on vanhentunut.
-            </p>
-
-            <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
-                <a href="../lyhennin" class="nappula" style="width: 220px; text-decoration: none;">Siirry takaisin lyhentimeen</a>
-                <a href="../" class="nappula1" style="width: 220px; text-decoration: none;">Takaisin pääsivulle</a>
+<a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+<div class="laatikko">
+    <h1 class="otsikko">🧩 API-ohje</h1>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">Sorolan julkiset API-reitit käyttävät API-avainta, jotta palvelu pysyy turvallisena, väärinkäyttö vähenee ja käyttöä voidaan seurata luotettavasti.</p>
+    </div>
+    <main id="paaosio">
+        <div class="osion-tausta ohje-palsta">
+            <h2>1. Miksi API-avain vaaditaan?</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p>API-avain varmistaa, että automaattiset pyynnöt tulevat tunnistetuilta käyttäjiltä. Näin voidaan estää roskapyyntöjä, hallita kuormaa ja tarvittaessa sulkea väärinkäytetty avain ilman että koko palvelu menee kiinni.</p>
             </div>
         </div>
+        <div class="osion-tausta ohje-palsta">
+            <h2>2. Näin tilaat API-avaimen</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p>API-avain on kehittäjille ilmainen. Lähetä sähköpostia osoitteeseen contact.make@sorola.fi ja kerro lyhyesti, mihin käyttöön tarvitset avaimen.</a> ja kerro lyhyesti, mihin käyttöön tarvitset avaimen.</p>
+            </div>
+        </div>
+        <div class="osion-tausta ohje-palsta">
+            <h2>3. API-avaimen käyttö pyynnöissä</button>
+            </h2>
+            <div class="ohje-sisalto">
+                <p>Lähetä saatu avain HTTP-otsikossa jokaisen pyynnön mukana:</p>
+                <pre style="background:#0b0d13;padding:10px;border-radius:6px;overflow:auto;"><code>X-API-Key: avain_tähän</code></pre>
+                <p>Tarvittaessa avaimen voi toimittaa myös query-parametrina muodossa ?api_key=avain_tähän, mutta turvallisin tapa on käyttää aina HTTP-otsikkoa.</code>, mutta turvallisin tapa on käyttää aina HTTP-otsikkoa.</p>
+            </div>
+        </div>
+    </main>
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="../ohjeet/" class="nappula1">« Takaisin ohjeisiin</a>
     </div>
+</div>
 </body>
 </html>
