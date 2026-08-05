@@ -412,7 +412,7 @@
                         <td>${date}</td>
                         <td>
                             <button onclick="muokkaaLinkkia('${domain}', '${link.short_path}', '${link.original_url}')" class="action-btn edit-btn">Edit</button>
-                            <button onclick="poistaLinkki('${domain}', '${link.short_path}')" class="action-btn">Poista</button>
+                            <button onclick="poistaLinkki('${domain}', '${link.short_path}')" class="action-btn">Delete</button>
                         </td>
                     </tr>
                 `;
@@ -449,7 +449,7 @@
                                     <td><a href="/en/p/$%7Bp.short_path%7D" target="_blank" style="color:#4ade80;">/p/${p.short_path}</a></td>
                                     <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${snippet}</td>
                                     <td>${date}</td>
-                                    <td><button onclick="poistaPaste(${p.id})" class="action-btn">Poista</button></td>
+                                    <td><button onclick="poistaPaste(${p.id})" class="action-btn">Delete</button></td>
                                 </tr>
                             `;
                         });
@@ -477,7 +477,7 @@
                                     <td>${date}</td>
                                     <td>
                                         ${!m.is_admin ? `<button onclick="vastaaVieraskirjaan(${m.id})" class="action-btn edit-btn">Vastaa</button>` : ''}
-                                        <button onclick="poistaVieraskirjaviesti(${m.id})" class="action-btn">Poista</button>
+                                        <button onclick="poistaVieraskirjaviesti(${m.id})" class="action-btn">Delete</button>
                                     </td>
                                 </tr>
                             `;
@@ -498,7 +498,7 @@
                             <tr>
                                 <td>${u.username} ${isMe ? '<span style="color:#4ade80; font-size:0.8rem;">(You)</span>' : ''}</td>
                                 <td>${date}</td>
-                                <td>${!isMe ? `<button onclick="poistaKayttaja(${u.id})" class="action-btn">Poista</button>` : ''}</td>
+                                <td>${!isMe ? `<button onclick="poistaKayttaja(${u.id})" class="action-btn">Delete</button>` : ''}</td>
                             </tr>
                         `;
                     });
@@ -518,7 +518,7 @@
                                 <td style="font-family: monospace;">${i.code}</td>
                                 <td>${status}</td>
                                 <td>${date}</td>
-                                <td><button onclick="poistaKutsu(${i.id})" class="action-btn">Poista</button></td>
+                                <td><button onclick="poistaKutsu(${i.id})" class="action-btn">Delete</button></td>
                             </tr>
                         `;
                     });
@@ -720,7 +720,7 @@
                                 <td><span style="font-family:monospace; color:#4ade80;">${r.value}</span></td>
                                 <td>${r.ttl}</td>
                                 <td>
-                                    <button onclick="poistaDnsTietue('${r.id}')" class="action-btn">Poista</button>
+                                    <button onclick="poistaDnsTietue('${r.id}')" class="action-btn">Delete</button>
                                 </td>
                             </tr>
                         `;
@@ -858,7 +858,7 @@
                             <td>${date}<br><small style="color:#64748b;">${f.created_by || ''}</small></td>
                             <td>
                                 <button onclick="kopioiLinkki('${shareUrl}')" class="action-btn edit-btn" style="background:#374151; margin-bottom:4px;">Kopioi</button>
-                                <button onclick="poistaAdminTiedosto(${f.id})" class="action-btn">Poista</button>
+                                <button onclick="poistaAdminTiedosto(${f.id})" class="action-btn">Delete</button>
                             </td>
                         </tr>
                     `;

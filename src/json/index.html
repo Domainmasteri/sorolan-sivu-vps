@@ -2,23 +2,23 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Sorolan JSON-muotoilija - Muotoile ja validoi JSON</title>
+    <title data-i18n="json.sorolan_jsonmuotoilija_muotoile_ja_validoi_json">Sorolan JSON-muotoilija - Muotoile ja validoi JSON</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/json/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Muotoile ja validoi JSON-dataa ilmaiseksi suoraan selaimessasi. Nopea ja helppokäyttöinen JSON-muotoilija ja -tarkistaja.">
-    <meta name="keywords" content="JSON muotoilija, JSON validaattori, JSON formatter, JSON validator, Sorola">
+    <meta name="description" content="Muotoile ja validoi JSON-dataa ilmaiseksi suoraan selaimessasi. Nopea ja helppokäyttöinen JSON-muotoilija ja -tarkistaja." data-i18n-attr-content="json.muotoile_ja_validoi_jsondataa_ilmaiseksi_suoraan_s">
+    <meta name="keywords" content="JSON muotoilija, JSON validaattori, JSON formatter, JSON validator, Sorola" data-i18n-attr-content="json.json_muotoilija_json_validaattori_json_formatter_j">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/json/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorolan JSON-muotoilija">
-    <meta property="og:description" content="Muotoile ja validoi JSON-dataa ilmaiseksi selaimessasi.">
-        <meta property="og:locale" content="fi_FI">
+    <meta property="og:title" content="Sorolan JSON-muotoilija" data-i18n-attr-content="json.sorolan_jsonmuotoilija">
+    <meta property="og:description" content="Muotoile ja validoi JSON-dataa ilmaiseksi selaimessasi." data-i18n-attr-content="json.muotoile_ja_validoi_jsondataa_ilmaiseksi_selaimess">
+        <meta property="og:locale" content="fi_FI" data-i18n-attr-content="muutokset.fi_fi">
     <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Sorolan JSON-muotoilija">
-    <meta name="twitter:description" content="Muotoile ja validoi JSON-dataa ilmaiseksi selaimessasi.">
+    <meta name="twitter:title" content="Sorolan JSON-muotoilija" data-i18n-attr-content="json.sorolan_jsonmuotoilija">
+    <meta name="twitter:description" content="Muotoile ja validoi JSON-dataa ilmaiseksi selaimessasi." data-i18n-attr-content="json.muotoile_ja_validoi_jsondataa_ilmaiseksi_selaimess">
     <style>
         #json-syote,
         #json-tulos {
@@ -98,39 +98,39 @@
     <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko" style="max-width: 860px;">
-        <h1 class="otsikko">JSON-muotoilija</h1>
+        <h1 class="otsikko" data-i18n="json.jsonmuotoilija">JSON-muotoilija</h1>
 
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Muotoile ja validoi JSON-dataa suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.</p>
+            <p style="margin: 0; text-align: center;" data-i18n="json.muotoile_ja_validoi_jsondataa_suoraan_selaimessasi">Muotoile ja validoi JSON-dataa suoraan selaimessasi. Kaikki käsittely tapahtuu paikallisesti – mitään ei lähetetä palvelimelle.</p>
         </div>
 
         <main id="paaosio">
             <div class="osion-tausta">
-                <h2>1. Liitä JSON-data</h2>
-                <label for="json-syote" class="sr-only">JSON-syöte</label>
-                <textarea id="json-syote" class="syote" placeholder='Liitä JSON-datasi tähän, esim. {"nimi":"Testi","arvo":42}' aria-label="JSON-syöte" spellcheck="false"></textarea>
+                <h2 data-i18n="json.1_liitä_jsondata">1. Liitä JSON-data</h2>
+                <label for="json-syote" class="sr-only" data-i18n="json.jsonsyöte">JSON-syöte</label>
+                <textarea id="json-syote" class="syote" placeholder='Liitä JSON-datasi tähän, esim. {"nimi":"Testi","arvo":42}' aria-label="JSON-syöte" spellcheck="false" data-i18n-attr-aria-label="json.jsonsyöte"></textarea>
 
                 <div class="toiminto-rivi">
-                    <button id="muotoile-btn" class="nappula">✨ Muotoile</button>
-                    <button id="pakkaa-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">📦 Pakkaa</button>
-                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;">🗑️ Tyhjennä</button>
+                    <button id="muotoile-btn" class="nappula" data-i18n="json.muotoile">✨ Muotoile</button>
+                    <button id="pakkaa-btn" class="nappula1" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;" data-i18n="json.pakkaa">📦 Pakkaa</button>
+                    <button id="tyhjenna-btn" class="nappula1" style="background: #191f2d; color: #a0aec0; border: 1px solid #4a5568;" data-i18n="json.tyhjennä">🗑️ Tyhjennä</button>
                 </div>
 
                 <div id="tila-viesti" role="status" aria-live="polite"></div>
             </div>
 
             <div class="osion-tausta">
-                <h2>2. Tulos</h2>
-                <label for="json-tulos" class="sr-only">Muotoiltu JSON-tulos</label>
-                <textarea id="json-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Muotoiltu JSON-tulos" spellcheck="false"></textarea>
+                <h2 data-i18n="json.2_tulos">2. Tulos</h2>
+                <label for="json-tulos" class="sr-only" data-i18n="json.muotoiltu_jsontulos">Muotoiltu JSON-tulos</label>
+                <textarea id="json-tulos" class="syote" readonly placeholder="Tulos näkyy tässä..." aria-label="Muotoiltu JSON-tulos" spellcheck="false" data-i18n-attr-placeholder="json.tulos_näkyy_tässä" data-i18n-attr-aria-label="json.muotoiltu_jsontulos"></textarea>
 
                 <div class="kopioi-btn-kontti">
-                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;">📋 Kopioi leikepöydälle</button>
+                    <button id="kopioi-btn" class="nappula" style="background-color: #218838; color: white;" data-i18n="salasanat.kopioi_leikepöydälle">📋 Kopioi leikepöydälle</button>
                 </div>
             </div>
         </main>
 
-        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+        <a href="../" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle">« Takaisin pääsivulle</a>
     </div>
 
     <script>

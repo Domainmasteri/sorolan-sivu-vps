@@ -2,23 +2,23 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Sorolan QR-koodin luoja - Luo QR-koodeja ilmaiseksi</title>
+    <title data-i18n="qr.sorolan_qrkoodin_luoja_luo_qrkoodeja_ilmaiseksi">Sorolan QR-koodin luoja - Luo QR-koodeja ilmaiseksi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/qr/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Luo QR-koodeja ilmaiseksi – nettisivuille, WiFi-verkoille, yhteystiedoille ja muulle. Nopea ja helppokäyttöinen QR-generaattori.">
+    <meta name="description" content="Luo QR-koodeja ilmaiseksi – nettisivuille, WiFi-verkoille, yhteystiedoille ja muulle. Nopea ja helppokäyttöinen QR-generaattori." data-i18n-attr-content="qr.luo_qrkoodeja_ilmaiseksi_nettisivuille_wifiverkoil">
     <meta name="keywords" content="QR-koodi, QR-koodin luoja, QR-generaattori, QR-koodi ilmainen, WiFi QR-koodi, URL QR-koodi, Sorola">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/qr/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorolan QR-koodin luoja">
-    <meta property="og:description" content="Luo QR-koodeja ilmaiseksi nettisivuille, WiFi-verkoille ja muulle.">
-        <meta property="og:locale" content="fi_FI">
+    <meta property="og:title" content="Sorolan QR-koodin luoja" data-i18n-attr-content="qr.sorolan_qrkoodin_luoja">
+    <meta property="og:description" content="Luo QR-koodeja ilmaiseksi nettisivuille, WiFi-verkoille ja muulle." data-i18n-attr-content="qr.luo_qrkoodeja_ilmaiseksi_nettisivuille_wifiverkoil_2">
+        <meta property="og:locale" content="fi_FI" data-i18n-attr-content="muutokset.fi_fi">
     <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Sorolan QR-koodin luoja">
-    <meta name="twitter:description" content="Luo QR-koodeja ilmaiseksi.">
+    <meta name="twitter:title" content="Sorolan QR-koodin luoja" data-i18n-attr-content="qr.sorolan_qrkoodin_luoja">
+    <meta name="twitter:description" content="Luo QR-koodeja ilmaiseksi." data-i18n-attr-content="qr.luo_qrkoodeja_ilmaiseksi">
     <style>
         .kentta-ryhma { display: none; flex-direction: column; gap: 15px; margin-top: 15px; }
         .kentta-ryhma.aktiivinen { display: flex; }
@@ -64,74 +64,74 @@
     <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko">
-        <h1 class="otsikko">QR-koodin luoja</h1>
+        <h1 class="otsikko" data-i18n="qr.qrkoodin_luoja">QR-koodin luoja</h1>
 
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Luo monipuolisia QR-koodeja! Voit jakaa nettisivuja, yhteystietoja tai vaikka kotisi WiFi-salasanan.</p>
+            <p style="margin: 0; text-align: center;" data-i18n="qr.luo_monipuolisia_qrkoodeja_voit_jakaa_nettisivuja">Luo monipuolisia QR-koodeja! Voit jakaa nettisivuja, yhteystietoja tai vaikka kotisi WiFi-salasanan.</p>
         </div>
 
         <main id="paaosio">
         <div class="osion-tausta">
-            <h2>1. Valitse tyyppi ja syötä tiedot</h2>
+            <h2 data-i18n="qr.1_valitse_tyyppi_ja_syötä_tiedot">1. Valitse tyyppi ja syötä tiedot</h2>
             
-            <label for="qr-tyyppi" class="sr-only">QR-koodin tyyppi</label>
-            <select id="qr-tyyppi" class="syote" aria-label="QR-koodin tyyppi">
-                <option value="url">Nettisivu (URL)</option>
-                <option value="text">Vapaa teksti</option>
-                <option value="wifi">WiFi-verkko</option>
-                <option value="email">Sähköposti</option>
-                <option value="phone">Soita numeroon</option>
-                <option value="sms">Lähetä tekstiviesti</option>
+            <label for="qr-tyyppi" class="sr-only" data-i18n="qr.qrkoodin_tyyppi">QR-koodin tyyppi</label>
+            <select id="qr-tyyppi" class="syote" aria-label="QR-koodin tyyppi" data-i18n-attr-aria-label="qr.qrkoodin_tyyppi">
+                <option value="url" data-i18n="qr.nettisivu_url">Nettisivu (URL)</option>
+                <option value="text" data-i18n="common.vapaa_teksti">Vapaa teksti</option>
+                <option value="wifi" data-i18n="qr.wifiverkko">WiFi-verkko</option>
+                <option value="email" data-i18n="common.sähköposti">Sähköposti</option>
+                <option value="phone" data-i18n="qr.soita_numeroon">Soita numeroon</option>
+                <option value="sms" data-i18n="qr.lähetä_tekstiviesti">Lähetä tekstiviesti</option>
             </select>
 
             <div id="kentat-url" class="kentta-ryhma aktiivinen">
-                <input type="url" id="val-url" class="syote" placeholder="https://soro.la" aria-label="URL-osoite">
+                <input type="url" id="val-url" class="syote" placeholder="https://soro.la" aria-label="URL-osoite" data-i18n-attr-aria-label="qr.urlosoite">
             </div>
 
             <div id="kentat-text" class="kentta-ryhma">
-                <textarea id="val-text" class="syote" placeholder="Kirjoita viestisi tähän..." rows="3" aria-label="Vapaa teksti"></textarea>
+                <textarea id="val-text" class="syote" placeholder="Kirjoita viestisi tähän..." rows="3" aria-label="Vapaa teksti" data-i18n-attr-placeholder="qr.kirjoita_viestisi_tähän" data-i18n-attr-aria-label="common.vapaa_teksti"></textarea>
             </div>
 
             <div id="kentat-wifi" class="kentta-ryhma">
-                <input type="text" id="val-wifi-ssid" class="syote" placeholder="Verkon nimi (SSID)" aria-label="WiFi-verkon nimi (SSID)">
-                <input type="text" id="val-wifi-pass" class="syote" placeholder="Salasana" aria-label="WiFi-salasana">
-                <select id="val-wifi-type" class="syote" aria-label="WiFi-suojaustyyppi">
-                    <option value="WPA">WPA/WPA2 (Yleisin)</option>
+                <input type="text" id="val-wifi-ssid" class="syote" placeholder="Verkon nimi (SSID)" aria-label="WiFi-verkon nimi (SSID)" data-i18n-attr-placeholder="qr.verkon_nimi_ssid" data-i18n-attr-aria-label="qr.wifiverkon_nimi_ssid">
+                <input type="text" id="val-wifi-pass" class="syote" placeholder="Salasana" aria-label="WiFi-salasana" data-i18n-attr-placeholder="common.salasana" data-i18n-attr-aria-label="qr.wifisalasana">
+                <select id="val-wifi-type" class="syote" aria-label="WiFi-suojaustyyppi" data-i18n-attr-aria-label="qr.wifisuojaustyyppi">
+                    <option value="WPA" data-i18n="qr.wpawpa2_yleisin">WPA/WPA2 (Yleisin)</option>
                     <option value="WEP">WEP</option>
-                    <option value="nopass">Ei salasanaa</option>
+                    <option value="nopass" data-i18n="qr.ei_salasanaa">Ei salasanaa</option>
                 </select>
             </div>
 
             <div id="kentat-email" class="kentta-ryhma">
-                <input type="email" id="val-email-osoite" class="syote" placeholder="vastaanottaja@esimerkki.fi" aria-label="Sähköpostiosoite">
-                <input type="text" id="val-email-otsikko" class="syote" placeholder="Viestin otsikko" aria-label="Sähköpostin otsikko">
+                <input type="email" id="val-email-osoite" class="syote" placeholder="vastaanottaja@esimerkki.fi" aria-label="Sähköpostiosoite" data-i18n-attr-placeholder="qr.vastaanottajaesimerkkifi" data-i18n-attr-aria-label="qr.sähköpostiosoite">
+                <input type="text" id="val-email-otsikko" class="syote" placeholder="Viestin otsikko" aria-label="Sähköpostin otsikko" data-i18n-attr-placeholder="qr.viestin_otsikko" data-i18n-attr-aria-label="qr.sähköpostin_otsikko">
             </div>
 
             <div id="kentat-phone" class="kentta-ryhma">
-                <input type="tel" id="val-phone" class="syote" placeholder="+358401234567" aria-label="Puhelinnumero">
+                <input type="tel" id="val-phone" class="syote" placeholder="+358401234567" aria-label="Puhelinnumero" data-i18n-attr-aria-label="qr.puhelinnumero">
             </div>
 
             <div id="kentat-sms" class="kentta-ryhma">
-                <input type="tel" id="val-sms-numero" class="syote" placeholder="Vastaanottajan numero" aria-label="Vastaanottajan puhelinnumero">
-                <input type="text" id="val-sms-viesti" class="syote" placeholder="Viestin sisältö" aria-label="Tekstiviestin sisältö">
+                <input type="tel" id="val-sms-numero" class="syote" placeholder="Vastaanottajan numero" aria-label="Vastaanottajan puhelinnumero" data-i18n-attr-placeholder="qr.vastaanottajan_numero" data-i18n-attr-aria-label="qr.vastaanottajan_puhelinnumero">
+                <input type="text" id="val-sms-viesti" class="syote" placeholder="Viestin sisältö" aria-label="Tekstiviestin sisältö" data-i18n-attr-placeholder="qr.viestin_sisältö" data-i18n-attr-aria-label="qr.tekstiviestin_sisältö">
             </div>
 
             <div class="asetus-rivi">
-                <label for="qr-vari">Koodin väri:</label>
+                <label for="qr-vari" data-i18n="qr.koodin_väri">Koodin väri:</label>
                 <input type="color" id="qr-vari" value="#000000" style="cursor: pointer; height: 40px; width: 60px; background: none; border: 1px solid #4a5568; border-radius: 6px;">
             </div>
 
-            <button id="luo-btn" class="nappula">Päivitä QR-koodi</button>
+            <button id="luo-btn" class="nappula" data-i18n="qr.päivitä_qrkoodi">Päivitä QR-koodi</button>
         </div>
 
         <div class="osion-tausta" style="text-align: center;">
-            <h2>Valmis koodi</h2>
+            <h2 data-i18n="qr.valmis_koodi">Valmis koodi</h2>
             
             <div id="qr-tulos-laatikko">
-                <img id="qr-kuva" src="/api/qr-proxy?data=https%3A%2F%2Fsoro.la&color=000000" alt="Generoitu QR-koodi" loading="lazy">
+                <img id="qr-kuva" src="/api/qr-proxy?data=https%3A%2F%2Fsoro.la&color=000000" alt="Generoitu QR-koodi" loading="lazy" data-i18n-attr-alt="qr.generoitu_qrkoodi">
             </div>
             
-            <button id="lataa-btn" class="nappula" style="background-color: #218838; color: white;">Lataa kuvana (PNG)</button>
+            <button id="lataa-btn" class="nappula" style="background-color: #218838; color: white;" data-i18n="qr.lataa_kuvana_png">Lataa kuvana (PNG)</button>
         </div>
         </main>
 

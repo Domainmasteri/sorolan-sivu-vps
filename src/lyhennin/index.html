@@ -2,25 +2,25 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä</title>
+    <title data-i18n="lyhennin.sorolan_linkkilyhennin_turvallinen_urllyhentäjä">Sorolan Linkkilyhennin - Turvallinen URL-lyhentäjä</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/lyhennin/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     
-    <meta name="description" content="Lyhennä pitkät URL-osoitteet nopeasti. Suomalainen ja turvallinen linkkilyhennin, joka tarjoaa helpon hallinnan ja tilastot.">
-    <meta name="keywords" content="linkkilyhennin, URL lyhennin, lyhytlinkki, URL shortener, Sorola">
+    <meta name="description" content="Lyhennä pitkät URL-osoitteet nopeasti. Suomalainen ja turvallinen linkkilyhennin, joka tarjoaa helpon hallinnan ja tilastot." data-i18n-attr-content="lyhennin.lyhennä_pitkät_urlosoitteet_nopeasti_suomalainen_j">
+    <meta name="keywords" content="linkkilyhennin, URL lyhennin, lyhytlinkki, URL shortener, Sorola" data-i18n-attr-content="lyhennin.linkkilyhennin_url_lyhennin_lyhytlinkki_url_shorte">
     
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/lyhennin/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Sorolan Linkkilyhennin">
-    <meta property="og:description" content="Tee pitkistä urleista siistejä ja helposti jaettavia.">
-        <meta property="og:locale" content="fi_FI">
+    <meta property="og:title" content="Sorolan Linkkilyhennin" data-i18n-attr-content="lyhennin.sorolan_linkkilyhennin">
+    <meta property="og:description" content="Tee pitkistä urleista siistejä ja helposti jaettavia." data-i18n-attr-content="lyhennin.tee_pitkistä_urleista_siistejä_ja_helposti_jaettav">
+        <meta property="og:locale" content="fi_FI" data-i18n-attr-content="muutokset.fi_fi">
     <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Sorolan Linkkilyhennin">
-    <meta name="twitter:description" content="Tee pitkistä urleista siistejä ja helposti jaettavia.">
+    <meta name="twitter:title" content="Sorolan Linkkilyhennin" data-i18n-attr-content="lyhennin.sorolan_linkkilyhennin">
+    <meta name="twitter:description" content="Tee pitkistä urleista siistejä ja helposti jaettavia." data-i18n-attr-content="lyhennin.tee_pitkistä_urleista_siistejä_ja_helposti_jaettav">
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/analytics.js"></script>
     
@@ -42,15 +42,15 @@
     <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko">
-        <h1 class="otsikko">URL-Lyhentäjä</h1>
+        <h1 class="otsikko" data-i18n="lyhennin.urllyhentäjä">URL-Lyhentäjä</h1>
         
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Jos sinulla on jokin todella pitkä linkki, voit kopioida sen tähän, ja tehdä siitä lyhyemmän.</p>
+            <p style="margin: 0; text-align: center;" data-i18n="lyhennin.jos_sinulla_on_jokin_todella_pitkä_linkki_voit_kop">Jos sinulla on jokin todella pitkä linkki, voit kopioida sen tähän, ja tehdä siitä lyhyemmän.</p>
         </div>
 
         <main id="paaosio">
         <div class="osion-tausta">
-            <h2>Luo Lyhytlinkki</h2>
+            <h2 data-i18n="lyhennin.luo_lyhytlinkki">Luo Lyhytlinkki</h2>
             <form id="lyhennin-lomake" class="flex-form">
                 <label for="domain-syote" class="sr-only">Lyhytlinkin domain</label>
                 <select id="domain-syote" class="syote" name="domain" style="flex: 0.35; min-width: 120px;" aria-label="Lyhytlinkin domain">
@@ -58,19 +58,19 @@
                     <option value="srla.fi">srla.fi</option>
                     <option value="srl.la">srl.la</option>
                 </select>
-                <label for="url-syote" class="sr-only">Lyhennettävä URL-osoite</label>
-                <input type="url" id="url-syote" class="syote" name="url" placeholder="http(s)://" pattern="https?://.+" required aria-label="Lyhennettävä URL-osoite">
-                <button type="submit" class="nappula">Lyhennä linkki</button>
+                <label for="url-syote" class="sr-only" data-i18n="common.lyhennettävä_urlosoite">Lyhennettävä URL-osoite</label>
+                <input type="url" id="url-syote" class="syote" name="url" placeholder="http(s)://" pattern="https?://.+" required aria-label="Lyhennettävä URL-osoite" data-i18n-attr-aria-label="common.lyhennettävä_urlosoite">
+                <button type="submit" class="nappula" data-i18n="lyhennin.lyhennä_linkki">Lyhennä linkki</button>
             </form>
 
             <div id="tulos-alue" style="display: none; width: 100%; text-align: center; margin-top: 20px;">
-                <p style="color: #ffaa00; margin-bottom: 15px; font-weight: bold; font-size: 1.2rem;">Linkki on valmis!</p>
+                <p style="color: #ffaa00; margin-bottom: 15px; font-weight: bold; font-size: 1.2rem;" data-i18n="lyhennin.linkki_on_valmis">Linkki on valmis!</p>
                 
-                <input type="text" id="lyhennetty-url" class="syote" style="text-align: center; margin-bottom: 15px;" readonly aria-label="Lyhennetty URL-osoite">
+                <input type="text" id="lyhennetty-url" class="syote" style="text-align: center; margin-bottom: 15px;" readonly aria-label="Lyhennetty URL-osoite" data-i18n-attr-aria-label="lyhennin.lyhennetty_urlosoite">
                 
                 <div class="flex-form">
-                    <button id="kopioi-btn" class="nappula" type="button">Kopioi linkki</button>
-                    <a href="../qr" class="nappula" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;">QR-Koodin luojaan</a>
+                    <button id="kopioi-btn" class="nappula" type="button" data-i18n="lyhennin.kopioi_linkki">Kopioi linkki</button>
+                    <a href="../qr" class="nappula" style="background: #191f2d; color: #ffaa00; border: 1px solid #ffaa00;" data-i18n="lyhennin.qrkoodin_luojaan">QR-Koodin luojaan</a>
                 </div>
             </div>
         </div>

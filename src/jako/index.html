@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti</title>
+    <title data-i18n="jako.sorolan_tiedostonjako_jaa_ja_lähetä_tiedostoja_tur">Sorolan Tiedostonjako - Jaa ja lähetä tiedostoja turvallisesti</title>
     <link rel="canonical" href="https://sorola.fi/jako/">
     <link rel="stylesheet" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
@@ -14,11 +14,11 @@
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Sorolan Tiedostonjako - Jaa tiedostoja turvallisesti">
     <meta property="og:description" content="Jaa tiedostoja turvallisesti latausrajoituksilla, vanhenemisajoilla ja selainpohjaisella salauksella.">
-        <meta property="og:locale" content="fi_FI">
+        <meta property="og:locale" content="fi_FI" data-i18n-attr-content="muutokset.fi_fi">
     <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Sorolan Tiedostonjako">
-    <meta name="twitter:description" content="Jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla.">
+    <meta name="twitter:title" content="Sorolan Tiedostonjako" data-i18n-attr-content="jako.sorolan_tiedostonjako">
+    <meta name="twitter:description" content="Jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla." data-i18n-attr-content="ohjeet.jaa_tiedostoja_turvallisesti_latausrajoituksilla_j">
     <script src="https://unpkg.com/lucide@0.511.0/dist/umd/lucide.min.js"></script>
     <style>
         #dropzone {
@@ -59,26 +59,26 @@
     </script>
 </head>
 <body>
-    <a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
+    <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_sisältöön">Hyppää sisältöön</a>
     <div class="laatikko">
-        <h1 class="otsikko">Sorola Share</h1>
+        <h1 class="otsikko" data-i18n="jako.sorola_share">Sorola Share</h1>
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän -salauksen. Suurin sallittu tiedostokoko on 1 Gt.</p>
+            <p style="margin: 0; text-align: center;" data-i18n="jako.jaa_tiedostoja_turvallisesti_voit_halutessasi_otta">Jaa tiedostoja turvallisesti. Voit halutessasi ottaa käyttöön myös selaimesi päästä päähän -salauksen. Suurin sallittu tiedostokoko on 1 Gt.</p>
         </div>
         <main id="paaosio">
             <div class="osion-tausta">
-                <h2>Asetukset</h2>
+                <h2 data-i18n="jako.asetukset">Asetukset</h2>
                 <div class="flex-form">
                     <div style="flex: 1; min-width: 200px;">
-                        <label for="expiryDays" style="display:block; font-size:0.9rem; color:#a0aec0; margin-bottom:8px; font-weight:bold;">Säilytysaika:</label>
+                        <label for="expiryDays" style="display:block; font-size:0.9rem; color:#a0aec0; margin-bottom:8px; font-weight:bold;" data-i18n="jako.säilytysaika">Säilytysaika:</label>
                         <select id="expiryDays" class="syote" style="width: 100%; box-sizing: border-box;">
-                            <option value="1">1 pv</option>
-                            <option value="3">3 pv</option>
-                            <option value="7" selected>7 pv (maksimi)</option>
+                            <option value="1" data-i18n="jako.1_pv">1 pv</option>
+                            <option value="3" data-i18n="jako.3_pv">3 pv</option>
+                            <option value="7" selected data-i18n="jako.7_pv_maksimi">7 pv (maksimi)</option>
                         </select>
                     </div>
                     <div style="flex: 1; min-width: 200px;">
-                        <label for="maxDownloads" style="display:block; font-size:0.9rem; color:#a0aec0; margin-bottom:8px; font-weight:bold;">Latausrajoitus (0 = rajaton):</label>
+                        <label for="maxDownloads" style="display:block; font-size:0.9rem; color:#a0aec0; margin-bottom:8px; font-weight:bold;" data-i18n="jako.latausrajoitus_0_rajaton">Latausrajoitus (0 = rajaton):</label>
                         <input type="number" id="maxDownloads" class="syote" value="0" min="0" style="width: 100%; box-sizing: border-box;" />
                     </div>
                 </div>
@@ -88,28 +88,28 @@
                 </label>
             </div>
             <div class="osion-tausta">
-                <h2>Lataa tiedosto</h2>
+                <h2 data-i18n="jako.lataa_tiedosto">Lataa tiedosto</h2>
                 <div id="dropzone">
                     <input type="file" id="fileInput" style="display: none;" />
                     <div id="dropzone-content">
                         <i data-lucide="upload-cloud" class="lucide-icon-large"></i>
-                        <p style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #e2e8f0;">Raahaa tiedosto tähän</p>
-                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #a0aec0;">tai klikkaa ladataksesi laitteeltasi</p>
+                        <p style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #e2e8f0;" data-i18n="jako.raahaa_tiedosto_tähän">Raahaa tiedosto tähän</p>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #a0aec0;" data-i18n="jako.tai_klikkaa_ladataksesi_laitteeltasi">tai klikkaa ladataksesi laitteeltasi</p>
                     </div>
                     <div id="loading" style="display: none; flex-direction: column; align-items: center;">
                         <i data-lucide="loader-2" class="lucide-icon-large lataus-spinner" style="color: #ffaa00;"></i>
-                        <p id="loading-text" style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #ffaa00;">Ladataan pilveen...</p>
+                        <p id="loading-text" style="margin: 0; font-size: 1.1rem; font-weight: bold; color: #ffaa00;" data-i18n="jako.ladataan_pilveen">Ladataan pilveen...</p>
                     </div>
                 </div>
             </div>
             <div id="result" class="osion-tausta" style="display: none; text-align: center;">
-                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;">Tiedosto ladattu onnistuneesti!</h2>
-                <p style="margin-bottom: 20px; color: #a0aec0;">Jaa alla oleva linkki vastaanottajalle.</p>
+                <h2 style="color: #4ade80; border-bottom: 1px solid #2d3748; padding-bottom: 10px;" data-i18n="jako.tiedosto_ladattu_onnistuneesti">Tiedosto ladattu onnistuneesti!</h2>
+                <p style="margin-bottom: 20px; color: #a0aec0;" data-i18n="jako.jaa_alla_oleva_linkki_vastaanottajalle">Jaa alla oleva linkki vastaanottajalle.</p>
                 <input type="text" id="shareLink" class="syote" readonly aria-label="Jakolinkki" style="width: 100%; box-sizing: border-box; text-align: center; color: #ffaa00; font-weight: bold; font-size: 1.1rem; margin-bottom: 15px;" />
-                <button id="copyBtn" class="nappula" style="width: 100%; max-width: 300px;">Kopioi linkki</button>
+                <button id="copyBtn" class="nappula" style="width: 100%; max-width: 300px;" data-i18n="lyhennin.kopioi_linkki">Kopioi linkki</button>
             </div>
         </main>
-        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
+        <a href="../" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle">« Takaisin pääsivulle</a>
     </div>
     <script>
         lucide.createIcons();

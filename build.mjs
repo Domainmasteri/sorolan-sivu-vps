@@ -177,7 +177,10 @@ function translateDataI18nAttributes(content, locale) {
     const translated = translations[key];
     if (translated === undefined) return match;
     const cleanOpen = openTag.replace(/\s+data-i18n="[^"]*"/, '');
-    return `${cleanOpen}${translated}${closeTag}`;
+    // Preserve leading/trailing whitespace of the inner content
+    const leading = innerContent.match(/^\s*/)[0];
+    const trailing = innerContent.match(/\s*$/)[0];
+    return `${cleanOpen}${leading}${translated}${trailing}${closeTag}`;
   });
 
   // Replace attribute values specified by data-i18n-attr-NAME="key"

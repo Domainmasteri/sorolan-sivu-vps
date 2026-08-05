@@ -2,17 +2,17 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Vieraskirja - Sorolan Sakki</title>
+    <title data-i18n="common.vieraskirja_sorolan_sakki">Vieraskirja - Sorolan Sakki</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://sorola.fi/vieraskirja/">
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Jätä terveisesi Sorolan perheelle vieraskirjassa. Sana on vapaa!">
+    <meta name="description" content="Jätä terveisesi Sorolan perheelle vieraskirjassa. Sana on vapaa!" data-i18n-attr-content="vieraskirja.jätä_terveisesi_sorolan_perheelle_vieraskirjassa_s">
     <meta name="keywords" content="vieraskirja, Sorola, Sorolan Sakki, tervehdys, palaute">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/vieraskirja/">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Vieraskirja - Sorolan Sakki">
+    <meta property="og:title" content="Vieraskirja - Sorolan Sakki" data-i18n-attr-content="common.vieraskirja_sorolan_sakki">
     <meta property="og:description" content="Jätä terveisesi Sorolan perheelle vieraskirjassa.">
     <style>
         .ilmoitus { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
@@ -118,10 +118,10 @@
     <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
     <div class="laatikko" style="max-width: 700px;">
-        <h1 class="otsikko">Vieraskirja</h1>
+        <h1 class="otsikko" data-i18n="vieraskirja.vieraskirja">Vieraskirja</h1>
 
         <div class="osion-tausta">
-            <p style="margin: 0; text-align: center;">Jätä puumerkkisi ja terveiset Sorolan perheelle! Sana on vapaa.</p>
+            <p style="margin: 0; text-align: center;" data-i18n="vieraskirja.jätä_puumerkkisi_ja_terveiset_sorolan_perheelle_sa">Jätä puumerkkisi ja terveiset Sorolan perheelle! Sana on vapaa.</p>
         </div>
 
         <main id="paaosio">
@@ -130,14 +130,14 @@
                 <h2 style="margin-top: 0; color: #ffaa00; border-bottom: 2px solid #2d3748; padding-bottom: 8px;">✍️ Jätä viesti</h2>
                 <div id="lomake-ilmoitus" class="ilmoitus piilotettu"></div>
                 <div class="flex-form">
-                    <input type="text" id="gb-nimi" class="syote" placeholder="Nimesi" maxlength="100" autocomplete="name">
-                    <textarea id="gb-viesti" class="syote" placeholder="Viestisi..." rows="4" maxlength="2000" style="resize: vertical; min-height: 90px;"></textarea>
+                    <input type="text" id="gb-nimi" class="syote" placeholder="Nimesi" maxlength="100" autocomplete="name" data-i18n-attr-placeholder="vieraskirja.nimesi">
+                    <textarea id="gb-viesti" class="syote" placeholder="Viestisi..." rows="4" maxlength="2000" style="resize: vertical; min-height: 90px;" data-i18n-attr-placeholder="vieraskirja.viestisi"></textarea>
                     <div class="captcha-rivi">
                         <span id="captcha-kysymys" class="captcha-kysymys" aria-live="polite"></span>
-                        <input type="number" id="captcha-vastaus" class="syote" placeholder="Vastaus" style="width: 90px; flex: 0 0 90px;" aria-label="Laskutoimituksen vastaus">
-                        <button type="button" onclick="uusiCaptcha()" class="nappula nappi-pieni" aria-label="Arvo uusi laskutoimitus" title="Arvo uusi laskutoimitus">🔄</button>
+                        <input type="number" id="captcha-vastaus" class="syote" placeholder="Vastaus" style="width: 90px; flex: 0 0 90px;" aria-label="Laskutoimituksen vastaus" data-i18n-attr-placeholder="vieraskirja.vastaus" data-i18n-attr-aria-label="vieraskirja.laskutoimituksen_vastaus">
+                        <button type="button" onclick="uusiCaptcha()" class="nappula nappi-pieni" aria-label="Arvo uusi laskutoimitus" title="Arvo uusi laskutoimitus" data-i18n-attr-aria-label="vieraskirja.arvo_uusi_laskutoimitus" data-i18n-attr-title="vieraskirja.arvo_uusi_laskutoimitus">🔄</button>
                     </div>
-                    <button type="button" onclick="lahetaViesti()" id="btn-laheta" class="nappula nappi-oranssi">Lähetä viesti</button>
+                    <button type="button" onclick="lahetaViesti()" id="btn-laheta" class="nappula nappi-oranssi" data-i18n="vieraskirja.lähetä_viesti">Lähetä viesti</button>
                 </div>
             </div>
 
@@ -240,7 +240,7 @@
         function renderViestit(viestit) {
             const osio = document.getElementById('viestit-osio');
             if (!viestit || viestit.length === 0) {
-                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;">Ei vielä viestejä. Ole ensimmäinen!</p></div>';
+                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;" data-i18n="vieraskirja.ei_vielä_viestejä_ole_ensimmäinen">Ei vielä viestejä. Ole ensimmäinen!</p></div>';
                 return;
             }
             osio.innerHTML = viestit.map(v => {
@@ -282,11 +282,11 @@
                     renderViestit(data.messages || []);
                 } else {
                     document.getElementById('viestit-osio').innerHTML =
-                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Viestejä ei voitu ladata.</p></div>';
+                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;" data-i18n="vieraskirja.viestejä_ei_voitu_ladata">Viestejä ei voitu ladata.</p></div>';
                 }
             } catch (e) {
                 document.getElementById('viestit-osio').innerHTML =
-                    '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Palvelinvirhe viestejä ladattaessa.</p></div>';
+                    '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;" data-i18n="vieraskirja.palvelinvirhe_viestejä_ladattaessa">Palvelinvirhe viestejä ladattaessa.</p></div>';
             }
         }
 

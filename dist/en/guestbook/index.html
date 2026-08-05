@@ -257,7 +257,7 @@
         function renderViestit(viestit) {
             const osio = document.getElementById('viestit-osio');
             if (!viestit || viestit.length === 0) {
-                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;">Ei vielä viestejä. Ole ensimmäinen!</p></div>';
+                osio.innerHTML = '<div class="osion-tausta"><p style="margin:0; text-align:center; color:#718096;">No messages yet. Be the first!</p></div>';
                 return;
             }
             osio.innerHTML = viestit.map(v => {
@@ -299,11 +299,11 @@
                     renderViestit(data.messages || []);
                 } else {
                     document.getElementById('viestit-osio').innerHTML =
-                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Viestejä ei voitu ladata.</p></div>';
+                        '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Messages could not be loaded.</p></div>';
                 }
             } catch (e) {
                 document.getElementById('viestit-osio').innerHTML =
-                    '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Palvelinvirhe viestejä ladattaessa.</p></div>';
+                    '<div class="osion-tausta"><p style="margin:0;text-align:center;color:#ef4444;">Server error while loading messages.</p></div>';
             }
         }
 
