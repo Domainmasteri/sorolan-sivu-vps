@@ -1,483 +1,201 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-<url>
-      <loc>https://sorola.fi/</loc>
+<url><loc>https://sorola.fi/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>1.0</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
+<url><loc>https://sorola.fi/en/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>1.0</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
+<url><loc>https://sorola.fi/ohjeet/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sorola.fi/en/guides/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/bitwarden</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sorola.fi/ohjeet/bitwarden</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/bitwarden" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/bitwarden" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/bitwarden</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/bitwarden" /><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/bitwarden</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/bitwarden" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/bitwarden" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/cryptomator</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/bitwarden" /><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ohjeet/cryptomator</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/cryptomator" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/cryptomator" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/cryptomator</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/cryptomator" /><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/cryptomator</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/cryptomator" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/cryptomator" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ansioluettelot/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/cryptomator" /><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ansioluettelot/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ansioluettelot/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/resume/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sorola.fi/en/resume/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ansioluettelot/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/jako/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/resume/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+<url><loc>https://sorola.fi/jako/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/jako/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/share/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/share/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/share/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/en/share/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/jako/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/share/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/lyhennin/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/share/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/lyhennin/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/lyhennin/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/shortener/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/shortener/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/shortener/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/en/shortener/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/lyhennin/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/shortener/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/qr/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/shortener/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/qr/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/qr/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/qr/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/qr/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/qr/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/en/qr/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/qr/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/qr/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/salasanat/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/qr/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/salasanat/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/salasanat/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/passwords/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/passwords/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/passwords/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/en/passwords/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/salasanat/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/passwords/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/vieraskirja/</loc>
-      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/vieraskirja/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guestbook/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guestbook/</loc>
-      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/vieraskirja/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guestbook/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/makelink/</loc>
-      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/makelink/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/makelink/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/makelink/</loc>
-      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/makelink/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/makelink/" />
-      <lastmod>2025-07-12</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/privacy/</loc>
-      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.4</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/privacy/</loc>
-      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.4</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/json/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/passwords/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/json/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/json/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/json-formatter/" />
-      <lastmod>2026-08-01</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/json-formatter/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/json-formatter/" /><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/en/json-formatter/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/json/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/json-formatter/" />
-      <lastmod>2026-08-01</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/base64/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/json-formatter/" /><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/base64/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/base64/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/base64/" />
-      <lastmod>2026-08-01</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/base64/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/base64/" /><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/en/base64/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/base64/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/base64/" />
-      <lastmod>2026-08-01</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/pastebin/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/base64/" /><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/pastebin/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/pastebin/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/pastebin/" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/pastebin/</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/pastebin/" /><lastmod>2026-08-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/en/pastebin/</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/pastebin/" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/pastebin/" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/privacy/qr</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/pastebin/" /><lastmod>2026-08-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/uuid</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/uuid" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/uuid" /><lastmod>2026-08-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/en/uuid</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/uuid" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/uuid" /><lastmod>2026-08-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://sorola.fi/vieraskirja/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/vieraskirja/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guestbook/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+<url><loc>https://sorola.fi/en/guestbook/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/vieraskirja/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guestbook/" /><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+<url><loc>https://sorola.fi/makelink/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/makelink/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/makelink/" /><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/makelink/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/makelink/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/makelink/" /><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/privacy/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+<url><loc>https://sorola.fi/en/privacy/</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+<url><loc>https://sorola.fi/privacy/qr</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/qr" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/qr" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/privacy/qr</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/qr" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/en/privacy/qr</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/qr" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/qr" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/privacy/pastebin</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/qr" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/privacy/pastebin</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/pastebin" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/pastebin" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/privacy/pastebin</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/pastebin" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/en/privacy/pastebin</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/pastebin" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/pastebin" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/privacy/jako</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/pastebin" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/privacy/jako</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/jako" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/share" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/privacy/share</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/share" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/en/privacy/share</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/jako" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/share" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/privacy/json</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/share" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/privacy/json</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/json" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/json-formatter" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/privacy/json-formatter</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/json-formatter" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/en/privacy/json-formatter</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/json" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/json-formatter" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/privacy/base64</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/json-formatter" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/privacy/base64</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/base64" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/base64" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/privacy/base64</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/base64" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/en/privacy/base64</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/base64" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/base64" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/privacy/lyhennin</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/base64" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/privacy/lyhennin</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/lyhennin" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/shortener" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/privacy/shortener</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/shortener" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/en/privacy/shortener</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/lyhennin" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/shortener" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/privacy/salasanat</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/shortener" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/privacy/salasanat</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/salasanat" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/passwords" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/privacy/passwords</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/passwords" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/en/privacy/passwords</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/salasanat" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/passwords" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/qr</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/passwords" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/privacy/uuid</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/uuid" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/uuid" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/en/privacy/uuid</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/uuid" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/uuid" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+<url><loc>https://sorola.fi/ohjeet/qr</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/qr" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/qr" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/qr</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/qr" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/qr</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/qr" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/qr" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/salasanat</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/qr" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ohjeet/salasanat</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/salasanat" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/passwords" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/passwords</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/passwords" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/passwords</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/salasanat" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/passwords" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/pastebin</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/passwords" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ohjeet/pastebin</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/pastebin" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/pastebin" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/pastebin</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/pastebin" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/pastebin</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/pastebin" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/pastebin" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/json</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/pastebin" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ohjeet/json</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/json" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/json-formatter" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/json-formatter</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/json-formatter" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/json-formatter</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/json" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/json-formatter" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/base64</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/json-formatter" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ohjeet/base64</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/base64" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/base64" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/base64</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/base64" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/base64</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/base64" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/base64" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/linkinlyhennin</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/base64" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ohjeet/linkinlyhennin</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/linkinlyhennin" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/link-shortener" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/link-shortener</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/link-shortener" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/link-shortener</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/linkinlyhennin" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/link-shortener" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/ohjeet/tiedostojako</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/link-shortener" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ohjeet/tiedostojako</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/tiedostojako" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/file-sharing" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/guides/file-sharing</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/file-sharing" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/file-sharing</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/tiedostojako" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/file-sharing" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/muutokset</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/file-sharing" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/ohjeet/uuid</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/uuid" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/uuid" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/en/guides/uuid</loc>
+      <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/uuid" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/uuid" /><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+<url><loc>https://sorola.fi/muutokset</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/muutokset" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/changes" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.5</priority>
-   </url>
-<url>
-      <loc>https://sorola.fi/en/changes</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/changes" /><lastmod>2026-08-05</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<url><loc>https://sorola.fi/en/changes</loc>
       <xhtml:link rel="alternate" hreflang="fi" href="https://sorola.fi/muutokset" />
-      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/changes" />
-      <lastmod>2026-08-05</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.5</priority>
-   </url>
+      <xhtml:link rel="alternate" hreflang="en" href="https://sorola.fi/en/changes" /><lastmod>2026-08-05</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
 </urlset>

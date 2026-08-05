@@ -1,20 +1,25 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="en">
 <head>
-    <meta property="og:url" content="https://sorola.fi/privacy/qr">
     <meta charset="UTF-8">
-    <title>Tietosuojakäytäntö - Sorolan QR-koodin luoja</title>
+    <title>UUID/GUID Generator Guide - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/privacy/qr">
-    <link rel="alternate" hreflang="fi" href="https://sorola.fi/privacy/qr">
-    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/privacy/qr">
-    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/privacy/qr">
-    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="canonical" href="https://sorola.fi/en/guides/uuid">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/uuid">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/uuid">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/uuid">
+    <link rel="stylesheet" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Official privacy policy for the Sorola QR code generator.">
-    <meta name="keywords" content="privacy policy, tietosuoja, QR-koodi, QR code generator, Sorola">
-    <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+    <meta name="description" content="English guide for the Sorola UUID/GUID Generator: create random identifiers locally.">
+    <meta name="keywords" content="uuid, guid, generator, user guide, instructions, sorola">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/en/guides/uuid">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="UUID/GUID Generator Guide - Sorola">
+    
+    <script src="/en/guides/ohjeet.js"></script>
+    <script src="/en/analytics.js"></script>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
@@ -84,52 +89,40 @@
     </script>
 </head>
 <body>
-    <nav class="language-overlay" aria-label="Kieli" id="lang-overlay" title="Siirrä kielen vaihtaja">
-        <span class="language-overlay__label language-overlay__handle">Kieli</span>
-        <a class="language-overlay__link is-active" href="/privacy/qr" aria-current="page">🇫🇮</a>
-        <a class="language-overlay__link" href="/en/privacy/qr">🇬🇧</a>
+    <nav class="language-overlay" aria-label="Language" id="lang-overlay" title="Drag to move">
+        <span class="language-overlay__label language-overlay__handle">Language</span>
+        <a class="language-overlay__link" href="/ohjeet/uuid">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/guides/uuid" aria-current="page">🇬🇧</a>
     </nav>
-    <a href="#paaosio" class="skip-to-content">Hyppää sisältöön</a>
-    <div class="laatikko" style="max-width: 750px; width: 95%;">
-        <h1 class="otsikko">Sorolan QR-koodin luojan tietosuojakäytäntö</h1>
-
+    <a href="#paaosio" class="skip-to-content">Skip to content</a>
+    <div class="laatikko">
+        <h1 class="otsikko">🔑 UUID/GUID Generator Guide</h1>
+        <br>
+        
         <main id="paaosio">
-            <div class="osion-tausta">
-                <p><strong>Voimaantulopäivä:</strong> Elokuu 2026</p>
+            <div class="osion-tausta ohje-palsta">
+                <h2>What is a UUID?</button>
+                </h2>
+                <div class="ohje-sisalto">
+                    <p>A UUID (Universally Unique Identifier) v4 is a 128-bit random identifier commonly used in software development and databases as unique primary keys.</p>
+                </div>
             </div>
 
-            <div class="osion-tausta">
-                <h2 style="color:#ffaa00;">1. Introduction</h2>
-                <p>Sorolan QR-koodin luoja ("työkalu") on ilmainen QR-koodien luoja, joka on sitoutunut suojaamaan käyttäjien yksityisyyttä. Tämä tietosuojakäytäntö kertoo, miten työkalu käsittelee tietoja.</p>
+            <div class="osion-tausta ohje-palsta">
+                <h2>How do I use the generator?</button>
+                </h2>
+                <div class="ohje-sisalto">
+                    <ul>
+                        <li>1. Choose the desired amount (1–50 pcs) in the input field.</li>
+                        <li>2. Click the 'Generate UUIDs' button to create new identifiers.</li>
+                        <li>3. Copy the list to your clipboard with a single click and paste it into your application.</li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="osion-tausta">
-                <h2 style="color:#ffaa00;">2. Data Collection and Usage</h2>
-                <p>The Tool generates QR codes by sending the user-provided data to a server-side API endpoint (<code>/api/qr-proxy</code>) solely to render the QR code image. This data is processed only to produce the image and is not stored, logged, or used for any other purpose.</p>
-                <ul>
-                    <li><strong>No Tracking:</strong> The Tool does not track your browsing history, monitor your behavior, or collect any analytics.</li>
-                    <li><strong>No Personal Data:</strong> No personal identification information, accounts, or cookies are collected or stored.</li>
-                    <li><strong>No Data Retention:</strong> The input data is processed in real-time to generate the QR image and is not saved on the server.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <h2 style="color:#ffaa00;">3. Data Sharing and Third Parties</h2>
-                <p>We do not sell, trade, or rent user data to any third parties. The Tool does not contain tracking codes, analytics, or advertisements.</p>
-            </div>
-
-            <div class="osion-tausta">
-                <h2 style="color:#ffaa00;">4. Security</h2>
-                <p>All communication with the QR generation endpoint is conducted via secure, encrypted HTTPS protocols. Do not enter sensitive information such as passwords into the QR generator.</p>
-            </div>
-
-            <div class="osion-tausta">
-                <h2 style="color:#ffaa00;">5. Contact</h2>
-                <p>If you have any questions regarding this privacy policy, you can contact us at: contact.make@sorola.fi</p>
-            </div>
+            <a href="/en/uuid" class="linkki-takaisin">« Back to guides</a>
         </main>
-
-        <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
     </div>
 </body>
 </html>
+

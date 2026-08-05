@@ -9,112 +9,333 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markus Sorola - CV</title>
-    <!-- Tuodaan html2pdf.js -kirjasto -->
-    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
-    <!-- Linkitetään oma tyylitiedosto -->
-    <link rel="stylesheet" href="/styles/style.css">
-    <!-- Privacy-friendly analytics by Plausible -->
-<script src="/en/analytics.js"></script>
+    
+    <meta name="description" content="Markus Sorola's CV. IT infrastructure, web development, and logistics professional from Salo.">
+    <meta name="keywords" content="Markus Sorola, CV, resume, work experience, education, IT, logistics, Salo">
+    <meta name="author" content="Markus Sorola">
+    <script src="/en/analytics.js"></script>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        :root {
+            --bg: #f3f4f6;
+            --surface: #ffffff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --accent: #2563eb;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .document-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 3rem;
+        }
+
+        /* Uusi Header-asettelu profiilikuvalle */
+        .cv-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .header-info h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: var(--text-main);
+        }
+
+        .header-info p {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.2rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Pyöreä profiilikuva ylänurkassa */
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--border);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .cv-body {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+        }
+
+        .sidebar h2 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar h2:first-child { margin-top: 0; }
+
+        .sidebar p { margin: 0.5rem 0; font-size: 0.95rem; }
+        .sidebar a { color: var(--accent); text-decoration: none; }
+        .sidebar a:hover { text-decoration: underline; }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        .sidebar li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .main-content h2 {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .item { margin-bottom: 1.8rem; }
+        .item:last-child { margin-bottom: 0; }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .item-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0.2rem 0 0.5rem 0;
+            font-style: italic;
+        }
+
+        .item-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .cv-body { grid-template-columns: 1fr; gap: 2rem; }
+            .cv-header { flex-direction: column-reverse; text-align: center; gap: 1.5rem; }
+            .document-container { padding: 1.5rem; }
+        }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__handle { cursor: grab; }
+        .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
         @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
     </style>
+    <script>
+    (function(){
+      var STORAGE_KEY='lang-overlay-pos';
+      function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
+      function applyPos(el,x,y){
+        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+      }
+      function restorePos(el){
+        try{
+          var s=sessionStorage.getItem(STORAGE_KEY);
+          if(!s)return;
+          var p=JSON.parse(s);
+          applyPos(el,clamp(p.x,0,window.innerWidth-el.offsetWidth),clamp(p.y,0,window.innerHeight-el.offsetHeight));
+        }catch(e){}
+      }
+      document.addEventListener('DOMContentLoaded',function(){
+        var el=document.getElementById('lang-overlay');
+        if(!el)return;
+        restorePos(el);
+        var handle=el.querySelector('.language-overlay__handle');
+        if(!handle)handle=el;
+        var startX,startY,origX,origY,dragging=false;
+        function onStart(e){
+          if(e.target.closest('a'))return;
+          dragging=true;
+          var rect=el.getBoundingClientRect();
+          origX=rect.left; origY=rect.top;
+          startX=e.touches?e.touches[0].clientX:e.clientX;
+          startY=e.touches?e.touches[0].clientY:e.clientY;
+          el.style.transition='none';
+          e.preventDefault();
+        }
+        function onMove(e){
+          if(!dragging)return;
+          var cx=e.touches?e.touches[0].clientX:e.clientX;
+          var cy=e.touches?e.touches[0].clientY:e.clientY;
+          var nx=clamp(origX+(cx-startX),0,window.innerWidth-el.offsetWidth);
+          var ny=clamp(origY+(cy-startY),0,window.innerHeight-el.offsetHeight);
+          applyPos(el,nx,ny);
+          e.preventDefault();
+        }
+        function onEnd(){
+          if(!dragging)return;
+          dragging=false;
+          el.style.transition='';
+          try{var r=el.getBoundingClientRect();sessionStorage.setItem(STORAGE_KEY,JSON.stringify({x:r.left,y:r.top}));}catch(e){}
+        }
+        handle.addEventListener('mousedown',onStart);
+        handle.addEventListener('touchstart',onStart,{passive:false});
+        document.addEventListener('mousemove',onMove);
+        document.addEventListener('touchmove',onMove,{passive:false});
+        document.addEventListener('mouseup',onEnd);
+        document.addEventListener('touchend',onEnd);
+      });
+    })();
+    </script>
 </head>
 <body>
-    <nav class="language-overlay" aria-label="Language">
-        <span class="language-overlay__label">Language</span>
+    <nav class="language-overlay" aria-label="Language" id="lang-overlay" title="Drag to move">
+        <span class="language-overlay__label language-overlay__handle">Language</span>
         <a class="language-overlay__link" href="/ansioluettelot/cv-make/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/resume/cv-builder/" aria-current="page">🇬🇧</a>
     </nav>
 
-<!-- Nappi joka käynnistää PDF-luonnin -->
-<button class="btn-download" onclick="generatePDF()">Download PDF</button>
-
-<!-- CV:n alue (Lukittu A4-kokoon) -->
-<div class="cv-container" id="cv">
+<div class="document-container">
     
-    <!-- Vasen palkki -->
-    <div class="sidebar">
-        <!-- VAIHDA TÄHÄN OMAN KUVASI TIEDOSTONIMI (esim. 73854.jpg) -->
-        <img src="/en/resume/cv-builder/cv-kuva.jpg" alt="Profile picture" class="profile-pic">
-        
-        <h2>Personal details</h2>
-        <p><strong>Name:</strong> Markus Sorola</p>
-        <p><strong>Email:</strong> <a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
-        <p><strong>Location:</strong> Salo</p>
-        <p><strong>Date of birth:</strong> 29 July 1998</p>
-        <p><strong>Verkkosivu:</strong> <a href="https://sorola.fi/en/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
-
-        <h3>Skills</h3>
-        <ul>
-            <li>servers and domains</li>
-            <li>Office and productivity software</li>
-            <li>mobile guidance and support</li>
-            <li>distribution and logistics</li>
-        </ul>
-
-        <h3>Languages</h3>
-        <ul>
-            <li>Finnish</li>
-            <li>English</li>
-        </ul>
-
-        <h3>Interests</h3>
-        <ul>
-            <li>Information technology</li>
-            <li>Studying languages from time to time</li>
-            <li>Spending time with friends and my girlfriend</li>
-        </ul>
-    </div>
-
-    <!-- Oikea puoli (Pääsisältö) -->
-    <div class="main-content">
-        <h1>Markus Sorola</h1>
-
-        <h2 class="section-title">Personal summary</h2>
-        <p class="item-desc">I am a reliable and proactive contributor with versatile experience in both practical logistics and technical problem solving. As an early-morning delivery worker, I have learned to value precision and optimize processes, and I have excellent visual-spatial memory. In my free time I design, code, and maintain extensive web infrastructures and servers. I am looking for work where I can use my ability to understand large systems and quickly learn new ones – whether it is source code or complex route maps.</p>
-
-        <h2 class="section-title">Education</h2>
-        <div class="item">
-            <div class="item-title">Vocational qualification in cleaning and property services</div>
-            <div class="item-subtitle">Ammattiopisto Spesia, Turku | Apr 2019 - Apr 2021</div>
-            <div class="item-desc">I studied the home services specialization, which focused mainly on household care.</div>
+    <!-- Ylätunniste, jossa nimi ja pyöreä kuva -->
+    <header class="cv-header">
+        <div class="header-info">
+            <h1>Markus Sorola</h1>
+            <p>IT infrastructure and logistics professional</p>
         </div>
-        <div class="item">
-            <div class="item-title">Preparatory education for work and independent living</div>
-            <div class="item-subtitle">Ammattiopisto Spesia, Turku | Aug 2018 - Apr 2019</div>
-            <div class="item-desc">The program focused on independent living skills.</div>
-        </div>
-        <div class="item">
-            <div class="item-title">Comprehensive school</div>
-            <div class="item-subtitle">Armfelt School, Salo | May 2016</div>
-        </div>
+        <!-- VAIHDA TÄHÄN OMAN KUVASI TIEDOSTONIMI -->
+        <img src="/en/resume/cv-builder/cv-kuva.jpg" alt="Markus Sorola - Profile picture" class="profile-pic" onerror="this.style.display='none'">
+    </header>
 
-        <h2 class="section-title">Work experience</h2>
-        <div class="item">
-            <div class="item-title">Early-morning delivery worker</div>
-            <div class="item-subtitle">Varsinais-Suomen Tietojakelu Oy, Salo | Jun 2023 - Present</div>
-            <div class="item-desc">Jaan aamuyöllä lehtiä, kirjeitä ja joskus myös paketteja. Yöpostihommaa siis.</div>
-        </div>
-        <div class="item">
-            <div class="item-title">Production operator</div>
-            <div class="item-subtitle">Valmet Automotive, Salo | Oct 2021 - Apr 2022</div>
-            <div class="item-desc">On the production line I handled different tasks involved in building electric vehicle batteries.</div>
-        </div>
-        <div class="item">
-            <div class="item-title">Flea market sales assistant</div>
-            <div class="item-subtitle">Ihme ja Kumma Tuki Ry, Salo | May 2021 - Oct 2021</div>
-            <div class="item-desc">I worked there as a flea market sales assistant for a few months until I got a job at Valmet. Later, Ihme ja Kumma unfortunately went bankrupt.</div>
-        </div>
+    <div class="cv-body">
+        <!-- Vasen palkki -->
+        <aside class="sidebar">
+            <h2>Personal details</h2>
+            <p><strong>Email:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+            <p><strong data-i18n="ansioluettelot.paikkakunta_2">Location:</strong><br>Salo</p>
+            <p><strong>Date of birth:</strong><br><span>29 July 1998</span></p>
+            <p><strong>Website:</strong><br><a href="https://sorola.fi/en/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+
+            <h2>Skills</h2>
+            <ul>
+                <li>Servers and domains</li>
+                <li>Office and productivity software</li>
+                <li>Mobile guidance and usage</li>
+                <li>Distribution and logistics</li>
+            </ul>
+
+            <h2>Languages</h2>
+            <ul>
+                <li>Finnish (Native)</li>
+                <li>English (Good)</li>
+            </ul>
+
+            <h2>Interests</h2>
+            <ul>
+                <li>Information technology</li>
+                <li>Occasional language learning</li>
+                <li>Spending time with friends and girlfriend</li>
+            </ul>
+        </aside>
+
+        <!-- Oikea puoli (Pääsisältö) -->
+        <main class="main-content">
+            
+            <section style="margin-bottom: 2.5rem;">
+                <h2>Personal summary</h2>
+                <p class="item-desc">I am a reliable and self-motivated professional with versatile experience in both hands-on logistics and technical problem-solving. As an early-morning delivery person, I have learned to value precision and process optimization, and I have an excellent visual-spatial memory. In my spare time I design, code, and maintain extensive web infrastructure including servers. I am looking for work where I can leverage my ability to grasp big-picture systems and quickly learn new ones – whether that means source code or complex delivery routes.</p>
+            </section>
+
+            <section style="margin-bottom: 2.5rem;">
+                <h2>Work experience</h2>
+                <div class="item">
+                    <div class="item-title">Early delivery person</div>
+                    <div class="item-subtitle">Varsinais-Suomen Tietojakelu Oy, Salo | Summer 2023 – Present</div>
+                    <div class="item-desc">I deliver newspapers, letters, and occasionally parcels in the early hours of the morning.</div>
+                </div>
+                <div class="item">
+                    <div class="item-title">Production operator</div>
+                    <div class="item-subtitle">Valmet Automotive, Salo | Oct 2021 – Apr 2022</div>
+                    <div class="item-desc">On the production line I performed various tasks involved in building electric vehicle battery packs in accordance with strict quality requirements.</div>
+                </div>
+                <div class="item">
+                    <div class="item-title">Flea market seller</div>
+                    <div class="item-subtitle">Ihme ja Kumma Tuki Ry, Salo | May 2021 - Oct 2021</div>
+                    <div class="item-desc">Customer service and shop management. The employment ended when I moved to Valmet.</div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Education</h2>
+                <div class="item">
+                    <div class="item-title">Vocational qualification in cleaning and property services</div>
+                    <div class="item-subtitle">Ammattiopisto Spesia, Turku | Apr 2019 - Apr 2021</div>
+                    <div class="item-desc">I studied the home services specialisation, which is mainly domestic work.</div>
+                </div>
+                <div class="item">
+                    <div class="item-title">Preparatory training for work and independent life</div>
+                    <div class="item-subtitle">Ammattiopisto Spesia, Turku | Aug 2018 - Apr 2019</div>
+                    <div class="item-desc">The program focused on independent living skills.</div>
+                </div>
+                <div class="item">
+                    <div class="item-title">Comprehensive school</div>
+                    <div class="item-subtitle">Armfelt School, Salo | May 2016</div>
+                </div>
+            </section>
+
+        </main>
     </div>
 </div>
 
-<!-- Linkitetään oma JavaScript-tiedosto -->
-<script src="/en/resume/cv-builder/script.js"></script>
+<a href="/en/resume/cv-builder/index.html" class="back-link">← Back to main page</a>
+
 </body>
 </html>
+

@@ -8,50 +8,220 @@
     <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ansioluettelot/hakemus-make/hakemus-jakelu">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job application - Markus Sorola</title>
-    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/styles/style-hakemus.css">
-    <!-- Privacy-friendly analytics by Plausible -->
-<script src="/en/analytics.js"></script>
+    <title>Open Logistics Job Application - Markus Sorola</title>
+    
+    <meta name="description" content="Markus Sorola's open job application for delivery and logistics roles. Solid experience in early delivery and route optimization.">
+    <meta name="keywords" content="Markus Sorola, job application, logistics, early delivery, distribution, route planning, Salo">
+    <meta name="author" content="Markus Sorola">
+    <script src="/en/analytics.js"></script>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        :root {
+            --bg: #f3f4f6;
+            --surface: #ffffff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --accent: #10b981; /* Vihreä teema logistiikka-puolelle */
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+
+        .document-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            overflow: hidden;
+            min-height: 800px;
+        }
+
+        .sidebar {
+            width: 30%;
+            background-color: #f0fdf4; /* Kevyt vihreä tausta */
+            padding: 3rem 2rem;
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar h2 { margin-top: 0; font-size: 1.8rem; color: var(--text-main); margin-bottom: 0.2rem; }
+        .sidebar .title { color: var(--accent); font-weight: 600; margin-top: 0; margin-bottom: 2rem; font-size: 1.1rem; }
+        
+        .sidebar h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar p { font-size: 0.95rem; margin-bottom: 1rem; }
+        .sidebar a { color: var(--accent); text-decoration: none; }
+        .sidebar a:hover { text-decoration: underline; }
+
+        .main-content {
+            width: 70%;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .date-info {
+            text-align: right;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .application-title {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .letter-body p { margin-bottom: 1.2rem; text-align: justify; }
+        
+        .letter-body ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .letter-body li { margin-bottom: 0.5rem; }
+
+        .signature {
+            margin-top: 3rem;
+            font-family: 'Georgia', serif;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+            display: inline-block;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .document-container { flex-direction: column; }
+            .sidebar { width: 100%; padding: 2rem; border-right: none; border-bottom: 1px solid var(--border); }
+            .main-content { width: 100%; padding: 2rem; }
+        }
+    </style>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__handle { cursor: grab; }
+        .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
         @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
     </style>
+    <script>
+    (function(){
+      var STORAGE_KEY='lang-overlay-pos';
+      function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
+      function applyPos(el,x,y){
+        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+      }
+      function restorePos(el){
+        try{
+          var s=sessionStorage.getItem(STORAGE_KEY);
+          if(!s)return;
+          var p=JSON.parse(s);
+          applyPos(el,clamp(p.x,0,window.innerWidth-el.offsetWidth),clamp(p.y,0,window.innerHeight-el.offsetHeight));
+        }catch(e){}
+      }
+      document.addEventListener('DOMContentLoaded',function(){
+        var el=document.getElementById('lang-overlay');
+        if(!el)return;
+        restorePos(el);
+        var handle=el.querySelector('.language-overlay__handle');
+        if(!handle)handle=el;
+        var startX,startY,origX,origY,dragging=false;
+        function onStart(e){
+          if(e.target.closest('a'))return;
+          dragging=true;
+          var rect=el.getBoundingClientRect();
+          origX=rect.left; origY=rect.top;
+          startX=e.touches?e.touches[0].clientX:e.clientX;
+          startY=e.touches?e.touches[0].clientY:e.clientY;
+          el.style.transition='none';
+          e.preventDefault();
+        }
+        function onMove(e){
+          if(!dragging)return;
+          var cx=e.touches?e.touches[0].clientX:e.clientX;
+          var cy=e.touches?e.touches[0].clientY:e.clientY;
+          var nx=clamp(origX+(cx-startX),0,window.innerWidth-el.offsetWidth);
+          var ny=clamp(origY+(cy-startY),0,window.innerHeight-el.offsetHeight);
+          applyPos(el,nx,ny);
+          e.preventDefault();
+        }
+        function onEnd(){
+          if(!dragging)return;
+          dragging=false;
+          el.style.transition='';
+          try{var r=el.getBoundingClientRect();sessionStorage.setItem(STORAGE_KEY,JSON.stringify({x:r.left,y:r.top}));}catch(e){}
+        }
+        handle.addEventListener('mousedown',onStart);
+        handle.addEventListener('touchstart',onStart,{passive:false});
+        document.addEventListener('mousemove',onMove);
+        document.addEventListener('touchmove',onMove,{passive:false});
+        document.addEventListener('mouseup',onEnd);
+        document.addEventListener('touchend',onEnd);
+      });
+    })();
+    </script>
 </head>
 <body>
-    <nav class="language-overlay" aria-label="Language">
-        <span class="language-overlay__label">Language</span>
+    <nav class="language-overlay" aria-label="Language" id="lang-overlay" title="Drag to move">
+        <span class="language-overlay__label language-overlay__handle">Language</span>
         <a class="language-overlay__link" href="/ansioluettelot/hakemus-make/hakemus-jakelu">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/resume/application-builder/delivery-application" aria-current="page">🇬🇧</a>
     </nav>
 
-<button class="btn-download" onclick="generatePDF('Markus_Sorola_Open_Application_Logistics.pdf')">Download PDF</button>
-
-<div class="hakemus-container" id="hakemus">
-    
-    <div class="sidebar theme-green">
+<div class="document-container">
+    <div class="sidebar">
         <h2>Markus Sorola</h2>
         <p class="title">Open application</p>
         
         <h3>Contact details</h3>
         <p><strong>Email:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
-        <p><strong>Location:</strong><br>Salo</p>
-        <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi/en/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+        <p><strong data-i18n="ansioluettelot.paikkakunta_2">Location:</strong><br>Salo</p>
+        <p><strong>Website:</strong><br><a href="https://sorola.fi/en/" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
 
-        <h3>Core strengths</h3>
-        <p>• Jakelu ja logistiikka<br>• Reittien optimointi<br>• Erinomainen reittimuisti<br>• Itsenäinen työote</p>
+        <h3>Core competencies</h3>
+        <p>
+            🔹 Distribution and logistics
+🔹 Route optimization
+🔹 Excellent route memory
+🔹 Independent work style
+        </p>
     </div>
 
     <div class="main-content">
-        <div class="letter-header" style="justify-content: flex-end;">
-            <div class="date-info">
-                Salo, <span id="current-date"></span>
-            </div>
+        <div class="date-info">
+            Salo, <span id="current-date"></span>
         </div>
 
         <h1 class="application-title">Open application – A precise professional with strong route management skills</h1>
@@ -59,29 +229,36 @@
         <div class="letter-body">
             <p>Dear recruiter,</p>
             
-            <p>I am sending you this open application because I am looking for new challenges in distribution and logistics, and I believe my experience would fit your needs very well. I am used to independent, responsible, and precision-focused work.</p>
+            <p>I am sending you this open application as I am looking for new challenges in delivery and logistics, and I believe my experience is an excellent fit for your needs. I am accustomed to independent, responsible work that demands precision.</p>
             
-            <p>I currently work as an early-morning delivery worker, which has taught me resilience under pressure and seamless routine management. One of my strengths is exceptionally strong visual and numerical memory; I learn and remember new routes, customer details, and delivery box locations very quickly without constant repetition. I can optimize driving routes independently and make sure deliveries arrive precisely on schedule, even in demanding weather conditions and during night shifts.</p>
+            <p>I currently work as an early delivery person, which has taught me resilience under pressure and seamless routine management. My strength is an exceptionally good visual and numerical memory; I learn and memorise new routes, customer details, and delivery box locations very quickly without constant repetition. I can optimise driving routes independently and ensure that deliveries are on time, even in demanding weather conditions and at night.</p>
             
             <p>Why choose me?</p>
             <ul>
-                <li><strong>Independence and reliability:</strong> I handle assigned tasks from start to finish without constant supervision.</li>
-                <li><strong>Fast learner:</strong> By understanding larger systems quickly, I can master new areas and routes in no time.</li>
-                <li><strong>Attitude:</strong> I am not afraid of physical work or unconventional working hours.</li>
+                <li><strong>Independence and reliability:</strong> <span>I handle assigned tasks from start to finish without constant supervision.</span></li>
+                <li><strong>Quick learning ability:</strong> <span>By understanding larger systems quickly, I can master new areas and routes in no time.</span></li>
+                <li><strong>Attitude:</strong> <span>I am not afraid of physical work or unconventional working hours.</span></li>
             </ul>
             
-            <p>I am ready to take on new challenges and bring a strong work ethic with me. I would gladly come to an interview to tell you more about how I could benefit your organization.</p>
+            <p>I am ready to take on new challenges and bring with me a solid work ethic. I would be happy to come for an interview to tell you more about how I can be of use to your organisation.</p>
         </div>
 
         <div class="letter-footer">
-            <p>Kind regards,</p>
-            <div class="signature">
-                Markus Sorola
-            </div>
+            <p>Yours sincerely,</p>
+            <div class="signature">Markus Sorola</div>
         </div>
     </div>
 </div>
-<script src="/en/resume/application-builder/script-hakemus.js"></script>
+
+<a href="/en/resume/application-builder/index.html" class="back-link">← Back to main page</a>
+
+<script>
+    // Asetetaan nykyinen päivämäärä
+    const dateElement = document.getElementById('current-date');
+    const today = new Date();
+    dateElement.textContent = today.toLocaleDateString('fi-FI');
+</script>
 
 </body>
 </html>
+

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UUID/GUID v4 Generator | Sorola.fi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/en/uuid/">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/uuid/">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/uuid/">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/uuid/">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    
+    <meta name="description" content="Generate standard UUID v4 / GUID identifiers directly in your browser without sending any data to a server.">
+    <meta name="keywords" content="uuid, guid, generator, v4, random, identifier, browser-based, sorola">
+    <meta name="author" content="Markus Sorola">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sorola.fi/en/uuid/">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="UUID/GUID v4 Generator | Sorola.fi">
+    <meta property="og:description" content="Generate standard UUID v4 / GUID identifiers directly in your browser without sending any data to a server.">
+    <meta property="og:locale" content="en_GB">
+    <meta property="og:image" content="https://sorola.fi/en/styles/og-image.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="UUID/GUID v4 Generator | Sorola.fi">
+    <meta name="twitter:description" content="Generate standard UUID v4 / GUID identifiers directly in your browser without sending any data to a server.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="UUID/GUID v4 Generator | Sorola.fi">
+    <meta name="twitter:description" content="Generate standard UUID v4 / GUID identifiers directly in your browser without sending any data to a server.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "UUID/GUID v4 Generaattori",
+      "url": "https://sorola.fi/en/uuid",
+      "description": "Luo standardinmukaisia UUID v4 / GUID -tunnisteita suoraan selaimessasi ilman tietojen lähettämistä palvelimelle.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+    }
+    </script>
+    <script src="/en/analytics.js"></script>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__handle { cursor: grab; }
+        .language-overlay__handle:active { cursor: grabbing; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+    <script>
+    (function(){
+      var STORAGE_KEY='lang-overlay-pos';
+      function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
+      function applyPos(el,x,y){
+        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+      }
+      function restorePos(el){
+        try{
+          var s=sessionStorage.getItem(STORAGE_KEY);
+          if(!s)return;
+          var p=JSON.parse(s);
+          applyPos(el,clamp(p.x,0,window.innerWidth-el.offsetWidth),clamp(p.y,0,window.innerHeight-el.offsetHeight));
+        }catch(e){}
+      }
+      document.addEventListener('DOMContentLoaded',function(){
+        var el=document.getElementById('lang-overlay');
+        if(!el)return;
+        restorePos(el);
+        var handle=el.querySelector('.language-overlay__handle');
+        if(!handle)handle=el;
+        var startX,startY,origX,origY,dragging=false;
+        function onStart(e){
+          if(e.target.closest('a'))return;
+          dragging=true;
+          var rect=el.getBoundingClientRect();
+          origX=rect.left; origY=rect.top;
+          startX=e.touches?e.touches[0].clientX:e.clientX;
+          startY=e.touches?e.touches[0].clientY:e.clientY;
+          el.style.transition='none';
+          e.preventDefault();
+        }
+        function onMove(e){
+          if(!dragging)return;
+          var cx=e.touches?e.touches[0].clientX:e.clientX;
+          var cy=e.touches?e.touches[0].clientY:e.clientY;
+          var nx=clamp(origX+(cx-startX),0,window.innerWidth-el.offsetWidth);
+          var ny=clamp(origY+(cy-startY),0,window.innerHeight-el.offsetHeight);
+          applyPos(el,nx,ny);
+          e.preventDefault();
+        }
+        function onEnd(){
+          if(!dragging)return;
+          dragging=false;
+          el.style.transition='';
+          try{var r=el.getBoundingClientRect();sessionStorage.setItem(STORAGE_KEY,JSON.stringify({x:r.left,y:r.top}));}catch(e){}
+        }
+        handle.addEventListener('mousedown',onStart);
+        handle.addEventListener('touchstart',onStart,{passive:false});
+        document.addEventListener('mousemove',onMove);
+        document.addEventListener('touchmove',onMove,{passive:false});
+        document.addEventListener('mouseup',onEnd);
+        document.addEventListener('touchend',onEnd);
+      });
+    })();
+    </script>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Language" id="lang-overlay" title="Drag to move">
+        <span class="language-overlay__label language-overlay__handle">Language</span>
+        <a class="language-overlay__link" href="/uuid/">🇫🇮</a>
+        <a class="language-overlay__link is-active" href="/en/uuid/" aria-current="page">🇬🇧</a>
+    </nav>
+    <a href="#paaosio" class="skip-to-content">Skip to content</a>
+    
+    <div class="laatikko">
+        <h1 class="otsikko">UUID / GUID Generator</h1>
+        <h2 style="font-weight: 700; text-align: center;">🔑 Generate random UUID v4 identifiers</h2>
+        <br>
+        
+        <div class="osion-tausta" style="text-align: center;">
+            <p style="margin: 0;">
+                Create standard UUID v4 (Universally Unique Identifier) / GUID key identifiers directly in your browser. All generation happens locally on your device.
+            </p>
+        </div>
+
+        <main id="paaosio">
+            <div class="osion-tausta">
+                <label for="uuid-count" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                    Amount to generate (1–50 pcs):
+                </label>
+                <div class="flex-form">
+                    <input type="number" id="uuid-count" class="syote" min="1" max="50" value="1" style="max-width: 150px;">
+                    <button type="button" onclick="generateUUIDs()" class="nappula">
+                        ✨ Generate UUIDs
+                    </button>
+                </div>
+            </div>
+
+            <div class="osion-tausta">
+                <label for="uuid-tulos" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                    Generated identifiers:
+                </label>
+                <textarea id="uuid-tulos" class="syote" rows="6" readonly placeholder="..." style="font-family: monospace; resize: vertical; margin-bottom: 12px;"></textarea>
+                
+                <button type="button" onclick="copyUUIDs()" id="copy-btn" class="nappula1">
+                    📋 Copy to clipboard
+                </button>
+                <div id="copy-toast" style="display: none; color: #48bb78; font-weight: bold; margin-top: 10px; text-align: center;">
+                    ✅ Copied to clipboard!
+                </div>
+            </div>
+
+            <div class="osion-tausta flex-form" style="text-align: center; justify-content: center;">
+                <a href="/en/guides/uuid" class="linkki-takaisin" style="margin: 0;">📖 User Instructions</a>
+                <a href="/en/privacy/uuid" class="linkki-takaisin" style="margin: 0;">🔒 Privacy Policy</a>
+            </div>
+
+            <a href="/en/" class="linkki-takaisin">« Back to home</a>
+        </main>
+    </div>
+
+    <script>
+        function generateUUIDs() {
+            let countInput = document.getElementById('uuid-count');
+            let count = parseInt(countInput.value, 10);
+            
+            if (isNaN(count) || count < 1) count = 1;
+            if (count > 50) count = 50;
+            countInput.value = count;
+
+            let result = "";
+            for (let i = 0; i < count; i++) {
+                if (window.crypto && window.crypto.randomUUID) {
+                    result += crypto.randomUUID() + "\n";
+                } else {
+                    result += 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    }) + "\n";
+                }
+            }
+            
+            document.getElementById('uuid-tulos').value = result.trim();
+        }
+
+        function copyUUIDs() {
+            const textArea = document.getElementById('uuid-tulos');
+            if (!textArea.value) return;
+
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const toast = document.getElementById('copy-toast');
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 2500);
+            } catch (err) {
+                console.error('Kopiointi epäonnistui:', err);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', generateUUIDs);
+    </script>
+</body>
+</html>
+
