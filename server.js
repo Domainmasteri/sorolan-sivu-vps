@@ -469,7 +469,7 @@ app.post('/api/auth', async (req, res) => {
 
     return res.status(400).json({ error: 'Tuntematon pyyntö.' });
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
 });
 

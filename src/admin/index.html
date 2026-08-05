@@ -672,7 +672,7 @@
                             <td style="font-family: monospace; word-break: break-all;">${escapeHtml(item.api_key || 'Ei asetettu')}</td>
                             <td>${escapeHtml(updatedAt)}</td>
                             <td><input type="text" id="tool-key-input-${escapeHtml(item.tool_name)}" class="syote" value="${escapeHtml(item.api_key || '')}" style="width: 100%; min-width: 220px;"></td>
-                            <td><button onclick="paivitaTyokaluAvain('${item.tool_name}')" class="nappula1" style="border: 1px solid #22c55e; color: #22c55e;">Tallenna</button></td>
+                            <td><button data-tool-name="${escapeHtml(item.tool_name)}" onclick="paivitaTyokaluAvain(this.dataset.toolName)" class="nappula1" style="border: 1px solid #22c55e; color: #22c55e;">Tallenna</button></td>
                         </tr>
                     `;
                 });
