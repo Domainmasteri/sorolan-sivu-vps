@@ -108,6 +108,9 @@
       "text": {
         "Sorola.fi - Hyödylliset IT-työkalut ja tekniset ohjeet": "Sorola.fi - Useful IT tools and technical guides",
         "Tervetuloa Sorolan nettisivuille!": "Welcome to Sorola's website!",
+        "Viimeisin muutos (4.8.2026):": "Latest update (4 Aug 2026):",
+        "Uusia ohjeita ja tietosuojaselosteita lisätty!": "New guides and privacy policies added!",
+        "Katso muutosloki →": "View changelog →",
         "Mikä on sorola.fi?": "What is sorola.fi?",
         "Sorola tarjoaa käsiisi monipuoliset ja turvalliset IT-työkalut arjen helpottamiseen. Sivustoltamme löydät mm. nopean linkkilyhentimen, helppokäyttöisen väliaikaisen tiedostonjaon sekä selkeät tekniset ohjeet eri ohjelmistojen ja työkalujen käyttöön.": "Sorola offers versatile and secure IT tools to make everyday life easier. On our site you'll find, among other things, a fast link shortener, an easy temporary file sharing service, and clear technical guides for different software and tools.",
         "Kehitämme jatkuvasti uusia ratkaisuja, jotka tekevät digitaalisesta arjestasi sujuvampaa. Tutustu myös Markus Sorolan ansioluetteloon ja portfolioon, jos etsit osaavaa tekijää IT-alan projekteihin.": "We keep building new solutions that make your digital everyday life smoother. You can also explore Markus Sorola's CV and portfolio if you're looking for a capable contributor for IT projects.",
@@ -135,10 +138,10 @@
         "Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.": "More powerful helpers for developers and technical needs.",
         "🌐 Verkkotyökalut": "🌐 Web tools",
         "🔧 JSON-muotoilija &amp; validaattori": "🔧 JSON Formatter &amp; Validator",
-        "🔐 Base64 Kooderi / Dekooderi": "🔐 Base64 Encoder / Decoder",
-        " Katso muutosloki →": "Check changelog→"
+        "🔐 Base64 Kooderi / Dekooderi": "🔐 Base64 Encoder / Decoder"
       },
       "attributes": {
+        "Viimeisin päivitys": "Latest update",
         "Sorola.fi tarjoaa näppärät ja turvalliset työkalut arkeen: nopea linkkilyhennin, väliaikainen tiedostonjako, pastebin sekä selkeät IT-ohjeet ja oppaat.": "Sorola.fi offers handy and secure everyday tools: a fast link shortener, temporary file sharing, pastebin, and clear IT guides and tutorials.",
         "Sorola, IT-työkalut, linkkilyhennin, tiedostonjako, pastebin, tekniset ohjeet, koodaus, web-kehitys, Markus Sorola": "Sorola, IT tools, link shortener, file sharing, pastebin, technical guides, coding, web development, Markus Sorola",
         "Sorola.fi - IT-työkalut ja ohjeet": "Sorola.fi - IT tools and guides",
@@ -147,9 +150,7 @@
         "Perustyökalut": "Basic tools",
         "Edistyneet työkalut": "Advanced tools",
         "Hae työkaluja": "Search tools",
-        "Hae työkaluja...": "Search for tools...",
-        "⚡ Viimeisin muutos": "⚡ Latest update",
-        "Uusia ohjeita ja tietosuojaselosteita lisätty!": "Added new privacy policies and guides!"
+        "Hae työkaluja...": "Search for tools..."
       },
       "raw": {
         "\"description\": \"Sorola.fi tarjoaa hyödyllisiä IT-työkaluja, kuten linkkilyhentimen, tiedostonjaon, koodinjaon ja tekniset ohjeet.\"": "\"description\": \"Sorola.fi offers useful IT tools such as a link shortener, file sharing, code sharing, and technical guides.\""
@@ -959,7 +960,7 @@
         "Linkkejä": "Links"
       }
     },
-    "muutokset/index.html": {
+        "muutokset/index.html": {
       "text": {
         "Sorolan Muutosloki - Sivuston päivitykset ja uudet ominaisuudet | Sorola.fi": "Sorola Changelog - Site updates and new features | Sorola.fi",
         "⚡ Sivuston muutosloki": "⚡ Site changelog",
@@ -968,15 +969,18 @@
         "Lisätty uusia kattavia käyttöohjeita palveluiden ja IT-työkalujen sujuvaan käyttöön.": "Added new comprehensive usage guides for services and IT tools.",
         "Päivitetty ja lisätty asianmukaiset tietosuojaselosteet verkkotyökaluille ja palveluille.": "Updated and added proper privacy policies for web tools and services.",
         "3.8.2026 – JSON-muotoilija": "3.8.2026 – JSON Formatter",
-        "Lisätty uusi JSON-muotoilija &amp; validaattori edistyneiden työkalujen joukkoon.": "Added a new JSON Formatter &amp; Validator to the advanced tools.",
+        "Lisätty uusi": "Added a new",
+        "JSON-muotoilija &amp; validaattori": "JSON Formatter &amp; Validator",
+        "edistyneiden työkalujen joukkoon.": "to the advanced tools section.",
         "Työkalu toimii täysin paikallisesti selaimessa ilman tietojen lähettämistä palvelimelle.": "The tool works entirely locally in the browser without sending any data to the server.",
         "1.8.2026 – Työkalujen ryhmittely &amp; webtools.sorola.fi": "1.8.2026 – Tool grouping &amp; webtools.sorola.fi",
-        "Työkalut ryhmitelty selkeämmin erikseen perustyökaluihin ja kehittäjille suunnattuihin edistyneisiin työkaluihin.": "Tools grouped more clearly into basic tools and advanced tools for developers.",
+        "Työkalut ryhmitelty selkeämmin erikseen": "Tools grouped more clearly into",
+        "perustyökaluihin": "basic tools",
+        "ja kehittajille suunnattuihin": "and developer-oriented",
+        "edistyneisiin työkaluihin": "advanced tools",
         "Avattu uusi aliverkkotunnus": "Launched a new subdomain",
         "verkkotyökalukokoelmaa varten.": "for the web tools collection.",
         "31.7.2026 – Android-sovelluksen julkaisu": "31.7.2026 – Android app release",
-        "perustyökaluihin": "basic tools",
-        "edistyneisiin työkaluihin": "advanched tools",
         "Luotu ja julkaistu Sorolan oma Android-sovellus (.apk-lataus), joka helpottaa perustyökalujen käyttöä mobiililaitteilla.": "Sorola's own Android app (.apk download) created and released, making it easier to use the basic tools on mobile devices."
       },
       "attributes": {
@@ -987,8 +991,7 @@
         "Katso sorola.fi-verkkopalvelun tuoreimmat päivitykset, uudet työkalut ja ohjeet kootusti.": "See the latest sorola.fi updates, new tools, and guides all in one place.",
         "Sorolan Muutosloki": "Sorola Changelog",
         "Sorolan Muutosloki - Sivuston päivitykset": "Sorola Changelog - Site updates",
-        "fi_FI": "en_GB",
-        "Sorolan Muutosloki - Sivuston päivitykset": "Sorola Changelog - Site updates"
+        "fi_FI": "en_GB"
       }
     },
     "privacy/index.html": {
