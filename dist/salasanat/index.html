@@ -11,11 +11,14 @@
     <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     <meta name="description" content="Luo vahvoja ja turvallisia salasanoja ilmaiseksi. Valitse pituus ja merkkityypit – salasana generoidaan suoraan selaimessasi, ei palvelimella.">
+    <meta name="keywords" content="salasanageneraattori, salasana, vahva salasana, satunnainen salasana, salasanakone, password generator, Sorola">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/salasanat/">
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Sorolan Salasanakone">
     <meta property="og:description" content="Luo vahvoja salasanoja selaimessasi turvallisesti.">
+        <meta property="og:locale" content="fi_FI">
+    <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Sorolan Salasanakone">
     <meta name="twitter:description" content="Luo vahvoja salasanoja selaimessasi turvallisesti.">
@@ -62,6 +65,19 @@
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/analytics.js"></script>
 
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Sorolan Salasanakone",
+      "url": "https://sorola.fi/salasanat/",
+      "description": "Luo vahvoja ja turvallisia salasanoja ilmaiseksi suoraan selaimessasi.",
+      "applicationCategory": "SecurityApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+    }
+    </script>
 
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }

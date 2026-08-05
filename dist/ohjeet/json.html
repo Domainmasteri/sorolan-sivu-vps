@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>JSON-muotoilijan käyttöohje - Sorola</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/json">
+    <link rel="alternate" hreflang="fi" href="https://sorola.fi/ohjeet/json">
+    <link rel="alternate" hreflang="en" href="https://sorola.fi/en/guides/json-formatter">
+    <link rel="alternate" hreflang="x-default" href="https://sorola.fi/ohjeet/json">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Suomenkielinen ohje Sorolan JSON-muotoilijan käyttöön: muotoile ja validoi JSON-dataa suoraan selaimessasi.">
+    <meta name="keywords" content="JSON muotoilija, JSON validaattori, JSON formatter, JSON validator, käyttöohje, Sorola">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/json">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="JSON-muotoilijan käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje JSON-datan muotoiluun ja validointiin Sorolan JSON-muotoilijalla.">
+    <script src="ohjehaitari.js" defer></script>
+    <style>
+        .ohje-palsta > h2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #ffaa00;
+        }
+
+        .ohje-palsta.auki > h2 {
+            margin-bottom: 16px;
+        }
+
+        .ohje-toggle {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ffaa00;
+            border-radius: 50%;
+            background: transparent;
+            color: #ffaa00;
+            font: inherit;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .ohje-toggle:hover,
+        .ohje-toggle:focus-visible {
+            background: #ffaa00;
+            color: #111;
+            outline: none;
+        }
+
+        .ohje-sisalto[hidden] {
+            display: none;
+        }
+
+        .ohje-sisalto > :first-child {
+            margin-top: 0;
+        }
+
+        .ohje-sisalto > :last-child {
+            margin-bottom: 0;
+        }
+    </style>
+    <!-- Privacy-friendly analytics by Plausible -->
+<script src="/analytics.js"></script>
+
+    <style>
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); }
+        .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+        .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
+        .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="language-overlay" aria-label="Kieli">
+        <span class="language-overlay__label">Kieli</span>
+        <a class="language-overlay__link is-active" href="/ohjeet/json" aria-current="page">🇫🇮</a>
+        <a class="language-overlay__link" href="/en/guides/json-formatter">🇬🇧</a>
+    </nav>
+<a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
+
+<div class="laatikko">
+    <h1 class="otsikko">🔧 JSON-muotoilijan ohje</h1>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Sorolan JSON-muotoilijalla voit muotoilla pakkaamattoman JSON-datan helppolukuiseksi tai pakata sen yhteen riviin. Työkalu toimii täysin paikallisesti selaimessasi.
+        </p>
+    </div>
+
+    <main id="paaosio">
+    <div class="osion-tausta ohje-palsta">
+        <h2>1. Liitä JSON-data
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Liitä tai kirjoita JSON-datasi syötekenttään. Esimerkki:</p>
+            <pre style="background:#0b0d13;padding:10px;border-radius:6px;overflow:auto;"><code>{"nimi":"Testi","arvo":42,"lista":[1,2,3]}</code></pre>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>2. Muotoile tai pakkaa
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <ul>
+                <li><strong>Muotoile:</strong> Lisää sisennykset ja rivinvaihdot — tekee JSONista helppolukuista.</li>
+                <li><strong>Pakkaa:</strong> Poistaa turhat välilyönnit ja rivinvaihdot — pienentää datan kokoa.</li>
+                <li><strong>Tyhjennä:</strong> Tyhjentää molemmat kentät.</li>
+            </ul>
+            <p>Jos JSON-data on virheellinen, työkalu näyttää virheilmoituksen virheen sijainnin kanssa.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>3. Kopioi tulos
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Paina <strong>Kopioi leikepöydälle</strong> -painiketta kopioidaksesi muotoillun tai pakatun JSONin käyttövalmiiksi.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>Tietosuoja
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>JSON-muotoilija toimii kokonaan paikallisesti selaimessasi. Syöttämäsi data ei koskaan poistu laitteeltasi.</p>
+            <p><a href="/privacy/json">Lue tietosuojakäytäntö →</a></p>
+        </div>
+    </div>
+    </main>
+
+    <div class="osion-tausta" style="text-align:center;">
+        <a href="../ohjeet/" class="nappula1">⬅ Takaisin ohjeisiin</a>
+    </div>
+</div>
+
+</body>
+</html>

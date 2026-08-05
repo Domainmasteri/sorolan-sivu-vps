@@ -603,7 +603,8 @@
       }
     },
     "ohjeet/cryptomator.html": {
-      "text": {        "Cryptomator-käyttöohje - Sorola": "Cryptomator guide - Sorola",
+      "text": {
+        "Cryptomator-käyttöohje - Sorola": "Cryptomator guide - Sorola",
         "🔐 Cryptomator-ohje": "🔐 Cryptomator guide",
         "Cryptomator": "Cryptomator",
         "salaa tiedostot omalla laitteellasi ennen niiden tallentamista pilvipalveluun. Tässä ohjeessa käytetään esimerkkinä Google Drivea. Pilvessä näkyvä holvikansio sisältää salattua tietoa, eikä sen tiedostoja pidä muokata suoraan.": "encrypts files on your own device before they are stored in a cloud service. This guide uses Google Drive as an example. The vault folder you see in the cloud contains encrypted data, and its files should not be edited directly.",
@@ -838,21 +839,6 @@
         "Yhteystiedot ja sosiaalinen media": "Contact details and social media"
       }
     },
-    "makelink/donate.html": {
-      "text": {
-        "Tue palvelua": "Support the service",
-        "💸 Tue palvelua": "💸 Support the service",
-        "Jos palvelusta on ollut hyötyä, voit auttaa sen ylläpidossa lahjoituksella. Lahjoitukset käytetään palvelin-, verkkotunnus- ja kehityskuluihin.": "If this service has been useful to you, you can help keep it running with a donation. Donations are used for server, domain, and development costs.",
-        "Pankkisiirto": "Bank transfer",
-        "☕ Lahjoita PayPalilla": "☕ Donate with PayPal",
-        "Lahjoittajien edut": "Supporter benefits",
-        "Mahdollinen pääsy Sorolan yksityiseen salasanaholviin.": "Possible access to Sorola's private password vault.",
-        "Mahdollinen pääsy Sorolan yksityiseen pilvitilaan.": "Possible access to Sorola's private cloud storage.",
-        "Uusien ominaisuuksien testaus ennen muita.": "The chance to test new features before others.",
-        "Palvelun kehityksen tukeminen.": "Helping fund the service's development.",
-        "Edut ovat vapaaehtoisia tukijoille annettavia kiitoksia eivätkä takuu palvelusta.": "Benefits are optional thank-you perks for supporters and are not a service guarantee."
-      }
-    },
     "privacy/lyhennin.html": {
       "text": {
         "Privacy Policy - Sorola Linkkilyhennin": "Privacy Policy - Sorola Link Shortener",
@@ -1046,11 +1032,10 @@
         "Arkkityyppi elämäntapa": "Archetype lifestyle",
         "Hei kaikki!": "Hello everyone!",
         "Tervetuloa sivuilleni. Täällä tutkimme arkkityyppistä elämäntapaa ja sen eri ulottuvuuksia.": "Welcome to my pages. Here we explore the archetypal lifestyle and its different dimensions.",
-        "Tämä on testisivu": "This is a test page",
         "Linkkejä": "Links"
       }
     },
-        "muutokset/index.html": {
+    "muutokset/index.html": {
       "text": {
         "Sorolan Muutosloki - Sivuston päivitykset ja uudet ominaisuudet | Sorola.fi": "Sorola Changelog - Site updates and new features | Sorola.fi",
         "⚡ Sivuston muutosloki": "⚡ Site changelog",
