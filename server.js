@@ -89,7 +89,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiLimiter);
 app.use('/api/auth', authLimiter);
 app.use('/api/upload', uploadLimiter);
-app.use(['/api/lyhennin', '/api/paste', '/api/upload', '/api/config'], (req, res, next) => {
+app.use(['/api/lyhennin', '/api/paste', '/api/upload'], (req, res, next) => {
   res.set({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
@@ -314,6 +314,11 @@ async function requireAuth(req, res, next) {
   }
 }
 
+async function resolveToolApiKey(toolName) {
+  const result = await db.query('SELECT api_key FROM tool_api_keys WHERE tool_name = $1 LIMIT 1', [toolName]);
+  return String(result.rows[0]?.api_key || '').trim();
+}
+
 async function requireApiKey(req, res, next) {
   try {
     const apiKey = String(req.headers['x-api-key'] || req.query?.api_key || '').trim();
@@ -330,13 +335,36 @@ async function requireApiKey(req, res, next) {
   }
 }
 
+function requireWebTool(toolName) {
+  return async (req, res, next) => {
+    try {
+      const configuredKey = await resolveToolApiKey(toolName);
+      if (!configuredKey) {
+        return res.status(503).json({ error: 'Työkalun API-avainta ei ole asetettu.' });
+      }
+
+      const origin = String(req.headers.origin || '').trim();
+      const secFetchSite = String(req.headers['sec-fetch-site'] || '').trim().toLowerCase();
+      const isSameOriginRequest = !origin || origin === `${req.protocol}://${req.get('host')}`;
+      const isBrowserSameSite = !secFetchSite || secFetchSite === 'same-origin' || secFetchSite === 'same-site' || secFetchSite === 'none';
+
+      if (!isSameOriginRequest || !isBrowserSameSite) {
+        return requireApiKey(req, res, next);
+      }
+
+      req.apiKey = { id: null, owner_name: toolName, tool_name: toolName, is_web_tool: true };
+      return next();
+    } catch {
+      return res.status(500).json({ error: 'Palvelinvirhe.' });
+    }
+  };
+}
+
 async function trackApiKeyUsage(apiKeyId) {
   await db.query('INSERT INTO api_key_usage (api_key_id) VALUES ($1)', [apiKeyId]);
 }
 
 const TOOL_KEY_NAMES = ['shortener', 'pastebin', 'share', 'mobile_app'];
-const PUBLIC_TOOL_KEY_NAMES = ['shortener', 'pastebin', 'share'];
-
 function isValidToolName(toolName) {
   return TOOL_KEY_NAMES.includes(String(toolName || '').trim());
 }
@@ -358,14 +386,6 @@ async function getToolApiKeys(toolNames = TOOL_KEY_NAMES) {
     api_key: rowsByName.get(toolName)?.api_key || '',
     updated_at: rowsByName.get(toolName)?.updated_at || null
   }));
-}
-
-async function getPublicToolKeysMap() {
-  const keys = await getToolApiKeys(PUBLIC_TOOL_KEY_NAMES);
-  return keys.reduce((acc, item) => {
-    acc[item.tool_name] = item.api_key || '';
-    return acc;
-  }, {});
 }
 
 async function upsertToolApiKey(toolName, apiKey) {
@@ -473,15 +493,6 @@ app.post('/api/auth', async (req, res) => {
   }
 });
 
-
-app.get('/api/config/public-keys', async (_req, res) => {
-  try {
-    const publicKeys = await getPublicToolKeysMap();
-    return res.json(publicKeys);
-  } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
-  }
-});
 
 app.get('/api/admin/tool-keys', requireAuth, async (_req, res) => {
   try {
@@ -780,7 +791,7 @@ app.delete('/api/links', requireAuth, async (req, res) => {
   }
 });
 
-app.all('/api/lyhennin/create', requireApiKey, apiKeyUsageMiddleware, async (req, res) => {
+app.all('/api/lyhennin/create', requireWebTool('shortener'), apiKeyUsageMiddleware, async (req, res) => {
   try {
     if (!['GET', 'POST'].includes(req.method)) {
       return res.status(405).json({ error: 'Tuntematon metodi.' });
@@ -801,7 +812,7 @@ app.all('/api/lyhennin/create', requireApiKey, apiKeyUsageMiddleware, async (req
 
 
 // --- PASTEBIN REITIT ---
-app.post('/api/paste', requireApiKey, apiKeyUsageMiddleware, async (req, res) => {
+app.post('/api/paste', requireWebTool('pastebin'), apiKeyUsageMiddleware, async (req, res) => {
   try {
     const { content } = req.body;
     if (!content || !content.trim()) return res.status(400).json({ error: 'Teksti on pakollinen.' });
@@ -863,7 +874,7 @@ void ensureUploadBucketReady().catch((error) => {
   console.error(`Bucketin varmistus epäonnistui käynnistyksessä: ${error.message}`);
 });
 
-app.post('/api/upload', requireApiKey, apiKeyUsageMiddleware, uploadShare.single('file'), async (req, res) => {
+app.post('/api/upload', requireWebTool('share'), apiKeyUsageMiddleware, uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
   const maxDownloads = Number.parseInt(req.body?.maxDownloads || '0', 10) || 0;
