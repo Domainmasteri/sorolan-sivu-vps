@@ -197,6 +197,30 @@
         const shareLink = document.getElementById('shareLink');
         const copyBtn = document.getElementById('copyBtn');
         const encryptCheckbox = document.getElementById('encryptCheckbox');
+        let publicToolKeyRequest = null;
+
+        async function haeJulkinenApiAvain(toolName) {
+            const storageKey = `public-tool-key:${toolName}`;
+            const cached = sessionStorage.getItem(storageKey);
+            if (cached) return cached;
+            if (!publicToolKeyRequest) {
+                publicToolKeyRequest = fetch('/api/config/public-keys')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        Object.entries(data || {}).forEach(([name, value]) => {
+                            if (typeof value === 'string' && value) {
+                                sessionStorage.setItem(`public-tool-key:${name}`, value);
+                            }
+                        });
+                        return data || {};
+                    })
+                    .finally(() => { publicToolKeyRequest = null; });
+            }
+            const data = await publicToolKeyRequest;
+            const apiKey = String(data?.[toolName] || '').trim();
+            if (!apiKey) throw new Error('API-avain puuttuu.');
+            return apiKey;
+        }
 
         dropzone.addEventListener('click', () => fileInput.click());
         dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
@@ -256,7 +280,8 @@
                 formData.append('expiryDays', expiryDays);
                 formData.append('maxDownloads', maxDownloads);
 
-                const response = await fetch('/api/upload', { method: 'POST', body: formData });
+                const apiKey = await haeJulkinenApiAvain('share');
+                const response = await fetch('/api/upload', { method: 'POST', headers: { 'X-API-Key': apiKey }, body: formData });
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Lataus epäonnistui.');
 

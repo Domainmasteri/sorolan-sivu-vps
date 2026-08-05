@@ -326,7 +326,7 @@ async function requireApiKey(req, res, next) {
     req.apiKey = key;
     return next();
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
 }
 

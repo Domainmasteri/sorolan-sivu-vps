@@ -12,6 +12,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Spämmieston muuttuja
     let voiLahettaa = true;
+    let apiKeyPromise = null;
+
+    async function haeJulkinenApiAvain(toolName) {
+        const storageKey = `public-tool-key:${toolName}`;
+        const cached = sessionStorage.getItem(storageKey);
+        if (cached) return cached;
+        if (!apiKeyPromise) {
+            apiKeyPromise = fetch('/api/config/public-keys')
+                .then((response) => response.json())
+                .then((data) => {
+                    Object.entries(data || {}).forEach(([name, value]) => {
+                        if (typeof value === 'string' && value) {
+                            sessionStorage.setItem(`public-tool-key:${name}`, value);
+                        }
+                    });
+                    return data || {};
+                })
+                .finally(() => { apiKeyPromise = null; });
+        }
+        const data = await apiKeyPromise;
+        const apiKey = String(data?.[toolName] || '').trim();
+        if (!apiKey) throw new Error('API-avain puuttuu.');
+        return apiKey;
+    }
 
     lomake.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -32,7 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const fetchUrl = `${WORKER_URL}?url=${encodeURIComponent(alkuperainenUrl)}&domain=${encodeURIComponent(domain)}`;
             
             // Tehdään pyyntö Workerille
-            const response = await fetch(fetchUrl);
+            const apiKey = await haeJulkinenApiAvain('shortener');
+            const response = await fetch(fetchUrl, { headers: { 'X-API-Key': apiKey } });
             const data = await response.json();
 
             if (data.success && data.shortUrl) {

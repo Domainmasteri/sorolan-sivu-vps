@@ -163,6 +163,31 @@
     </div>
     
     <script>
+        let publicToolKeyRequest = null;
+
+        async function haeJulkinenApiAvain(toolName) {
+            const storageKey = `public-tool-key:${toolName}`;
+            const cached = sessionStorage.getItem(storageKey);
+            if (cached) return cached;
+            if (!publicToolKeyRequest) {
+                publicToolKeyRequest = fetch('/api/config/public-keys')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        Object.entries(data || {}).forEach(([name, value]) => {
+                            if (typeof value === 'string' && value) {
+                                sessionStorage.setItem(`public-tool-key:${name}`, value);
+                            }
+                        });
+                        return data || {};
+                    })
+                    .finally(() => { publicToolKeyRequest = null; });
+            }
+            const data = await publicToolKeyRequest;
+            const apiKey = String(data?.[toolName] || '').trim();
+            if (!apiKey) throw new Error('API-avain puuttuu.');
+            return apiKey;
+        }
+
         document.getElementById('tallenna-btn').addEventListener('click', async () => {
             const content = document.getElementById('paste-content').value;
             if (!content.trim()) return alert('Tekstikenttä on tyhjä!');
@@ -172,9 +197,10 @@
             btn.textContent = 'Tallennetaan...';
 
             try {
+                const apiKey = await haeJulkinenApiAvain('pastebin');
                 const res = await fetch('/api/paste', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
                     body: JSON.stringify({ content })
                 });
                 const data = await res.json();

@@ -255,6 +255,18 @@
                 </div>
             </div>
 
+
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #22c55e;">🔄 Työkalujen API-avaimet (Lennosta vaihto)</h2>
+                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;">Vaihda verkkotyökalujen ja mobiilisovelluksen aktiivinen API-avain ilman palvelimen uudelleenkäynnistystä.</p>
+                <div class="table-container">
+                    <table id="tool-api-keys-table">
+                        <thead><tr><th>Työkalu</th><th>Nykyinen API-avain</th><th>Päivitetty</th><th>Uusi API-avain</th><th>Actions</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- API-avaimet -->
             <div class="osion-tausta" style="margin-top: 20px;">
                 <h2 style="color: #38bdf8;">🗝️ API keys</h2>
@@ -560,6 +572,7 @@
             }
             lataaAdminTiedostot();
             lataaApiAvaimet();
+            lataaTyokaluAvaimet();
         }
 
         // --- Linkit ---
@@ -708,6 +721,58 @@
         }
 
         // --- API-avaimet ---
+
+        const TOOL_KEY_LABELS = {
+            shortener: 'Lyhennin',
+            pastebin: 'Pastebin',
+            share: 'Tiedostonjako',
+            mobile_app: 'Mobiilisovellus'
+        };
+
+        async function lataaTyokaluAvaimet() {
+            if (!currentAuthHeader) return;
+            try {
+                const res = await fetch('/api/admin/tool-keys', { headers: { 'Authorization': currentAuthHeader } });
+                if (!res.ok) return;
+                const data = await res.json();
+                const tbody = document.querySelector('#tool-api-keys-table tbody');
+                tbody.innerHTML = '';
+                if (!data.toolKeys.length) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#a0aec0;">Ei työkaluavaimia.</td></tr>`;
+                    return;
+                }
+                data.toolKeys.forEach((item) => {
+                    const updatedAt = item.updated_at ? new Date(item.updated_at).toLocaleString('fi-FI') : 'Ei asetettu';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${escapeHtml(TOOL_KEY_LABELS[item.tool_name] || item.tool_name)}</td>
+                            <td style="font-family: monospace; word-break: break-all;">${escapeHtml(item.api_key || 'Ei asetettu')}</td>
+                            <td>${escapeHtml(updatedAt)}</td>
+                            <td><input type="text" id="tool-key-input-${escapeHtml(item.tool_name)}" class="syote" value="${escapeHtml(item.api_key || '')}" style="width: 100%; min-width: 220px;"></td>
+                            <td><button onclick="paivitaTyokaluAvain('${item.tool_name}')" class="nappula1" style="border: 1px solid #22c55e; color: #22c55e;">Tallenna</button></td>
+                        </tr>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function paivitaTyokaluAvain(toolName) {
+            const input = document.getElementById(`tool-key-input-${toolName}`);
+            const apiKey = input?.value?.trim() || '';
+            if (!apiKey) return alert('API-avain puuttuu.');
+            try {
+                const res = await fetch('/api/admin/tool-keys', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ tool_name: toolName, api_key: apiKey })
+                });
+                const data = await res.json();
+                if (!res.ok) return alert(data.error || 'Virhe API-avaimen tallennuksessa.');
+                alert('Työkalun API-avain päivitetty.');
+                lataaTyokaluAvaimet();
+            } catch { alert('Server error.'); }
+        }
+
         async function lataaApiAvaimet() {
             if (!currentAuthHeader) return;
             try {

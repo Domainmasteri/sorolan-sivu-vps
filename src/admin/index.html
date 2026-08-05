@@ -664,9 +664,9 @@
                     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#a0aec0;">Ei työkaluavaimia.</td></tr>`;
                     return;
                 }
-                data.toolKeys.forEach((item) => {
+                const rows = data.toolKeys.map((item) => {
                     const updatedAt = item.updated_at ? new Date(item.updated_at).toLocaleString('fi-FI') : 'Ei asetettu';
-                    tbody.innerHTML += `
+                    return `
                         <tr>
                             <td>${escapeHtml(TOOL_KEY_LABELS[item.tool_name] || item.tool_name)}</td>
                             <td style="font-family: monospace; word-break: break-all;">${escapeHtml(item.api_key || 'Ei asetettu')}</td>
@@ -676,6 +676,7 @@
                         </tr>
                     `;
                 });
+                tbody.innerHTML = rows.join('');
             } catch (e) { console.error(e); }
         }
 
