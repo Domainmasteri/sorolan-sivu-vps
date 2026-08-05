@@ -33,20 +33,19 @@ jobs:
           # Nappaa tekstin joko kommentista tai suoraan issuen rungosta
           PROMPT_TEXT: ${{ github.event.comment.body || github.event.issue.body }}
         run: |
-          # Asennetaan Aider-tekoälyagentti taustalle
+          # Asennetaan Aider-tekoälyagentti
           pip install --quiet aider-chat
 
           # 1. Siivotaan "/gemini"-sana pois viestistä, jotta Aider ei luule sitä omaksi komennokseen
           CLEAN_PROMPT=$(echo "$PROMPT_TEXT" | sed 's/\/gemini//ig' | xargs)
 
-          # 2. Ajetaan Gemini puhtaalla viestillä ja estetään historiatiedostojen tallennus
+          # 2. Ajetaan Gemini puhtaalla viestillä ja turvallisilla toimivilla lipuilla
           aider --model gemini/gemini-2.5-pro \
                 --message "$CLEAN_PROMPT" \
-                --yes \
-                --no-git \
-                --no-history
+                --yes-always \
+                --no-git
 
-          # 3. Varmistetaan vielä, ettei repon juureen jää mitään Aiderin lokitiedostoja sotkemaan PR:ää
+          # 3. Varmistetaan, ettei repon juureen jää mitään Aiderin lokitiedostoja sotkemaan PR:ää
           rm -f .aider*
 
       - name: Create Pull Request
