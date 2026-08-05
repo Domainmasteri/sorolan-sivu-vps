@@ -432,13 +432,24 @@
       "text": {
         "📖 Ohjeet": "📖 Guides",
         "Täältä löydät Sorolan palveluiden käyttöohjeet.": "Here you'll find usage guides for Sorola services.",
-        "Salaa tiedostosi ennen niiden tallentamista pilveen.": "Encrypt your files before storing them in the cloud.",
+        "QR-koodin luoja": "QR code generator",
+        "Luo QR-koodeja nettisivuille, WiFi-verkoille, yhteystiedoille ja muulle.": "Create QR codes for websites, WiFi networks, contact details, and more.",
+        "Linkin lyhennin": "URL shortener",
         "Opettele luomaan lyhyitä ja helposti jaettavia linkkejä.": "Learn how to create short and easy-to-share links.",
-        "Linkin lyhennin": "URL-Shortener",
+        "Salasanageneraattori": "Password generator",
+        "Luo vahvoja ja satunnaisia salasanoja suoraan selaimessasi.": "Generate strong and random passwords directly in your browser.",
+        "Pastebin": "Pastebin",
+        "Jaa koodia ja tekstiä helposti väliaikaisilla linkeillä.": "Share code and text easily with temporary links.",
         "Tiedostonjako": "File sharing",
         "Jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla.": "Share files securely with download limits and expiration times.",
-        "Salasanaholvi": "Password vault",
-        "Luo ja varastoi vahvoja salasanoja.": "Create and store strong passwords."
+        "JSON-muotoilija": "JSON formatter",
+        "Muotoile ja validoi JSON-dataa suoraan selaimessasi.": "Format and validate JSON data directly in your browser.",
+        "Base64 Kooderi": "Base64 Encoder",
+        "Koodaa ja pura Base64-tekstiä suoraan selaimessasi.": "Encode and decode Base64 text directly in your browser.",
+        "Cryptomator": "Cryptomator",
+        "Salaa tiedostosi ennen niiden tallentamista pilveen.": "Encrypt your files before storing them in the cloud.",
+        "Bitwarden – salasananhallinta": "Bitwarden – password manager",
+        "Luo, säilytä ja hallitse vahvoja salasanoja Bitwardenin avulla.": "Create, store, and manage strong passwords with Bitwarden."
       },
       "attributes": {
         "Selkeät ja suomenkieliset käyttöohjeet eri IT-työkaluihin, ohjelmistoihin ja teknisten ongelmien ratkaisuun. Lue oppaat ja ota laitteet haltuun.": "Clear usage guides for different IT tools, software, and technical problem solving. Read the tutorials and take control of your devices.",
@@ -842,20 +853,6 @@
         "Edut ovat vapaaehtoisia tukijoille annettavia kiitoksia eivätkä takuu palvelusta.": "Benefits are optional thank-you perks for supporters and are not a service guarantee."
       }
     },
-    "privacy/index.html": {
-      "text": {
-        "Tietosuojakäytännöt - Sorolan Sakki": "Privacy policies - Sorolan Sakki",
-        "Tietosuoja": "Privacy",
-        "Tältä sivulta löydät Sorolan Sakin selainlaajennusten ja palveluiden viralliset tietosuojakäytännöt.": "On this page you'll find the official privacy policies for Sorolan Sakki browser extensions and services.",
-        "🔗 Linkkilyhennin": "🔗 Link shortener",
-        "🔑 Salasanakone": "🔑 Password generator"
-      },
-      "attributes": {
-        "Sorolan Sakin palveluiden ja selainlaajennusten viralliset tietosuojakäytännöt.": "Official privacy policies for Sorolan Sakki services and browser extensions.",
-        "Privacy policies": "Privacy policies",
-        "Tietosuojakäytännöt": "Privacy policies"
-      }
-    },
     "privacy/lyhennin.html": {
       "text": {
         "Privacy Policy - Sorola Linkkilyhennin": "Privacy Policy - Sorola Link Shortener",
@@ -869,11 +866,104 @@
         "Sorolan Salasanat (\"the Extension\") is a strictly local password generator committed to absolute user privacy. This Privacy Policy explains how the Extension handles information.": "Sorola Password Generator (\"the Extension\") is a strictly local password generator committed to absolute user privacy. This Privacy Policy explains how the Extension handles information."
       }
     },
-    "privacy/holvi.html": {
+    "privacy/qr.html": {
       "text": {
-        "Privacy Policy for Sorolan Holvi": "Privacy Policy for Sorola Vault",
-        "Privacy Policy - Sorolan Holvi": "Privacy Policy - Sorola Vault",
-        "Sorolan Holvi (\"the Extension\") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data.": "Sorola Vault (\"the Extension\") is a personal, encrypted password manager committed to protecting your privacy. This Privacy Policy explains how the Extension handles your data."
+        "Privacy Policy - Sorolan QR-koodin luoja": "Privacy Policy - Sorola QR Code Generator",
+        "Privacy Policy for Sorolan QR-koodin luoja": "Privacy Policy for Sorola QR Code Generator",
+        "Sorolan QR-koodin luoja (\"the Tool\") is a free QR code generator committed to protecting user privacy. This Privacy Policy explains how the Tool handles information.": "Sorola QR Code Generator (\"the Tool\") is a free QR code generator committed to protecting user privacy. This Privacy Policy explains how the Tool handles information.",
+        "The Tool generates QR codes by sending the user-provided data to a server-side API endpoint (<code>/api/qr-proxy</code>) solely to render the QR code image. This data is processed only to produce the image and is not stored, logged, or used for any other purpose.": "The Tool generates QR codes by sending the user-provided data to a server-side API endpoint solely to render the QR code image. This data is processed only to produce the image and is not stored, logged, or used for any other purpose.",
+        "Effective Date:": "Effective Date:",
+        "August 2026": "August 2026"
+      }
+    },
+    "privacy/pastebin.html": {
+      "text": {
+        "Privacy Policy - Sorolan Pastebin": "Privacy Policy - Sorola Pastebin",
+        "Privacy Policy for Sorolan Pastebin": "Privacy Policy for Sorola Pastebin",
+        "Sorolan Pastebin (\"the Service\") is a text and code sharing service committed to protecting user privacy. This Privacy Policy explains how the Service handles information.": "Sorola Pastebin (\"the Service\") is a text and code sharing service committed to protecting user privacy. This Privacy Policy explains how the Service handles information."
+      }
+    },
+    "privacy/jako.html": {
+      "text": {
+        "Privacy Policy - Sorolan Tiedostojako": "Privacy Policy - Sorola File Sharing",
+        "Privacy Policy for Sorolan Tiedostojako": "Privacy Policy for Sorola File Sharing",
+        "Sorolan Tiedostojako (\"the Service\") is a temporary file sharing service committed to protecting user privacy. This Privacy Policy explains how the Service handles your data.": "Sorola File Sharing (\"the Service\") is a temporary file sharing service committed to protecting user privacy. This Privacy Policy explains how the Service handles your data."
+      }
+    },
+    "privacy/json.html": {
+      "text": {
+        "Privacy Policy - Sorolan JSON-muotoilija": "Privacy Policy - Sorola JSON Formatter",
+        "Privacy Policy for Sorolan JSON-muotoilija": "Privacy Policy for Sorola JSON Formatter",
+        "Sorolan JSON-muotoilija (\"the Tool\") is a 100% local JSON formatter and validator committed to absolute user privacy. This Privacy Policy explains how the Tool handles information.": "Sorola JSON Formatter (\"the Tool\") is a 100% local JSON formatter and validator committed to absolute user privacy. This Privacy Policy explains how the Tool handles information."
+      }
+    },
+    "privacy/base64.html": {
+      "text": {
+        "Privacy Policy - Sorolan Base64 Kooderi": "Privacy Policy - Sorola Base64 Encoder",
+        "Privacy Policy for Sorolan Base64 Kooderi": "Privacy Policy for Sorola Base64 Encoder",
+        "Sorolan Base64 Kooderi (\"the Tool\") is a 100% local Base64 encoder and decoder committed to absolute user privacy. This Privacy Policy explains how the Tool handles information.": "Sorola Base64 Encoder (\"the Tool\") is a 100% local Base64 encoder and decoder committed to absolute user privacy. This Privacy Policy explains how the Tool handles information."
+      }
+    },
+    "ohjeet/qr.html": {
+      "text": {
+        "QR-koodin luojan käyttöohje - Sorola": "QR code generator guide - Sorola",
+        "📱 QR-koodin luojan ohje": "📱 QR code generator guide",
+        "Sorolan QR-generaattorilla voit luoda monipuolisia QR-koodeja ilmaiseksi. Voit jakaa nettisivuja, yhteystietoja, WiFi-salasanoja ja muuta yhdellä skannauksella.": "With Sorola's QR generator you can create versatile QR codes for free. Share websites, contact details, WiFi passwords, and more with a single scan.",
+        "1. Valitse QR-koodin tyyppi": "1. Choose the QR code type",
+        "2. Syötä tiedot": "2. Enter the data",
+        "3. Päivitä ja lataa QR-koodi": "3. Generate and download the QR code",
+        "Päivitä QR-koodi": "Generate QR code",
+        "Lataa kuvana (PNG)": "Download as image (PNG)",
+        "QR-koodi luodaan palvelinpuolen rajapinnan kautta, mutta syöttämiäsi tietoja ei tallenneta palvelimelle. Älä syötä QR-generaattoriin salasanoja tai muita arkaluonteisia tietoja.": "QR codes are generated via a server-side API endpoint, but the data you enter is not stored on the server. Do not enter passwords or other sensitive data into the QR generator.",
+        "Lue tietosuojakäytäntö →": "Read privacy policy →"
+      }
+    },
+    "ohjeet/salasanat.html": {
+      "text": {
+        "Salasanageneraattorin käyttöohje - Sorola": "Password generator guide - Sorola",
+        "🔑 Salasanageneraattorin ohje": "🔑 Password generator guide",
+        "Sorolan salasanageneraattorilla voit luoda vahvoja ja satunnaisia salasanoja suoraan selaimessasi. Työkalu toimii täysin offline-tilassa – mitään ei lähetetä palvelimelle.": "With Sorola's password generator you can create strong, random passwords directly in your browser. The tool works entirely offline — nothing is sent to the server.",
+        "1. Säädä salasanan asetuksia": "1. Adjust password settings",
+        "2. Luo salasana": "2. Generate a password",
+        "3. Tallenna salasana turvallisesti": "3. Store the password securely",
+        "Luo vahvoja ja satunnaisia salasanoja suoraan selaimessasi.": "Generate strong and random passwords directly in your browser.",
+        "Salasanageneraattori toimii täysin paikallisesti selaimessasi. Luotuja salasanoja ei lähetetä tai tallenneta palvelimelle missään vaiheessa.": "The password generator runs entirely locally in your browser. Generated passwords are never sent to or stored on the server."
+      }
+    },
+    "ohjeet/pastebin.html": {
+      "text": {
+        "Pastebinin käyttöohje - Sorola": "Pastebin guide - Sorola",
+        "📝 Pastebinin ohje": "📝 Pastebin guide",
+        "Sorolan Pastebin on nopea ja yksinkertainen tapa jakaa koodia, lokeja tai muuta tekstiä väliaikaisilla linkeillä. Ei vaadi rekisteröitymistä.": "Sorola Pastebin is a fast and simple way to share code, logs, or other text with temporary links. No registration required.",
+        "1. Kirjoita tai liitä teksti": "1. Write or paste text",
+        "2. Luo ja jaa linkki": "2. Create and share the link",
+        "3. Lue olemassa oleva paste": "3. Read an existing paste",
+        "Luo paste": "Create paste",
+        "Paste-sisältö tallennetaan palvelimelle väliaikaisesti, kunnes se vanhenee. Sisältöä ei salata palvelimella — älä tallenna arkaluonteisia tietoja pastehin.": "Paste content is stored on the server temporarily until it expires. Content is not encrypted at rest — do not store sensitive data in pastes."
+      }
+    },
+    "ohjeet/json.html": {
+      "text": {
+        "JSON-muotoilijan käyttöohje - Sorola": "JSON formatter guide - Sorola",
+        "🔧 JSON-muotoilijan ohje": "🔧 JSON formatter guide",
+        "Sorolan JSON-muotoilijalla voit muotoilla pakkaamattoman JSON-datan helppolukuiseksi tai pakata sen yhteen riviin. Työkalu toimii täysin paikallisesti selaimessasi.": "With Sorola's JSON formatter you can format uncompressed JSON data for easy reading, or compact it to a single line. The tool works entirely locally in your browser.",
+        "1. Liitä JSON-data": "1. Paste JSON data",
+        "2. Muotoile tai pakkaa": "2. Format or compact",
+        "3. Kopioi tulos": "3. Copy the result",
+        "Muotoile": "Format",
+        "Pakkaa": "Compact",
+        "JSON-muotoilija toimii kokonaan paikallisesti selaimessasi. Syöttämäsi data ei koskaan poistu laitteeltasi.": "The JSON formatter runs entirely locally in your browser. The data you enter never leaves your device."
+      }
+    },
+    "ohjeet/base64.html": {
+      "text": {
+        "Base64 Kooderin käyttöohje - Sorola": "Base64 Encoder guide - Sorola",
+        "🔐 Base64 Kooderin ohje": "🔐 Base64 Encoder guide",
+        "Sorolan Base64 Kooderilla voit koodata tekstiä Base64-muotoon tai purkaa Base64-datan takaisin luettavaksi tekstiksi. Työkalu toimii täysin offline-tilassa — mitään ei lähetetä palvelimelle.": "With Sorola's Base64 Encoder you can encode text to Base64 format or decode Base64 data back to readable text. The tool works entirely offline — nothing is sent to the server.",
+        "Mikä on Base64?": "What is Base64?",
+        "1. Koodaa teksti Base64-muotoon": "1. Encode text to Base64",
+        "2. Pura Base64-teksti": "2. Decode Base64 text",
+        "Base64 Kooderi toimii kokonaan paikallisesti selaimessasi. Syöttämäsi teksti ei koskaan poistu laitteeltasi.": "The Base64 Encoder runs entirely locally in your browser. The text you enter never leaves your device."
       }
     },
     "admin/index.html": {
@@ -998,13 +1088,17 @@
       "text": {
         "Tietosuojakäytännöt - Sorolan Sakki": "Privacy policies - Sorolan Sakki",
         "Tietosuoja": "Privacy",
-        "Tältä sivulta löydät Sorolan Sakin selainlaajennusten ja palveluiden viralliset tietosuojakäytännöt.": "Here you'll find the official privacy policies for Sorolan Sakki browser extensions and services.",
+        "Tältä sivulta löydät Sorolan Sakin selainlaajennusten ja palveluiden viralliset tietosuojakäytännöt.": "Here you'll find the official privacy policies for Sorolan Sakki services and tools.",
         "🔗 Linkkilyhennin": "🔗 Link Shortener",
         "🎲 Salasanakone": "🎲 Password Generator",
-        "🔐 Sorolan Holvi": "🔐 Sorolan Holvi"
+        "📱 QR-koodin luoja": "📱 QR code generator",
+        "📝 Pastebin": "📝 Pastebin",
+        "📁 Tiedostojako": "📁 File Sharing",
+        "🔧 JSON-muotoilija": "🔧 JSON Formatter",
+        "🔐 Base64": "🔐 Base64"
       },
       "attributes": {
-        "Sorolan Sakin palveluiden ja selainlaajennusten viralliset tietosuojakäytännöt.": "Official privacy policies for Sorolan Sakki services and browser extensions.",
+        "Sorolan Sakin palveluiden ja selainlaajennusten viralliset tietosuojakäytännöt.": "Official privacy policies for Sorolan Sakki services and tools.",
         "Tietosuojakäytännöt - Sorolan Sakki": "Privacy policies - Sorolan Sakki",
         "Tietosuojakäytännöt": "Privacy policies"
       }

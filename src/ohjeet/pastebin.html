@@ -2,18 +2,18 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Linkinlyhentimen käyttöohje - Sorola</title>
+    <title>Pastebinin käyttöohje - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/ohjeet/linkinlyhennin">
-    <link rel="stylesheet" href="/styles/pohja.css">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/pastebin">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Suomenkielinen ohje Sorolan linkinlyhentimen käyttöön: luo lyhyitä ja helposti jaettavia linkkejä URL-osoitteista.">
-    <meta name="keywords" content="linkinlyhennin, URL-lyhennin, lyhytlinkki, lyhytosoite, URL shortener, käyttöohje, Sorola">
+    <meta name="description" content="Suomenkielinen ohje Sorolan Pastebinin käyttöön: jaa koodia ja tekstiä helposti väliaikaisilla linkeillä.">
+    <meta name="keywords" content="pastebin, koodinjako, tekstinjako, väliaikainen linkki, käyttöohje, Sorola">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://sorola.fi/ohjeet/linkinlyhennin">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/pastebin">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Linkinlyhentimen käyttöohje - Sorola">
-    <meta property="og:description" content="Suomenkielinen ohje lyhytlinkkien luomiseen Sorolan linkinlyhentimellä.">
+    <meta property="og:title" content="Pastebinin käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje koodin ja tekstin jakamiseen Sorolan Pastebin-palvelulla.">
     <script src="ohjehaitari.js" defer></script>
     <style>
         .ohje-palsta > h2 {
@@ -67,51 +67,47 @@
 <script src="/analytics.js"></script>
 </head>
 <body>
-
 <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
 <div class="laatikko">
-    <h1 class="otsikko">🔗 Linkinlyhentimen käyttö</h1>
+    <h1 class="otsikko">📝 Pastebinin ohje</h1>
 
-    <div class="osion-tausta">
-        <p>Sorolan linkinlyhentimellä voit muuttaa pitkät URL-osoitteet lyhyiksi ja helpommin jaettaviksi.</p>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Sorolan Pastebin on nopea ja yksinkertainen tapa jakaa koodia, lokeja tai muuta tekstiä väliaikaisilla linkeillä. Ei vaadi rekisteröitymistä.
+        </p>
     </div>
 
     <main id="paaosio">
-
     <div class="osion-tausta ohje-palsta">
-        <h2>1. Syötä pitkä osoite
+        <h2>1. Kirjoita tai liitä teksti
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Liitä haluamasi verkkosivun osoite kenttään.</p>
-            <p><strong>Esimerkki:</strong></p>
-            <code>https://esimerkki.fi/todella/pitka/osoite/joka/on/hankala/jakaa</code>
+            <p>Kirjoita tai liitä haluamasi teksti tai koodi tekstikenttään. Voit halutessasi valita ohjelmointikielen syntaksin korostusta varten.</p>
+            <p><strong>Huomio:</strong> Älä liitä salasanoja, API-avaimia tai muita arkaluonteisia tietoja Pastebiniin — paste-linkit ovat julkisia ja kuka tahansa, jolla on linkki, voi lukea sisällön.</p>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>2. Luo lyhyt linkki
+        <h2>2. Luo ja jaa linkki
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Paina "Luo linkki" -painiketta.</p>
-            <p>Palvelu luo automaattisesti lyhyen osoitteen.</p>
+            <ol>
+                <li>Paina <strong>Luo paste</strong> -painiketta.</li>
+                <li>Palvelu luo automaattisesti uniikin linkin pasteellesi.</li>
+                <li>Kopioi linkki ja jaa se esimerkiksi sähköpostissa, pikaviestimessä tai GitHub-issuessa.</li>
+            </ol>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>3. Jaa linkki
+        <h2>3. Lue olemassa oleva paste
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Voit jakaa lyhyen linkin esimerkiksi:</p>
-            <ul>
-                <li>Sähköpostissa</li>
-                <li>Sosiaalisessa mediassa</li>
-                <li>QR-koodissa</li>
-                <li>Tekstiviesteissä</li>
-            </ul>
+            <p>Avaa sinulle jaettu paste-linkki selaimessa. Teksti näkyy luettavana sivuna. Paste säilyy palvelimella määritetyn ajan, jonka jälkeen se poistetaan automaattisesti.</p>
         </div>
     </div>
 
@@ -120,8 +116,8 @@
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Linkinlyhennin ei muuta alkuperäisen sivun sisältöä. Lyhyt linkki toimii vain uudelleenohjauksena alkuperäiseen osoitteeseen.</p>
-            <p><a href="/privacy/lyhennin">Lue tietosuojakäytäntö →</a></p>
+            <p>Paste-sisältö tallennetaan palvelimelle väliaikaisesti, kunnes se vanhenee. Sisältöä ei salata palvelimella — älä tallenna arkaluonteisia tietoja pastehin.</p>
+            <p><a href="/privacy/pastebin">Lue tietosuojakäytäntö →</a></p>
         </div>
     </div>
     </main>

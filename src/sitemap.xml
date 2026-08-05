@@ -92,12 +92,11 @@
    <!-- Tietosuoja -->
    <url>
       <loc>https://sorola.fi/privacy/</loc>
-      <lastmod>2025-07-12</lastmod>
+      <lastmod>2026-08-05</lastmod>
       <changefreq>yearly</changefreq>
       <priority>0.4</priority>
    </url>
 
-   <!-- JSON-muotoilija -->
    <url>
       <loc>https://sorola.fi/json/</loc>
       <lastmod>2026-08-01</lastmod>
@@ -113,10 +112,130 @@
       <priority>0.7</priority>
    </url>
 
+   <!-- Pastebin -->
+   <url>
+      <loc>https://sorola.fi/pastebin/</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+
+   <!-- Tietosuoja – QR -->
+   <url>
+      <loc>https://sorola.fi/privacy/qr</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.3</priority>
+   </url>
+
+   <!-- Tietosuoja – Pastebin -->
+   <url>
+      <loc>https://sorola.fi/privacy/pastebin</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.3</priority>
+   </url>
+
+   <!-- Tietosuoja – Tiedostojako -->
+   <url>
+      <loc>https://sorola.fi/privacy/jako</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.3</priority>
+   </url>
+
+   <!-- Tietosuoja – JSON -->
+   <url>
+      <loc>https://sorola.fi/privacy/json</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.3</priority>
+   </url>
+
+   <!-- Tietosuoja – Base64 -->
+   <url>
+      <loc>https://sorola.fi/privacy/base64</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.3</priority>
+   </url>
+
+   <!-- Tietosuoja – Linkkilyhennin -->
+   <url>
+      <loc>https://sorola.fi/privacy/lyhennin</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.3</priority>
+   </url>
+
+   <!-- Tietosuoja – Salasanakone -->
+   <url>
+      <loc>https://sorola.fi/privacy/salasanat</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.3</priority>
+   </url>
+
+   <!-- Ohjeet – QR -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/qr</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Ohjeet – Salasanat -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/salasanat</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Ohjeet – Pastebin -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/pastebin</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Ohjeet – JSON -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/json</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Ohjeet – Base64 -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/base64</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Ohjeet – Linkinlyhennin -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/linkinlyhennin</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
+   <!-- Ohjeet – Tiedostojako -->
+   <url>
+      <loc>https://sorola.fi/ohjeet/tiedostojako</loc>
+      <lastmod>2026-08-05</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+
    <!-- Muutosloki -->
    <url>
       <loc>https://sorola.fi/muutokset</loc>
-      <lastmod>2026-08-04</lastmod>
+      <lastmod>2026-08-05</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.5</priority>
    </url>

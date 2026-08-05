@@ -2,18 +2,18 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Linkinlyhentimen käyttöohje - Sorola</title>
+    <title>JSON-muotoilijan käyttöohje - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://sorola.fi/ohjeet/linkinlyhennin">
-    <link rel="stylesheet" href="/styles/pohja.css">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/json">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
-    <meta name="description" content="Suomenkielinen ohje Sorolan linkinlyhentimen käyttöön: luo lyhyitä ja helposti jaettavia linkkejä URL-osoitteista.">
-    <meta name="keywords" content="linkinlyhennin, URL-lyhennin, lyhytlinkki, lyhytosoite, URL shortener, käyttöohje, Sorola">
+    <meta name="description" content="Suomenkielinen ohje Sorolan JSON-muotoilijan käyttöön: muotoile ja validoi JSON-dataa suoraan selaimessasi.">
+    <meta name="keywords" content="JSON muotoilija, JSON validaattori, JSON formatter, JSON validator, käyttöohje, Sorola">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://sorola.fi/ohjeet/linkinlyhennin">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/json">
     <meta property="og:site_name" content="Sorolan Sakki">
-    <meta property="og:title" content="Linkinlyhentimen käyttöohje - Sorola">
-    <meta property="og:description" content="Suomenkielinen ohje lyhytlinkkien luomiseen Sorolan linkinlyhentimellä.">
+    <meta property="og:title" content="JSON-muotoilijan käyttöohje - Sorola">
+    <meta property="og:description" content="Suomenkielinen ohje JSON-datan muotoiluun ja validointiin Sorolan JSON-muotoilijalla.">
     <script src="ohjehaitari.js" defer></script>
     <style>
         .ohje-palsta > h2 {
@@ -67,51 +67,48 @@
 <script src="/analytics.js"></script>
 </head>
 <body>
-
 <a href="#paaosio" class="skip-to-content">Hyppää pääsisältöön</a>
 
 <div class="laatikko">
-    <h1 class="otsikko">🔗 Linkinlyhentimen käyttö</h1>
+    <h1 class="otsikko">🔧 JSON-muotoilijan ohje</h1>
 
-    <div class="osion-tausta">
-        <p>Sorolan linkinlyhentimellä voit muuttaa pitkät URL-osoitteet lyhyiksi ja helpommin jaettaviksi.</p>
+    <div class="osion-tausta" style="text-align:center;">
+        <p style="margin:0;">
+            Sorolan JSON-muotoilijalla voit muotoilla pakkaamattoman JSON-datan helppolukuiseksi tai pakata sen yhteen riviin. Työkalu toimii täysin paikallisesti selaimessasi.
+        </p>
     </div>
 
     <main id="paaosio">
-
     <div class="osion-tausta ohje-palsta">
-        <h2>1. Syötä pitkä osoite
+        <h2>1. Liitä JSON-data
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Liitä haluamasi verkkosivun osoite kenttään.</p>
-            <p><strong>Esimerkki:</strong></p>
-            <code>https://esimerkki.fi/todella/pitka/osoite/joka/on/hankala/jakaa</code>
+            <p>Liitä tai kirjoita JSON-datasi syötekenttään. Esimerkki:</p>
+            <pre style="background:#0b0d13;padding:10px;border-radius:6px;overflow:auto;"><code>{"nimi":"Testi","arvo":42,"lista":[1,2,3]}</code></pre>
         </div>
     </div>
 
     <div class="osion-tausta ohje-palsta">
-        <h2>2. Luo lyhyt linkki
+        <h2>2. Muotoile tai pakkaa
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Paina "Luo linkki" -painiketta.</p>
-            <p>Palvelu luo automaattisesti lyhyen osoitteen.</p>
-        </div>
-    </div>
-
-    <div class="osion-tausta ohje-palsta">
-        <h2>3. Jaa linkki
-            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
-        </h2>
-        <div class="ohje-sisalto">
-            <p>Voit jakaa lyhyen linkin esimerkiksi:</p>
             <ul>
-                <li>Sähköpostissa</li>
-                <li>Sosiaalisessa mediassa</li>
-                <li>QR-koodissa</li>
-                <li>Tekstiviesteissä</li>
+                <li><strong>Muotoile:</strong> Lisää sisennykset ja rivinvaihdot — tekee JSONista helppolukuista.</li>
+                <li><strong>Pakkaa:</strong> Poistaa turhat välilyönnit ja rivinvaihdot — pienentää datan kokoa.</li>
+                <li><strong>Tyhjennä:</strong> Tyhjentää molemmat kentät.</li>
             </ul>
+            <p>Jos JSON-data on virheellinen, työkalu näyttää virheilmoituksen virheen sijainnin kanssa.</p>
+        </div>
+    </div>
+
+    <div class="osion-tausta ohje-palsta">
+        <h2>3. Kopioi tulos
+            <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
+        </h2>
+        <div class="ohje-sisalto">
+            <p>Paina <strong>Kopioi leikepöydälle</strong> -painiketta kopioidaksesi muotoillun tai pakatun JSONin käyttövalmiiksi.</p>
         </div>
     </div>
 
@@ -120,8 +117,8 @@
             <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje">+</button>
         </h2>
         <div class="ohje-sisalto">
-            <p>Linkinlyhennin ei muuta alkuperäisen sivun sisältöä. Lyhyt linkki toimii vain uudelleenohjauksena alkuperäiseen osoitteeseen.</p>
-            <p><a href="/privacy/lyhennin">Lue tietosuojakäytäntö →</a></p>
+            <p>JSON-muotoilija toimii kokonaan paikallisesti selaimessasi. Syöttämäsi data ei koskaan poistu laitteeltasi.</p>
+            <p><a href="/privacy/json">Lue tietosuojakäytäntö →</a></p>
         </div>
     </div>
     </main>
