@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="privacy.uuid_otsikko">Tietosuojakäytäntö - Sorolan UUID-generaattori</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+</head>
+<body>
+    <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_sisältöön">Hyppää sisältöön</a>
+    <div class="laatikko">
+        <h1 class="otsikko" data-i18n="privacy.uuid_otsikko">Tietosuojakäytäntö - Sorolan UUID-generaattori</h1>
+        
+        <main id="paaosio">
+            <div class="osion-tausta">
+                <p data-i18n="privacy.uuid_seloste">
+                    Sorolan UUID/GUID-generaattori toimii täysin paikallisesti selaimessasi (Web Crypto API). Mitään luotuja tunnisteita tai laitetietoja ei kerätä, tallenneta tai lähetetä palvelimelle.
+                </p>
+            </div>
+
+            <a href="/uuid" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle">« Takaisin työkaluun</a>
+        </main>
+    </div>
+</body>
+</html>
