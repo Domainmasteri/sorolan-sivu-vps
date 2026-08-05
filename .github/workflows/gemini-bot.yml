@@ -8,7 +8,7 @@ on:
 
 jobs:
   gemini-coder:
-    # Aja vain jos kommentissa tai uudessa issuessa lukee "/gemini"
+    # Aja vain jos uudessa issuessa tai kommentissa lukee "/gemini"
     if: contains(github.event.issue.body, '/gemini') || contains(github.event.comment.body, '/gemini')
     runs-on: ubuntu-latest
     permissions:
@@ -22,23 +22,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          node-version: '20'
+          python-version: '3.11'
 
       - name: Run Gemini AI Agent
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          ISSUE_BODY: ${{ github.event.issue.body }}
+          # Nappaa tekstin joko kommentista tai suoraan issuen rungosta
+          PROMPT_TEXT: ${{ github.event.comment.body || github.event.issue.body }}
         run: |
-          # Asennetaan kevyt tekoäly-CLI taustalle (esim. virallinen @google/generative-ai tai avoin CLI)
-          npm install -g @google/generative-ai
-          
-          # Tähän tulee agentti, joka ottaa vastaan Issuen tekstin, muokkaa tiedostoja ja tekee branchin
-          echo "Gemini kuuntelee... (Tähän kytketään haluttu open-source Gemini action scripti)"
+          # Asennetaan Aider-tekoälyagentti taustalle
+          pip install --quiet aider-chat
+
+          # Ajetaan Gemini muokkaamaan tiedostoja ohjeistuksen perusteella
+          # --yes hyväksyy tekoälyn ehdottamat muutokset automaattisesti
+          # --no-git jättää kommitoinnin ja PR:n teon seuraavalle askeleelle
+          aider --model gemini/gemini-2.5-pro \
+                --message "$PROMPT_TEXT" \
+                --yes \
+                --no-git
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
