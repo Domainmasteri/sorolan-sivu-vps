@@ -39,7 +39,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Syötetään repon tiedostot kontekstiksi ($(git ls-files)) ja pakotetaan tiedostojen luonti
-          aider --model gemini/gemini-2.5-pro \
+          aider --model gemini/gemini-2.5-flash \
                 --message "TEHTÄVÄ: $ISSUE_TITLE. OHJEET: $ISSUE_BODY. TÄRKEÄÄ: Luo tarvittavat uudet .html, .js, .css ja .md -tiedostot suoraan projektiin ja muokkaa CHANGELOG.md-tiedostoa." \
                 --yes-always \
                 --no-auto-commits \
