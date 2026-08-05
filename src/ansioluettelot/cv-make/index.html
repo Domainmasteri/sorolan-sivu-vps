@@ -3,99 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="ansioluettelot.markus_sorola_cv">Markus Sorola - CV</title>
-    <!-- Tuodaan html2pdf.js -kirjasto -->
-    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
-    <!-- Linkitetään oma tyylitiedosto -->
-    <link rel="stylesheet" href="/styles/style.css">
-    <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+    <title>Markus Sorola - Ansioluettelo (CV)</title>
+    
+    <meta name="description" content="Markus Sorolan ansioluettelo. IT-infrastruktuurin, verkkokehityksen ja logistiikan osaaja Salosta.">
+    <meta name="keywords" content="Markus Sorola, CV, ansioluettelo, työkokemus, koulutus, IT-ala, logistiikka, Salo">
+    <meta name="author" content="Markus Sorola">
+    <script src="/analytics.js"></script>
+
+    <style>
+        :root {
+            --bg: #f3f4f6;
+            --surface: #ffffff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --accent: #2563eb;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .document-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 3rem;
+        }
+
+        /* Uusi Header-asettelu profiilikuvalle */
+        .cv-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .header-info h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: var(--text-main);
+        }
+
+        .header-info p {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.2rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Pyöreä profiilikuva ylänurkassa */
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--border);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .cv-body {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+        }
+
+        .sidebar h2 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar h2:first-child { margin-top: 0; }
+
+        .sidebar p { margin: 0.5rem 0; font-size: 0.95rem; }
+        .sidebar a { color: var(--accent); text-decoration: none; }
+        .sidebar a:hover { text-decoration: underline; }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        .sidebar li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .main-content h2 {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .item { margin-bottom: 1.8rem; }
+        .item:last-child { margin-bottom: 0; }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .item-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0.2rem 0 0.5rem 0;
+            font-style: italic;
+        }
+
+        .item-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .cv-body { grid-template-columns: 1fr; gap: 2rem; }
+            .cv-header { flex-direction: column-reverse; text-align: center; gap: 1.5rem; }
+            .document-container { padding: 1.5rem; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Nappi joka käynnistää PDF-luonnin -->
-<button class="btn-download" onclick="generatePDF()" data-i18n="common.lataa_pdf">Lataa PDF</button>
-
-<!-- CV:n alue (Lukittu A4-kokoon) -->
-<div class="cv-container" id="cv">
+<div class="document-container">
     
-    <!-- Vasen palkki -->
-    <div class="sidebar">
-        <!-- VAIHDA TÄHÄN OMAN KUVASI TIEDOSTONIMI (esim. 73854.jpg) -->
-        <img src="cv-kuva.jpg" alt="Profiilikuva" class="profile-pic" data-i18n-attr-alt="ansioluettelot.profiilikuva">
-        
-        <h2 data-i18n="ansioluettelot.henkilötiedot">Henkilötiedot</h2>
-        <p><strong>Nimi:</strong> Markus Sorola</p>
-        <p><strong>Sähköposti:</strong> <a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
-        <p><strong>Paikkakunta:</strong> Salo</p>
-        <p><strong>Syntymäaika:</strong> 29. heinäkuuta 1998</p>
-        <p><strong>Verkkosivu:</strong> <a href="https://sorola.fi" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
-
-        <h3 data-i18n="ansioluettelot.taidot">Taidot</h3>
-        <ul>
-            <li data-i18n="ansioluettelot.palvelimet_ja_domainit">palvelimet ja domainit</li>
-            <li data-i18n="ansioluettelot.office_ja_toimistoohjelmat">Office- ja toimisto-ohjelmat</li>
-            <li data-i18n="ansioluettelot.mobiilineuvonta_ja_käyttö">mobiilineuvonta ja käyttö</li>
-            <li data-i18n="ansioluettelot.jakelu_ja_logistiikka">Jakelu- ja logistiikka</li>
-        </ul>
-
-        <h3 data-i18n="ansioluettelot.kielet">Kielet</h3>
-        <ul>
-            <li data-i18n="ansioluettelot.suomi">Suomi</li>
-            <li>English</li>
-        </ul>
-
-        <h3 data-i18n="ansioluettelot.harrastukset">Harrastukset</h3>
-        <ul>
-            <li data-i18n="ansioluettelot.tietotekniikka">Tietotekniikka</li>
-            <li data-i18n="ansioluettelot.kielten_opiskelu_satunnaisesti">Kielten opiskelu satunnaisesti</li>
-            <li data-i18n="ansioluettelot.kavereiden_ja_tyttöystävän_kanssa_ajan_vietto">Kavereiden ja tyttöystävän kanssa ajan vietto</li>
-        </ul>
-    </div>
-
-    <!-- Oikea puoli (Pääsisältö) -->
-    <div class="main-content">
-        <h1>Markus Sorola</h1>
-
-        <h2 class="section-title" data-i18n="ansioluettelot.henkilökohtainen_tiivistelmä">Henkilökohtainen tiivistelmä</h2>
-        <p class="item-desc" data-i18n="ansioluettelot.olen_luotettava_ja_omaaloitteinen_tekijä_jolla_on">Olen luotettava ja oma-aloitteinen tekijä, jolla on monipuolinen kokemus niin käytännönläheisestä logistiikasta kuin teknisestä ongelmanratkaisustakin. Varhaisjakajana olen oppinut arvostamaan täsmällisyyttä ja optimoimaan prosesseja, ja minulla on erinomainen visuaalis-avaruudellinen muisti. Vapaa-ajallani suunnittelen, koodaan ja ylläpidän laajoja verkkoinfrastruktuureja palvelimineen. Etsin työtä, jossa voin hyödyntää kykyäni hahmottaa isoja kokonaisuuksia ja omaksua nopeasti uusia järjestelmiä – oli kyse sitten lähdekoodista tai monimutkaisista reittikartoista.</p>
-
-        <h2 class="section-title" data-i18n="ansioluettelot.koulutus">Koulutus</h2>
-        <div class="item">
-            <div class="item-title">Puhtaus- ja kiinteistöpalvelualan perustutkinto</div>
-            <div class="item-subtitle">Ammattiopisto Spesia, Turku | huhti 2019 - huhti 2021</div>
-            <div class="item-desc">Opiskelin kotityöpalvelujen osaamisalan, joka on pääasiassa kodinhoitoa.</div>
+    <!-- Ylätunniste, jossa nimi ja pyöreä kuva -->
+    <header class="cv-header">
+        <div class="header-info">
+            <h1>Markus Sorola</h1>
+            <p>IT-infrastruktuurin ja logistiikan osaaja</p>
         </div>
-        <div class="item">
-            <div class="item-title">Työhön ja itsenäiseen elämään valmentava koulutus</div>
-            <div class="item-subtitle">Ammattiopisto Spesia, Turku | elo 2018 - huhti 2019</div>
-            <div class="item-desc">Harjoiteltiin itsenäisen elämän taitoja.</div>
-        </div>
-        <div class="item">
-            <div class="item-title">Peruskoulu</div>
-            <div class="item-subtitle">Armfeltin Koulu, Salo | touko 2016</div>
-        </div>
+        <!-- VAIHDA TÄHÄN OMAN KUVASI TIEDOSTONIMI -->
+        <img src="cv-kuva.jpg" alt="Markus Sorola - Profiilikuva" class="profile-pic" onerror="this.style.display='none'">
+    </header>
 
-        <h2 class="section-title" data-i18n="ansioluettelot.työkokemus">Työkokemus</h2>
-        <div class="item">
-            <div class="item-title">Varhaisjakaja</div>
-            <div class="item-subtitle">Varsinais-Suomen Tietojakelu Oy, Salo | kesä 2023 - Kuluva</div>
-            <div class="item-desc">Jaan aamuyöllä lehtiä, kirjeitä ja joskus myös paketteja. Yöpostihommaa siis.</div>
-        </div>
-        <div class="item">
-            <div class="item-title">Tuotanto-Operaattori</div>
-            <div class="item-subtitle">Valmet Automotive, Salo | loka 2021 - huhti 2022</div>
-            <div class="item-desc">Tuotantolinjalla tein erilaisia tehtäviä, joilla rakennettiin sähköautojen akkuja.</div>
-        </div>
-        <div class="item">
-            <div class="item-title">Kirpputorimyyjä</div>
-            <div class="item-subtitle">Ihme ja Kumma Tuki Ry, Salo | touko 2021 - loka 2021</div>
-            <div class="item-desc">Olin heillä kirpputorimyyjänä jokusen kuukauden, mutta se loppui minulta, kun sain työpaikan Valmetilta. Myöhemmin Ihme ja Kumma teki valitettavasti konkurssin.</div>
-        </div>
+    <div class="cv-body">
+        <!-- Vasen palkki -->
+        <aside class="sidebar">
+            <h2>Henkilötiedot</h2>
+            <p><strong>Sähköposti:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
+            <p><strong>Paikkakunta:</strong><br>Salo</p>
+            <p><strong>Syntymäaika:</strong><br>29. heinäkuuta 1998</p>
+            <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
+
+            <h2>Taidot</h2>
+            <ul>
+                <li>Palvelimet ja domainit</li>
+                <li>Office- ja toimisto-ohjelmat</li>
+                <li>Mobiilineuvonta ja käyttö</li>
+                <li>Jakelu ja logistiikka</li>
+            </ul>
+
+            <h2>Kielet</h2>
+            <ul>
+                <li>Suomi (Äidinkieli)</li>
+                <li>Englanti (Hyvä)</li>
+            </ul>
+
+            <h2>Harrastukset</h2>
+            <ul>
+                <li>Tietotekniikka</li>
+                <li>Kielten opiskelu satunnaisesti</li>
+                <li>Kavereiden ja tyttöystävän kanssa ajan vietto</li>
+            </ul>
+        </aside>
+
+        <!-- Oikea puoli (Pääsisältö) -->
+        <main class="main-content">
+            
+            <section style="margin-bottom: 2.5rem;">
+                <h2>Henkilökohtainen tiivistelmä</h2>
+                <p class="item-desc">Olen luotettava ja oma-aloitteinen tekijä, jolla on monipuolinen kokemus niin käytännönläheisestä logistiikasta kuin teknisestä ongelmanratkaisustakin. Varhaisjakajana olen oppinut arvostamaan täsmällisyyttä ja optimoimaan prosesseja, ja minulla on erinomainen visuaalis-avaruudellinen muisti. Vapaa-ajallani suunnittelen, koodaan ja ylläpidän laajoja verkkoinfrastruktuureja palvelimineen. Etsin työtä, jossa voin hyödyntää kykyäni hahmottaa isoja kokonaisuuksia ja omaksua nopeasti uusia järjestelmiä – oli kyse sitten lähdekoodista tai monimutkaisista reittikartoista.</p>
+            </section>
+
+            <section style="margin-bottom: 2.5rem;">
+                <h2>Työkokemus</h2>
+                <div class="item">
+                    <div class="item-title">Varhaisjakaja</div>
+                    <div class="item-subtitle">Varsinais-Suomen Tietojakelu Oy, Salo | kesä 2023 - Kuluva</div>
+                    <div class="item-desc">Jaan aamuyöllä lehtiä, kirjeitä ja joskus myös paketteja. Yöpostihommaa siis, joka vaatii tarkkuutta ja itsenäistä otetta.</div>
+                </div>
+                <div class="item">
+                    <div class="item-title">Tuotanto-operaattori</div>
+                    <div class="item-subtitle">Valmet Automotive, Salo | loka 2021 - huhti 2022</div>
+                    <div class="item-desc">Tuotantolinjalla tein erilaisia tehtäviä, joilla rakennettiin sähköautojen akkuja tiukkojen laatuvaatimusten mukaisesti.</div>
+                </div>
+                <div class="item">
+                    <div class="item-title">Kirpputorimyyjä</div>
+                    <div class="item-subtitle">Ihme ja Kumma Tuki Ry, Salo | touko 2021 - loka 2021</div>
+                    <div class="item-desc">Asiakaspalvelua ja myymälänhoitoa. Työsuhde päättyi siirtyessäni Valmetille.</div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Koulutus</h2>
+                <div class="item">
+                    <div class="item-title">Puhtaus- ja kiinteistöpalvelualan perustutkinto</div>
+                    <div class="item-subtitle">Ammattiopisto Spesia, Turku | huhti 2019 - huhti 2021</div>
+                    <div class="item-desc">Opiskelin kotityöpalvelujen osaamisalan, joka on pääasiassa kodinhoitoa.</div>
+                </div>
+                <div class="item">
+                    <div class="item-title">Työhön ja itsenäiseen elämään valmentava koulutus</div>
+                    <div class="item-subtitle">Ammattiopisto Spesia, Turku | elo 2018 - huhti 2019</div>
+                    <div class="item-desc">Harjoiteltiin itsenäisen elämän taitoja.</div>
+                </div>
+                <div class="item">
+                    <div class="item-title">Peruskoulu</div>
+                    <div class="item-subtitle">Armfeltin Koulu, Salo | touko 2016</div>
+                </div>
+            </section>
+
+        </main>
     </div>
 </div>
 
-<!-- Linkitetään oma JavaScript-tiedosto -->
-<script src="script.js"></script>
+<a href="index.html" class="back-link">← Takaisin pääsivulle</a>
+
 </body>
 </html>
+
