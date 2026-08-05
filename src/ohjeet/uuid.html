@@ -2,25 +2,49 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title data-i18n="ohjeet.uuid_otsikko">🔑 UUID/GUID-generaattorin ohje | Sorola.fi</title>
+    <title data-i18n="ohjeet.uuid.title">UUID/GUID-generaattorin käyttöohje - Sorola</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="canonical" href="https://sorola.fi/ohjeet/uuid">
+    <link rel="stylesheet" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    <meta name="description" content="Suomenkielinen ohje Sorolan UUID/GUID-generaattorin käyttöön: luo satunnaisia tunnisteita paikallisesti." data-i18n-attr-content="ohjeet.uuid.meta_description">
+    <meta name="keywords" content="uuid, guid, generaattori, käyttöohje, ohje, sorola" data-i18n-attr-content="ohjeet.uuid.meta_keywords">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sorola.fi/ohjeet/uuid">
+    <meta property="og:site_name" content="Sorolan Sakki">
+    <meta property="og:title" content="UUID/GUID-generaattorin käyttöohje - Sorola" data-i18n-attr-content="ohjeet.uuid.title">
+    
+    <script src="ohjeet.js"></script>
+    <script src="/analytics.js"></script>
 </head>
 <body>
     <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_sisältöön">Hyppää sisältöön</a>
     <div class="laatikko">
-        <h1 class="otsikko" data-i18n="ohjeet.uuid_otsikko">🔑 UUID/GUID-generaattorin ohje</h1>
+        <h1 class="otsikko" data-i18n="ohjeet.uuid.otsikko">🔑 UUID/GUID-generaattorin ohje</h1>
+        <br>
         
         <main id="paaosio">
-            <div class="osion-tausta">
-                <p data-i18n="ohjeet.uuid_mika_on">
-                    UUID (Universally Unique Identifier) v4 on 128-bittinen satunnainen tunniste, jota käytetään ohjelmistokehityksessä ja tietokannoissa uniikkeina avaimina.
-                </p>
-                <hr style="border-color: #2d3748; margin: 15px 0;">
-                <p data-i18n="ohjeet.uuid_vaihe1">1. Valitse haluamasi määrä (1–50 kpl) syötekentästä.</p>
-                <p data-i18n="ohjeet.uuid_vaihe2">2. Paina 'Generoi UUID:t' -painiketta luodaksesi uudet tunnisteet.</p>
-                <p data-i18n="ohjeet.uuid_vaihe3">3. Kopioi lista leikepöydälle yhdellä klikkauksella ja liitä se sovellukseesi.</p>
+            <div class="osion-tausta ohje-palsta">
+                <h2 data-i18n="ohjeet.uuid.mika_on">Mikä on UUID?
+                    <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
+                </h2>
+                <div class="ohje-sisalto">
+                    <p data-i18n="ohjeet.uuid.mika_on_vastaus">UUID (Universally Unique Identifier) v4 on 128-bittinen satunnainen tunniste, jota käytetään ohjelmistokehityksessä ja tietokannoissa uniikkeina avaimina.</p>
+                </div>
+            </div>
+
+            <div class="osion-tausta ohje-palsta">
+                <h2 data-i18n="ohjeet.uuid.miten_kaytan">Miten käytän generaattoria?
+                    <button class="ohje-toggle" type="button" aria-expanded="false" aria-label="Avaa ohje" data-i18n-attr-aria-label="common.avaa_ohje">+</button>
+                </h2>
+                <div class="ohje-sisalto">
+                    <ul>
+                        <li data-i18n="ohjeet.uuid.vaihe1">1. Valitse haluamasi määrä (1–50 kpl) syötekentästä.</li>
+                        <li data-i18n="ohjeet.uuid.vaihe2">2. Paina 'Generoi UUID:t' -painiketta luodaksesi uudet tunnisteet.</li>
+                        <li data-i18n="ohjeet.uuid.vaihe3">3. Kopioi lista leikepöydälle yhdellä klikkauksella ja liitä se sovellukseesi.</li>
+                    </ul>
+                </div>
             </div>
 
             <a href="/uuid" class="linkki-takaisin" data-i18n="common.takaisin_ohjeisiin">« Takaisin työkaluun</a>
@@ -28,3 +52,4 @@
     </div>
 </body>
 </html>
+
