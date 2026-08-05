@@ -47,7 +47,7 @@
             <div class="flex-form">
                 <input type="text" id="reg-invite" class="syote" placeholder="Kutsukoodi" data-i18n-attr-placeholder="common.kutsukoodi">
                 <input type="text" id="reg-username" class="syote" placeholder="Haluttu käyttäjätunnus" data-i18n-attr-placeholder="common.haluttu_käyttäjätunnus">
-                <input type="password" id="reg-password" class="syote" placeholder="Salasana (min. 6 merkkiä)">
+                <input type="password" id="reg-password" class="syote" placeholder="Salasana (min. 6 merkkiä)" data-i18n-attr-placeholder="admin.salasana_min_6_merkkiä">
                 <button onclick="register()" class="nappula1" style="width: 100%; border: 1px solid #60a5fa; color: #60a5fa;" data-i18n="admin.luo_tunnus">Luo tunnus</button>
             </div>
             <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
@@ -129,17 +129,17 @@
 
             <!-- Ylläpidon tiedostojako -->
             <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #34d399;">📁 Ylläpidon tiedostojako</h2>
-                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;">Lataa tiedostoja samaan tallennustilaan kuin käyttäjät, ilman kokorajoituksia.</p>
+                <h2 style="color: #34d399;" data-i18n="admin.ylläpidon_tiedostojako">📁 Ylläpidon tiedostojako</h2>
+                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;" data-i18n="admin.lataa_tiedostoja_samaan_tallennustilaan">Lataa tiedostoja samaan tallennustilaan kuin käyttäjät, ilman kokorajoituksia.</p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
                     <input type="file" id="admin-file-input" class="syote" style="padding: 8px;">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 150px;">
-                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;">Voimassaoloaika (päiviä, 0 = ei vanhene)</label>
+                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;" data-i18n="admin.voimassaoloaika_päiviä">Voimassaoloaika (päiviä, 0 = ei vanhene)</label>
                             <input type="number" id="admin-file-expiry" class="syote" value="0" min="0" style="width: 100%;">
                         </div>
                         <div style="flex: 1; min-width: 150px;">
-                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;">Latausmääräraja (0 = rajaton)</label>
+                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;" data-i18n="admin.latausmääräraja">Latausmääräraja (0 = rajaton)</label>
                             <input type="number" id="admin-file-maxdownloads" class="syote" value="0" min="0" style="width: 100%;">
                         </div>
                     </div>
@@ -171,12 +171,12 @@
             <div class="osion-tausta" style="margin-top: 20px;">
                 <h2 style="color: #f472b6;" data-i18n="index.vieraskirja">📖 Vieraskirja</h2>
                 <div class="flex-form" style="margin-bottom: 15px;">
-                    <input type="text" id="admin-gb-message" class="syote" placeholder="Kirjoita ylläpidon uusi viesti vieraskirjaan..." style="flex: 2;">
-                    <button onclick="lahetaAdminViesti()" class="nappula1" style="flex: 1; border: 1px solid #f472b6; color: #f472b6; background: transparent;">Lähetä ilmoitus</button>
+                    <input type="text" id="admin-gb-message" class="syote" placeholder="Kirjoita ylläpidon uusi viesti vieraskirjaan..." style="flex: 2;" data-i18n-attr-placeholder="admin.kirjoita_ylläpidon_uusi_viesti">
+                    <button onclick="lahetaAdminViesti()" class="nappula1" style="flex: 1; border: 1px solid #f472b6; color: #f472b6; background: transparent;" data-i18n="admin.lähetä_ilmoitus">Lähetä ilmoitus</button>
                 </div>
                 <div class="table-container">
                     <table id="guestbook-table">
-                        <thead><tr><th>Nimi</th><th>Viesti</th><th>Ylläpidon vastaus</th><th>Pvm</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                        <thead><tr><th data-i18n="admin.nimi">Nimi</th><th data-i18n="admin.viesti">Viesti</th><th data-i18n="admin.ylläpidon_vastaus">Ylläpidon vastaus</th><th data-i18n="admin.pvm">Pvm</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -186,53 +186,53 @@
             <div class="osion-tausta" style="margin-top: 20px;">
                 <h2 style="color: #60a5fa;">🌐 DNS-hallinta (OVH)</h2>
                 <div style="margin-bottom: 15px;">
-                    <label for="dns-zone-select" style="display:block; color:#a0aec0; margin-bottom:5px; font-size:0.9rem;">Valitse hallittava domain:</label>
+                    <label for="dns-zone-select" style="display:block; color:#a0aec0; margin-bottom:5px; font-size:0.9rem;" data-i18n="admin.valitse_hallittava_domain">Valitse hallittava domain:</label>
                     <div style="display:flex; gap:10px;">
                         <select id="dns-zone-select" class="syote" style="flex: 1;">
-                            <option value="">Ladataan vyöhykkeitä...</option>
+                            <option value="" data-i18n="admin.ladataan_vyöhykkeitä">Ladataan vyöhykkeitä...</option>
                         </select>
-                        <button onclick="lataaDnsTietueet()" class="nappula1" style="width: auto;">Hae tietueet</button>
+                        <button onclick="lataaDnsTietueet()" class="nappula1" style="width: auto;" data-i18n="admin.hae_tietueet">Hae tietueet</button>
                     </div>
                 </div>
 
-                <div id="dns-hallinta-alue" class="hidden">
-                    <div class="dns-tietue-tila">
-                        <h3 style="color:#4ade80; margin-bottom:10px;">Lisää uusi tietue</h3>
-                        <div class="dns-input-rivi">
-                            <div style="flex: 0.5;">
-                                <label style="font-size:0.8rem; color:#a0aec0;">Tyyppi</label>
-                                <select id="new-dns-type" class="syote">
-                                    <option value="A">A</option>
-                                    <option value="AAAA">AAAA</option>
-                                    <option value="CNAME">CNAME</option>
-                                    <option value="MX">MX</option>
-                                    <option value="TXT">TXT</option>
-                                    <option value="SRV">SRV</option>
-                                </select>
+                    <div id="dns-hallinta-alue" class="hidden">
+                        <div class="dns-tietue-tila">
+                            <h3 style="color:#4ade80; margin-bottom:10px;" data-i18n="admin.lisää_uusi_tietue">Lisää uusi tietue</h3>
+                            <div class="dns-input-rivi">
+                                <div style="flex: 0.5;">
+                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.tyyppi">Tyyppi</label>
+                                    <select id="new-dns-type" class="syote">
+                                        <option value="A">A</option>
+                                        <option value="AAAA">AAAA</option>
+                                        <option value="CNAME">CNAME</option>
+                                        <option value="MX">MX</option>
+                                        <option value="TXT">TXT</option>
+                                        <option value="SRV">SRV</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.nimi_esim_www_api">Nimi (esim. @, www, api)</label>
+                                    <input type="text" id="new-dns-name" class="syote" placeholder="@">
+                                </div>
+                                <div style="flex: 2;">
+                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.arvo_ip_tai_kohde">Arvo (IP tai kohde)</label>
+                                    <input type="text" id="new-dns-value" class="syote" placeholder="1.2.3.4">
+                                </div>
+                                <div style="flex: 0.5;">
+                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.ttl_s">TTL (s)</label>
+                                    <input type="number" id="new-dns-ttl" class="syote" value="300">
+                                </div>
+                                <button onclick="luoDnsTietue()" class="nappula" style="width:auto; height: 44px; margin-bottom: 2px;" data-i18n="admin.lisää">Lisää</button>
                             </div>
-                            <div style="flex: 1;">
-                                <label style="font-size:0.8rem; color:#a0aec0;">Nimi (esim. @, www, api)</label>
-                                <input type="text" id="new-dns-name" class="syote" placeholder="@">
-                            </div>
-                            <div style="flex: 2;">
-                                <label style="font-size:0.8rem; color:#a0aec0;">Arvo (IP tai kohde)</label>
-                                <input type="text" id="new-dns-value" class="syote" placeholder="1.2.3.4">
-                            </div>
-                            <div style="flex: 0.5;">
-                                <label style="font-size:0.8rem; color:#a0aec0;">TTL (s)</label>
-                                <input type="number" id="new-dns-ttl" class="syote" value="300">
-                            </div>
-                            <button onclick="luoDnsTietue()" class="nappula" style="width:auto; height: 44px; margin-bottom: 2px;">Lisää</button>
+                        </div>
+
+                        <div class="table-container">
+                            <table id="dns-records-table">
+                                <thead><tr><th data-i18n="admin.tyyppi">Tyyppi</th><th data-i18n="admin.nimi">Nimi</th><th data-i18n="admin.arvo">Arvo</th><th data-i18n="admin.ttl">TTL</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
-
-                    <div class="table-container">
-                        <table id="dns-records-table">
-                            <thead><tr><th>Tyyppi</th><th>Nimi</th><th>Arvo</th><th>TTL</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
 
             <!-- Käyttäjät & Kutsut -->
