@@ -3,66 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="ansioluettelot.työhakemus_markus_sorola">Työhakemus - Markus Sorola</title>
-    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/styles/style-hakemus.css">
-    <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+    <title>Avoin Logistiikan Työhakemus - Markus Sorola</title>
+    
+    <meta name="description" content="Markus Sorolan avoin työhakemus jakelun ja logistiikan tehtäviin. Vankka kokemus varhaisjakelusta ja reittien optimoinnista.">
+    <meta name="keywords" content="Markus Sorola, työhakemus, logistiikka, varhaisjakelu, jakelu, reittisuunnittelu, Salo">
+    <meta name="author" content="Markus Sorola">
+    <script src="/analytics.js"></script>
+
+    <style>
+        :root {
+            --bg: #f3f4f6;
+            --surface: #ffffff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --accent: #10b981; /* Vihreä teema logistiikka-puolelle */
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+
+        .document-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            overflow: hidden;
+            min-height: 800px;
+        }
+
+        .sidebar {
+            width: 30%;
+            background-color: #f0fdf4; /* Kevyt vihreä tausta */
+            padding: 3rem 2rem;
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar h2 { margin-top: 0; font-size: 1.8rem; color: var(--text-main); margin-bottom: 0.2rem; }
+        .sidebar .title { color: var(--accent); font-weight: 600; margin-top: 0; margin-bottom: 2rem; font-size: 1.1rem; }
+        
+        .sidebar h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar p { font-size: 0.95rem; margin-bottom: 1rem; }
+        .sidebar a { color: var(--accent); text-decoration: none; }
+        .sidebar a:hover { text-decoration: underline; }
+
+        .main-content {
+            width: 70%;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .date-info {
+            text-align: right;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .application-title {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .letter-body p { margin-bottom: 1.2rem; text-align: justify; }
+        
+        .letter-body ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .letter-body li { margin-bottom: 0.5rem; }
+
+        .signature {
+            margin-top: 3rem;
+            font-family: 'Georgia', serif;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+            display: inline-block;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .document-container { flex-direction: column; }
+            .sidebar { width: 100%; padding: 2rem; border-right: none; border-bottom: 1px solid var(--border); }
+            .main-content { width: 100%; padding: 2rem; }
+        }
+    </style>
 </head>
 <body>
 
-<button class="btn-download" onclick="generatePDF('Markus_Sorola_Avoin_Hakemus_Logistiikka.pdf')" data-i18n="common.lataa_pdf">Lataa PDF</button>
-
-<div class="hakemus-container" id="hakemus">
-    
-    <div class="sidebar theme-green">
+<div class="document-container">
+    <div class="sidebar">
         <h2>Markus Sorola</h2>
-        <p class="title" data-i18n="common.avoin_hakemus">Avoin hakemus</p>
+        <p class="title">Avoin hakemus</p>
         
-        <h3 data-i18n="common.yhteystiedot">Yhteystiedot</h3>
+        <h3>Yhteystiedot</h3>
         <p><strong>Sähköposti:</strong><br><a href="mailto:markus@sorola.fi">markus@sorola.fi</a></p>
         <p><strong>Paikkakunta:</strong><br>Salo</p>
         <p><strong>Verkkosivu:</strong><br><a href="https://sorola.fi" target="_blank" rel="noopener noreferrer">sorola.fi</a></p>
 
-        <h3 data-i18n="ansioluettelot.ydinosaaminen">Ydinosaaminen</h3>
-        <p>• Jakelu ja logistiikka<br>• Reittien optimointi<br>• Erinomainen reittimuisti<br>• Itsenäinen työote</p>
+        <h3>Ydinosaaminen</h3>
+        <p>
+            • Jakelu ja logistiikka<br>
+            • Reittien optimointi<br>
+            • Erinomainen reittimuisti<br>
+            • Itsenäinen työote
+        </p>
     </div>
 
     <div class="main-content">
-        <div class="letter-header" style="justify-content: flex-end;">
-            <div class="date-info">
-                Salo, <span id="current-date"></span>
-            </div>
+        <div class="date-info">
+            Salo, <span id="current-date"></span>
         </div>
 
-        <h1 class="application-title" data-i18n="ansioluettelot.avoin_työhakemus_täsmällinen_ja_reittien_hallinnan">Avoin työhakemus – Täsmällinen ja reittien hallinnan taitava tekijä</h1>
+        <h1 class="application-title">Avoin työhakemus – Täsmällinen ja reittien hallinnan taitava tekijä</h1>
 
         <div class="letter-body">
-            <p data-i18n="common.hyvä_rekrytoija">Hyvä rekrytoija,</p>
+            <p>Hyvä rekrytoija,</p>
             
-            <p data-i18n="ansioluettelot.lähetän_teille_tämän_avoimen_hakemuksen_sillä_etsi_2">Lähetän teille tämän avoimen hakemuksen, sillä etsin uusia haasteita jakelun ja logistiikan parista, ja uskon kokemukseni sopivan erinomaisesti tarpeisiinne. Olen tottunut itsenäiseen, vastuulliseen ja tarkkuutta vaativaan työhön.</p>
+            <p>Lähetän teille tämän avoimen hakemuksen, sillä etsin uusia haasteita jakelun ja logistiikan parista, ja uskon kokemukseni sopivan erinomaisesti tarpeisiinne. Olen tottunut itsenäiseen, vastuulliseen ja tarkkuutta vaativaan työhön.</p>
             
-            <p data-i18n="ansioluettelot.työskentelen_tällä_hetkellä_varhaisjakajana_mikä_o">Työskentelen tällä hetkellä varhaisjakajana, mikä on opettanut minulle paineensietokykyä ja saumatonta rutiinien hallintaa. Vahvuuteni on poikkeuksellisen hyvä visuaalinen ja numeerinen muisti; opin ja painan mieleeni uudet reitit, asiakastiedot ja jakelulaatikoiden sijainnit erittäin nopeasti ilman jatkuvaa kertaamista. Pystyn optimoimaan ajoreittejä itsenäisesti ja huolehtimaan siitä, että toimitukset ovat perillä täsmällisesti aikataulussa, myös vaativissa sääolosuhteissa ja yöaikaan.</p>
+            <p>Työskentelen tällä hetkellä varhaisjakajana, mikä on opettanut minulle paineensietokykyä ja saumatonta rutiinien hallintaa. Vahvuuteni on poikkeuksellisen hyvä visuaalinen ja numeerinen muisti; opin ja painan mieleeni uudet reitit, asiakastiedot ja jakelulaatikoiden sijainnit erittäin nopeasti ilman jatkuvaa kertaamista. Pystyn optimoimaan ajoreittejä itsenäisesti ja huolehtimaan siitä, että toimitukset ovat perillä täsmällisesti aikataulussa, myös vaativissa sääolosuhteissa ja yöaikaan.</p>
             
-            <p data-i18n="ansioluettelot.miksi_valita_minut">Miksi valita minut?</p>
+            <p>Miksi valita minut?</p>
             <ul>
                 <li><strong>Itsenäisyys ja luotettavuus:</strong> Hoidan annetut tehtävät alusta loppuun ilman jatkuvaa valvontaa.</li>
                 <li><strong>Nopea oppimiskyky:</strong> Hahmottamalla laajoja kokonaisuuksia otan uudet alueet ja reitit haltuun hetkessä.</li>
                 <li><strong>Asenne:</strong> En pelkää fyysistä työtä tai epätyypillisiä työaikoja.</li>
             </ul>
             
-            <p data-i18n="ansioluettelot.olen_valmis_tarttumaan_uusiin_haasteisiin_ja_tuoma">Olen valmis tarttumaan uusiin haasteisiin ja tuomaan mukanani rautaisen työmoraalin. Tulisin mielelläni haastatteluun kertomaan lisää siitä, miten voin olla hyödyksi organisaatiollenne.</p>
+            <p>Olen valmis tarttumaan uusiin haasteisiin ja tuomaan mukanani rautaisen työmoraalin. Tulisin mielelläni haastatteluun kertomaan lisää siitä, miten voin olla hyödyksi organisaatiollenne.</p>
         </div>
 
         <div class="letter-footer">
-            <p data-i18n="common.ystävällisin_terveisin">Ystävällisin terveisin,</p>
-            <div class="signature">
-                Markus Sorola
-            </div>
+            <p>Ystävällisin terveisin,</p>
+            <div class="signature">Markus Sorola</div>
         </div>
     </div>
 </div>
-<script src="script-hakemus.js"></script>
+
+<a href="index.html" class="back-link">← Takaisin pääsivulle</a>
+
+<script>
+    // Asetetaan nykyinen päivämäärä
+    const dateElement = document.getElementById('current-date');
+    const today = new Date();
+    dateElement.textContent = today.toLocaleDateString('fi-FI');
+</script>
 
 </body>
 </html>
+
