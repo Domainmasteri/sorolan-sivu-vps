@@ -135,7 +135,8 @@
         "Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.": "More powerful helpers for developers and technical needs.",
         "🌐 Verkkotyökalut": "🌐 Web tools",
         "🔧 JSON-muotoilija &amp; validaattori": "🔧 JSON Formatter &amp; Validator",
-        "🔐 Base64 Kooderi / Dekooderi": "🔐 Base64 Encoder / Decoder"
+        "🔐 Base64 Kooderi / Dekooderi": "🔐 Base64 Encoder / Decoder",
+        " Katso muutosloki →": "Check changelog→"
       },
       "attributes": {
         "Sorola.fi tarjoaa näppärät ja turvalliset työkalut arkeen: nopea linkkilyhennin, väliaikainen tiedostonjako, pastebin sekä selkeät IT-ohjeet ja oppaat.": "Sorola.fi offers handy and secure everyday tools: a fast link shortener, temporary file sharing, pastebin, and clear IT guides and tutorials.",
@@ -147,7 +148,8 @@
         "Edistyneet työkalut": "Advanced tools",
         "Hae työkaluja": "Search tools",
         "Hae työkaluja...": "Search for tools...",
-        "Viimeisin päivitys": "Latest update"
+        "⚡ Viimeisin muutos": "⚡ Latest update",
+        "Uusia ohjeita ja tietosuojaselosteita lisätty!": "Added new privacy policies and guides!"
       },
       "raw": {
         "\"description\": \"Sorola.fi tarjoaa hyödyllisiä IT-työkaluja, kuten linkkilyhentimen, tiedostonjaon, koodinjaon ja tekniset ohjeet.\"": "\"description\": \"Sorola.fi offers useful IT tools such as a link shortener, file sharing, code sharing, and technical guides.\""
@@ -973,6 +975,8 @@
         "Avattu uusi aliverkkotunnus": "Launched a new subdomain",
         "verkkotyökalukokoelmaa varten.": "for the web tools collection.",
         "31.7.2026 – Android-sovelluksen julkaisu": "31.7.2026 – Android app release",
+        "perustyökaluihin": "basic tools",
+        "edistyneisiin työkaluihin": "advanched tools",
         "Luotu ja julkaistu Sorolan oma Android-sovellus (.apk-lataus), joka helpottaa perustyökalujen käyttöä mobiililaitteilla.": "Sorola's own Android app (.apk download) created and released, making it easier to use the basic tools on mobile devices."
       },
       "attributes": {
