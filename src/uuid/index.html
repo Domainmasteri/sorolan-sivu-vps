@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="uuid.sivun_otsikko">UUID/GUID v4 Generaattori | Sorola.fi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://sorola.fi/uuid">
+    <link rel="stylesheet" type="text/css" href="/styles/pohja.css">
+    <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
+    
+    <meta name="description" content="Luo standardinmukaisia UUID v4 / GUID -tunnisteita suoraan selaimessasi ilman tietojen lähettämistä palvelimelle." data-i18n-attr-content="uuid.kuvaus">
+    <meta name="robots" content="index, follow">
+</head>
+<body>
+    <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_sisältöön">Hyppää sisältöön</a>
+    
+    <div class="laatikko">
+        <h1 class="otsikko" data-i18n="uuid.otsikko">UUID / GUID Generaattori</h1>
+        <h2 style="font-weight: 700; text-align: center;" data-i18n="uuid.alaotsikko">🔑 Luo satunnaisia UUID v4 -tunnisteita</h2>
+        <br>
+        
+        <div class="osion-tausta" style="text-align: center;">
+            <p style="margin: 0;" data-i18n="uuid.esittely">
+                Luo standardinmukaisia UUID v4 (Universally Unique Identifier) / GUID -avaintunnisteita suoraan selaimessasi. Kaikki generointi tapahtuu paikallisesti laitteellasi.
+            </p>
+        </div>
+
+        <main id="paaosio">
+            <!-- Generointikontrollit -->
+            <div class="osion-tausta">
+                <label for="uuid-count" style="display: block; margin-bottom: 8px; font-weight: bold;" data-i18n="uuid.maara_label">
+                    Generoitava määrä (1–50 kpl):
+                </label>
+                <div class="flex-form">
+                    <input type="number" id="uuid-count" class="syote" min="1" max="50" value="1" style="max-width: 150px;">
+                    <button type="button" onclick="generateUUIDs()" class="nappula" data-i18n="uuid.generoi_nappi">
+                        ✨ Generoi UUID:t
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tulosalue -->
+            <div class="osion-tausta">
+                <label for="uuid-tulos" style="display: block; margin-bottom: 8px; font-weight: bold;" data-i18n="uuid.tulos_label">
+                    Generoidut tunnisteet:
+                </label>
+                <textarea id="uuid-tulos" class="syote" rows="6" readonly placeholder="..." style="font-family: monospace; resize: vertical; margin-bottom: 12px;"></textarea>
+                
+                <button type="button" onclick="copyUUIDs()" id="copy-btn" class="nappula1" data-i18n="uuid.kopioi_nappi">
+                    📋 Kopioi leikepöydälle
+                </button>
+                <div id="copy-toast" style="display: none; color: #48bb78; font-weight: bold; margin-top: 10px; text-align: center;" data-i18n="uuid.kopioitu_toast">
+                    ✅ Kopioitu leikepöydälle!
+                </div>
+            </div>
+
+            <!-- Linkit ohjeisiin ja tietosuojaan -->
+            <div class="osion-tausta flex-form" style="text-align: center; justify-content: center;">
+                <a href="/ohjeet/uuid" class="linkki-takaisin" style="margin: 0;" data-i18n="uuid.lue_ohjeet">📖 Käyttöohjeet</a>
+                <a href="/privacy/uuid" class="linkki-takaisin" style="margin: 0;" data-i18n="uuid.lue_tietosuoja">🔒 Tietosuojaseloste</a>
+            </div>
+
+            <a href="/" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle">« Takaisin pääsivulle</a>
+        </main>
+    </div>
+
+    <script>
+        function generateUUIDs() {
+            let countInput = document.getElementById('uuid-count');
+            let count = parseInt(countInput.value, 10);
+            
+            if (isNaN(count) || count < 1) count = 1;
+            if (count > 50) count = 50;
+            countInput.value = count;
+
+            let result = "";
+            for (let i = 0; i < count; i++) {
+                if (window.crypto && window.crypto.randomUUID) {
+                    result += crypto.randomUUID() + "\n";
+                } else {
+                    result += 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    }) + "\n";
+                }
+            }
+            
+            document.getElementById('uuid-tulos').value = result.trim();
+        }
+
+        function copyUUIDs() {
+            const textArea = document.getElementById('uuid-tulos');
+            if (!textArea.value) return;
+
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const toast = document.getElementById('copy-toast');
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 2500);
+            } catch (err) {
+                console.error('Kopiointi epäonnistui:', err);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', generateUUIDs);
+    </script>
+</body>
+</html>
