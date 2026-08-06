@@ -5,7 +5,11 @@ import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import multer from 'multer';
+
+const execFileAsync = promisify(execFile);
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { create as contentDisposition } from 'content-disposition';
@@ -919,6 +923,7 @@ app.post('/api/admin/elements', requireAuth, async (req, res) => {
     if (!content_fi) return res.status(400).json({ error: 'content_fi on pakollinen.' });
     if (!content_en) return res.status(400).json({ error: 'content_en on pakollinen.' });
     if (element_type === 'button' && !url) return res.status(400).json({ error: 'url on pakollinen button-tyypille.' });
+    if (element_type === 'button' && url && !validateUrl(url)) return res.status(400).json({ error: 'URL on virheellinen. Hyväksytään vain http:// ja https://-osoitteet.' });
 
     const maxOrderResult = await db.query('SELECT COALESCE(MAX(sort_order), -1) AS max_order FROM custom_elements WHERE target_section = $1', [target_section]);
     const nextOrder = (maxOrderResult.rows[0]?.max_order ?? -1) + 1;
@@ -956,6 +961,39 @@ app.patch('/api/admin/elements/reorder', requireAuth, async (req, res) => {
       if (!Number.isFinite(id)) return res.status(400).json({ error: 'Virheellinen ID.' });
       await db.query('UPDATE custom_elements SET sort_order = $1 WHERE id = $2', [i, id]);
     }
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/admin/translations', requireAuth, async (req, res) => {
+  try {
+    const key = String(req.body?.key || '').trim();
+    const lang = String(req.body?.lang || 'fi').trim();
+    const value = stripHtml(String(req.body?.value || '').trim());
+
+    if (!key) return res.status(400).json({ error: 'key on pakollinen.' });
+    if (!['fi', 'en'].includes(lang)) return res.status(400).json({ error: 'Virheellinen kieli.' });
+    if (!value) return res.status(400).json({ error: 'value on pakollinen.' });
+
+    const jsonPath = path.join(__dirname, 'src', 'i18n', `${lang}.json`);
+    let existing;
+    try {
+      existing = JSON.parse(await fs.readFile(jsonPath, 'utf8'));
+    } catch {
+      return res.status(500).json({ error: 'Käännöstiedostoa ei voitu lukea.' });
+    }
+    if (!(key in existing)) return res.status(404).json({ error: 'Käännösavainta ei löydy.' });
+
+    existing[key] = value;
+    await fs.writeFile(jsonPath, JSON.stringify(existing, null, 2) + '\n', 'utf8');
+
+    // Trigger build to regenerate dist/ HTML files
+    execFileAsync('node', ['build.mjs'], { cwd: __dirname }).catch(err => {
+      console.error('Build error after translation update:', err.message);
+    });
+
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -1067,6 +1105,16 @@ function escapeHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+function validateUrl(url) {
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+  } catch {
+    return false;
+  }
 }
 
 function stripHtml(str) {

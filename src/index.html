@@ -133,6 +133,8 @@
         .elem-up-btn, .elem-down-btn { background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 0.8rem; margin-left: 4px; vertical-align: middle; padding: 0; line-height: 1; }
         .elem-up-btn:hover, .elem-down-btn:hover { color: #ffaa00; }
         #admin-error { color: #ef4444; font-size: 0.85rem; margin-bottom: 8px; display: none; }
+        [data-i18n][contenteditable] { outline: 2px dashed #ffaa00; cursor: text; background: rgba(255,170,0,0.06); border-radius: 2px; min-width: 4px; display: inline-block; }
+        [data-i18n][contenteditable]:focus { outline: 2px dashed #ffcc44; background: rgba(255,170,0,0.12); }
     </style>
 </head>
 <body>
@@ -355,6 +357,7 @@
                     btn.classList.add('admin-active');
                 });
                 showDeleteButtons();
+                enableI18nEditing();
             }
 
             function exitEditMode() {
@@ -363,6 +366,45 @@
                 toggleBtn.title = 'Admin-muokkaustila';
                 document.querySelectorAll('.lisaa-nappi-btn').forEach(function(b) { b.classList.remove('admin-active'); });
                 document.querySelectorAll('.poista-elem-btn, .elem-up-btn, .elem-down-btn').forEach(function(b) { b.remove(); });
+                disableI18nEditing();
+            }
+
+            function preventEnterKey(e) {
+                if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
+            }
+
+            function saveI18nEdit(e) {
+                var el = e.target;
+                var key = el.getAttribute('data-i18n');
+                var original = el.getAttribute('data-i18n-original') || '';
+                var newVal = (el.innerText || el.textContent || '').trim();
+                if (!newVal || newVal === original) return;
+                fetch('/api/admin/translations', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', Authorization: authHeader },
+                    body: JSON.stringify({ key: key, value: newVal, lang: document.documentElement.lang || 'fi' })
+                }).catch(function() { /* ignore */ });
+            }
+
+            var SKIP_TAGS = new Set(['script', 'style', 'meta', 'link', 'title', 'input', 'textarea', 'button', 'select', 'option']);
+
+            function enableI18nEditing() {
+                document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                    if (SKIP_TAGS.has(el.tagName.toLowerCase())) return;
+                    el.setAttribute('contenteditable', 'true');
+                    el.setAttribute('data-i18n-original', (el.innerText || el.textContent || '').trim());
+                    el.addEventListener('keydown', preventEnterKey);
+                    el.addEventListener('blur', saveI18nEdit);
+                });
+            }
+
+            function disableI18nEditing() {
+                document.querySelectorAll('[data-i18n][contenteditable]').forEach(function(el) {
+                    el.removeAttribute('contenteditable');
+                    el.removeAttribute('data-i18n-original');
+                    el.removeEventListener('keydown', preventEnterKey);
+                    el.removeEventListener('blur', saveI18nEdit);
+                });
             }
 
             function getCustomListItems(listEl) {
