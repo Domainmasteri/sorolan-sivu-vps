@@ -290,6 +290,64 @@
                 </div>
             </div>
 
+            <!-- Tekstikäännösten hallinta -->
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #38bdf8;">🌐 Tekstikäännökset</h2>
+                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 10px;">Hallinnoi sivuston suomen- ja englanninkielisiä tekstikäännöksiä. Muutokset päivittyvät sivustolle automaattisesti.</p>
+
+                <h3 style="color: #7dd3fc; margin-bottom: 8px; font-size: 1rem;">➕ Lisää uusi käännösavain</h3>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <input type="text" id="new-trans-key" class="syote" placeholder="avain (esim. ohjeet.otsikko)" style="flex: 1; min-width: 150px;">
+                    <input type="text" id="new-trans-fi" class="syote" placeholder="Teksti suomeksi" style="flex: 2; min-width: 150px;">
+                    <input type="text" id="new-trans-en" class="syote" placeholder="Text in English" style="flex: 2; min-width: 150px;">
+                    <button onclick="lisaaKaannos()" class="nappula1" style="border: 1px solid #38bdf8; color: #38bdf8;">Lisää</button>
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                    <input type="text" id="trans-filter" class="syote" placeholder="Hae avaimella tai tekstillä..." style="flex: 1;" oninput="suodataKaannokset()">
+                </div>
+
+                <div class="table-container">
+                    <table id="translations-table">
+                        <thead>
+                            <tr>
+                                <th>Avain</th>
+                                <th>Suomi (fi)</th>
+                                <th>Englanti (en)</th>
+                                <th>Toiminnot</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Polkujen käännösten hallinta -->
+            <div class="osion-tausta" style="margin-top: 20px;">
+                <h2 style="color: #a78bfa;">🔗 Polkujen käännökset</h2>
+                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 10px;">Hallinnoi suomenkielisten URL-polkujen englanninkielisiä vastineita (esim. <code style="color:#a78bfa;">/vieraskirja</code> → <code style="color:#a78bfa;">/en/guestbook</code>).</p>
+
+                <h3 style="color: #c4b5fd; margin-bottom: 8px; font-size: 1rem;">➕ Lisää uusi polkukäännös</h3>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <input type="text" id="new-route-fi" class="syote" placeholder="Suomenkielinen polku (esim. vieraskirja)" style="flex: 1; min-width: 150px;">
+                    <input type="text" id="new-route-en" class="syote" placeholder="Englanninkielinen polku (esim. guestbook)" style="flex: 1; min-width: 150px;">
+                    <button onclick="lisaaPolkukaannos()" class="nappula1" style="border: 1px solid #a78bfa; color: #a78bfa;">Lisää</button>
+                </div>
+
+                <div class="table-container">
+                    <table id="routes-table">
+                        <thead>
+                            <tr>
+                                <th>Suomi (fi)</th>
+                                <th>Englanti (en)</th>
+                                <th>Toiminnot</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
             <button onclick="logout()" class="nappula action-btn" style="width: 100%; margin-top: 20px; font-size: 1rem; padding: 12px;">Kirjaudu ulos</button>
         </div>
         <a href="/" class="linkki-takaisin" style="margin-top: 20px; display: block; text-align: center;">« Takaisin etusivulle</a>
@@ -526,6 +584,8 @@
                 alert('Virhe ladattaessa tietoja.');
             }
             lataaAdminTiedostot();
+            lataaKaannokset();
+            lataaPolkukaannokset();
         }
 
         // --- Linkit ---
@@ -785,6 +845,205 @@
                 });
                 if (res.ok) lataaAdminTiedostot();
                 else alert('Virhe poistossa.');
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        // --- Tekstikäännökset ---
+        let _allTranslations = [];
+
+        async function lataaKaannokset() {
+            if (!currentAuthHeader) return;
+            try {
+                const res = await fetch('/api/admin/translations', { headers: { 'Authorization': currentAuthHeader } });
+                if (!res.ok) return;
+                const data = await res.json();
+                _allTranslations = data.translations;
+                renderKaannokset(_allTranslations);
+            } catch (e) { console.error(e); }
+        }
+
+        function suodataKaannokset() {
+            const filter = document.getElementById('trans-filter').value.toLowerCase();
+            const filtered = _allTranslations.filter(t =>
+                t.key.toLowerCase().includes(filter) ||
+                (t.fi || '').toLowerCase().includes(filter) ||
+                (t.en || '').toLowerCase().includes(filter)
+            );
+            renderKaannokset(filtered);
+        }
+
+        function renderKaannokset(translations) {
+            const tbody = document.querySelector('#translations-table tbody');
+            tbody.innerHTML = '';
+            if (!translations.length) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#a0aec0;">Ei käännöksiä.</td></tr>`;
+                return;
+            }
+            translations.forEach(t => {
+                const keyEsc = t.key.replace(/'/g, "\\'");
+                const fiEsc = (t.fi || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const enEsc = (t.en || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                tbody.innerHTML += `
+                    <tr id="trans-row-${t.key.replace(/[^a-zA-Z0-9]/g, '_')}">
+                        <td style="font-family:monospace; font-size:0.8rem; color:#a0aec0; min-width:180px;">${t.key.replace(/</g, '&lt;')}</td>
+                        <td><input type="text" value="${fiEsc}" class="syote" style="width:100%; font-size:0.85rem; padding:4px;" id="fi-${t.key.replace(/[^a-zA-Z0-9]/g, '_')}"></td>
+                        <td><input type="text" value="${enEsc}" class="syote" style="width:100%; font-size:0.85rem; padding:4px;" id="en-${t.key.replace(/[^a-zA-Z0-9]/g, '_')}"></td>
+                        <td style="white-space:nowrap;">
+                            <button onclick="tallennnaKaannos('${keyEsc}')" class="action-btn edit-btn" style="margin-bottom:4px;">Tallenna</button>
+                            <button onclick="poistaKaannos('${keyEsc}')" class="action-btn">Poista</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function lisaaKaannos() {
+            const key = document.getElementById('new-trans-key').value.trim();
+            const fi = document.getElementById('new-trans-fi').value.trim();
+            const en = document.getElementById('new-trans-en').value.trim();
+            if (!key) return alert('Avain on pakollinen.');
+            try {
+                const res = await fetch('/api/admin/translations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ key, fi, en })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('new-trans-key').value = '';
+                    document.getElementById('new-trans-fi').value = '';
+                    document.getElementById('new-trans-en').value = '';
+                    await lataaKaannokset();
+                } else {
+                    alert(data.error || 'Virhe lisäämisessä.');
+                }
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        async function tallennnaKaannos(key) {
+            const safeId = key.replace(/[^a-zA-Z0-9]/g, '_');
+            const fiVal = document.getElementById(`fi-${safeId}`)?.value ?? '';
+            const enVal = document.getElementById(`en-${safeId}`)?.value ?? '';
+            try {
+                const [resFi, resEn] = await Promise.all([
+                    fetch('/api/admin/translations', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                        body: JSON.stringify({ key, lang: 'fi', value: fiVal })
+                    }),
+                    fetch('/api/admin/translations', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                        body: JSON.stringify({ key, lang: 'en', value: enVal })
+                    })
+                ]);
+                if (resFi.ok && resEn.ok) {
+                    await lataaKaannokset();
+                } else {
+                    const errData = await (resFi.ok ? resEn : resFi).json();
+                    alert(errData.error || 'Virhe tallennuksessa.');
+                }
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        async function poistaKaannos(key) {
+            if (!confirm(`Poistetaanko käännösavain "${key}" pysyvästi?`)) return;
+            try {
+                const res = await fetch(`/api/admin/translations?key=${encodeURIComponent(key)}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) await lataaKaannokset();
+                else {
+                    const data = await res.json();
+                    alert(data.error || 'Virhe poistossa.');
+                }
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        // --- Polkujen käännökset ---
+        async function lataaPolkukaannokset() {
+            if (!currentAuthHeader) return;
+            try {
+                const res = await fetch('/api/admin/routes', { headers: { 'Authorization': currentAuthHeader } });
+                if (!res.ok) return;
+                const data = await res.json();
+                renderPolkukaannokset(data.routes);
+            } catch (e) { console.error(e); }
+        }
+
+        function renderPolkukaannokset(routes) {
+            const tbody = document.querySelector('#routes-table tbody');
+            tbody.innerHTML = '';
+            if (!routes.length) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#a0aec0;">Ei polkukäännöksiä.</td></tr>`;
+                return;
+            }
+            routes.forEach(r => {
+                const fiEsc = r.fi.replace(/'/g, "\\'");
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-family:monospace; color:#c4b5fd;">/${r.fi}</td>
+                        <td>
+                            <input type="text" value="${r.en}" class="syote" style="width:100%; font-size:0.85rem; padding:4px;" id="route-en-${r.fi}">
+                        </td>
+                        <td style="white-space:nowrap;">
+                            <button onclick="tallennaPolkukaannos('${fiEsc}')" class="action-btn edit-btn" style="margin-bottom:4px;">Tallenna</button>
+                            <button onclick="poistaPolkukaannos('${fiEsc}')" class="action-btn">Poista</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function lisaaPolkukaannos() {
+            const fi = document.getElementById('new-route-fi').value.trim().toLowerCase();
+            const en = document.getElementById('new-route-en').value.trim().toLowerCase();
+            if (!fi || !en) return alert('Molemmat kentät ovat pakollisia.');
+            try {
+                const res = await fetch('/api/admin/routes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ fi, en })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('new-route-fi').value = '';
+                    document.getElementById('new-route-en').value = '';
+                    await lataaPolkukaannokset();
+                } else {
+                    alert(data.error || 'Virhe lisäämisessä.');
+                }
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        async function tallennaPolkukaannos(fi) {
+            const en = document.getElementById(`route-en-${fi}`)?.value?.trim().toLowerCase() ?? '';
+            if (!en) return alert('Englanninkielinen polku on pakollinen.');
+            try {
+                const res = await fetch('/api/admin/routes', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
+                    body: JSON.stringify({ fi, en })
+                });
+                if (res.ok) await lataaPolkukaannokset();
+                else {
+                    const data = await res.json();
+                    alert(data.error || 'Virhe tallennuksessa.');
+                }
+            } catch { alert('Palvelinvirhe.'); }
+        }
+
+        async function poistaPolkukaannos(fi) {
+            if (!confirm(`Poistetaanko polkukäännös "/${fi}"?`)) return;
+            try {
+                const res = await fetch(`/api/admin/routes?fi=${encodeURIComponent(fi)}`, {
+                    method: 'DELETE', headers: { 'Authorization': currentAuthHeader }
+                });
+                if (res.ok) await lataaPolkukaannokset();
+                else {
+                    const data = await res.json();
+                    alert(data.error || 'Virhe poistossa.');
+                }
             } catch { alert('Palvelinvirhe.'); }
         }
     </script>

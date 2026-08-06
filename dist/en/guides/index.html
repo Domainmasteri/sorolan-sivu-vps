@@ -21,9 +21,33 @@
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Technical guides and IT tutorials - Sorola">
     <meta property="og:description" content="Guides and solutions for technical problems.">
+    
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/en/analytics.js"></script>
+    <script src="/en/analytics.js"></script>
 
+    <style>
+      .nappilista-ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .nappilista-ul li {
+        width: 100%;
+        max-width: 320px;
+        margin-bottom: 12px;
+      }
+      .nappilista-ul li:last-child {
+        margin-bottom: 0;
+      }
+      .nappilista-ul li .nappula1 {
+        margin-bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
   
     <style>
         .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
@@ -98,70 +122,39 @@
         <a class="language-overlay__link" href="/ohjeet/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/guides/" aria-current="page">🇬🇧</a>
     </nav>
-  <a href="#paaosio" class="skip-to-content">Skip to main content</a>
-  <div class="laatikko">
-    <h1 class="otsikko">📚 Guides</h1>
+    <a href="#paaosio" class="skip-to-content">Skip to main content</a>
+    <div class="laatikko">
+      <h1 class="otsikko">📚 Guides</h1>
 
-  <div class="osion-tausta" style="text-align:center;">
-    <p>Here you'll find usage guides for Sorola services.</p>
-  </div>
+      <div class="osion-tausta" style="text-align:center;">
+        <p style="margin: 0;">
+          Here you'll find usage guides for Sorola services.
+        </p>
+      </div>
 
-  <main id="paaosio">
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>QR code generator</h2>
-    <p>Create QR codes for websites, WiFi networks, contact details, and more.</p>
-    <a href="/en/guides/qr" class="nappula1">Open guide</a>
-  </div>
+      <main id="paaosio">
+        <!-- OSIO 1: PERUSTYÖKALUT -->
+        <div class="osion-tausta" style="text-align:center;">
+          <h2 style="color: #ffaa00; margin-top: 0;">Basic tools</h2>
+          <p data-i18n="ohjeet.opettele_käyttämään_arkisia_apuvälineitä" style="margin-bottom: 15px; color: #ddd; font-size: 0.9rem;">
+            Helpot ja nopeat ohjeet arjen digityökaluihin.
+          </p>
+          <ul class="nappilista-ul" id="lista-ohjeet-perus" data-admin-list="lista-ohjeet-perus">
+          </ul>
+        </div>
 
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>URL shortener</h2>
-    <p>Learn how to create short and easy-to-share links.</p>
-    <a href="/en/guides/link-shortener" class="nappula1">Open guide</a>
-  </div>
+        <!-- OSIO 2: EDISTYNEET TYÖKALUT & TIETOTURVA -->
+        <div class="osion-tausta" style="text-align:center;">
+          <h2 style="color: #ffaa00; margin-top: 0;">Advanced tools</h2>
+          <p data-i18n="ohjeet.syvenny_teknisiin_työkaluihin_ja_salaukseen" style="margin-bottom: 15px; color: #ddd; font-size: 0.9rem;">
+            Oppaat kehittäjille, salaukseen ja turvalliseen hallintaan.
+          </p>
+          <ul class="nappilista-ul" id="lista-ohjeet-edistyneet" data-admin-list="lista-ohjeet-edistyneet">
+          </ul>
+        </div>
+      </main>
 
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>Password generator</h2>
-    <p>Generate strong and random passwords directly in your browser.</p>
-    <a href="/en/guides/passwords" class="nappula1">Open guide</a>
-  </div>
-
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>Pastebin</h2>
-    <p>Share code and text easily with temporary links.</p>
-    <a href="/en/guides/pastebin" class="nappula1">Open guide</a>
-  </div>
-  
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>File sharing</h2>
-    <p>Share files securely with download limits and expiration times.</p>
-    <a href="/en/guides/file-sharing" class="nappula1">Open guide</a>
-  </div>
-
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>JSON Formatter</h2>
-    <p>Format and validate JSON data directly in your browser.</p>
-    <a href="/en/guides/json-formatter" class="nappula1">Open guide</a>
-  </div>
-
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>Base64 Encoder</h2>
-    <p>Encode and decode Base64 text directly in your browser.</p>
-    <a href="/en/guides/base64" class="nappula1">Open guide</a>
-  </div>
-
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>Cryptomator</h2>
-    <p>Encrypt your files before storing them in the cloud.</p>
-    <a href="/en/guides/cryptomator" class="nappula1">Open guide</a>
-  </div>
-    
-  <div class="osion-tausta" style="text-align:center;">
-    <h2>Bitwarden – password manager</h2>
-    <p>Create, store, and manage strong passwords with Bitwarden.</p>
-    <a href="/en/guides/bitwarden" class="nappula1">Open guide</a>
-  </div>
-  </main>
-    <a href="/en/" class="linkki-takaisin">← Back to home</a>
-  </div>
+      <a href="/en/" class="linkki-takaisin">← Back to home</a>
+    </div>
   </body>
 </html>

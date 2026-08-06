@@ -995,6 +995,61 @@ app.patch('/api/admin/elements/reorder', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/admin/translations', requireAuth, async (_req, res) => {
+  try {
+    const fiPath = path.join(__dirname, 'src', 'i18n', 'fi.json');
+    const enPath = path.join(__dirname, 'src', 'i18n', 'en.json');
+    let fi, en;
+    try {
+      fi = JSON.parse(await fs.readFile(fiPath, 'utf8'));
+      en = JSON.parse(await fs.readFile(enPath, 'utf8'));
+    } catch {
+      return res.status(500).json({ error: 'Käännöstiedostoa ei voitu lukea.' });
+    }
+    const keys = [...new Set([...Object.keys(fi), ...Object.keys(en)])].sort();
+    const translations = keys.map(key => ({ key, fi: fi[key] ?? '', en: en[key] ?? '' }));
+    res.json({ translations });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/translations', requireAuth, async (req, res) => {
+  try {
+    const key = String(req.body?.key || '').trim();
+    const valueFi = stripHtml(String(req.body?.fi || '').trim());
+    const valueEn = stripHtml(String(req.body?.en || '').trim());
+
+    if (!key) return res.status(400).json({ error: 'key on pakollinen.' });
+    if (/^__/.test(key) || key === 'constructor' || key === 'prototype') {
+      return res.status(400).json({ error: 'Virheellinen avain.' });
+    }
+
+    const fiPath = path.join(__dirname, 'src', 'i18n', 'fi.json');
+    const enPath = path.join(__dirname, 'src', 'i18n', 'en.json');
+    let fi, en;
+    try {
+      fi = JSON.parse(await fs.readFile(fiPath, 'utf8'));
+      en = JSON.parse(await fs.readFile(enPath, 'utf8'));
+    } catch {
+      return res.status(500).json({ error: 'Käännöstiedostoa ei voitu lukea.' });
+    }
+    if (Object.hasOwn(fi, key) || Object.hasOwn(en, key)) {
+      return res.status(409).json({ error: 'Käännösavain on jo olemassa. Käytä PUT päivittämiseen.' });
+    }
+
+    fi[key] = valueFi;
+    en[key] = valueEn;
+    await fs.writeFile(fiPath, JSON.stringify(fi, null, 2) + '\n', 'utf8');
+    await fs.writeFile(enPath, JSON.stringify(en, null, 2) + '\n', 'utf8');
+
+    triggerBuild();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.put('/api/admin/translations', requireAuth, async (req, res) => {
   try {
     const key = String(req.body?.key || '').trim();
@@ -1003,7 +1058,6 @@ app.put('/api/admin/translations', requireAuth, async (req, res) => {
 
     if (!key) return res.status(400).json({ error: 'key on pakollinen.' });
     if (!['fi', 'en'].includes(lang)) return res.status(400).json({ error: 'Virheellinen kieli.' });
-    if (!value) return res.status(400).json({ error: 'value on pakollinen.' });
     if (/^__/.test(key) || key === 'constructor' || key === 'prototype') {
       return res.status(400).json({ error: 'Virheellinen avain.' });
     }
@@ -1023,6 +1077,124 @@ app.put('/api/admin/translations', requireAuth, async (req, res) => {
     // Trigger build to regenerate dist/ HTML files (serialized via lock)
     triggerBuild();
 
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/translations', requireAuth, async (req, res) => {
+  try {
+    const key = String(req.query?.key || '').trim();
+    if (!key) return res.status(400).json({ error: 'key on pakollinen.' });
+    if (/^__/.test(key) || key === 'constructor' || key === 'prototype') {
+      return res.status(400).json({ error: 'Virheellinen avain.' });
+    }
+
+    const fiPath = path.join(__dirname, 'src', 'i18n', 'fi.json');
+    const enPath = path.join(__dirname, 'src', 'i18n', 'en.json');
+    let fi, en;
+    try {
+      fi = JSON.parse(await fs.readFile(fiPath, 'utf8'));
+      en = JSON.parse(await fs.readFile(enPath, 'utf8'));
+    } catch {
+      return res.status(500).json({ error: 'Käännöstiedostoa ei voitu lukea.' });
+    }
+    if (!Object.hasOwn(fi, key) && !Object.hasOwn(en, key)) {
+      return res.status(404).json({ error: 'Käännösavainta ei löydy.' });
+    }
+
+    delete fi[key];
+    delete en[key];
+    await fs.writeFile(fiPath, JSON.stringify(fi, null, 2) + '\n', 'utf8');
+    await fs.writeFile(enPath, JSON.stringify(en, null, 2) + '\n', 'utf8');
+
+    triggerBuild();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+const ROUTES_JSON_PATH = path.join(__dirname, 'src', 'i18n', 'routes.json');
+
+async function readRoutesJson() {
+  return JSON.parse(await fs.readFile(ROUTES_JSON_PATH, 'utf8'));
+}
+
+async function writeRoutesJson(data) {
+  await fs.writeFile(ROUTES_JSON_PATH, JSON.stringify(data, null, 2) + '\n', 'utf8');
+}
+
+app.get('/api/admin/routes', requireAuth, async (_req, res) => {
+  try {
+    const routes = await readRoutesJson();
+    const list = Object.entries(routes).map(([fi, en]) => ({ fi, en }));
+    res.json({ routes: list });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/routes', requireAuth, async (req, res) => {
+  try {
+    const fiSeg = String(req.body?.fi || '').trim().toLowerCase();
+    const enSeg = String(req.body?.en || '').trim().toLowerCase();
+    if (!fiSeg || !enSeg) return res.status(400).json({ error: 'fi ja en ovat pakollisia.' });
+    if (!/^[a-z0-9-]+$/.test(fiSeg) || !/^[a-z0-9-]+$/.test(enSeg)) {
+      return res.status(400).json({ error: 'Polun segmentti saa sisältää vain pieniä kirjaimia, numeroita ja tavuviivoja.' });
+    }
+
+    const routes = await readRoutesJson();
+    if (Object.hasOwn(routes, fiSeg)) {
+      return res.status(409).json({ error: 'Suomenkielinen polku on jo olemassa.' });
+    }
+
+    routes[fiSeg] = enSeg;
+    await writeRoutesJson(routes);
+    triggerBuild();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/admin/routes', requireAuth, async (req, res) => {
+  try {
+    const fiSeg = String(req.body?.fi || '').trim().toLowerCase();
+    const enSeg = String(req.body?.en || '').trim().toLowerCase();
+    if (!fiSeg || !enSeg) return res.status(400).json({ error: 'fi ja en ovat pakollisia.' });
+    if (!/^[a-z0-9-]+$/.test(fiSeg) || !/^[a-z0-9-]+$/.test(enSeg)) {
+      return res.status(400).json({ error: 'Polun segmentti saa sisältää vain pieniä kirjaimia, numeroita ja tavuviivoja.' });
+    }
+
+    const routes = await readRoutesJson();
+    if (!Object.hasOwn(routes, fiSeg)) {
+      return res.status(404).json({ error: 'Suomenkielistä polkua ei löydy.' });
+    }
+
+    routes[fiSeg] = enSeg;
+    await writeRoutesJson(routes);
+    triggerBuild();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/routes', requireAuth, async (req, res) => {
+  try {
+    const fiSeg = String(req.query?.fi || '').trim().toLowerCase();
+    if (!fiSeg) return res.status(400).json({ error: 'fi on pakollinen.' });
+
+    const routes = await readRoutesJson();
+    if (!Object.hasOwn(routes, fiSeg)) {
+      return res.status(404).json({ error: 'Suomenkielistä polkua ei löydy.' });
+    }
+
+    delete routes[fiSeg];
+    await writeRoutesJson(routes);
+    triggerBuild();
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
