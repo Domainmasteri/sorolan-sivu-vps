@@ -909,6 +909,42 @@ app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (re
   }
 });
 
+app.post('/api/admin/elements', requireAuth, async (req, res) => {
+  try {
+    const target_section = String(req.body?.target_section || '').trim();
+    const element_type = String(req.body?.element_type || '').trim();
+    const url = String(req.body?.url || '').trim();
+    const content_fi = String(req.body?.content_fi || '').trim();
+    const content_en = String(req.body?.content_en || '').trim();
+
+    if (!target_section) return res.status(400).json({ error: 'target_section on pakollinen.' });
+    if (!['button', 'text'].includes(element_type)) return res.status(400).json({ error: 'element_type täytyy olla button tai text.' });
+    if (!content_fi) return res.status(400).json({ error: 'content_fi on pakollinen.' });
+    if (!content_en) return res.status(400).json({ error: 'content_en on pakollinen.' });
+    if (element_type === 'button' && !url) return res.status(400).json({ error: 'url on pakollinen button-tyypille.' });
+
+    const result = await db.query(
+      'INSERT INTO custom_elements (target_section, element_type, url, content_fi, content_en) VALUES ($1, $2, $3, $4, $5)',
+      [target_section, element_type, url || null, content_fi, content_en]
+    );
+    res.json({ success: true, id: result.lastInsertRowid });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/elements/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ error: 'ID puuttuu.' });
+    const result = await db.query('DELETE FROM custom_elements WHERE id = $1', [id]);
+    if (result.changes === 0) return res.status(404).json({ error: 'Elementtiä ei löydy.' });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/admin/files', requireAuth, async (_req, res) => {
   try {
     const result = await db.query('SELECT id, s3_key, original_name, file_size, mime_type, expires_at, max_downloads, created_by, created_at FROM admin_files ORDER BY created_at DESC');
@@ -973,13 +1009,62 @@ app.use((error, _req, res, next) => {
   return next();
 });
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function injectCustomElements(html, elements, lang) {
+  if (!elements || elements.length === 0) return html;
+
+  const bySection = {};
+  for (const el of elements) {
+    if (!bySection[el.target_section]) bySection[el.target_section] = [];
+    bySection[el.target_section].push(el);
+  }
+
+  let result = html;
+  for (const [section, items] of Object.entries(bySection)) {
+    const escapedSection = section.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const ulRegex = new RegExp(`(<ul[^>]*\\bid="${escapedSection}"[^>]*>)(.*?)(</ul>)`, 's');
+    result = result.replace(ulRegex, (_match, open, inner, close) => {
+      const injected = items.map(el => {
+        const content = lang === 'en' ? el.content_en : el.content_fi;
+        if (el.element_type === 'button') {
+          return `\n                        <li data-custom-element-id="${el.id}"><a href="${escapeHtml(el.url)}" class="nappula1">${escapeHtml(content)}</a></li>`;
+        }
+        return `\n                        <li data-custom-element-id="${el.id}">${escapeHtml(content)}</li>`;
+      }).join('');
+      return `${open}${inner}${injected}\n                    ${close}`;
+    });
+  }
+  return result;
+}
+
 // Kaikki muut reitit ohjataan oikeisiin .html tiedostoihin tai index.html:ään
 app.get('*', pageLimiter, async (req, res) => {
   const staticHtmlPath = await resolveStaticHtmlPath(req.path);
-  if (staticHtmlPath) {
-    return res.sendFile(staticHtmlPath);
+  const htmlFilePath = staticHtmlPath || path.join(distPath, 'index.html');
+
+  try {
+    const elementsResult = await db.query('SELECT id, target_section, element_type, url, content_fi, content_en FROM custom_elements ORDER BY created_at ASC');
+    const elements = elementsResult.rows;
+
+    if (elements.length > 0) {
+      const lang = req.path.startsWith('/en') ? 'en' : 'fi';
+      const html = await fs.readFile(htmlFilePath, 'utf8');
+      const injected = injectCustomElements(html, elements, lang);
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.send(injected);
+    }
+  } catch {
+    // Jatketaan normaalilla tiedoston lähetyksellä virhetilanteessa
   }
-  return res.sendFile(path.join(distPath, 'index.html'));
+
+  return res.sendFile(htmlFilePath);
 });
 
 const port = Number.parseInt(process.env.PORT || '3000', 10);
