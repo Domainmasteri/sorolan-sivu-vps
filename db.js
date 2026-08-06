@@ -58,21 +58,25 @@ const migrateCustomElementsSortOrder = (connection) => {
     return;
   }
 
-  connection.prepare('ALTER TABLE custom_elements ADD COLUMN sort_order INTEGER DEFAULT 0').run();
-  connection.prepare(`
-    WITH ranked AS (
-      SELECT
-        id,
-        ROW_NUMBER() OVER (PARTITION BY target_section ORDER BY id ASC) - 1 AS next_sort_order
-      FROM custom_elements
-    )
-    UPDATE custom_elements
-    SET sort_order = (
-      SELECT next_sort_order
-      FROM ranked
-      WHERE ranked.id = custom_elements.id
-    )
-  `).run();
+  const migrate = connection.transaction(() => {
+    connection.prepare('ALTER TABLE custom_elements ADD COLUMN sort_order INTEGER DEFAULT 0').run();
+    connection.prepare(`
+      WITH ranked AS (
+        SELECT
+          id,
+          ROW_NUMBER() OVER (PARTITION BY target_section ORDER BY id ASC) - 1 AS next_sort_order
+        FROM custom_elements
+      )
+      UPDATE custom_elements
+      SET sort_order = (
+        SELECT next_sort_order
+        FROM ranked
+        WHERE ranked.id = custom_elements.id
+      )
+    `).run();
+  });
+
+  migrate();
 };
 
 const runMigrations = (connection) => {
