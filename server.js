@@ -1312,7 +1312,7 @@ function validateUrl(url) {
   const value = String(url || '').trim();
   if (!value || /[\u0000-\u001F\u007F\s]/.test(value)) return false;
   if (value.startsWith('//')) return false;
-  if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) return true;
+  if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) return value.startsWith('/');
   try {
     const parsed = new URL(value);
     return parsed.protocol === 'https:' || parsed.protocol === 'http:';

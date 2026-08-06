@@ -484,7 +484,7 @@
             function isAllowedButtonUrl(url) {
                 var value = String(url || '').trim();
                 if (!value || /[\u0000-\u001F\u007F\s]/.test(value) || value.indexOf('//') === 0) return false;
-                if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) return true;
+                if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) return value.indexOf('/') === 0;
                 try {
                     var parsed = new URL(value);
                     return parsed.protocol === 'https:' || parsed.protocol === 'http:';
