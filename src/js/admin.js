@@ -65,14 +65,14 @@ async function register() {
   }
 }
 
-async function vaihdaSalasana() {
+async function vaihdaSalasana(buttonEl) {
   const oldP = document.getElementById('change-old-password').value;
   const newP = document.getElementById('change-new-password').value;
   const confirmP = document.getElementById('change-new-password-confirm').value;
   if (!oldP || !newP || !confirmP) return alert('Täytä kaikki salasanakentät.');
   if (newP !== confirmP) return alert('Uudet salasanat eivät täsmää.');
 
-  const btn = event.target;
+  const btn = buttonEl;
   btn.disabled = true;
   btn.textContent = 'Vaihdetaan...';
 
@@ -232,13 +232,13 @@ async function lataaTiedot() {
   }
 }
 
-async function luoUusiLinkki() {
+async function luoUusiLinkki(buttonEl) {
   const domain = document.getElementById('new-domain').value;
   const url = document.getElementById('new-url').value;
   const path = document.getElementById('new-path').value;
   if (!url) return alert('Kohdeosoite on pakollinen.');
 
-  const btn = event.target;
+  const btn = buttonEl;
   btn.textContent = 'Luodaan...';
   btn.disabled = true;
   try {
@@ -375,7 +375,7 @@ async function poistaVieraskirjaviesti(id) {
   }
 }
 
-async function lataaTiedosto() {
+async function lataaTiedosto(buttonEl) {
   const fileInput = document.getElementById('admin-file-input');
   const expiryDays = document.getElementById('admin-file-expiry').value;
   const maxDownloads = document.getElementById('admin-file-maxdownloads').value;
@@ -388,7 +388,7 @@ async function lataaTiedosto() {
   formData.append('expiryDays', expiryDays);
   formData.append('maxDownloads', maxDownloads);
 
-  const btn = event.target;
+  const btn = buttonEl;
   btn.textContent = 'Ladataan...';
   btn.disabled = true;
   resultDiv.style.display = 'none';

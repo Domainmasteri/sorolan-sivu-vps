@@ -71,7 +71,7 @@
                     <div style="flex: 1;">
                         <input type="text" id="new-path" class="syote" placeholder="Lyhenne (tyhjä = satunnainen)" style="width: 100%;" data-i18n-attr-placeholder="common.lyhenne_tyhjä_satunnainen">
                     </div>
-                    <button onclick="luoUusiLinkki()" class="nappula" data-i18n="admin.luo">Luo</button>
+                    <button onclick="luoUusiLinkki(this)" class="nappula" data-i18n="admin.luo">Luo</button>
                 </div>
             </div>
 
@@ -139,7 +139,7 @@
                             <input type="number" id="admin-file-maxdownloads" class="syote" value="0" min="0" style="width: 100%;">
                         </div>
                     </div>
-                    <button onclick="lataaTiedosto()" class="nappula1" style="border: 1px solid #34d399; color: #34d399;">📤 Lataa tiedosto</button>
+                    <button onclick="lataaTiedosto(this)" class="nappula1" style="border: 1px solid #34d399; color: #34d399;">📤 Lataa tiedosto</button>
                 </div>
                 <div id="admin-upload-result" style="display: none; background: #0b0d13; border-radius: 8px; padding: 12px; margin-bottom: 15px; word-break: break-all;">
                     <p style="color: #4ade80; margin: 0 0 6px 0; font-weight: bold;">✅ Tiedosto ladattu!</p>
@@ -270,7 +270,7 @@
                     <input type="password" id="change-old-password" class="syote" placeholder="Nykyinen salasana" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.nykyinen_salasana">
                     <input type="password" id="change-new-password" class="syote" placeholder="Uusi salasana" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.uusi_salasana">
                     <input type="password" id="change-new-password-confirm" class="syote" placeholder="Uusi uudelleen" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.uusi_uudelleen">
-                    <button onclick="vaihdaSalasana()" class="nappula" style="width: 100%; background: #4b5563;" data-i18n="admin.vaihda">Vaihda</button>
+                    <button onclick="vaihdaSalasana(this)" class="nappula" style="width: 100%; background: #4b5563;" data-i18n="admin.vaihda">Vaihda</button>
                 </div>
             </div>
 
