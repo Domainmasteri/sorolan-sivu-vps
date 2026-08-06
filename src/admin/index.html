@@ -18,10 +18,6 @@
         .edit-btn:hover { background: #2563eb; }
         .hidden { display: none !important; }
         #app-container { max-width: 1000px; margin: 0 auto; }
-        /* DNS Admin Styles */
-        .dns-tietue-tila { background: #0b0d13; padding: 15px; border-radius: 8px; margin-top: 15px; }
-        .dns-input-rivi { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; }
-        .dns-input-rivi > div { flex: 1; min-width: 120px; }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/analytics.js"></script>
@@ -182,59 +178,6 @@
                 </div>
             </div>
 
-            <!-- DNS Hallinta -->
-            <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #60a5fa;">🌐 DNS-hallinta (OVH)</h2>
-                <div style="margin-bottom: 15px;">
-                    <label for="dns-zone-select" style="display:block; color:#a0aec0; margin-bottom:5px; font-size:0.9rem;" data-i18n="admin.valitse_hallittava_domain">Valitse hallittava domain:</label>
-                    <div style="display:flex; gap:10px;">
-                        <select id="dns-zone-select" class="syote" style="flex: 1;">
-                            <option value="" data-i18n="admin.ladataan_vyöhykkeitä">Ladataan vyöhykkeitä...</option>
-                        </select>
-                        <button onclick="lataaDnsTietueet()" class="nappula1" style="width: auto;" data-i18n="admin.hae_tietueet">Hae tietueet</button>
-                    </div>
-                </div>
-
-                    <div id="dns-hallinta-alue" class="hidden">
-                        <div class="dns-tietue-tila">
-                            <h3 style="color:#4ade80; margin-bottom:10px;" data-i18n="admin.lisää_uusi_tietue">Lisää uusi tietue</h3>
-                            <div class="dns-input-rivi">
-                                <div style="flex: 0.5;">
-                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.tyyppi">Tyyppi</label>
-                                    <select id="new-dns-type" class="syote">
-                                        <option value="A">A</option>
-                                        <option value="AAAA">AAAA</option>
-                                        <option value="CNAME">CNAME</option>
-                                        <option value="MX">MX</option>
-                                        <option value="TXT">TXT</option>
-                                        <option value="SRV">SRV</option>
-                                    </select>
-                                </div>
-                                <div style="flex: 1;">
-                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.nimi_esim_www_api">Nimi (esim. @, www, api)</label>
-                                    <input type="text" id="new-dns-name" class="syote" placeholder="@">
-                                </div>
-                                <div style="flex: 2;">
-                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.arvo_ip_tai_kohde">Arvo (IP tai kohde)</label>
-                                    <input type="text" id="new-dns-value" class="syote" placeholder="1.2.3.4">
-                                </div>
-                                <div style="flex: 0.5;">
-                                    <label style="font-size:0.8rem; color:#a0aec0;" data-i18n="admin.ttl_s">TTL (s)</label>
-                                    <input type="number" id="new-dns-ttl" class="syote" value="300">
-                                </div>
-                                <button onclick="luoDnsTietue()" class="nappula" style="width:auto; height: 44px; margin-bottom: 2px;" data-i18n="admin.lisää">Lisää</button>
-                            </div>
-                        </div>
-
-                        <div class="table-container">
-                            <table id="dns-records-table">
-                                <thead><tr><th data-i18n="admin.tyyppi">Tyyppi</th><th data-i18n="admin.nimi">Nimi</th><th data-i18n="admin.arvo">Arvo</th><th data-i18n="admin.ttl">TTL</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-            </div>
-
             <!-- Käyttäjät & Kutsut -->
             <div class="osion-tausta" style="margin-top: 20px;">
                 <h2 style="color: #f472b6;" data-i18n="admin.ylläpitäjät">👑 Ylläpitäjät</h2>
@@ -278,7 +221,6 @@
     <script>
         let currentUser = null;
         let currentAuthHeader = null;
-        let currentDnsZoneId = null;
 
         function toggleMode() {
             document.getElementById('login-section').classList.toggle('hidden');
@@ -302,7 +244,6 @@
                     document.getElementById('login-section').classList.add('hidden');
                     document.getElementById('dashboard-section').classList.remove('hidden');
                     lataaTiedot();
-                    lataaDnsVyohykkeet();
                 } else {
                     alert(data.error || 'Virheellinen tunnus tai salasana.');
                 }
@@ -367,7 +308,6 @@
         function logout() {
             currentUser = null;
             currentAuthHeader = null;
-            currentDnsZoneId = null;
             document.getElementById('dashboard-section').classList.add('hidden');
             document.getElementById('login-section').classList.remove('hidden');
             document.getElementById('login-password').value = '';
@@ -656,105 +596,6 @@
             } catch { alert('Palvelinvirhe.'); }
         }
 
-        // --- DNS Hallinta (OVH) ---
-        async function lataaDnsVyohykkeet() {
-            const select = document.getElementById('dns-zone-select');
-            try {
-                const res = await fetch('/api/dns/zones', { headers: { 'Authorization': currentAuthHeader } });
-                const data = await res.json();
-                
-                if (res.ok && data.zones) {
-                    select.innerHTML = '<option value="">-- Valitse domain --</option>';
-                    data.zones.forEach(z => {
-                        select.innerHTML += `<option value="${z.id}">${z.name}</option>`;
-                    });
-                } else {
-                    const errorText = data?.error ? `DNS API virhe: ${data.error}` : 'DNS API ei saatavilla';
-                    select.innerHTML = `<option value="">${errorText}</option>`;
-                }
-            } catch (e) {
-                select.innerHTML = '<option value="">DNS API ei vastaa</option>';
-                console.error(e);
-            }
-        }
-
-        async function lataaDnsTietueet() {
-            const zoneId = document.getElementById('dns-zone-select').value;
-            if (!zoneId) return alert('Valitse domain ensin.');
-            currentDnsZoneId = zoneId;
-            
-            document.getElementById('dns-hallinta-alue').classList.remove('hidden');
-            const tbody = document.querySelector('#dns-records-table tbody');
-            tbody.innerHTML = '<tr><td colspan="5">Ladataan...</td></tr>';
-
-            try {
-                const res = await fetch(`/api/dns?zone_id=${zoneId}`, { headers: { 'Authorization': currentAuthHeader } });
-                const data = await res.json();
-                
-                if (res.ok && data.records) {
-                    tbody.innerHTML = '';
-                    data.records.forEach(r => {
-                        tbody.innerHTML += `
-                            <tr>
-                                <td><strong>${r.type}</strong></td>
-                                <td>${r.name}</td>
-                                <td><span style="font-family:monospace; color:#4ade80;">${r.value}</span></td>
-                                <td>${r.ttl}</td>
-                                <td>
-                                    <button onclick="poistaDnsTietue('${r.id}')" class="action-btn" data-i18n="ohjeet.poista">Poista</button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    tbody.innerHTML = `<tr><td colspan="5" style="color:red;">${data.error || 'Virhe ladattaessa.'}</td></tr>`;
-                }
-            } catch (e) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color:red;" data-i18n="admin_raw.palvelinvirhe">Palvelinvirhe.</td></tr>`;
-            }
-        }
-
-        async function luoDnsTietue() {
-            if (!currentDnsZoneId) return alert('Valitse domain ensin.');
-            
-            const type = document.getElementById('new-dns-type').value;
-            const name = document.getElementById('new-dns-name').value || '@';
-            const value = document.getElementById('new-dns-value').value;
-            const ttl = document.getElementById('new-dns-ttl').value;
-
-            if (!value) return alert('Tietueen arvo (IP/kohde) on pakollinen.');
-
-            try {
-                const res = await fetch('/api/dns', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': currentAuthHeader },
-                    body: JSON.stringify({ zone_id: currentDnsZoneId, type, name, value, ttl })
-                });
-                
-                if (res.ok) {
-                    document.getElementById('new-dns-value').value = '';
-                    document.getElementById('new-dns-name').value = '';
-                    lataaDnsTietueet();
-                } else {
-                    const data = await res.json();
-                    alert(data.error || 'Virhe tietueen luonnissa.');
-                }
-            } catch { alert('Palvelinvirhe.'); }
-        }
-
-        async function poistaDnsTietue(recordId) {
-            if (!confirm('Haluatko varmasti poistaa tämän DNS-tietueen? Tämä voi rikkoa sivuston tai sähköpostin!')) return;
-            try {
-                const zoneId = currentDnsZoneId || document.getElementById('dns-zone-select').value;
-                if (!zoneId) return alert('Valitse domain ensin.');
-                const res = await fetch(`/api/dns/${recordId}?zone_id=${encodeURIComponent(zoneId)}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': currentAuthHeader }
-                });
-                if (res.ok) lataaDnsTietueet();
-                else alert('Virhe poistossa.');
-            } catch { alert('Palvelinvirhe.'); }
-        }
         // --- Ylläpidon tiedostojako ---
         async function lataaTiedosto() {
             const fileInput = document.getElementById('admin-file-input');

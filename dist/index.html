@@ -343,12 +343,34 @@
         (function() {
             var authHeader = null;
             var editMode = false;
-            var LISTS = ['lista-perustyokalut', 'lista-edistyneet'];
 
             var toggleBtn = document.getElementById('admin-toggle-btn');
             var loginOverlay = document.getElementById('admin-login-overlay');
             var addOverlay = document.getElementById('admin-add-overlay');
             var adminError = document.getElementById('admin-error');
+
+            function getEditableTargets() {
+                var targets = [];
+                var seen = new Set();
+                function addTarget(id, element) {
+                    if (!id || seen.has(id)) return;
+                    seen.add(id);
+                    targets.push({ id: id, element: element });
+                }
+
+                document.querySelectorAll('[data-admin-list]').forEach(function(el) {
+                    var targetId = (el.getAttribute('data-admin-list') || '').trim();
+                    if (!targetId && el.id) targetId = el.id;
+                    addTarget(targetId, el);
+                });
+                document.querySelectorAll('ul.nappilista-ul[id]').forEach(function(el) {
+                    addTarget(el.id, el);
+                });
+                document.querySelectorAll('nav.nappilista[id]').forEach(function(el) {
+                    addTarget(el.id, el);
+                });
+                return targets;
+            }
 
             toggleBtn.addEventListener('click', function() {
                 if (editMode) {
@@ -390,17 +412,18 @@
                 editMode = true;
                 toggleBtn.classList.add('active');
                 toggleBtn.title = 'Poistu muokkaustilasta';
-                LISTS.forEach(function(listId) {
-                    var list = document.getElementById(listId);
-                    if (!list) return;
-                    var btn = list.parentNode.querySelector('.lisaa-nappi-btn[data-list="' + listId + '"]');
+                getEditableTargets().forEach(function(target) {
+                    var listId = target.id;
+                    var targetEl = target.element;
+                    var parent = targetEl.parentNode;
+                    var btn = parent.querySelector('.lisaa-nappi-btn[data-list="' + listId + '"]');
                     if (!btn) {
                         btn = document.createElement('button');
                         btn.className = 'lisaa-nappi-btn';
                         btn.setAttribute('data-list', listId);
                         btn.textContent = '+ Lisää uusi nappi';
                         btn.addEventListener('click', function() { openAddModal(listId); });
-                        list.parentNode.insertBefore(btn, list.nextSibling);
+                        parent.insertBefore(btn, targetEl.nextSibling);
                     }
                     btn.classList.add('admin-active');
                 });
@@ -416,24 +439,24 @@
             }
 
             function showDeleteButtons() {
-                document.querySelectorAll('li[data-custom-element-id]').forEach(function(li) {
-                    if (li.querySelector('.poista-elem-btn')) return;
-                    var id = li.getAttribute('data-custom-element-id');
+                document.querySelectorAll('[data-custom-element-id]').forEach(function(el) {
+                    if (el.querySelector('.poista-elem-btn')) return;
+                    var id = el.getAttribute('data-custom-element-id');
                     var btn = document.createElement('button');
                     btn.className = 'poista-elem-btn';
                     btn.title = 'Poista elementti';
                     btn.textContent = '🗑';
-                    btn.addEventListener('click', function(e) { e.preventDefault(); deleteElement(id, li); });
-                    li.appendChild(btn);
+                    btn.addEventListener('click', function(e) { e.preventDefault(); deleteElement(id, el); });
+                    el.appendChild(btn);
                 });
             }
 
-            async function deleteElement(id, li) {
+            async function deleteElement(id, el) {
                 if (!confirm('Poistetaanko tämä elementti?')) return;
                 try {
                     var resp = await fetch('/api/admin/elements/' + id, { method: 'DELETE', headers: { Authorization: authHeader } });
                     if (resp.ok) {
-                        li.remove();
+                        el.remove();
                     } else {
                         var data = await resp.json();
                         alert('Virhe: ' + (data.error || 'Tuntematon virhe'));
@@ -478,14 +501,20 @@
                         a.href = sanitizedUrl;
                         a.className = 'nappula1';
                         a.textContent = fi;
-                        li.appendChild(a);
-                        var delBtn = document.createElement('button');
-                        delBtn.className = 'poista-elem-btn';
-                        delBtn.title = 'Poista elementti';
-                        delBtn.textContent = '🗑';
-                        delBtn.addEventListener('click', function(e) { e.preventDefault(); deleteElement(data.id, li); });
-                        li.appendChild(delBtn);
-                        list.appendChild(li);
+                        if (list.tagName.toLowerCase() === 'ul') {
+                            li.appendChild(a);
+                            var delBtn = document.createElement('button');
+                            delBtn.className = 'poista-elem-btn';
+                            delBtn.title = 'Poista elementti';
+                            delBtn.textContent = '🗑';
+                            delBtn.addEventListener('click', function(e) { e.preventDefault(); deleteElement(data.id, li); });
+                            li.appendChild(delBtn);
+                            list.appendChild(li);
+                        } else {
+                            a.setAttribute('data-custom-element-id', data.id);
+                            list.appendChild(a);
+                            showDeleteButtons();
+                        }
                     }
                 } catch(e) {
                     alert('Verkkovirhe.');

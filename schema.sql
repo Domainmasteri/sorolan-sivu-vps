@@ -78,4 +78,14 @@ CREATE TABLE IF NOT EXISTS custom_elements (
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS changelog (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date_str TEXT NOT NULL,
+    title_fi TEXT NOT NULL,
+    title_en TEXT NOT NULL,
+    content_fi TEXT NOT NULL,
+    content_en TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
 INSERT OR IGNORE INTO invites (code_hash) VALUES ('root');
