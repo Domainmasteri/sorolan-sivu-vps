@@ -39,6 +39,20 @@ const stylesDir = process.env.STYLES_DIR || '/opt/sorola/styles';
 const shortenerHomeUrl = process.env.SHORTENER_HOME_URL || 'https://sorola.fi/lyhennin';
 const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/lyhennin/error';
 
+// Build lock: prevents multiple overlapping build processes from racing
+let _buildRunning = false;
+let _buildQueued = false;
+function triggerBuild() {
+  if (_buildRunning) { _buildQueued = true; return; }
+  _buildRunning = true;
+  execFileAsync('node', ['build.mjs'], { cwd: __dirname })
+    .catch(err => console.error('Build error after translation update:', err.message))
+    .finally(() => {
+      _buildRunning = false;
+      if (_buildQueued) { _buildQueued = false; triggerBuild(); }
+    });
+}
+
 // 1 GB maksimikoko (1024 * 1024 * 1024 tavua)
 const MAX_SHARE_FILE_SIZE_BYTES = 1 * 1024 * 1024 * 1024;
 const uploadDir = path.join(__dirname, 'uploads');
@@ -951,18 +965,32 @@ app.delete('/api/admin/elements/:id', requireAuth, async (req, res) => {
 });
 
 app.patch('/api/admin/elements/reorder', requireAuth, async (req, res) => {
+  const conn = db.connect();
   try {
     const orderedIds = req.body?.orderedIds;
     if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
+      conn.release();
       return res.status(400).json({ error: 'orderedIds-taulukko on pakollinen.' });
     }
+    const parsed = [];
     for (let i = 0; i < orderedIds.length; i++) {
       const id = Number.parseInt(orderedIds[i], 10);
-      if (!Number.isFinite(id)) return res.status(400).json({ error: 'Virheellinen ID.' });
-      await db.query('UPDATE custom_elements SET sort_order = $1 WHERE id = $2', [i, id]);
+      if (!Number.isFinite(id)) {
+        conn.release();
+        return res.status(400).json({ error: 'Virheellinen ID.' });
+      }
+      parsed.push(id);
     }
+    conn.query('BEGIN');
+    for (let i = 0; i < parsed.length; i++) {
+      conn.query('UPDATE custom_elements SET sort_order = $1 WHERE id = $2', [i, parsed[i]]);
+    }
+    conn.query('COMMIT');
+    conn.release();
     res.json({ success: true });
   } catch (error) {
+    try { conn.query('ROLLBACK'); } catch { /* ignore */ }
+    conn.release();
     res.status(500).json({ error: error.message });
   }
 });
@@ -976,6 +1004,9 @@ app.put('/api/admin/translations', requireAuth, async (req, res) => {
     if (!key) return res.status(400).json({ error: 'key on pakollinen.' });
     if (!['fi', 'en'].includes(lang)) return res.status(400).json({ error: 'Virheellinen kieli.' });
     if (!value) return res.status(400).json({ error: 'value on pakollinen.' });
+    if (/^__/.test(key) || key === 'constructor' || key === 'prototype') {
+      return res.status(400).json({ error: 'Virheellinen avain.' });
+    }
 
     const jsonPath = path.join(__dirname, 'src', 'i18n', `${lang}.json`);
     let existing;
@@ -984,15 +1015,13 @@ app.put('/api/admin/translations', requireAuth, async (req, res) => {
     } catch {
       return res.status(500).json({ error: 'Käännöstiedostoa ei voitu lukea.' });
     }
-    if (!(key in existing)) return res.status(404).json({ error: 'Käännösavainta ei löydy.' });
+    if (!Object.hasOwn(existing, key)) return res.status(404).json({ error: 'Käännösavainta ei löydy.' });
 
     existing[key] = value;
     await fs.writeFile(jsonPath, JSON.stringify(existing, null, 2) + '\n', 'utf8');
 
-    // Trigger build to regenerate dist/ HTML files
-    execFileAsync('node', ['build.mjs'], { cwd: __dirname }).catch(err => {
-      console.error('Build error after translation update:', err.message);
-    });
+    // Trigger build to regenerate dist/ HTML files (serialized via lock)
+    triggerBuild();
 
     res.json({ success: true });
   } catch (error) {
