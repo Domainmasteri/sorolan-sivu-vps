@@ -64,6 +64,23 @@ const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 40, standardHea
 const uploadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false });
 const pageLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 1200, standardHeaders: true, legacyHeaders: false });
 
+function resolveRequestSiteUrl(req) {
+  const configured = String(process.env.SITE_URL || '').trim();
+  if (configured) {
+    return configured.replace(/\/$/, '');
+  }
+
+  const forwardedHost = String(req.get('x-forwarded-host') || '').trim();
+  const host = forwardedHost || String(req.get('host') || req.hostname || '').trim();
+  if (!host) {
+    return `${req.protocol}://localhost`;
+  }
+
+  const forwardedProto = String(req.get('x-forwarded-proto') || '').split(',')[0].trim();
+  const protocol = forwardedProto || req.protocol || 'http';
+  return `${protocol}://${host}`;
+}
+
 async function resolveStaticHtmlPath(requestPath) {
   if (typeof requestPath !== 'string') return null;
   const trimmedPath = requestPath.replace(/^\/+|\/+$/g, '');
@@ -921,9 +938,7 @@ app.post('/api/upload', requireWebTool('share'), apiKeyUsageMiddleware, uploadSh
       }
     }));
 
-    const siteUrl = process.env.SITE_URL
-      ? process.env.SITE_URL.replace(/\/$/, '')
-      : `${req.protocol}://${req.hostname}`;
+    const siteUrl = resolveRequestSiteUrl(req);
 
     return res.json({ url: `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`, id: fileName });
   } catch (error) {
@@ -1091,9 +1106,7 @@ app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (re
       [fileName, file.originalname, file.size, file.mimetype || 'application/octet-stream', expiresAt || null, maxDownloads, req.user.username]
     );
 
-    const siteUrl = process.env.SITE_URL
-      ? process.env.SITE_URL.replace(/\/$/, '')
-      : `${req.protocol}://${req.hostname}`;
+    const siteUrl = resolveRequestSiteUrl(req);
 
     return res.json({
       success: true,
