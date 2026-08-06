@@ -49,7 +49,7 @@
     }
     </script>
 
-    <script src="/en/analytics.js"></script>
+    <script src="/en/js/analytics.js"></script>
 
     <style>
         .muutos-pvm {
@@ -72,21 +72,21 @@
     </style>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{
@@ -157,57 +157,11 @@
         </div>
         
         <main id="paaosio">
-            <div class="osion-tausta">
-                <div class="muutos-pvm">5.8.2026 – UUID generator &amp; improved language selector</div>
-                <ul class="muutos-lista">
-                    <li>Added UUID/GUID v4 generator to the advanced tools section on the front page.</li>
-                    <li>Language selector is now draggable – you can move it out of the way if it covers important content.</li>
-                    <li>Added user guides and privacy policies for the QR code generator, password generator, pastebin, JSON formatter, and Base64 encoder.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">5.8.2026 – Guides and privacy policies for all tools</div>
-                <ul class="muutos-lista">
-                    <li>Added usage guides for QR code creator, password generator, pastebin, JSON formatter and Base64 encoder.</li>
-                    <li>Added privacy policies for all services: QR, Pastebin, File sharing, JSON formatter and Base64.</li>
-                    <li>Removed Sorolan Holvi browser extension (replaced by Vaultwarden).</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">4.8.2026 – New guides and privacy policies</div>
-                <ul class="muutos-lista">
-                    <li>Added new comprehensive usage guides for services and IT tools.</li>
-                    <li>Updated and added proper privacy policies for web tools and services.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">3.8.2026 – JSON Formatter</div>
-                <ul class="muutos-lista">
-                    <li>Added a new <strong>JSON Formatter &amp; Validator</strong> to the advanced tools section.</li>
-                    <li>The tool works entirely locally in the browser without sending any data to the server.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">1.8.2026 – Tool grouping &amp; webtools.sorola.fi</div>
-                <ul class="muutos-lista">
-                    <li>Tools grouped more clearly into <strong>basic tools</strong> and developer-oriented <strong>advanced tools</strong>.</li>
-                    <li>Launched a new subdomain <a href="https://webtools.sorola.fi/" target="_blank" rel="noopener noreferrer" style="color: #3b82f6; text-decoration: underline;">webtools.sorola.fi</a> for the web tools collection.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">31.7.2026 – Android app release</div>
-                <ul class="muutos-lista">
-                    <li>Sorola's own Android app (.apk download) created and released, making it easier to use the basic tools on mobile devices.</li>
-                </ul>
-            </div>
+            <div id="muutoslista"></div>
 
             <a href="/en/" class="linkki-takaisin">« Back to home</a>
         </main>
     </div>
+    <script src="/en/js/muutokset.js"></script>
 </body>
 </html>

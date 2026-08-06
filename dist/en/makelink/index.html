@@ -12,11 +12,18 @@
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     <meta name="description" content="Markus Sorola's contact details, social media profiles, and GitHub link.">
     <meta name="keywords" content="Markus Sorola, yhteystiedot, GitHub, portfolio, web-kehittäjä, IT, Sorola">
+    <meta name="author" content="Markus Sorola">
+    <meta name="robots" content="index, follow">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sorola.fi/en/makelink/">
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Markus's contact details - Markus Sorola">
     <meta property="og:description" content="Markus Sorola's contact details and social media profiles.">
+    <meta property="og:locale" content="en_GB">
+    <meta property="og:image" content="https://sorola.fi/en/styles/og-image.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Markus's contact details - Markus Sorola">
+    <meta name="twitter:description" content="Markus Sorola's contact details and social media profiles.">
     <style>
         /* PayPal-painikkeen oma brändiväri */
         .paypal-nappula {
@@ -30,25 +37,25 @@
         }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/en/analytics.js"></script>
+<script src="/en/js/analytics.js"></script>
 
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{

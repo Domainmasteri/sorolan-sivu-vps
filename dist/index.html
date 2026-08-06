@@ -118,24 +118,24 @@
         }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+<script src="/js/analytics.js"></script>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{
@@ -198,7 +198,7 @@
         <h1 class="otsikko">Sorolan Sakki</h1>
         <h2 style="font-weight: 700; text-align: center;">Tervetuloa Sorolan nettisivuille!</h2><br>
         
-        <div class="muutos-banneri" role="region" aria-label="Viimeisin päivitys">
+        <div class="muutos-banneri" id="muutos-banneri" role="region" aria-label="Viimeisin päivitys">
             ⚡ <strong>Viimeisin muutos (5.8.2026):</strong> <span>UUID-generaattori etusivulle ja kielen vaihtajan parannus!</span>
             <a href="muutokset">Katso muutosloki →</a>
         </div>
@@ -212,88 +212,16 @@
         
         <main id="paaosio">
             <div class="osion-tausta">
-                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Sorolan linkit</h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;">Kokoelma perheen omia sivuja, teknisiä oppaita sekä hyödyllistä tietoa.</p>
-                <nav aria-label="Sorolan linkit">
-                    <ul class="nappilista-ul">
-                        <li><a href="ansioluettelot" class="nappula1">📄 Maken Ansioluettelot</a></li>
-                        <li><a href="makelink" class="nappula1">📞 Maken yhteystiedot</a></li>
-                        <li><a href="ohjeet" class="nappula1">📖 Sorolan ohjeita</a></li>
-                        <li><a href="https://soro.la/pienoismallit" target="_blank" rel="noopener noreferrer" class="nappula1">✈️ Taven pienoismallikerho</a></li>
-                        <li><a href="vieraskirja" class="nappula1">📖 Vieraskirja</a></li>
-                        <li><a href="privacy" class="nappula1">🔒 Yksityisyyskäytännöt</a></li>
-                        <li><a href="muutokset" class="nappula1">📋 Viimeisimmät muutokset</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="osion-tausta">
                 <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Hae työkaluja</h2>
                 <div class="haku-kontti">
                     <input type="search" id="tyokaluhaku" class="syote" placeholder="Hae työkaluja..." aria-label="Hae työkaluja">
                 </div>
             </div>
 
-            <div class="osion-tausta" id="osio-perustyokalut">
-                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Perustyökalut</h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;">Itse koodatut, nopeat ja ilman mainoksia toimivat apuvälineet digiarjen tueksi.</p>
-                <nav aria-label="Perustyökalut">
-                    <ul class="nappilista-ul" id="lista-perustyokalut">
-                        <li><a href="https://soro.la/sovellus" target="_blank" rel="noopener noreferrer" class="nappula1">📱 Lataa Android-sovellus (.apk)</a></li>
-                        <li><a href="qr" class="nappula1">📱 QR-koodin luoja</a></li>
-                        <li><a href="lyhennin" class="nappula1">🔗 Linkin lyhennin</a></li>
-                        <li><a href="salasanat" class="nappula1">🔑 Salasanageneraattori</a></li>
-                        <li><a href="pastebin" class="nappula1">📝 Pastebin (Koodinjako)</a></li>
-                        <li><a href="https://vault.sorola.fi/" target="_blank" rel="noopener noreferrer" class="nappula1">🔐 SorolaVault (kutsutut)</a></li>
-                        <li><a href="jako" class="nappula1">📁 Sorolan tiedostojako</a></li>
-                    </ul>
-                    <p class="ei-tuloksia" id="ei-tuloksia-perus">Ei hakutuloksia.</p>
-                </nav>
-            </div>
-
-            <div class="osion-tausta" id="osio-edistyneet">
-                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Edistyneet työkalut</h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;">Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.</p>
-                <nav aria-label="Edistyneet työkalut">
-                    <ul class="nappilista-ul" id="lista-edistyneet">
-                        <li><a href="https://webtools.sorola.fi/" class="nappula1">🌐 Verkkotyökalut</a></li>
-                        <li><a href="json" class="nappula1">🔧 JSON-muotoilija &amp; validaattori</a></li>
-                        <li><a href="base64" class="nappula1">🔐 Base64 Kooderi / Dekooderi</a></li>
-                        <li><a href="uuid" class="nappula1">🔑 UUID / GUID Generaattori</a></li>
-                    </ul>
-                    <p class="ei-tuloksia" id="ei-tuloksia-edistyneet">Ei hakutuloksia.</p>
-                </nav>
-            </div>
+            <div id="home-sections"></div>
         </main>
     </div>
 
-    <script>
-        const hakukentta = document.getElementById('tyokaluhaku');
-
-        function suodataLista(listaId, eiTuloksiaId) {
-            const lista = document.getElementById(listaId);
-            const eiTuloksiaEl = document.getElementById(eiTuloksiaId);
-            const hakusana = hakukentta.value.trim().toLowerCase();
-            const rivit = lista.querySelectorAll('li');
-            let loydetty = 0;
-
-            rivit.forEach(rivi => {
-                const teksti = rivi.textContent.trim().toLowerCase();
-                if (!hakusana || teksti.includes(hakusana)) {
-                    rivi.classList.remove('piilotettu');
-                    loydetty++;
-                } else {
-                    rivi.classList.add('piilotettu');
-                }
-            });
-
-            eiTuloksiaEl.style.display = loydetty === 0 ? 'block' : 'none';
-        }
-
-        hakukentta.addEventListener('input', () => {
-            suodataLista('lista-perustyokalut', 'ei-tuloksia-perus');
-            suodataLista('lista-edistyneet', 'ei-tuloksia-edistyneet');
-        });
-    </script>
+    <script src="/js/home.js"></script>
 </body>
 </html>

@@ -46,7 +46,7 @@
         .asetus-rivi-flex input[type="checkbox"] { width: 20px; height: 20px; accent-color: #ffaa00; cursor: pointer; }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/en/analytics.js"></script>
+<script src="/en/js/analytics.js"></script>
 
     <script type="application/ld+json">
     {
@@ -62,21 +62,21 @@
     </script>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{
@@ -186,117 +186,6 @@
         </main>
         <a href="/en/" class="linkki-takaisin">« Back to home</a>
     </div>
-    <script>
-        lucide.createIcons();
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('fileInput');
-        const dropzoneContent = document.getElementById('dropzone-content');
-        const loading = document.getElementById('loading');
-        const loadingText = document.getElementById('loading-text');
-        const result = document.getElementById('result');
-        const shareLink = document.getElementById('shareLink');
-        const copyBtn = document.getElementById('copyBtn');
-        const encryptCheckbox = document.getElementById('encryptCheckbox');
-
-        dropzone.addEventListener('click', () => fileInput.click());
-        dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-        dropzone.addEventListener('dragleave', () => { dropzone.classList.remove('dragover'); });
-        dropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropzone.classList.remove('dragover');
-            if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
-        });
-        fileInput.addEventListener('change', function() {
-            if (this.files.length) handleUpload(this.files[0]);
-        });
-
-        async function handleUpload(file) {
-            const MAX_SIZE_MB = 1024;
-            if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-                alert(`The file is too large! The maximum allowed size is ${MAX_SIZE_MB} MB.`);
-                return;
-            }
-
-            dropzoneContent.style.display = 'none';
-            loading.style.display = 'flex';
-            result.style.display = 'none';
-            dropzone.style.pointerEvents = 'none';
-
-            const expiryDays = document.getElementById('expiryDays').value;
-            const maxDownloads = document.getElementById('maxDownloads').value;
-            const isEncrypted = encryptCheckbox.checked;
-
-            let uploadBlob = file;
-            let finalFilename = file.name;
-            let encryptionKeyHash = '';
-
-            try {
-                if (isEncrypted) {
-                    loadingText.textContent = 'Encrypting in browser...';
-                    const cryptoKey = await window.crypto.subtle.generateKey(
-                        { name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]
-                    );
-                    const iv = window.crypto.getRandomValues(new Uint8Array(12));
-                    const fileBuffer = await file.arrayBuffer();
-                    const encryptedContent = await window.crypto.subtle.encrypt(
-                        { name: "AES-GCM", iv: iv }, cryptoKey, fileBuffer
-                    );
-
-                    const rawKey = await window.crypto.subtle.exportKey("raw", cryptoKey);
-                    encryptionKeyHash = btoa(String.fromCharCode(...new Uint8Array(rawKey)))
-                        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-
-                    uploadBlob = new Blob([iv, encryptedContent]);
-                    finalFilename = file.name + '.enc';
-                }
-
-                loadingText.textContent = 'Uploading to cloud...';
-                const formData = new FormData();
-                formData.append('file', uploadBlob, finalFilename);
-                formData.append('expiryDays', expiryDays);
-                formData.append('maxDownloads', maxDownloads);
-
-                const response = await fetch('/api/upload', { method: 'POST', body: formData });
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || 'Upload failed.');
-
-                // Tunnistetaan kieli ja ohjataan lyhyisiin reitteihin oikealla kielellä!
-                const isEn = window.location.pathname.includes('/en/');
-
-                if (isEncrypted) {
-                    const prefix = isEn ? '/en/share/s/' : '/s/';
-                    shareLink.value = window.location.origin + prefix + data.id + '#key=' + encryptionKeyHash;
-                } else {
-                    const prefix = isEn ? '/en/share/d/' : '/d/';
-                    shareLink.value = window.location.origin + prefix + data.id;
-                }
-
-                result.style.display = 'block';
-            } catch (error) {
-                alert('Error: ' + error.message);
-            } finally {
-                loading.style.display = 'none';
-                dropzoneContent.style.display = 'block';
-                dropzone.style.pointerEvents = 'auto';
-                fileInput.value = '';
-            }
-        }
-
-        copyBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            shareLink.select();
-            shareLink.setSelectionRange(0, 99999);
-            document.execCommand('copy');
-            const alkuperainen = copyBtn.innerText;
-            copyBtn.innerText = "Kopioitu!";
-            copyBtn.style.backgroundColor = "#218838";
-            copyBtn.style.color = "white";
-            setTimeout(() => {
-                copyBtn.innerText = alkuperainen;
-                copyBtn.style.backgroundColor = "";
-                copyBtn.style.color = "";
-            }, 2500);
-        });
-    </script>
+    <script src="/en/js/inline/jako__index__inline_1.js"></script>
 </body>
 </html>

@@ -562,6 +562,23 @@ app.delete('/api/guestbook', requireAuth, async (req, res) => {
   }
 });
 
+app.put('/api/guestbook', requireAuth, async (req, res) => {
+  try {
+    const { id, name, message, adminReply } = req.body || {};
+    const idNum = Number.parseInt(id, 10);
+    if (!idNum || idNum <= 0) return res.status(400).json({ error: 'Viestin ID puuttuu.' });
+    if (!name || !message) return res.status(400).json({ error: 'Nimi ja viesti ovat pakollisia.' });
+    const result = await db.query(
+      'UPDATE guestbook SET name = $1, message = $2, admin_reply = $3 WHERE id = $4',
+      [String(name).trim(), String(message).trim(), adminReply ? String(adminReply).trim() : null, idNum]
+    );
+    if (result.rowCount === 0) return res.status(404).json({ error: 'Viestiä ei löydy.' });
+    return res.json({ success: true });
+  } catch {
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
+  }
+});
+
 app.get('/api/links', requireAuth, async (_req, res) => {
   try {
     const [sorola, srla, srl] = await Promise.all([
@@ -589,13 +606,24 @@ app.post('/api/links', requireAuth, async (req, res) => {
 
 app.put('/api/links', requireAuth, async (req, res) => {
   try {
-    const { domain, path: pathValue, newOriginalURL } = req.body || {};
+    const { domain, path: pathValue, newOriginalURL, newShortPath } = req.body || {};
     if (!newOriginalURL) return res.status(400).json({ error: 'Uusi kohdeosoite puuttuu.' });
 
     const table = resolveTableByDomain(domain);
     if (!table) return res.status(400).json({ error: 'Virheellinen domain.' });
 
-    await updateShortLink(table, pathValue, newOriginalURL);
+    if (newShortPath && newShortPath !== pathValue) {
+      if (!/^[a-zA-Z0-9_-]+$/.test(newShortPath)) {
+        return res.status(400).json({ error: 'Lyhenne saa sisältää vain kirjaimia, numeroita, _ ja -.' });
+      }
+      if (!/^[a-zA-Z0-9_]+$/.test(table)) throw new Error('Invalid input');
+      await db.query(
+        `UPDATE ${table} SET original_url = $1, short_path = $2 WHERE short_path = $3`,
+        [newOriginalURL, newShortPath, pathValue]
+      );
+    } else {
+      await updateShortLink(table, pathValue, newOriginalURL);
+    }
     return res.json({ success: true });
   } catch (error) {
     return res.status(500).json({ error: error.message });
