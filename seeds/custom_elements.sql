@@ -62,3 +62,15 @@ INSERT INTO custom_elements (target_section, element_type, url, content_fi, cont
   ('lista-makelink', 'button', 'mailto:contact.make@sorola.fi',                               '📧 Sähköposti', '📧 Email',     0),
   ('lista-makelink', 'button', 'https://www.instagram.com/bannivasara?igsh=dWlmZ3J4d3liMHFy','📷 Instagram',  '📷 Instagram', 1),
   ('lista-makelink', 'button', 'https://github.com/Domainmasteri',                            '💻 GitHub',     '💻 GitHub',    2);
+
+-- ============================================================
+-- lista-privacy  (privacy/index.html)
+-- ============================================================
+INSERT INTO custom_elements (target_section, element_type, url, content_fi, content_en, sort_order) VALUES
+  ('lista-privacy', 'button', 'lyhennin',  '🔗 Linkkilyhennin',  '🔗 Link Shortener',     0),
+  ('lista-privacy', 'button', 'salasanat', '🎲 Salasanakone',    '🎲 Password Generator', 1),
+  ('lista-privacy', 'button', 'qr',        '📱 QR-koodin luoja', '📱 QR code generator',  2),
+  ('lista-privacy', 'button', 'pastebin',  '📝 Pastebin',        '📝 Pastebin',           3),
+  ('lista-privacy', 'button', 'jako',      '📁 Tiedostojako',    '📁 File Sharing',       4),
+  ('lista-privacy', 'button', 'json',      '🔧 JSON-muotoilija', '🔧 JSON Formatter',     5),
+  ('lista-privacy', 'button', 'base64',    '🔐 Base64',          '🔐 Base64',             6);

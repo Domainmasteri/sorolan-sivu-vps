@@ -1193,10 +1193,15 @@ function injectCustomElements(html, elements, lang) {
 
     const navRegex = new RegExp(`(<nav[^>]*\\bid="${escapedSection}"[^>]*>)(.*?)(</nav>)`, 's');
     result = result.replace(navRegex, (_match, open, inner, close) => {
+      const injectClassMatch = open.match(/data-inject-class="([^"]*)"/);
+      const injectClass = injectClassMatch ? injectClassMatch[1] : 'nappula1';
       const injected = items.map(el => {
         const content = lang === 'en' ? el.content_en : el.content_fi;
         if (el.element_type === 'button') {
-          return `\n                    <a href="${escapeHtml(el.url)}" class="nappula1" data-custom-element-id="${el.id}">${escapeHtml(content)}</a>`;
+          if (injectClass === 'tietosuoja-linkki') {
+            return `\n                    <a href="${escapeHtml(el.url)}" class="tietosuoja-linkki" data-custom-element-id="${el.id}"><span>${escapeHtml(content)}</span><span class="nuoli">→</span></a>`;
+          }
+          return `\n                    <a href="${escapeHtml(el.url)}" class="${injectClass}" data-custom-element-id="${el.id}">${escapeHtml(content)}</a>`;
         }
         return `\n                    <div data-custom-element-id="${el.id}">${escapeHtml(content)}</div>`;
       }).join('');
@@ -1214,10 +1219,12 @@ function renderChangelogEntries(entries, lang, includeDeleteButtons = false) {
     const deleteButton = includeDeleteButtons
       ? '<button class="poista-changelog-btn" type="button" title="Poista merkintä">🗑</button>'
       : '';
+    const bullets = content.split('\n').filter(line => line.trim());
+    const liItems = bullets.map(line => `<li>${escapeHtml(line.trim())}</li>`).join('');
     return `
             <div class="osion-tausta" data-changelog-id="${entry.id}">
                 <div class="muutos-pvm">${escapeHtml(entry.date_str)} - ${escapeHtml(title)}${deleteButton}</div>
-                <ul class="muutos-lista"><li>${escapeHtml(content)}</li></ul>
+                <ul class="muutos-lista">${liItems}</ul>
             </div>`;
   }).join('');
 }
