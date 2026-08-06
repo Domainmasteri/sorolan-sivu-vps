@@ -18,75 +18,77 @@
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Tekniset ohjeet ja IT-oppaat - Sorola" data-i18n-attr-content="ohjeet.tekniset_ohjeet_ja_itoppaat_sorola">
     <meta property="og:description" content="Suomenkieliset oppaat ja ratkaisut teknisiin ongelmiin." data-i18n-attr-content="ohjeet.suomenkieliset_oppaat_ja_ratkaisut_teknisiin_ongel">
+    
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+    <script src="/analytics.js"></script>
 
+    <style>
+      .nappilista-ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .nappilista-ul li {
+        width: 100%;
+        max-width: 320px;
+        margin-bottom: 12px;
+      }
+      .nappilista-ul li:last-child {
+        margin-bottom: 0;
+      }
+      .nappilista-ul li .nappula1 {
+        margin-bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
   </head>
   <body>
-  <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_pääsisältöön">Hyppää pääsisältöön</a>
-  <div class="laatikko">
-    <h1 class="otsikko" data-i18n="ohjeet.ohjeet_h1">📚 Ohjeet</h1>
+    <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_pääsisältöön">Hyppää pääsisältöön</a>
+    <div class="laatikko">
+      <h1 class="otsikko" data-i18n="ohjeet.ohjeet_h1">📚 Ohjeet</h1>
 
-  <div class="osion-tausta" style="text-align:center;">
-    <p data-i18n="ohjeet.täältä_löydät_sorolan_palveluiden_käyttöohjeet">Täältä löydät Sorolan palveluiden käyttöohjeet.</p>
-  </div>
+      <div class="osion-tausta" style="text-align:center;">
+        <p data-i18n="ohjeet.täältä_löydät_sorolan_palveluiden_käyttöohjeet" style="margin: 0;">
+          Täältä löydät Sorolan palveluiden käyttöohjeet.
+        </p>
+      </div>
 
-  <main id="paaosio">
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="qr.qrkoodin_luoja">QR-koodin luoja</h2>
-    <p data-i18n="ohjeet.luo_qrkoodeja_nettisivuille_wifiverkoille_yhteysti">Luo QR-koodeja nettisivuille, WiFi-verkoille, yhteystiedoille ja muulle.</p>
-    <a href="qr" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
+      <main id="paaosio">
+        <!-- OSIO 1: PERUSTYÖKALUT -->
+        <div class="osion-tausta" style="text-align:center;">
+          <h2 data-i18n="index.perustyökalut" style="color: #ffaa00; margin-top: 0;">Perustyökalut</h2>
+          <p data-i18n="ohjeet.opettele_käyttämään_arkisia_apuvälineitä" style="margin-bottom: 15px; color: #ddd; font-size: 0.9rem;">
+            Helpot ja nopeat ohjeet arjen digityökaluihin.
+          </p>
+          <ul class="nappilista-ul" id="lista-ohjeet-perus" data-admin-list="lista-ohjeet-perus">
+            <li><a href="qr" class="nappula1" data-i18n="qr.qrkoodin_luoja">QR-koodin luoja</a></li>
+            <li><a href="linkinlyhennin" class="nappula1" data-i18n="ohjeet.linkin_lyhennin">Linkin lyhennin</a></li>
+            <li><a href="salasanat" class="nappula1" data-i18n="ohjeet.salasanageneraattori">Salasanageneraattori</a></li>
+            <li><a href="pastebin" class="nappula1" data-i18n="pastebin.pastebin">Pastebin</a></li>
+            <li><a href="tiedostojako" class="nappula1" data-i18n="ohjeet.tiedostonjako">Tiedostonjako</a></li>
+          </ul>
+        </div>
 
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="ohjeet.linkin_lyhennin">Linkin lyhennin</h2>
-    <p data-i18n="ohjeet.opettele_luomaan_lyhyitä_ja_helposti_jaettavia_lin">Opettele luomaan lyhyitä ja helposti jaettavia linkkejä.</p>
-    <a href="linkinlyhennin" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
+        <!-- OSIO 2: EDISTYNEET TYÖKALUT & TIETOTURVA -->
+        <div class="osion-tausta" style="text-align:center;">
+          <h2 data-i18n="index.edistyneet_työkalut" style="color: #ffaa00; margin-top: 0;">Edistyneet työkalut & tietoturva</h2>
+          <p data-i18n="ohjeet.syvenny_teknisiin_työkaluihin_ja_salaukseen" style="margin-bottom: 15px; color: #ddd; font-size: 0.9rem;">
+            Oppaat kehittäjille, salaukseen ja turvalliseen hallintaan.
+          </p>
+          <ul class="nappilista-ul" id="lista-ohjeet-edistyneet" data-admin-list="lista-ohjeet-edistyneet">
+            <li><a href="json" class="nappula1" data-i18n="json.jsonmuotoilija">JSON-muotoilija</a></li>
+            <li><a href="base64" class="nappula1" data-i18n="ohjeet.base64_kooderi">Base64 Kooderi</a></li>
+            <li><a href="cryptomator" class="nappula1" data-i18n="ohjeet.cryptomator">Cryptomator</a></li>
+            <li><a href="bitwarden" class="nappula1" data-i18n="ohjeet.bitwarden_salasananhallinta">Bitwarden – salasananhallinta</a></li>
+          </ul>
+        </div>
+      </main>
 
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="ohjeet.salasanageneraattori">Salasanageneraattori</h2>
-    <p data-i18n="ohjeet.luo_vahvoja_ja_satunnaisia_salasanoja_suoraan_sela">Luo vahvoja ja satunnaisia salasanoja suoraan selaimessasi.</p>
-    <a href="salasanat" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
-
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="pastebin.pastebin">Pastebin</h2>
-    <p data-i18n="ohjeet.jaa_koodia_ja_tekstiä_helposti_väliaikaisilla_link">Jaa koodia ja tekstiä helposti väliaikaisilla linkeillä.</p>
-    <a href="pastebin" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
-  
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="ohjeet.tiedostonjako">Tiedostonjako</h2>
-    <p data-i18n="ohjeet.jaa_tiedostoja_turvallisesti_latausrajoituksilla_j">Jaa tiedostoja turvallisesti latausrajoituksilla ja vanhenemisajoilla.</p>
-    <a href="tiedostojako" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
-
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="json.jsonmuotoilija">JSON-muotoilija</h2>
-    <p data-i18n="ohjeet.muotoile_ja_validoi_jsondataa_suoraan_selaimessasi">Muotoile ja validoi JSON-dataa suoraan selaimessasi.</p>
-    <a href="json" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
-
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="ohjeet.base64_kooderi">Base64 Kooderi</h2>
-    <p data-i18n="ohjeet.koodaa_ja_pura_base64tekstiä_suoraan_selaimessasi">Koodaa ja pura Base64-tekstiä suoraan selaimessasi.</p>
-    <a href="base64" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
-
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="ohjeet.cryptomator">Cryptomator</h2>
-    <p data-i18n="ohjeet.salaa_tiedostosi_ennen_niiden_tallentamista_pilvee">Salaa tiedostosi ennen niiden tallentamista pilveen.</p>
-    <a href="cryptomator" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
-    
-  <div class="osion-tausta" style="text-align:center;">
-    <h2 data-i18n="ohjeet.bitwarden_salasananhallinta">Bitwarden – salasananhallinta</h2>
-    <p data-i18n="ohjeet.luo_säilytä_ja_hallitse_vahvoja_salasanoja_bitward">Luo, säilytä ja hallitse vahvoja salasanoja Bitwardenin avulla.</p>
-    <a href="bitwarden" class="nappula1" data-i18n="common.avaa_ohje">Avaa ohje</a>
-  </div>
-  </main>
-    <a href="../" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle_nuoli">← Takaisin pääsivulle</a>
-  </div>
+      <a href="../" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle_nuoli">← Takaisin pääsivulle</a>
+    </div>
   </body>
 </html>
