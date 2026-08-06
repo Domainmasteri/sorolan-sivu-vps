@@ -37,5 +37,7 @@
               }
           }
 
+          window.generateUUIDs = generateUUIDs;
+          window.copyUUIDs = copyUUIDs;
           window.addEventListener('DOMContentLoaded', generateUUIDs);
 })();

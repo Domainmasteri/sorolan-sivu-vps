@@ -137,6 +137,8 @@
           }
 
           // Alustus
+          window.uusiCaptcha = uusiCaptcha;
+          window.lahetaViesti = lahetaViesti;
           uusiCaptcha();
           lataaViestit();
 })();
