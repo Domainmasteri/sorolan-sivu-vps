@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS custom_elements (
     url TEXT,
     content_fi TEXT NOT NULL,
     content_en TEXT NOT NULL,
+    sort_order INTEGER DEFAULT 0,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 

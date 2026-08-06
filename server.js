@@ -5,7 +5,11 @@ import { createReadStream } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import multer from 'multer';
+
+const execFileAsync = promisify(execFile);
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { create as contentDisposition } from 'content-disposition';
@@ -34,6 +38,20 @@ const distPath = path.join(__dirname, 'dist');
 const stylesDir = process.env.STYLES_DIR || '/opt/sorola/styles';
 const shortenerHomeUrl = process.env.SHORTENER_HOME_URL || 'https://sorola.fi/lyhennin';
 const shortenerErrorUrl = process.env.SHORTENER_ERROR_URL || 'https://sorola.fi/lyhennin/error';
+
+// Build lock: prevents multiple overlapping build processes from racing
+let _buildRunning = false;
+let _buildQueued = false;
+function triggerBuild() {
+  if (_buildRunning) { _buildQueued = true; return; }
+  _buildRunning = true;
+  execFileAsync('node', ['build.mjs'], { cwd: __dirname })
+    .catch(err => console.error('Build error after translation update:', err.message))
+    .finally(() => {
+      _buildRunning = false;
+      if (_buildQueued) { _buildQueued = false; triggerBuild(); }
+    });
+}
 
 // 1 GB maksimikoko (1024 * 1024 * 1024 tavua)
 const MAX_SHARE_FILE_SIZE_BYTES = 1 * 1024 * 1024 * 1024;
@@ -911,18 +929,22 @@ app.post('/api/admin/elements', requireAuth, async (req, res) => {
     const target_section = String(req.body?.target_section || '').trim();
     const element_type = String(req.body?.element_type || '').trim();
     const url = String(req.body?.url || '').trim();
-    const content_fi = String(req.body?.content_fi || '').trim();
-    const content_en = String(req.body?.content_en || '').trim();
+    const content_fi = stripHtml(String(req.body?.content_fi || '').trim());
+    const content_en = stripHtml(String(req.body?.content_en || '').trim());
 
     if (!target_section) return res.status(400).json({ error: 'target_section on pakollinen.' });
     if (!['button', 'text'].includes(element_type)) return res.status(400).json({ error: 'element_type täytyy olla button tai text.' });
     if (!content_fi) return res.status(400).json({ error: 'content_fi on pakollinen.' });
     if (!content_en) return res.status(400).json({ error: 'content_en on pakollinen.' });
     if (element_type === 'button' && !url) return res.status(400).json({ error: 'url on pakollinen button-tyypille.' });
+    if (element_type === 'button' && url && !validateUrl(url)) return res.status(400).json({ error: 'URL on virheellinen. Hyväksytään vain http:// ja https://-osoitteet.' });
+
+    const maxOrderResult = await db.query('SELECT COALESCE(MAX(sort_order), -1) AS max_order FROM custom_elements WHERE target_section = $1', [target_section]);
+    const nextOrder = (maxOrderResult.rows[0]?.max_order ?? -1) + 1;
 
     const result = await db.query(
-      'INSERT INTO custom_elements (target_section, element_type, url, content_fi, content_en) VALUES ($1, $2, $3, $4, $5)',
-      [target_section, element_type, url || null, content_fi, content_en]
+      'INSERT INTO custom_elements (target_section, element_type, url, content_fi, content_en, sort_order) VALUES ($1, $2, $3, $4, $5, $6)',
+      [target_section, element_type, url || null, content_fi, content_en, nextOrder]
     );
     res.json({ success: true, id: result.lastInsertRowid });
   } catch (error) {
@@ -942,13 +964,78 @@ app.delete('/api/admin/elements/:id', requireAuth, async (req, res) => {
   }
 });
 
+app.patch('/api/admin/elements/reorder', requireAuth, async (req, res) => {
+  const conn = db.connect();
+  try {
+    const orderedIds = req.body?.orderedIds;
+    if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
+      conn.release();
+      return res.status(400).json({ error: 'orderedIds-taulukko on pakollinen.' });
+    }
+    const parsed = [];
+    for (let i = 0; i < orderedIds.length; i++) {
+      const id = Number.parseInt(orderedIds[i], 10);
+      if (!Number.isFinite(id)) {
+        conn.release();
+        return res.status(400).json({ error: 'Virheellinen ID.' });
+      }
+      parsed.push(id);
+    }
+    conn.query('BEGIN');
+    for (let i = 0; i < parsed.length; i++) {
+      conn.query('UPDATE custom_elements SET sort_order = $1 WHERE id = $2', [i, parsed[i]]);
+    }
+    conn.query('COMMIT');
+    conn.release();
+    res.json({ success: true });
+  } catch (error) {
+    try { conn.query('ROLLBACK'); } catch { /* ignore */ }
+    conn.release();
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/admin/translations', requireAuth, async (req, res) => {
+  try {
+    const key = String(req.body?.key || '').trim();
+    const lang = String(req.body?.lang || 'fi').trim();
+    const value = stripHtml(String(req.body?.value || '').trim());
+
+    if (!key) return res.status(400).json({ error: 'key on pakollinen.' });
+    if (!['fi', 'en'].includes(lang)) return res.status(400).json({ error: 'Virheellinen kieli.' });
+    if (!value) return res.status(400).json({ error: 'value on pakollinen.' });
+    if (/^__/.test(key) || key === 'constructor' || key === 'prototype') {
+      return res.status(400).json({ error: 'Virheellinen avain.' });
+    }
+
+    const jsonPath = path.join(__dirname, 'src', 'i18n', `${lang}.json`);
+    let existing;
+    try {
+      existing = JSON.parse(await fs.readFile(jsonPath, 'utf8'));
+    } catch {
+      return res.status(500).json({ error: 'Käännöstiedostoa ei voitu lukea.' });
+    }
+    if (!Object.hasOwn(existing, key)) return res.status(404).json({ error: 'Käännösavainta ei löydy.' });
+
+    existing[key] = value;
+    await fs.writeFile(jsonPath, JSON.stringify(existing, null, 2) + '\n', 'utf8');
+
+    // Trigger build to regenerate dist/ HTML files (serialized via lock)
+    triggerBuild();
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/admin/changelog', requireAuth, async (req, res) => {
   try {
     const dateStr = String(req.body?.date_str || '').trim();
-    const titleFi = String(req.body?.title_fi || '').trim();
-    const titleEn = String(req.body?.title_en || '').trim();
-    const contentFi = String(req.body?.content_fi || '').trim();
-    const contentEn = String(req.body?.content_en || '').trim();
+    const titleFi = stripHtml(String(req.body?.title_fi || '').trim());
+    const titleEn = stripHtml(String(req.body?.title_en || '').trim());
+    const contentFi = stripHtml(String(req.body?.content_fi || '').trim());
+    const contentEn = stripHtml(String(req.body?.content_en || '').trim());
 
     if (!dateStr || !titleFi || !titleEn || !contentFi || !contentEn) {
       return res.status(400).json({ error: 'Kaikki kentät ovat pakollisia.' });
@@ -1049,6 +1136,33 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+function validateUrl(url) {
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
+function stripHtml(str) {
+  const s = String(str).slice(0, 10000);
+  // Remove HTML tags by scanning character by character to avoid ReDoS
+  let result = '';
+  let inTag = false;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '<') {
+      inTag = true;
+    } else if (s[i] === '>' && inTag) {
+      inTag = false;
+    } else if (!inTag) {
+      result += s[i];
+    }
+  }
+  return result.trim();
+}
+
 function injectCustomElements(html, elements, lang) {
   if (!elements || elements.length === 0) return html;
 
@@ -1127,7 +1241,7 @@ app.get('*', pageLimiter, async (req, res) => {
     const html = await fs.readFile(htmlFilePath, 'utf8');
 
     const [elementsResult, changelogResult, authedUser] = await Promise.all([
-      db.query('SELECT id, target_section, element_type, url, content_fi, content_en FROM custom_elements ORDER BY created_at ASC'),
+      db.query('SELECT id, target_section, element_type, url, content_fi, content_en FROM custom_elements ORDER BY sort_order ASC, id ASC'),
       isChangelogPage
         ? db.query('SELECT id, date_str, title_fi, title_en, content_fi, content_en, created_at FROM changelog ORDER BY id DESC')
         : Promise.resolve({ rows: [] }),
