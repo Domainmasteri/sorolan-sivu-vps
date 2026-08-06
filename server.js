@@ -70,8 +70,7 @@ function resolveRequestSiteUrl(req) {
     return configured.replace(/\/$/, '');
   }
 
-  const forwardedHost = String(req.get('x-forwarded-host') || '').trim();
-  const host = forwardedHost || String(req.get('host') || req.hostname || '').trim();
+  const host = String(req.get('host') || req.hostname || '').trim();
   if (!host) {
     return `${req.protocol}://localhost`;
   }
@@ -377,7 +376,7 @@ function requireWebTool(toolName) {
       const origin = String(req.headers.origin || '').trim();
       const secFetchSite = String(req.headers['sec-fetch-site'] || '').trim().toLowerCase();
       const hasBrowserContextHeaders = Boolean(origin || secFetchSite);
-      const isSameOriginRequest = Boolean(origin) && origin === resolveRequestSiteUrl(req);
+      const isSameOriginRequest = !origin || origin === resolveRequestSiteUrl(req);
       const isBrowserSameSite = secFetchSite === 'same-origin';
 
       if (!hasBrowserContextHeaders || !isSameOriginRequest || !isBrowserSameSite) {
