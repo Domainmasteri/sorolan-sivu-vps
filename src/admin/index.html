@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="admin.sorolan_sakki_hallintapaneeli">Sorolan Sakki - Hallintapaneeli</title>
+    <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="/styles/pohja.css">
     <link rel="icon" type="image/svg+xml" href="/styles/favicon.svg">
     <style>
@@ -18,6 +19,55 @@
         .edit-btn:hover { background: #2563eb; }
         .hidden { display: none !important; }
         #app-container { max-width: 1000px; margin: 0 auto; }
+
+        /* Collapsible sections */
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .collapsible-header h2 { margin: 0; }
+        .collapse-toggle {
+            background: transparent;
+            border: 1px solid #4a5568;
+            color: #a0aec0;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+            flex-shrink: 0;
+        }
+        .collapse-toggle:hover { background: #2d3748; color: #e2e8f0; }
+        .section-content { margin-top: 15px; }
+        .section-content.collapsed { display: none; }
+
+        /* Edit modal */
+        .edit-modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.65);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+        }
+        .edit-modal-box {
+            background: #131720;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 480px;
+        }
+        .edit-modal-box h3 { margin: 0 0 16px 0; color: #e2e8f0; }
+        .edit-modal-box label { font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 3px; margin-top: 12px; }
+        .edit-modal-box input, .edit-modal-box textarea { width: 100%; box-sizing: border-box; }
+        .edit-modal-box textarea { min-height: 80px; }
+        .edit-modal-box .btn-row { display: flex; gap: 8px; margin-top: 16px; }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/js/analytics.js"></script>
@@ -56,221 +106,281 @@
 
             <!-- Linkkien hallinta -->
             <div class="osion-tausta" style="margin-bottom: 20px;">
-                <h2 style="color: #4ade80;" data-i18n="admin.uusi_oma_linkki">➕ Uusi oma linkki</h2>
-                <div class="flex-form" style="display: flex; gap: 10px; align-items: flex-end;">
-                    <div style="flex: 1;">
-                        <select id="new-domain" class="syote" style="width: 100%;">
-                            <option value="soro.la">soro.la</option>
-                            <option value="srla.fi">srla.fi</option>
-                            <option value="srl.la">srl.la</option>
-                        </select>
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #4ade80;" data-i18n="admin.uusi_oma_linkki">➕ Uusi oma linkki</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="flex-form" style="display: flex; gap: 10px; align-items: flex-end;">
+                        <div style="flex: 1;">
+                            <select id="new-domain" class="syote" style="width: 100%;">
+                                <option value="soro.la">soro.la</option>
+                                <option value="srla.fi">srla.fi</option>
+                                <option value="srl.la">srl.la</option>
+                            </select>
+                        </div>
+                        <div style="flex: 2;">
+                            <input type="text" id="new-url" class="syote" placeholder="Kohdeosoite (https://...)" style="width: 100%;" data-i18n-attr-placeholder="common.kohdeosoite_https">
+                        </div>
+                        <div style="flex: 1;">
+                            <input type="text" id="new-path" class="syote" placeholder="Lyhenne (tyhjä = satunnainen)" style="width: 100%;" data-i18n-attr-placeholder="common.lyhenne_tyhjä_satunnainen">
+                        </div>
+                        <button onclick="luoUusiLinkki(this)" class="nappula" data-i18n="admin.luo">Luo</button>
                     </div>
-                    <div style="flex: 2;">
-                        <input type="text" id="new-url" class="syote" placeholder="Kohdeosoite (https://...)" style="width: 100%;" data-i18n-attr-placeholder="common.kohdeosoite_https">
-                    </div>
-                    <div style="flex: 1;">
-                        <input type="text" id="new-path" class="syote" placeholder="Lyhenne (tyhjä = satunnainen)" style="width: 100%;" data-i18n-attr-placeholder="common.lyhenne_tyhjä_satunnainen">
-                    </div>
-                    <button onclick="luoUusiLinkki(this)" class="nappula" data-i18n="admin.luo">Luo</button>
                 </div>
             </div>
 
-            <div class="osion-tausta">
-                <h2 style="color: #ffaa00;" data-i18n="admin.aktiiviset_linkit_sorola">Aktiiviset linkit (soro.la)</h2>
-                <div class="table-container">
-                    <table id="sorola-table">
-                        <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #ffaa00;" data-i18n="admin.aktiiviset_linkit_sorola">Aktiiviset linkit (soro.la)</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="table-container">
+                        <table id="sorola-table">
+                            <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div class="osion-tausta">
-                <h2 style="color: #60a5fa;" data-i18n="admin.aktiiviset_linkit_srlafi">Aktiiviset linkit (srla.fi)</h2>
-                <div class="table-container">
-                    <table id="srla-table">
-                        <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #60a5fa;" data-i18n="admin.aktiiviset_linkit_srlafi">Aktiiviset linkit (srla.fi)</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="table-container">
+                        <table id="srla-table">
+                            <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
-            <div class="osion-tausta">
-                <h2 style="color: #a78bfa;">Aktiiviset linkit (srl.la)</h2>
-                <div class="table-container">
-                    <table id="srlla-table">
-                        <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #a78bfa;">Aktiiviset linkit (srl.la)</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="table-container">
+                        <table id="srlla-table">
+                            <thead><tr><th data-i18n="admin.lyhytosoite">Lyhytosoite</th><th data-i18n="admin.kohdeosoite">Kohdeosoite</th><th data-i18n="admin.klikit">Klikit</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Pastebin -->
-            <div class="osion-tausta">
-                <h2 style="color: #4ade80;">📝 Pastebin-tekstit</h2>
-                <div class="table-container">
-                    <table id="pastes-table">
-                        <thead>
-                            <tr>
-                                <th>Polku</th>
-                                <th>Ote</th>
-                                <th data-i18n="admin.luotu">Luotu</th>
-                                <th data-i18n="admin.toiminnot">Toiminnot</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #4ade80;">📝 Pastebin-tekstit</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="table-container">
+                        <table id="pastes-table">
+                            <thead>
+                                <tr>
+                                    <th>Polku</th>
+                                    <th>Ote</th>
+                                    <th data-i18n="admin.luotu">Luotu</th>
+                                    <th data-i18n="admin.toiminnot">Toiminnot</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Ylläpidon tiedostojako -->
-            <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #34d399;" data-i18n="admin.ylläpidon_tiedostojako">📁 Ylläpidon tiedostojako</h2>
-                <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;" data-i18n="admin.lataa_tiedostoja_samaan_tallennustilaan">Lataa tiedostoja samaan tallennustilaan kuin käyttäjät, ilman kokorajoituksia.</p>
-                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-                    <input type="file" id="admin-file-input" class="syote" style="padding: 8px;">
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 150px;">
-                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;" data-i18n="admin.voimassaoloaika_päiviä">Voimassaoloaika (päiviä, 0 = ei vanhene)</label>
-                            <input type="number" id="admin-file-expiry" class="syote" value="0" min="0" style="width: 100%;">
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #34d399;" data-i18n="admin.ylläpidon_tiedostojako">📁 Ylläpidon tiedostojako</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 15px;" data-i18n="admin.lataa_tiedostoja_samaan_tallennustilaan">Lataa tiedostoja samaan tallennustilaan kuin käyttäjät, ilman kokorajoituksia.</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                        <input type="file" id="admin-file-input" class="syote" style="padding: 8px;">
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 150px;">
+                                <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;" data-i18n="admin.voimassaoloaika_päiviä">Voimassaoloaika (päiviä, 0 = ei vanhene)</label>
+                                <input type="number" id="admin-file-expiry" class="syote" value="0" min="0" style="width: 100%;">
+                            </div>
+                            <div style="flex: 1; min-width: 150px;">
+                                <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;" data-i18n="admin.latausmääräraja">Latausmääräraja (0 = rajaton)</label>
+                                <input type="number" id="admin-file-maxdownloads" class="syote" value="0" min="0" style="width: 100%;">
+                            </div>
                         </div>
-                        <div style="flex: 1; min-width: 150px;">
-                            <label style="font-size: 0.85rem; color: #a0aec0; display: block; margin-bottom: 4px;" data-i18n="admin.latausmääräraja">Latausmääräraja (0 = rajaton)</label>
-                            <input type="number" id="admin-file-maxdownloads" class="syote" value="0" min="0" style="width: 100%;">
-                        </div>
+                        <button onclick="lataaTiedosto(this)" class="nappula1" style="border: 1px solid #34d399; color: #34d399;">📤 Lataa tiedosto</button>
                     </div>
-                    <button onclick="lataaTiedosto(this)" class="nappula1" style="border: 1px solid #34d399; color: #34d399;">📤 Lataa tiedosto</button>
-                </div>
-                <div id="admin-upload-result" style="display: none; background: #0b0d13; border-radius: 8px; padding: 12px; margin-bottom: 15px; word-break: break-all;">
-                    <p style="color: #4ade80; margin: 0 0 6px 0; font-weight: bold;">✅ Tiedosto ladattu!</p>
-                    <p style="margin: 0 0 4px 0; font-size: 0.9rem; color: #a0aec0;">Jakolinkki: <a id="admin-share-url" href="#" target="_blank" style="color: #34d399;"></a></p>
-                    <p style="margin: 0; font-size: 0.9rem; color: #a0aec0;">Suora lataus: <a id="admin-download-url" href="#" target="_blank" style="color: #60a5fa;"></a></p>
-                </div>
-                <div class="table-container">
-                    <table id="admin-files-table">
-                        <thead>
-                            <tr>
-                                <th>Tiedosto</th>
-                                <th>Koko</th>
-                                <th>Vanhenee</th>
-                                <th>Max lataukset</th>
-                                <th>Ladattu</th>
-                                <th data-i18n="admin.toiminnot">Toiminnot</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    <div id="admin-upload-result" style="display: none; background: #0b0d13; border-radius: 8px; padding: 12px; margin-bottom: 15px; word-break: break-all;">
+                        <p style="color: #4ade80; margin: 0 0 6px 0; font-weight: bold;">✅ Tiedosto ladattu!</p>
+                        <p style="margin: 0 0 4px 0; font-size: 0.9rem; color: #a0aec0;">Jakolinkki: <a id="admin-share-url" href="#" target="_blank" style="color: #34d399;"></a></p>
+                        <p style="margin: 0; font-size: 0.9rem; color: #a0aec0;">Suora lataus: <a id="admin-download-url" href="#" target="_blank" style="color: #60a5fa;"></a></p>
+                    </div>
+                    <div class="table-container">
+                        <table id="admin-files-table">
+                            <thead>
+                                <tr>
+                                    <th>Tiedosto</th>
+                                    <th>Koko</th>
+                                    <th>Vanhenee</th>
+                                    <th>Max lataukset</th>
+                                    <th>Ladattu</th>
+                                    <th data-i18n="admin.toiminnot">Toiminnot</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Vieraskirjan hallinta -->
-            <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #f472b6;" data-i18n="index.vieraskirja">📖 Vieraskirja</h2>
-                <div class="flex-form" style="margin-bottom: 15px;">
-                    <input type="text" id="admin-gb-message" class="syote" placeholder="Kirjoita ylläpidon uusi viesti vieraskirjaan..." style="flex: 2;" data-i18n-attr-placeholder="admin.kirjoita_ylläpidon_uusi_viesti">
-                    <button onclick="lahetaAdminViesti()" class="nappula1" style="flex: 1; border: 1px solid #f472b6; color: #f472b6; background: transparent;" data-i18n="admin.lähetä_ilmoitus">Lähetä ilmoitus</button>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #f472b6;" data-i18n="index.vieraskirja">📖 Vieraskirja</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
                 </div>
-                <div class="table-container">
-                    <table id="guestbook-table">
-                        <thead><tr><th data-i18n="admin.nimi">Nimi</th><th data-i18n="admin.viesti">Viesti</th><th data-i18n="admin.ylläpidon_vastaus">Ylläpidon vastaus</th><th data-i18n="admin.pvm">Pvm</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #22d3ee;">🏠 Etusivun osiot ja napit (käännökset + kansiopolut)</h2>
-                <p style="color: #a0aec0; margin-top: 0;">Muokkaa osioiden tekstejä sekä nappien tekstejä ja polkuja suoraan tietokantaan (fi/en).</p>
-                <div class="table-container">
-                    <table id="home-sections-table">
-                        <thead><tr><th>Avain</th><th>Otsikko (fi/en)</th><th>Kuvaus (fi/en)</th><th>Järj.</th><th>Haku</th><th>Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="flex-form" style="margin-top: 12px;">
-                    <input type="text" id="new-section-key" class="syote" placeholder="Osion avain (esim. perustyokalut)">
-                    <input type="text" id="new-section-title-fi" class="syote" placeholder="Otsikko (fi)">
-                    <input type="text" id="new-section-title-en" class="syote" placeholder="Otsikko (en)">
-                    <input type="text" id="new-section-description-fi" class="syote" placeholder="Kuvaus (fi)">
-                    <input type="text" id="new-section-description-en" class="syote" placeholder="Kuvaus (en)">
-                    <input type="number" id="new-section-sort" class="syote" value="0" placeholder="Järj.">
-                    <label style="display:flex; align-items:center; gap:6px; color:#cbd5e1;"><input type="checkbox" id="new-section-searchable"> Hakukelpoisuus</label>
-                    <button onclick="lisaaOsio()" class="nappula1">Lisää osio</button>
-                </div>
-
-                <div class="table-container" style="margin-top: 16px;">
-                    <table id="home-buttons-table">
-                        <thead><tr><th>Osio</th><th>Ikoni</th><th>Nimi (fi/en)</th><th>Polku/URL (fi/en)</th><th>Järj.</th><th>Kohde</th><th>Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="flex-form" style="margin-top: 12px;">
-                    <select id="new-button-section-id" class="syote"></select>
-                    <input type="text" id="new-button-icon" class="syote" placeholder="Ikoni (esim. 🔧)">
-                    <input type="text" id="new-button-label-fi" class="syote" placeholder="Napin teksti (fi)">
-                    <input type="text" id="new-button-label-en" class="syote" placeholder="Napin teksti (en)">
-                    <input type="text" id="new-button-href-fi" class="syote" placeholder="Polku/URL (fi)">
-                    <input type="text" id="new-button-href-en" class="syote" placeholder="Polku/URL (en)">
-                    <input type="number" id="new-button-sort" class="syote" value="0" placeholder="Järj.">
-                    <label style="display:flex; align-items:center; gap:6px; color:#cbd5e1;"><input type="checkbox" id="new-button-target"> Uusi välilehti</label>
-                    <button onclick="lisaaNappi()" class="nappula1">Lisää nappi</button>
+                <div class="section-content collapsed">
+                    <div class="flex-form" style="margin-bottom: 15px;">
+                        <input type="text" id="admin-gb-message" class="syote" placeholder="Kirjoita ylläpidon uusi viesti vieraskirjaan..." style="flex: 2;" data-i18n-attr-placeholder="admin.kirjoita_ylläpidon_uusi_viesti">
+                        <button onclick="lahetaAdminViesti()" class="nappula1" style="flex: 1; border: 1px solid #f472b6; color: #f472b6; background: transparent;" data-i18n="admin.lähetä_ilmoitus">Lähetä ilmoitus</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="guestbook-table">
+                            <thead><tr><th data-i18n="admin.nimi">Nimi</th><th data-i18n="admin.viesti">Viesti</th><th data-i18n="admin.ylläpidon_vastaus">Ylläpidon vastaus</th><th data-i18n="admin.pvm">Pvm</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #f59e0b;">📋 Muutoslokin hallinta (fi/en)</h2>
-                <p style="color: #a0aec0; margin-top: 0;">Muutoslokikirjaukset ja etusivun bannerin uusin päivitys tulevat tästä taulusta.</p>
-                <div class="table-container">
-                    <table id="changelog-table">
-                        <thead><tr><th>Päivämäärä (fi/en)</th><th>Otsikko (fi/en)</th><th>Kohdat (fi)</th><th>Järj.</th><th>Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #22d3ee;">🏠 Etusivun osiot ja napit (käännökset + kansiopolut)</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
                 </div>
-                <div class="flex-form" style="margin-top: 12px;">
-                    <input type="date" id="new-change-date-iso" class="syote">
-                    <input type="text" id="new-change-date-fi" class="syote" placeholder="Päivämääräteksti (fi)">
-                    <input type="text" id="new-change-date-en" class="syote" placeholder="Date label (en)">
-                    <input type="text" id="new-change-title-fi" class="syote" placeholder="Otsikko (fi)">
-                    <input type="text" id="new-change-title-en" class="syote" placeholder="Title (en)">
-                    <textarea id="new-change-details-fi" class="syote" placeholder="Kohdat (fi), yksi per rivi" style="min-height: 80px;"></textarea>
-                    <textarea id="new-change-details-en" class="syote" placeholder="Points (en), one per row" style="min-height: 80px;"></textarea>
-                    <input type="number" id="new-change-sort" class="syote" value="0" placeholder="Järj.">
-                    <button onclick="lisaaMuutoskirjaus()" class="nappula1">Lisää kirjaus</button>
+                <div class="section-content collapsed">
+                    <p style="color: #a0aec0; margin-top: 0;">Muokkaa osioiden tekstejä sekä nappien tekstejä ja polkuja suoraan tietokantaan (fi/en).</p>
+                    <div class="table-container">
+                        <table id="home-sections-table">
+                            <thead><tr><th>Avain</th><th>Otsikko (fi/en)</th><th>Kuvaus (fi/en)</th><th>Järj.</th><th>Haku</th><th>Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="flex-form" style="margin-top: 12px;">
+                        <input type="text" id="new-section-key" class="syote" placeholder="Osion avain (esim. perustyokalut)">
+                        <input type="text" id="new-section-title-fi" class="syote" placeholder="Otsikko (fi)">
+                        <input type="text" id="new-section-title-en" class="syote" placeholder="Otsikko (en)">
+                        <input type="text" id="new-section-description-fi" class="syote" placeholder="Kuvaus (fi)">
+                        <input type="text" id="new-section-description-en" class="syote" placeholder="Kuvaus (en)">
+                        <input type="number" id="new-section-sort" class="syote" value="0" placeholder="Järj.">
+                        <label style="display:flex; align-items:center; gap:6px; color:#cbd5e1;"><input type="checkbox" id="new-section-searchable"> Hakukelpoisuus</label>
+                        <button onclick="lisaaOsio()" class="nappula1">Lisää osio</button>
+                    </div>
+
+                    <div class="table-container" style="margin-top: 16px;">
+                        <table id="home-buttons-table">
+                            <thead><tr><th>Osio</th><th>Ikoni</th><th>Nimi (fi/en)</th><th>Polku/URL (fi/en)</th><th>Järj.</th><th>Kohde</th><th>Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="flex-form" style="margin-top: 12px;">
+                        <select id="new-button-section-id" class="syote"></select>
+                        <input type="text" id="new-button-icon" class="syote" placeholder="Ikoni (esim. 🔧)">
+                        <input type="text" id="new-button-label-fi" class="syote" placeholder="Napin teksti (fi)">
+                        <input type="text" id="new-button-label-en" class="syote" placeholder="Napin teksti (en)">
+                        <input type="text" id="new-button-href-fi" class="syote" placeholder="Polku/URL (fi)">
+                        <input type="text" id="new-button-href-en" class="syote" placeholder="Polku/URL (en)">
+                        <input type="number" id="new-button-sort" class="syote" value="0" placeholder="Järj.">
+                        <label style="display:flex; align-items:center; gap:6px; color:#cbd5e1;"><input type="checkbox" id="new-button-target"> Uusi välilehti</label>
+                        <button onclick="lisaaNappi()" class="nappula1">Lisää nappi</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #f59e0b;">📋 Muutoslokin hallinta (fi/en)</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <p style="color: #a0aec0; margin-top: 0;">Muutoslokikirjaukset ja etusivun bannerin uusin päivitys tulevat tästä taulusta.</p>
+                    <div class="table-container">
+                        <table id="changelog-table">
+                            <thead><tr><th>Päivämäärä (fi/en)</th><th>Otsikko (fi/en)</th><th>Kohdat (fi)</th><th>Järj.</th><th>Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="flex-form" style="margin-top: 12px;">
+                        <input type="date" id="new-change-date-iso" class="syote">
+                        <input type="text" id="new-change-date-fi" class="syote" placeholder="Päivämääräteksti (fi)">
+                        <input type="text" id="new-change-date-en" class="syote" placeholder="Date label (en)">
+                        <input type="text" id="new-change-title-fi" class="syote" placeholder="Otsikko (fi)">
+                        <input type="text" id="new-change-title-en" class="syote" placeholder="Title (en)">
+                        <textarea id="new-change-details-fi" class="syote" placeholder="Kohdat (fi), yksi per rivi" style="min-height: 80px;"></textarea>
+                        <textarea id="new-change-details-en" class="syote" placeholder="Points (en), one per row" style="min-height: 80px;"></textarea>
+                        <input type="number" id="new-change-sort" class="syote" value="0" placeholder="Järj.">
+                        <button onclick="lisaaMuutoskirjaus()" class="nappula1">Lisää kirjaus</button>
+                    </div>
                 </div>
             </div>
 
             <!-- Käyttäjät & Kutsut -->
-            <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #f472b6;" data-i18n="admin.ylläpitäjät">👑 Ylläpitäjät</h2>
-                <div class="table-container">
-                    <table id="users-table">
-                        <thead><tr><th data-i18n="admin.tunnus">Tunnus</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #f472b6;" data-i18n="admin.ylläpitäjät">👑 Ylläpitäjät</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="table-container">
+                        <table id="users-table">
+                            <thead><tr><th data-i18n="admin.tunnus">Tunnus</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #fbbf24;" data-i18n="admin.kutsukoodit">🎟️ Kutsukoodit</h2>
-                <div class="flex-form" style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <input type="text" id="new-invite" class="syote" placeholder="Uusi koodisana" style="flex: 1;" data-i18n-attr-placeholder="common.uusi_koodisana">
-                    <button onclick="luoKutsukoodi()" class="nappula1" style="border: 1px solid #fbbf24; color: #fbbf24;" data-i18n="admin.luo">Luo</button>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #fbbf24;" data-i18n="admin.kutsukoodit">🎟️ Kutsukoodit</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
                 </div>
-                <div class="table-container">
-                    <table id="invites-table">
-                        <thead><tr><th data-i18n="admin.koodi">Koodi</th><th data-i18n="admin.tila">Tila</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="section-content collapsed">
+                    <div class="flex-form" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="new-invite" class="syote" placeholder="Uusi koodisana" style="flex: 1;" data-i18n-attr-placeholder="common.uusi_koodisana">
+                        <button onclick="luoKutsukoodi()" class="nappula1" style="border: 1px solid #fbbf24; color: #fbbf24;" data-i18n="admin.luo">Luo</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="invites-table">
+                            <thead><tr><th data-i18n="admin.koodi">Koodi</th><th data-i18n="admin.tila">Tila</th><th data-i18n="admin.luotu">Luotu</th><th data-i18n="admin.toiminnot">Toiminnot</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div class="osion-tausta" style="margin-top: 20px;">
-                <h2 style="color: #9ca3af;" data-i18n="admin.vaihda_salasana">🔑 Vaihda salasana</h2>
-                <div class="flex-form">
-                    <input type="password" id="change-old-password" class="syote" placeholder="Nykyinen salasana" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.nykyinen_salasana">
-                    <input type="password" id="change-new-password" class="syote" placeholder="Uusi salasana" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.uusi_salasana">
-                    <input type="password" id="change-new-password-confirm" class="syote" placeholder="Uusi uudelleen" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.uusi_uudelleen">
-                    <button onclick="vaihdaSalasana(this)" class="nappula" style="width: 100%; background: #4b5563;" data-i18n="admin.vaihda">Vaihda</button>
+            <div class="osion-tausta" style="margin-bottom: 20px;">
+                <div class="collapsible-header" onclick="toggleSection(this)">
+                    <h2 style="color: #9ca3af;" data-i18n="admin.vaihda_salasana">🔑 Vaihda salasana</h2>
+                    <button class="collapse-toggle" title="Laajenna / pienennä">▼</button>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="flex-form">
+                        <input type="password" id="change-old-password" class="syote" placeholder="Nykyinen salasana" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.nykyinen_salasana">
+                        <input type="password" id="change-new-password" class="syote" placeholder="Uusi salasana" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.uusi_salasana">
+                        <input type="password" id="change-new-password-confirm" class="syote" placeholder="Uusi uudelleen" style="margin-bottom: 10px;" data-i18n-attr-placeholder="common.uusi_uudelleen">
+                        <button onclick="vaihdaSalasana(this)" class="nappula" style="width: 100%; background: #4b5563;" data-i18n="admin.vaihda">Vaihda</button>
+                    </div>
                 </div>
             </div>
 
@@ -280,5 +390,37 @@
     </div>
 
     <script src="/js/admin.js"></script>
+
+    <!-- Link edit modal -->
+    <div id="link-edit-modal" class="edit-modal-overlay hidden">
+        <div class="edit-modal-box">
+            <h3>✏️ Muokkaa linkkiä</h3>
+            <label>Lyhenne (short path)</label>
+            <input type="text" id="modal-link-path" class="syote">
+            <label>Kohdeosoite (URL)</label>
+            <input type="text" id="modal-link-url" class="syote">
+            <div class="btn-row">
+                <button onclick="tallennaMuokattuLinkki()" class="nappula" style="flex:1;">Tallenna</button>
+                <button onclick="suljeLinkkireditointi()" class="nappula1" style="flex:1; border:1px solid #4a5568; color:#a0aec0;">Peruuta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guestbook edit modal -->
+    <div id="gb-edit-modal" class="edit-modal-overlay hidden">
+        <div class="edit-modal-box">
+            <h3>✏️ Muokkaa vieraskirjaviestiä</h3>
+            <label>Nimi</label>
+            <input type="text" id="modal-gb-name" class="syote">
+            <label>Viesti</label>
+            <textarea id="modal-gb-message" class="syote"></textarea>
+            <label>Ylläpidon vastaus</label>
+            <textarea id="modal-gb-reply" class="syote"></textarea>
+            <div class="btn-row">
+                <button onclick="tallennaMuokattuGbViesti()" class="nappula" style="flex:1;">Tallenna</button>
+                <button onclick="suljeGbMuokkaus()" class="nappula1" style="flex:1; border:1px solid #4a5568; color:#a0aec0;">Peruuta</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

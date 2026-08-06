@@ -82,7 +82,7 @@
         }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+<script src="/js/analytics.js"></script>
 
     <script type="application/ld+json">
     {
@@ -98,21 +98,21 @@
     </script>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{
@@ -213,87 +213,6 @@
         <a href="../" class="linkki-takaisin">« Takaisin pääsivulle</a>
     </div>
 
-    <script>
-        const syoteEl = document.getElementById('json-syote');
-        const tulosEl = document.getElementById('json-tulos');
-        const tilaEl = document.getElementById('tila-viesti');
-        const kopiointiBtn = document.getElementById('kopioi-btn');
-
-        function naytaTila(viesti, tyyppi) {
-            tilaEl.textContent = viesti;
-            tilaEl.className = tyyppi;
-        }
-
-        function poistaTila() {
-            tilaEl.className = '';
-            tilaEl.textContent = '';
-        }
-
-        document.getElementById('muotoile-btn').addEventListener('click', () => {
-            const syote = syoteEl.value.trim();
-            if (!syote) {
-                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
-                return;
-            }
-            try {
-                const parsittu = JSON.parse(syote);
-                const muotoiltu = JSON.stringify(parsittu, null, 2);
-                tulosEl.value = muotoiltu;
-                tulosEl.className = 'syote';
-                naytaTila('✅ JSON on kelvollinen ja muotoiltu onnistuneesti.', 'ok');
-            } catch (e) {
-                tulosEl.value = '';
-                tulosEl.className = 'syote virhe';
-                naytaTila('❌ Virheellinen JSON: ' + e.message, 'virhe');
-            }
-        });
-
-        document.getElementById('pakkaa-btn').addEventListener('click', () => {
-            const syote = syoteEl.value.trim();
-            if (!syote) {
-                naytaTila('⚠️ Syötekenttä on tyhjä.', 'virhe');
-                return;
-            }
-            try {
-                const parsittu = JSON.parse(syote);
-                tulosEl.value = JSON.stringify(parsittu);
-                tulosEl.className = 'syote';
-                naytaTila('✅ JSON pakattu onnistuneesti.', 'ok');
-            } catch (e) {
-                tulosEl.value = '';
-                tulosEl.className = 'syote virhe';
-                naytaTila('❌ Virheellinen JSON: ' + e.message, 'virhe');
-            }
-        });
-
-        document.getElementById('tyhjenna-btn').addEventListener('click', () => {
-            syoteEl.value = '';
-            tulosEl.value = '';
-            tulosEl.className = 'syote';
-            poistaTila();
-        });
-
-        kopiointiBtn.addEventListener('click', async () => {
-            const teksti = tulosEl.value;
-            if (!teksti) {
-                naytaTila('⚠️ Ei kopioitavaa – muotoile ensin JSON.', 'virhe');
-                return;
-            }
-            try {
-                await navigator.clipboard.writeText(teksti);
-            } catch {
-                tulosEl.select();
-                document.execCommand('copy');
-            }
-            const alkuperainen = kopiointiBtn.textContent;
-            const alkuperainenVari = kopiointiBtn.style.backgroundColor;
-            kopiointiBtn.textContent = '✅ Kopioitu!';
-            kopiointiBtn.style.backgroundColor = '#166534';
-            setTimeout(() => {
-                kopiointiBtn.textContent = alkuperainen;
-                kopiointiBtn.style.backgroundColor = alkuperainenVari;
-            }, 2000);
-        });
-    </script>
+    <script src="/js/inline/json__index__inline_1.js"></script>
 </body>
 </html>

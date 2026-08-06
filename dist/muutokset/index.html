@@ -49,7 +49,7 @@
     }
     </script>
 
-    <script src="/analytics.js"></script>
+    <script src="/js/analytics.js"></script>
 
     <style>
         .muutos-pvm {
@@ -72,21 +72,21 @@
     </style>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{
@@ -157,57 +157,11 @@
         </div>
         
         <main id="paaosio">
-            <div class="osion-tausta">
-                <div class="muutos-pvm">5.8.2026 – UUID-generaattori &amp; kielen vaihtajan parannus</div>
-                <ul class="muutos-lista">
-                    <li>Lisätty UUID/GUID v4 -generaattori etusivun edistyneiden työkalujen joukkoon.</li>
-                    <li>Kielen vaihtajasta tehty siirrettävä – voit nyt raahata sen pois tieltä, jos se peittää tärkeää sisältöä.</li>
-                    <li>Lisätty käyttöohjeet ja tietosuojaselosteet QR-koodin luojalle, salasanageneraattorille, pastebinille, JSON-muotoilijalle ja Base64 kooderille.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">5.8.2026 – Ohjeet ja tietosuojaselosteet kaikille työkaluille</div>
-                <ul class="muutos-lista">
-                    <li>Lisätty käyttöohjeet QR-koodin luojalle, salasanageneraattorille, pastebinille, JSON-muotoilijalle ja Base64 kooderille.</li>
-                    <li>Lisätty tietosuojaselosteet kaikille palveluille: QR, Pastebin, Tiedostojako, JSON-muotoilija ja Base64.</li>
-                    <li>Poistettu Sorolan Holvi -selainlaajennus (korvattu Vaultwardenilla).</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">4.8.2026 – Uusia ohjeita ja tietosuojaselosteita</div>
-                <ul class="muutos-lista">
-                    <li>Lisätty uusia kattavia käyttöohjeita palveluiden ja IT-työkalujen sujuvaan käyttöön.</li>
-                    <li>Päivitetty ja lisätty asianmukaiset tietosuojaselosteet verkkotyökaluille ja palveluille.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">3.8.2026 – JSON-muotoilija</div>
-                <ul class="muutos-lista">
-                    <li>Lisätty uusi JSON-muotoilija & validaattori edistyneiden työkalujen joukkoon.</li>
-                    <li>Työkalu toimii täysin paikallisesti selaimessa ilman tietojen lähettämistä palvelimelle.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">1.8.2026 – Työkalujen ryhmittely &amp; webtools.sorola.fi</div>
-                <ul class="muutos-lista">
-                    <li>Työkalut ryhmitelty selkeämmin erikseen perustyökaluihin ja kehittäjille suunnattuihin edistyneisiin työkaluihin.</li>
-                    <li>Avattu uusi aliverkkotunnus</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">31.7.2026 – Android-sovelluksen julkaisu</div>
-                <ul class="muutos-lista">
-                    <li>Luotu ja julkaistu Sorolan oma Android-sovellus (.apk-lataus), joka helpottaa perustyökalujen käyttöä mobiililaitteilla.</li>
-                </ul>
-            </div>
+            <div id="muutoslista"></div>
 
             <a href="/" class="linkki-takaisin">« Takaisin pääsivulle</a>
         </main>
     </div>
+    <script src="/js/muutokset.js"></script>
 </body>
 </html>

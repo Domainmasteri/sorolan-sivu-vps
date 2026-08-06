@@ -26,24 +26,24 @@
         pre { margin: 0; }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/en/analytics.js"></script>
+<script src="/en/js/analytics.js"></script>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{
@@ -114,39 +114,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.js" integrity="sha384-DLX96w7/1q8CY3tN4eR0Nn7K1f2GhJ2/A3ZfTKUm7n0J966auAcNt7r9GEYhr8F0" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Irrotetaan ID pomminvarmasti poistamalla ensin ylimääräinen / lopusta
-            const rawPath = window.location.pathname.replace(/\/+$/, '');
-            const pasteId = rawPath.split('/').pop();
-            const koodiAlue = document.getElementById('koodi-alue');
-
-            try {
-                const res = await fetch(`/api/paste/${pasteId}`);
-                if (!res.ok) throw new Error('Text not found');
-                
-                const data = await res.json();
-                koodiAlue.textContent = data.content;
-                Prism.highlightElement(koodiAlue);
-            } catch (err) {
-                koodiAlue.textContent = "Error: The text you are looking for was not found or has been deleted.";
-            }
-
-            document.getElementById('kopioi-sisalto').addEventListener('click', (e) => {
-                const text = koodiAlue.textContent;
-                navigator.clipboard.writeText(text);
-                const btn = e.target;
-                const alkuperainen = btn.textContent;
-                btn.textContent = 'Kopioitu!';
-                btn.style.backgroundColor = '#218838';
-                btn.style.color = 'white';
-                setTimeout(() => {
-                    btn.textContent = alkuperainen;
-                    btn.style.backgroundColor = '';
-                    btn.style.color = '';
-                }, 2000);
-            });
-        });
-    </script>
+    <script src="/en/js/inline/pastebin__lue__inline_1.js"></script>
 </body>
 </html>
