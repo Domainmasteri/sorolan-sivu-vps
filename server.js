@@ -347,7 +347,7 @@ function requireWebTool(toolName) {
       const secFetchSite = String(req.headers['sec-fetch-site'] || '').trim().toLowerCase();
       const hasBrowserContextHeaders = Boolean(origin || secFetchSite);
       const isSameOriginRequest = Boolean(origin) && origin === `${req.protocol}://${req.get('host')}`;
-      const isBrowserSameSite = ['same-origin', 'same-site', 'none'].includes(secFetchSite);
+      const isBrowserSameSite = ['same-origin', 'same-site'].includes(secFetchSite);
 
       if (!hasBrowserContextHeaders || !isSameOriginRequest || !isBrowserSameSite) {
         return requireApiKey(req, res, next);
@@ -500,7 +500,7 @@ app.get('/api/admin/tool-keys', requireAuth, async (_req, res) => {
     const toolKeys = await getToolApiKeys();
     return res.json({ toolKeys });
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
 });
 
