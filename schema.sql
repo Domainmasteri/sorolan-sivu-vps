@@ -68,4 +68,14 @@ CREATE TABLE IF NOT EXISTS admin_files (
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS custom_elements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    target_section TEXT NOT NULL,
+    element_type TEXT NOT NULL,
+    url TEXT,
+    content_fi TEXT NOT NULL,
+    content_en TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
 INSERT OR IGNORE INTO invites (code_hash) VALUES ('root');

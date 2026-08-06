@@ -119,23 +119,39 @@
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
 <script src="/en/analytics.js"></script>
+    <!-- Admin In-Context Editing -->
+    <style>
+        #admin-toggle-btn { position: fixed; bottom: 20px; right: 20px; z-index: 9000; background: #1e293b; border: 1px solid #334155; color: #94a3b8; border-radius: 50%; width: 40px; height: 40px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+        #admin-toggle-btn.active { background: #ffaa00; color: #0b0d13; border-color: #ffaa00; }
+        .admin-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9001; align-items: center; justify-content: center; }
+        .admin-overlay.open { display: flex; }
+        .admin-modal { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 24px; width: 360px; max-width: 95vw; color: #f8fafc; }
+        .admin-modal h3 { margin: 0 0 16px; color: #ffaa00; font-size: 1rem; }
+        .admin-modal input { width: 100%; box-sizing: border-box; padding: 8px 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #f8fafc; margin-bottom: 10px; font-size: 0.9rem; }
+        .admin-modal button.ok { background: #ffaa00; color: #0b0d13; font-weight: 700; border: none; border-radius: 6px; padding: 9px 18px; cursor: pointer; width: 100%; }
+        .admin-modal button.cancel { background: transparent; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; padding: 8px 18px; cursor: pointer; width: 100%; margin-top: 8px; }
+        .lisaa-nappi-btn { display: none; margin: 8px 0 0 0; width: 100%; background: transparent; border: 1px dashed #ffaa00; color: #ffaa00; border-radius: 6px; padding: 7px; cursor: pointer; font-size: 0.85rem; }
+        .lisaa-nappi-btn.admin-active { display: block; }
+        .poista-elem-btn { background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 0.85rem; margin-left: 8px; vertical-align: middle; padding: 0; line-height: 1; }
+        #admin-error { color: #ef4444; font-size: 0.85rem; margin-bottom: 8px; display: none; }
+    </style>
 
     <style>
-        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; }
+        .language-overlay { position: fixed; top: 16px; left: 16px; z-index: 10001; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 0, 0.35); background: rgba(11, 13, 19, 0.92); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); backdrop-filter: blur(8px); user-select: none; touch-action: none; width: max-content; height: max-content; }
         .language-overlay__label { color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .language-overlay__handle { cursor: grab; }
         .language-overlay__handle:active { cursor: grabbing; }
         .language-overlay__link { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; padding: 8px 12px; border-radius: 999px; border: 1px solid #334155; color: #f8fafc; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
         .language-overlay__link:hover, .language-overlay__link:focus-visible { border-color: #ffaa00; color: #ffaa00; outline: none; }
         .language-overlay__link.is-active { background: #ffaa00; color: #111827; border-color: #ffaa00; }
-        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: 12px; justify-content: center; } }
+        @media (max-width: 768px) { .language-overlay { top: auto; bottom: 12px; left: 12px; right: auto; justify-content: center; } }
     </style>
     <script>
     (function(){
       var STORAGE_KEY='lang-overlay-pos';
       function clamp(v,lo,hi){return Math.min(Math.max(v,lo),hi);}
       function applyPos(el,x,y){
-        el.style.top=y+'px'; el.style.bottom=''; el.style.left=x+'px'; el.style.right='';
+        el.style.top=y+'px'; el.style.bottom='auto'; el.style.left=x+'px'; el.style.right='auto';
       }
       function restorePos(el){
         try{
@@ -193,6 +209,33 @@
         <a class="language-overlay__link" href="/">🇫🇮</a>
         <a class="language-overlay__link is-active" href="/en/" aria-current="page">🇬🇧</a>
     </nav>
+    <button id="admin-toggle-btn" title="Admin edit mode">⚙</button>
+
+    <!-- Kirjautumismodaali -->
+    <div class="admin-overlay" id="admin-login-overlay">
+        <div class="admin-modal">
+            <h3>🔐 Admin login</h3>
+            <div id="admin-error"></div>
+            <input type="text" id="admin-u" placeholder="Username" autocomplete="username">
+            <input type="password" id="admin-p" placeholder="Password" autocomplete="current-password">
+            <button class="ok" id="admin-login-btn">Login</button>
+            <button class="cancel" onclick="document.getElementById('admin-login-overlay').classList.remove('open')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Lisää nappi -modaali -->
+    <div class="admin-overlay" id="admin-add-overlay">
+        <div class="admin-modal">
+            <h3>➕ Add new button</h3>
+            <input type="hidden" id="add-target-section">
+            <input type="text" id="add-content-fi" placeholder="Button text (Finnish)">
+            <input type="text" id="add-content-en" placeholder="Button text (english)">
+            <input type="url" id="add-url" placeholder="URL (e.g. https://...)">
+            <button class="ok" id="admin-add-btn">Save</button>
+            <button class="cancel" onclick="document.getElementById('admin-add-overlay').classList.remove('open')">Cancel</button>
+        </div>
+    </div>
+
     <a href="#paaosio" class="skip-to-content">Skip to content</a>
     <div class="laatikko">
         <h1 class="otsikko">Sorolan Sakki</h1>
@@ -294,6 +337,169 @@
             suodataLista('lista-perustyokalut', 'ei-tuloksia-perus');
             suodataLista('lista-edistyneet', 'ei-tuloksia-edistyneet');
         });
+    </script>
+
+    <script>
+        (function() {
+            var authHeader = null;
+            var editMode = false;
+            var LISTS = ['lista-perustyokalut', 'lista-edistyneet'];
+
+            var toggleBtn = document.getElementById('admin-toggle-btn');
+            var loginOverlay = document.getElementById('admin-login-overlay');
+            var addOverlay = document.getElementById('admin-add-overlay');
+            var adminError = document.getElementById('admin-error');
+
+            toggleBtn.addEventListener('click', function() {
+                if (editMode) {
+                    exitEditMode();
+                } else if (authHeader) {
+                    enterEditMode();
+                } else {
+                    loginOverlay.classList.add('open');
+                    document.getElementById('admin-u').focus();
+                }
+            });
+
+            document.getElementById('admin-login-btn').addEventListener('click', doLogin);
+            document.getElementById('admin-p').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+
+            async function doLogin() {
+                var u = document.getElementById('admin-u').value;
+                var p = document.getElementById('admin-p').value;
+                if (!u || !p) return;
+                var header = 'Bearer ' + btoa(u + ':' + p);
+                try {
+                    var resp = await fetch('/api/users', { headers: { Authorization: header } });
+                    if (!resp.ok) {
+                        adminError.textContent = 'Invalid credentials.';
+                        adminError.style.display = 'block';
+                        return;
+                    }
+                    authHeader = header;
+                    adminError.style.display = 'none';
+                    loginOverlay.classList.remove('open');
+                    enterEditMode();
+                } catch(e) {
+                    adminError.textContent = 'Network error.';
+                    adminError.style.display = 'block';
+                }
+            }
+
+            function enterEditMode() {
+                editMode = true;
+                toggleBtn.classList.add('active');
+                toggleBtn.title = 'Exit edit mode';
+                LISTS.forEach(function(listId) {
+                    var list = document.getElementById(listId);
+                    if (!list) return;
+                    var btn = list.parentNode.querySelector('.lisaa-nappi-btn[data-list="' + listId + '"]');
+                    if (!btn) {
+                        btn = document.createElement('button');
+                        btn.className = 'lisaa-nappi-btn';
+                        btn.setAttribute('data-list', listId);
+                        btn.textContent = '+ Add new button';
+                        btn.addEventListener('click', function() { openAddModal(listId); });
+                        list.parentNode.insertBefore(btn, list.nextSibling);
+                    }
+                    btn.classList.add('admin-active');
+                });
+                showDeleteButtons();
+            }
+
+            function exitEditMode() {
+                editMode = false;
+                toggleBtn.classList.remove('active');
+                toggleBtn.title = 'Admin edit mode';
+                document.querySelectorAll('.lisaa-nappi-btn').forEach(function(b) { b.classList.remove('admin-active'); });
+                document.querySelectorAll('.poista-elem-btn').forEach(function(b) { b.remove(); });
+            }
+
+            function showDeleteButtons() {
+                document.querySelectorAll('li[data-custom-element-id]').forEach(function(li) {
+                    if (li.querySelector('.poista-elem-btn')) return;
+                    var id = li.getAttribute('data-custom-element-id');
+                    var btn = document.createElement('button');
+                    btn.className = 'poista-elem-btn';
+                    btn.title = 'Poista elementti';
+                    btn.textContent = '🗑';
+                    btn.addEventListener('click', function(e) { e.preventDefault(); deleteElement(id, li); });
+                    li.appendChild(btn);
+                });
+            }
+
+            async function deleteElement(id, li) {
+                if (!confirm('Delete this element?')) return;
+                try {
+                    var resp = await fetch('/api/admin/elements/' + id, { method: 'DELETE', headers: { Authorization: authHeader } });
+                    if (resp.ok) {
+                        li.remove();
+                    } else {
+                        var data = await resp.json();
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                } catch(e) {
+                    alert('Network error.');
+                }
+            }
+
+            function openAddModal(listId) {
+                document.getElementById('add-target-section').value = listId;
+                document.getElementById('add-content-fi').value = '';
+                document.getElementById('add-content-en').value = '';
+                document.getElementById('add-url').value = '';
+                addOverlay.classList.add('open');
+                document.getElementById('add-content-fi').focus();
+            }
+
+            document.getElementById('admin-add-btn').addEventListener('click', async function() {
+                var section = document.getElementById('add-target-section').value;
+                var fi = document.getElementById('add-content-fi').value.trim();
+                var en = document.getElementById('add-content-en').value.trim();
+                var url = document.getElementById('add-url').value.trim();
+                if (!fi || !en || !url) { alert('Fill in all fields.'); return; }
+                try {
+                    var resp = await fetch('/api/admin/elements', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', Authorization: authHeader },
+                        body: JSON.stringify({ target_section: section, element_type: 'button', url: url, content_fi: fi, content_en: en })
+                    });
+                    var data = await resp.json();
+                    if (!resp.ok) { alert('Error: ' + (data.error || 'Unknown error')); return; }
+                    addOverlay.classList.remove('open');
+                    // Lisätään uusi elementti listaan ilman sivun latausta
+                    var list = document.getElementById(section);
+                    if (list) {
+                        var sanitizedUrl = url;
+                        try { var parsed = new URL(url); if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') sanitizedUrl = '#'; } catch(e) { sanitizedUrl = '#'; }
+                        var li = document.createElement('li');
+                        li.setAttribute('data-custom-element-id', data.id);
+                        var a = document.createElement('a');
+                        a.href = sanitizedUrl;
+                        a.className = 'nappula1';
+                        a.textContent = fi;
+                        li.appendChild(a);
+                        var delBtn = document.createElement('button');
+                        delBtn.className = 'poista-elem-btn';
+                        delBtn.title = 'Poista elementti';
+                        delBtn.textContent = '🗑';
+                        delBtn.addEventListener('click', function(e) { e.preventDefault(); deleteElement(data.id, li); });
+                        li.appendChild(delBtn);
+                        list.appendChild(li);
+                    }
+                } catch(e) {
+                    alert('Network error.');
+                }
+            });
+
+            // Sulje modaalit Escape-näppäimellä
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    loginOverlay.classList.remove('open');
+                    addOverlay.classList.remove('open');
+                }
+            });
+        })();
     </script>
 </body>
 </html>
