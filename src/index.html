@@ -115,7 +115,7 @@
         }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
-<script src="/analytics.js"></script>
+<script src="/js/analytics.js"></script>
 </head>
 <body>
     <a href="#paaosio" class="skip-to-content" data-i18n="common.hyppää_sisältöön">Hyppää sisältöön</a>
@@ -123,8 +123,8 @@
         <h1 class="otsikko">Sorolan Sakki</h1>
         <h2 style="font-weight: 700; text-align: center;" data-i18n="index.tervetuloa_sorolan_nettisivuille">Tervetuloa Sorolan nettisivuille!</h2><br>
         
-        <div class="muutos-banneri" role="region" aria-label="Viimeisin päivitys" data-i18n-attr-aria-label="index.viimeisin_päivitys">
-            ⚡ <strong data-i18n="index.viimeisin_muutos_pvm">Viimeisin muutos (5.8.2026):</strong> <span data-i18n="index.viimeisin_muutos_teksti">UUID-generaattori etusivulle ja kielen vaihtajan parannus!</span>
+        <div class="muutos-banneri" id="muutos-banneri" role="region" aria-label="Viimeisin päivitys" data-i18n-attr-aria-label="index.viimeisin_päivitys">
+            ⚡ <strong data-i18n="index.viimeisin_muutos_pvm">Viimeisin muutos:</strong> <span data-i18n="index.viimeisin_muutos_teksti">Ladataan…</span>
             <a href="muutokset" data-i18n="index.katso_muutosloki">Katso muutosloki →</a>
         </div>
         
@@ -137,88 +137,16 @@
         
         <main id="paaosio">
             <div class="osion-tausta">
-                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;" data-i18n="common.sorolan_linkit">Sorolan linkit</h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;" data-i18n="index.kokoelma_perheen_omia_sivuja_teknisiä_oppaita_sekä">Kokoelma perheen omia sivuja, teknisiä oppaita sekä hyödyllistä tietoa.</p>
-                <nav aria-label="Sorolan linkit" data-i18n-attr-aria-label="common.sorolan_linkit">
-                    <ul class="nappilista-ul">
-                        <li><a href="ansioluettelot" class="nappula1" data-i18n="index.maken_ansioluettelot">📄 Maken Ansioluettelot</a></li>
-                        <li><a href="makelink" class="nappula1" data-i18n="index.maken_yhteystiedot">📞 Maken yhteystiedot</a></li>
-                        <li><a href="ohjeet" class="nappula1" data-i18n="index.sorolan_ohjeita">📖 Sorolan ohjeita</a></li>
-                        <li><a href="https://soro.la/pienoismallit" target="_blank" rel="noopener noreferrer" class="nappula1" data-i18n="index.taven_pienoismallikerho">✈️ Taven pienoismallikerho</a></li>
-                        <li><a href="vieraskirja" class="nappula1" data-i18n="index.vieraskirja">📖 Vieraskirja</a></li>
-                        <li><a href="privacy" class="nappula1" data-i18n="index.yksityisyyskäytännöt">🔒 Yksityisyyskäytännöt</a></li>
-                        <li><a href="muutokset" class="nappula1" data-i18n="index.viimeisimmät_muutokset">📋 Viimeisimmät muutokset</a></li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="osion-tausta">
                 <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;" data-i18n="index.hae_työkaluja">Hae työkaluja</h2>
                 <div class="haku-kontti">
                     <input type="search" id="tyokaluhaku" class="syote" placeholder="Hae työkaluja..." aria-label="Hae työkaluja" data-i18n-attr-placeholder="index.hae_työkaluja_2" data-i18n-attr-aria-label="index.hae_työkaluja">
                 </div>
             </div>
 
-            <div class="osion-tausta" id="osio-perustyokalut">
-                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;" data-i18n="index.perustyökalut">Perustyökalut</h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;" data-i18n="index.itse_koodatut_nopeat_ja_ilman_mainoksia_toimivat_a">Itse koodatut, nopeat ja ilman mainoksia toimivat apuvälineet digiarjen tueksi.</p>
-                <nav aria-label="Perustyökalut" data-i18n-attr-aria-label="index.perustyökalut">
-                    <ul class="nappilista-ul" id="lista-perustyokalut">
-                        <li><a href="https://soro.la/sovellus" target="_blank" rel="noopener noreferrer" class="nappula1" data-i18n="index.lataa_androidsovellus_apk">📱 Lataa Android-sovellus (.apk)</a></li>
-                        <li><a href="qr" class="nappula1" data-i18n="index.qrkoodin_luoja">📱 QR-koodin luoja</a></li>
-                        <li><a href="lyhennin" class="nappula1" data-i18n="index.linkin_lyhennin">🔗 Linkin lyhennin</a></li>
-                        <li><a href="salasanat" class="nappula1" data-i18n="index.salasanageneraattori">🔑 Salasanageneraattori</a></li>
-                        <li><a href="pastebin" class="nappula1" data-i18n="index.pastebin_koodinjako">📝 Pastebin (Koodinjako)</a></li>
-                        <li><a href="https://vault.sorola.fi/" target="_blank" rel="noopener noreferrer" class="nappula1" data-i18n="index.sorolavault_kutsutut">🔐 SorolaVault (kutsutut)</a></li>
-                        <li><a href="jako" class="nappula1" data-i18n="index.sorolan_tiedostojako">📁 Sorolan tiedostojako</a></li>
-                    </ul>
-                    <p class="ei-tuloksia" id="ei-tuloksia-perus" data-i18n="index.ei_hakutuloksia">Ei hakutuloksia.</p>
-                </nav>
-            </div>
-
-            <div class="osion-tausta" id="osio-edistyneet">
-                <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;" data-i18n="index.edistyneet_työkalut">Edistyneet työkalut</h2>
-                <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;" data-i18n="index.tehokkaammat_apuvälineet_kehittäjille_ja_teknisiin">Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.</p>
-                <nav aria-label="Edistyneet työkalut" data-i18n-attr-aria-label="index.edistyneet_työkalut">
-                    <ul class="nappilista-ul" id="lista-edistyneet">
-                        <li><a href="https://webtools.sorola.fi/" class="nappula1" data-i18n="index.verkkotyökalut">🌐 Verkkotyökalut</a></li>
-                        <li><a href="json" class="nappula1" data-i18n="index.jsonmuotoilija_amp_validaattori">🔧 JSON-muotoilija &amp; validaattori</a></li>
-                        <li><a href="base64" class="nappula1" data-i18n="index.base64_kooderi_dekooderi">🔐 Base64 Kooderi / Dekooderi</a></li>
-                        <li><a href="uuid" class="nappula1" data-i18n="index.uuid_generaattori">🔑 UUID / GUID Generaattori</a></li>
-                    </ul>
-                    <p class="ei-tuloksia" id="ei-tuloksia-edistyneet" data-i18n="index.ei_hakutuloksia">Ei hakutuloksia.</p>
-                </nav>
-            </div>
+            <div id="home-sections"></div>
         </main>
     </div>
 
-    <script>
-        const hakukentta = document.getElementById('tyokaluhaku');
-
-        function suodataLista(listaId, eiTuloksiaId) {
-            const lista = document.getElementById(listaId);
-            const eiTuloksiaEl = document.getElementById(eiTuloksiaId);
-            const hakusana = hakukentta.value.trim().toLowerCase();
-            const rivit = lista.querySelectorAll('li');
-            let loydetty = 0;
-
-            rivit.forEach(rivi => {
-                const teksti = rivi.textContent.trim().toLowerCase();
-                if (!hakusana || teksti.includes(hakusana)) {
-                    rivi.classList.remove('piilotettu');
-                    loydetty++;
-                } else {
-                    rivi.classList.add('piilotettu');
-                }
-            });
-
-            eiTuloksiaEl.style.display = loydetty === 0 ? 'block' : 'none';
-        }
-
-        hakukentta.addEventListener('input', () => {
-            suodataLista('lista-perustyokalut', 'ei-tuloksia-perus');
-            suodataLista('lista-edistyneet', 'ei-tuloksia-edistyneet');
-        });
-    </script>
+    <script src="/js/home.js"></script>
 </body>
 </html>
