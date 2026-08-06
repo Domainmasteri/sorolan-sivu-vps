@@ -46,7 +46,7 @@
     }
     </script>
 
-    <script src="/analytics.js"></script>
+    <script src="/js/analytics.js"></script>
 
     <style>
         .muutos-pvm {
@@ -82,57 +82,11 @@
         </div>
         
         <main id="paaosio">
-            <div class="osion-tausta">
-                <div class="muutos-pvm" data-i18n="muutokset.582026_uuid_generaattori">5.8.2026 – UUID-generaattori &amp; kielen vaihtajan parannus</div>
-                <ul class="muutos-lista">
-                    <li data-i18n="muutokset.lisatty_uuid_etusivu">Lisätty UUID/GUID v4 -generaattori etusivun edistyneiden työkalujen joukkoon.</li>
-                    <li data-i18n="muutokset.kielen_vaihtaja_siirrettava">Kielen vaihtajasta tehty siirrettävä – voit nyt raahata sen pois tieltä, jos se peittää tärkeää sisältöä.</li>
-                    <li data-i18n="muutokset.lisatty_ohjeet_tietosuoja_5_8">Lisätty käyttöohjeet ja tietosuojaselosteet QR-koodin luojalle, salasanageneraattorille, pastebinille, JSON-muotoilijalle ja Base64 kooderille.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm" data-i18n="muutokset.58_2026_ohjeet_ja_tietosuojaselosteet">5.8.2026 – Ohjeet ja tietosuojaselosteet kaikille työkaluille</div>
-                <ul class="muutos-lista">
-                    <li data-i18n="muutokset.lisätty_käyttöohjeet_5_8">Lisätty käyttöohjeet QR-koodin luojalle, salasanageneraattorille, pastebinille, JSON-muotoilijalle ja Base64 kooderille.</li>
-                    <li data-i18n="muutokset.lisätty_tietosuojaselosteet_5_8">Lisätty tietosuojaselosteet kaikille palveluille: QR, Pastebin, Tiedostojako, JSON-muotoilija ja Base64.</li>
-                    <li data-i18n="muutokset.poistettu_sorolan_holvi">Poistettu Sorolan Holvi -selainlaajennus (korvattu Vaultwardenilla).</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">4.8.2026 – Uusia ohjeita ja tietosuojaselosteita</div>
-                <ul class="muutos-lista">
-                    <li data-i18n="muutokset.lisätty_uusia_kattavia_käyttöohjeita_palveluiden_j">Lisätty uusia kattavia käyttöohjeita palveluiden ja IT-työkalujen sujuvaan käyttöön.</li>
-                    <li data-i18n="muutokset.päivitetty_ja_lisätty_asianmukaiset_tietosuojaselo">Päivitetty ja lisätty asianmukaiset tietosuojaselosteet verkkotyökaluille ja palveluille.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">3.8.2026 – JSON-muotoilija</div>
-                <ul class="muutos-lista">
-                    <li>Lisätty uusi <strong>JSON-muotoilija &amp; validaattori</strong> edistyneiden työkalujen joukkoon.</li>
-                    <li data-i18n="muutokset.työkalu_toimii_täysin_paikallisesti_selaimessa_ilm">Työkalu toimii täysin paikallisesti selaimessa ilman tietojen lähettämistä palvelimelle.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">1.8.2026 – Työkalujen ryhmittely &amp; webtools.sorola.fi</div>
-                <ul class="muutos-lista">
-                    <li>Työkalut ryhmitelty selkeämmin erikseen <strong>perustyökaluihin</strong> ja kehittäjille suunnattuihin <strong>edistyneisiin työkaluihin</strong>.</li>
-                    <li>Avattu uusi aliverkkotunnus <a href="https://webtools.sorola.fi/" target="_blank" rel="noopener noreferrer" style="color: #3b82f6; text-decoration: underline;">webtools.sorola.fi</a> verkkotyökalukokoelmaa varten.</li>
-                </ul>
-            </div>
-
-            <div class="osion-tausta">
-                <div class="muutos-pvm">31.7.2026 – Android-sovelluksen julkaisu</div>
-                <ul class="muutos-lista">
-                    <li data-i18n="muutokset.luotu_ja_julkaistu_sorolan_oma_androidsovellus_apk">Luotu ja julkaistu Sorolan oma Android-sovellus (.apk-lataus), joka helpottaa perustyökalujen käyttöä mobiililaitteilla.</li>
-                </ul>
-            </div>
+            <div id="muutoslista"></div>
 
             <a href="/" class="linkki-takaisin" data-i18n="common.takaisin_pääsivulle">« Takaisin pääsivulle</a>
         </main>
     </div>
+    <script src="/js/muutokset.js"></script>
 </body>
 </html>

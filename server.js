@@ -17,10 +17,8 @@ import {
   HeadObjectCommand,
   ListObjectsV2Command
 } from '@aws-sdk/client-s3';
-
 import { db } from './db.js';
 import { s3, bucketName, ensureBucketExists } from './storage.js';
-import dnsRouter from './api/dns.js';
 
 const app = express();
 app.use(
@@ -307,6 +305,39 @@ function prefersEnglish(req) {
   if (!header) return false;
   const first = header.split(',')[0]?.trim().toLowerCase() || '';
   return first.startsWith('en');
+}
+
+function parseSortOrder(value) {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function isExternalHref(value) {
+  return /^https?:\/\//i.test(String(value || '').trim());
+}
+
+function normalizeLocalHref(value) {
+  const trimmed = String(value || '').trim();
+  if (!trimmed) return '/';
+  if (isExternalHref(trimmed)) return trimmed;
+  if (trimmed.startsWith('#') || trimmed.startsWith('mailto:') || trimmed.startsWith('tel:')) return trimmed;
+  return `/${trimmed.replace(/^\/+/, '')}`;
+}
+
+function localizeHref({ hrefFi, hrefEn, lang }) {
+  const raw = String(lang === 'en' ? (hrefEn || hrefFi) : hrefFi).trim();
+  if (!raw) return '/';
+  if (isExternalHref(raw) || raw.startsWith('#') || raw.startsWith('mailto:') || raw.startsWith('tel:')) return raw;
+  const clean = raw.replace(/^\/+/, '');
+  if (!clean) return '/';
+  return lang === 'en' ? `/en/${clean}` : `/${clean}`;
+}
+
+function splitDetailsToItems(details) {
+  return String(details || '')
+    .split(/\r?\n/)
+    .map(item => item.trim())
+    .filter(Boolean);
 }
 
 async function streamS3BodyToResponse(body, res) {
@@ -624,7 +655,359 @@ app.all('/api/lyhennin/create', async (req, res) => {
   }
 });
 
-app.use('/api/dns', requireAuth, dnsRouter);
+app.get('/api/public/home-content', async (req, res) => {
+  try {
+    const lang = String(req.query.lang || (prefersEnglish(req) ? 'en' : 'fi')).toLowerCase() === 'en' ? 'en' : 'fi';
+    const sectionResult = await db.query(`
+      SELECT id, section_key, sort_order, title_fi, title_en, description_fi, description_en, is_searchable
+      FROM home_sections
+      ORDER BY sort_order ASC, id ASC
+    `);
+    const buttonResult = await db.query(`
+      SELECT id, section_id, sort_order, icon, label_fi, label_en, href_fi, href_en, target_blank
+      FROM home_buttons
+      ORDER BY sort_order ASC, id ASC
+    `);
+    const latestResult = await db.query(`
+      SELECT id, date_label_fi, date_label_en, title_fi, title_en
+      FROM changelog_entries
+      ORDER BY sort_order ASC, id ASC
+      LIMIT 1
+    `);
+
+    const buttonsBySection = new Map();
+    for (const button of buttonResult.rows) {
+      if (!buttonsBySection.has(button.section_id)) buttonsBySection.set(button.section_id, []);
+      buttonsBySection.get(button.section_id).push({
+        id: button.id,
+        sortOrder: button.sort_order,
+        icon: button.icon || '',
+        label: lang === 'en' ? (button.label_en || button.label_fi) : button.label_fi,
+        labelFi: button.label_fi,
+        labelEn: button.label_en,
+        href: localizeHref({ hrefFi: button.href_fi, hrefEn: button.href_en, lang }),
+        hrefFi: normalizeLocalHref(button.href_fi),
+        hrefEn: normalizeLocalHref(button.href_en || button.href_fi),
+        targetBlank: Number(button.target_blank) === 1
+      });
+    }
+
+    const sections = sectionResult.rows.map(section => ({
+      id: section.id,
+      key: section.section_key,
+      sortOrder: section.sort_order,
+      title: lang === 'en' ? (section.title_en || section.title_fi) : section.title_fi,
+      titleFi: section.title_fi,
+      titleEn: section.title_en,
+      description: lang === 'en' ? (section.description_en || section.description_fi) : section.description_fi,
+      descriptionFi: section.description_fi,
+      descriptionEn: section.description_en,
+      isSearchable: Number(section.is_searchable) === 1,
+      buttons: buttonsBySection.get(section.id) || []
+    }));
+
+    const latest = latestResult.rows[0]
+      ? {
+          id: latestResult.rows[0].id,
+          date: lang === 'en' ? (latestResult.rows[0].date_label_en || latestResult.rows[0].date_label_fi) : latestResult.rows[0].date_label_fi,
+          text: lang === 'en' ? (latestResult.rows[0].title_en || latestResult.rows[0].title_fi) : latestResult.rows[0].title_fi
+        }
+      : null;
+
+    return res.json({ sections, latestChange: latest });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/public/changelog', async (req, res) => {
+  try {
+    const lang = String(req.query.lang || (prefersEnglish(req) ? 'en' : 'fi')).toLowerCase() === 'en' ? 'en' : 'fi';
+    const result = await db.query(`
+      SELECT id, sort_order, date_iso, date_label_fi, date_label_en, title_fi, title_en, details_fi, details_en
+      FROM changelog_entries
+      ORDER BY sort_order ASC, id ASC
+    `);
+
+    const entries = result.rows.map(entry => ({
+      id: entry.id,
+      sortOrder: entry.sort_order,
+      dateIso: entry.date_iso,
+      dateLabelFi: entry.date_label_fi,
+      dateLabelEn: entry.date_label_en,
+      titleFi: entry.title_fi,
+      titleEn: entry.title_en,
+      detailsFi: splitDetailsToItems(entry.details_fi),
+      detailsEn: splitDetailsToItems(entry.details_en),
+      dateLabel: lang === 'en' ? (entry.date_label_en || entry.date_label_fi) : entry.date_label_fi,
+      title: lang === 'en' ? (entry.title_en || entry.title_fi) : entry.title_fi,
+      details: splitDetailsToItems(lang === 'en' ? (entry.details_en || entry.details_fi) : entry.details_fi)
+    }));
+    return res.json({ entries });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/admin/content', requireAuth, async (_req, res) => {
+  try {
+    const sections = await db.query(`
+      SELECT id, section_key, sort_order, title_fi, title_en, description_fi, description_en, is_searchable
+      FROM home_sections
+      ORDER BY sort_order ASC, id ASC
+    `);
+    const buttons = await db.query(`
+      SELECT id, section_id, sort_order, icon, label_fi, label_en, href_fi, href_en, target_blank
+      FROM home_buttons
+      ORDER BY sort_order ASC, id ASC
+    `);
+    const changelog = await db.query(`
+      SELECT id, sort_order, date_iso, date_label_fi, date_label_en, title_fi, title_en, details_fi, details_en
+      FROM changelog_entries
+      ORDER BY sort_order ASC, id ASC
+    `);
+    return res.json({ sections: sections.rows, buttons: buttons.rows, changelog: changelog.rows });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/home/sections', requireAuth, async (req, res) => {
+  try {
+    const sectionKey = String(req.body?.sectionKey || '').trim();
+    const titleFi = String(req.body?.titleFi || '').trim();
+    const titleEn = String(req.body?.titleEn || '').trim();
+    const descriptionFi = String(req.body?.descriptionFi || '').trim();
+    const descriptionEn = String(req.body?.descriptionEn || '').trim();
+    const isSearchable = Number(req.body?.isSearchable) === 1 ? 1 : 0;
+    const sortOrder = parseSortOrder(req.body?.sortOrder);
+    if (!sectionKey || !titleFi) return res.status(400).json({ error: 'Osion avain ja suomenkielinen otsikko vaaditaan.' });
+    await db.query(`
+      INSERT INTO home_sections (section_key, sort_order, title_fi, title_en, description_fi, description_en, is_searchable)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `, [sectionKey, sortOrder, titleFi, titleEn || titleFi, descriptionFi, descriptionEn || descriptionFi, isSearchable]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/admin/home/sections/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ error: 'Virheellinen osion ID.' });
+    const sectionKey = String(req.body?.sectionKey || '').trim();
+    const titleFi = String(req.body?.titleFi || '').trim();
+    const titleEn = String(req.body?.titleEn || '').trim();
+    const descriptionFi = String(req.body?.descriptionFi || '').trim();
+    const descriptionEn = String(req.body?.descriptionEn || '').trim();
+    const isSearchable = Number(req.body?.isSearchable) === 1 ? 1 : 0;
+    const sortOrder = parseSortOrder(req.body?.sortOrder);
+    if (!sectionKey || !titleFi) return res.status(400).json({ error: 'Osion avain ja suomenkielinen otsikko vaaditaan.' });
+    await db.query(`
+      UPDATE home_sections
+      SET section_key = $1, sort_order = $2, title_fi = $3, title_en = $4, description_fi = $5, description_en = $6, is_searchable = $7
+      WHERE id = $8
+    `, [sectionKey, sortOrder, titleFi, titleEn || titleFi, descriptionFi, descriptionEn || descriptionFi, isSearchable, id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/home/sections/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ error: 'Virheellinen osion ID.' });
+    await db.query('DELETE FROM home_sections WHERE id = $1', [id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/home/sections/:id/move', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    const direction = String(req.body?.direction || '').trim().toLowerCase();
+    if (!id || !['up', 'down'].includes(direction)) return res.status(400).json({ error: 'Virheellinen pyyntö.' });
+    const current = await db.query('SELECT id, sort_order FROM home_sections WHERE id = $1 LIMIT 1', [id]);
+    if (!current.rows[0]) return res.status(404).json({ error: 'Osio puuttuu.' });
+    const comparator = direction === 'up' ? '<' : '>';
+    const orderDirection = direction === 'up' ? 'DESC' : 'ASC';
+    const swap = await db.query(`
+      SELECT id, sort_order FROM home_sections
+      WHERE sort_order ${comparator} $1
+      ORDER BY sort_order ${orderDirection}, id ${orderDirection}
+      LIMIT 1
+    `, [current.rows[0].sort_order]);
+    if (!swap.rows[0]) return res.json({ success: true });
+    await db.query('UPDATE home_sections SET sort_order = $1 WHERE id = $2', [swap.rows[0].sort_order, id]);
+    await db.query('UPDATE home_sections SET sort_order = $1 WHERE id = $2', [current.rows[0].sort_order, swap.rows[0].id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/home/buttons', requireAuth, async (req, res) => {
+  try {
+    const sectionId = Number.parseInt(req.body?.sectionId, 10);
+    const sortOrder = parseSortOrder(req.body?.sortOrder);
+    const icon = String(req.body?.icon || '').trim();
+    const labelFi = String(req.body?.labelFi || '').trim();
+    const labelEn = String(req.body?.labelEn || '').trim();
+    const hrefFi = String(req.body?.hrefFi || '').trim();
+    const hrefEn = String(req.body?.hrefEn || '').trim();
+    const targetBlank = Number(req.body?.targetBlank) === 1 ? 1 : 0;
+    if (!sectionId || !labelFi || !hrefFi) return res.status(400).json({ error: 'Osio, nimi (fi) ja polku (fi) vaaditaan.' });
+    await db.query(`
+      INSERT INTO home_buttons (section_id, sort_order, icon, label_fi, label_en, href_fi, href_en, target_blank)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    `, [sectionId, sortOrder, icon, labelFi, labelEn || labelFi, hrefFi, hrefEn || hrefFi, targetBlank]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/admin/home/buttons/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    const sectionId = Number.parseInt(req.body?.sectionId, 10);
+    const sortOrder = parseSortOrder(req.body?.sortOrder);
+    const icon = String(req.body?.icon || '').trim();
+    const labelFi = String(req.body?.labelFi || '').trim();
+    const labelEn = String(req.body?.labelEn || '').trim();
+    const hrefFi = String(req.body?.hrefFi || '').trim();
+    const hrefEn = String(req.body?.hrefEn || '').trim();
+    const targetBlank = Number(req.body?.targetBlank) === 1 ? 1 : 0;
+    if (!id || !sectionId || !labelFi || !hrefFi) return res.status(400).json({ error: 'Virheelliset tiedot.' });
+    await db.query(`
+      UPDATE home_buttons
+      SET section_id = $1, sort_order = $2, icon = $3, label_fi = $4, label_en = $5, href_fi = $6, href_en = $7, target_blank = $8
+      WHERE id = $9
+    `, [sectionId, sortOrder, icon, labelFi, labelEn || labelFi, hrefFi, hrefEn || hrefFi, targetBlank, id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/home/buttons/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ error: 'Virheellinen napin ID.' });
+    await db.query('DELETE FROM home_buttons WHERE id = $1', [id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/home/buttons/:id/move', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    const direction = String(req.body?.direction || '').trim().toLowerCase();
+    if (!id || !['up', 'down'].includes(direction)) return res.status(400).json({ error: 'Virheellinen pyyntö.' });
+    const current = await db.query('SELECT id, section_id, sort_order FROM home_buttons WHERE id = $1 LIMIT 1', [id]);
+    if (!current.rows[0]) return res.status(404).json({ error: 'Nappi puuttuu.' });
+    const comparator = direction === 'up' ? '<' : '>';
+    const orderDirection = direction === 'up' ? 'DESC' : 'ASC';
+    const swap = await db.query(`
+      SELECT id, sort_order FROM home_buttons
+      WHERE section_id = $1 AND sort_order ${comparator} $2
+      ORDER BY sort_order ${orderDirection}, id ${orderDirection}
+      LIMIT 1
+    `, [current.rows[0].section_id, current.rows[0].sort_order]);
+    if (!swap.rows[0]) return res.json({ success: true });
+    await db.query('UPDATE home_buttons SET sort_order = $1 WHERE id = $2', [swap.rows[0].sort_order, id]);
+    await db.query('UPDATE home_buttons SET sort_order = $1 WHERE id = $2', [current.rows[0].sort_order, swap.rows[0].id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/changelog', requireAuth, async (req, res) => {
+  try {
+    const sortOrder = parseSortOrder(req.body?.sortOrder);
+    const dateIso = String(req.body?.dateIso || '').trim() || null;
+    const dateLabelFi = String(req.body?.dateLabelFi || '').trim();
+    const dateLabelEn = String(req.body?.dateLabelEn || '').trim();
+    const titleFi = String(req.body?.titleFi || '').trim();
+    const titleEn = String(req.body?.titleEn || '').trim();
+    const detailsFi = String(req.body?.detailsFi || '').trim();
+    const detailsEn = String(req.body?.detailsEn || '').trim();
+    if (!dateLabelFi || !titleFi) return res.status(400).json({ error: 'Päivämäärä (fi) ja otsikko (fi) vaaditaan.' });
+    await db.query(`
+      INSERT INTO changelog_entries (sort_order, date_iso, date_label_fi, date_label_en, title_fi, title_en, details_fi, details_en)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    `, [sortOrder, dateIso, dateLabelFi, dateLabelEn || dateLabelFi, titleFi, titleEn || titleFi, detailsFi, detailsEn || detailsFi]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/admin/changelog/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ error: 'Virheellinen kirjaus-ID.' });
+    const sortOrder = parseSortOrder(req.body?.sortOrder);
+    const dateIso = String(req.body?.dateIso || '').trim() || null;
+    const dateLabelFi = String(req.body?.dateLabelFi || '').trim();
+    const dateLabelEn = String(req.body?.dateLabelEn || '').trim();
+    const titleFi = String(req.body?.titleFi || '').trim();
+    const titleEn = String(req.body?.titleEn || '').trim();
+    const detailsFi = String(req.body?.detailsFi || '').trim();
+    const detailsEn = String(req.body?.detailsEn || '').trim();
+    if (!dateLabelFi || !titleFi) return res.status(400).json({ error: 'Päivämäärä (fi) ja otsikko (fi) vaaditaan.' });
+    await db.query(`
+      UPDATE changelog_entries
+      SET sort_order = $1, date_iso = $2, date_label_fi = $3, date_label_en = $4, title_fi = $5, title_en = $6, details_fi = $7, details_en = $8
+      WHERE id = $9
+    `, [sortOrder, dateIso, dateLabelFi, dateLabelEn || dateLabelFi, titleFi, titleEn || titleFi, detailsFi, detailsEn || detailsFi, id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/changelog/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ error: 'Virheellinen kirjaus-ID.' });
+    await db.query('DELETE FROM changelog_entries WHERE id = $1', [id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/admin/changelog/:id/move', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    const direction = String(req.body?.direction || '').trim().toLowerCase();
+    if (!id || !['up', 'down'].includes(direction)) return res.status(400).json({ error: 'Virheellinen pyyntö.' });
+    const current = await db.query('SELECT id, sort_order FROM changelog_entries WHERE id = $1 LIMIT 1', [id]);
+    if (!current.rows[0]) return res.status(404).json({ error: 'Kirjaus puuttuu.' });
+    const comparator = direction === 'up' ? '<' : '>';
+    const orderDirection = direction === 'up' ? 'DESC' : 'ASC';
+    const swap = await db.query(`
+      SELECT id, sort_order FROM changelog_entries
+      WHERE sort_order ${comparator} $1
+      ORDER BY sort_order ${orderDirection}, id ${orderDirection}
+      LIMIT 1
+    `, [current.rows[0].sort_order]);
+    if (!swap.rows[0]) return res.json({ success: true });
+    await db.query('UPDATE changelog_entries SET sort_order = $1 WHERE id = $2', [swap.rows[0].sort_order, id]);
+    await db.query('UPDATE changelog_entries SET sort_order = $1 WHERE id = $2', [current.rows[0].sort_order, swap.rows[0].id]);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
 
 // --- PASTEBIN REITIT ---
 app.post('/api/paste', async (req, res) => {
