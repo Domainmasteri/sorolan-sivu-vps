@@ -19,7 +19,7 @@
     <meta property="og:site_name" content="Sorolan Sakki">
     <meta property="og:title" content="Sorola.fi - IT-työkalut ja ohjeet">
     <meta property="og:description" content="Kokoelma hyödyllisiä työkaluja: linkkilyhennin, tiedostonjako, pastebin ja tekniset ohjeet.">
-        <meta property="og:locale" content="fi_FI">
+    <meta property="og:locale" content="fi_FI">
     <meta property="og:image" content="https://sorola.fi/styles/og-image.png">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Sorola.fi - IT-työkalut ja ohjeet">
@@ -132,8 +132,12 @@
         .admin-modal button.cancel { background: transparent; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; padding: 8px 18px; cursor: pointer; width: 100%; margin-top: 8px; }
         .lisaa-nappi-btn { display: none; margin: 8px 0 0 0; width: 100%; background: transparent; border: 1px dashed #ffaa00; color: #ffaa00; border-radius: 6px; padding: 7px; cursor: pointer; font-size: 0.85rem; }
         .lisaa-nappi-btn.admin-active { display: block; }
-        .poista-elem-btn { background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 0.85rem; margin-left: 8px; vertical-align: middle; padding: 0; line-height: 1; }
+        .poista-elem-btn { background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 0.85rem; margin-left: 4px; vertical-align: middle; padding: 0; line-height: 1; }
+        .elem-up-btn, .elem-down-btn { background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 0.8rem; margin-left: 4px; vertical-align: middle; padding: 0; line-height: 1; }
+        .elem-up-btn:hover, .elem-down-btn:hover { color: #ffaa00; }
         #admin-error { color: #ef4444; font-size: 0.85rem; margin-bottom: 8px; display: none; }
+        [data-i18n][contenteditable] { outline: 2px dashed #ffaa00; cursor: text; background: rgba(255,170,0,0.06); border-radius: 2px; min-width: 4px; display: inline-block; }
+        [data-i18n][contenteditable]:focus { outline: 2px dashed #ffcc44; background: rgba(255,170,0,0.12); }
     </style>
 
     <style>
@@ -258,14 +262,7 @@
                 <h2 style="margin-top: 0; margin-bottom: 5px; text-align: center; color: #ffaa00; font-size: 1.2rem;">Sorolan linkit</h2>
                 <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;">Kokoelma perheen omia sivuja, teknisiä oppaita sekä hyödyllistä tietoa.</p>
                 <nav aria-label="Sorolan linkit">
-                    <ul class="nappilista-ul">
-                        <li><a href="ansioluettelot" class="nappula1">📄 Maken Ansioluettelot</a></li>
-                        <li><a href="makelink" class="nappula1">📞 Maken yhteystiedot</a></li>
-                        <li><a href="ohjeet" class="nappula1">📖 Sorolan ohjeita</a></li>
-                        <li><a href="https://soro.la/pienoismallit" target="_blank" rel="noopener noreferrer" class="nappula1">✈️ Taven pienoismallikerho</a></li>
-                        <li><a href="vieraskirja" class="nappula1">📖 Vieraskirja</a></li>
-                        <li><a href="privacy" class="nappula1">🔒 Yksityisyyskäytännöt</a></li>
-                        <li><a href="muutokset" class="nappula1">📋 Viimeisimmät muutokset</a></li>
+                    <ul class="nappilista-ul" id="lista-sorola-links">
                     </ul>
                 </nav>
             </div>
@@ -282,13 +279,6 @@
                 <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;">Itse koodatut, nopeat ja ilman mainoksia toimivat apuvälineet digiarjen tueksi.</p>
                 <nav aria-label="Perustyökalut">
                     <ul class="nappilista-ul" id="lista-perustyokalut">
-                        <li><a href="https://soro.la/sovellus" target="_blank" rel="noopener noreferrer" class="nappula1">📱 Lataa Android-sovellus (.apk)</a></li>
-                        <li><a href="qr" class="nappula1">📱 QR-koodin luoja</a></li>
-                        <li><a href="lyhennin" class="nappula1">🔗 Linkin lyhennin</a></li>
-                        <li><a href="salasanat" class="nappula1">🔑 Salasanageneraattori</a></li>
-                        <li><a href="pastebin" class="nappula1">📝 Pastebin (Koodinjako)</a></li>
-                        <li><a href="https://vault.sorola.fi/" target="_blank" rel="noopener noreferrer" class="nappula1">🔐 SorolaVault (kutsutut)</a></li>
-                        <li><a href="jako" class="nappula1">📁 Sorolan tiedostojako</a></li>
                     </ul>
                     <p class="ei-tuloksia" id="ei-tuloksia-perus">Ei hakutuloksia.</p>
                 </nav>
@@ -299,10 +289,6 @@
                 <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px; color: #ddd;">Tehokkaammat apuvälineet kehittäjille ja teknisiin tarpeisiin.</p>
                 <nav aria-label="Edistyneet työkalut">
                     <ul class="nappilista-ul" id="lista-edistyneet">
-                        <li><a href="https://webtools.sorola.fi/" class="nappula1">🌐 Verkkotyökalut</a></li>
-                        <li><a href="json" class="nappula1">🔧 JSON-muotoilija &amp; validaattori</a></li>
-                        <li><a href="base64" class="nappula1">🔐 Base64 Kooderi / Dekooderi</a></li>
-                        <li><a href="uuid" class="nappula1">🔑 UUID / GUID Generaattori</a></li>
                     </ul>
                     <p class="ei-tuloksia" id="ei-tuloksia-edistyneet">Ei hakutuloksia.</p>
                 </nav>
@@ -428,6 +414,7 @@
                     btn.classList.add('admin-active');
                 });
                 showDeleteButtons();
+                enableI18nEditing();
             }
 
             function exitEditMode() {
@@ -435,17 +422,111 @@
                 toggleBtn.classList.remove('active');
                 toggleBtn.title = 'Admin-muokkaustila';
                 document.querySelectorAll('.lisaa-nappi-btn').forEach(function(b) { b.classList.remove('admin-active'); });
-                document.querySelectorAll('.poista-elem-btn').forEach(function(b) { b.remove(); });
+                document.querySelectorAll('.poista-elem-btn, .elem-up-btn, .elem-down-btn').forEach(function(b) { b.remove(); });
+                disableI18nEditing();
+            }
+
+            function preventEnterKey(e) {
+                if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
+            }
+
+            function saveI18nEdit(e) {
+                var el = e.target;
+                var key = el.getAttribute('data-i18n');
+                var original = el.getAttribute('data-i18n-original') || '';
+                var newVal = (el.innerText || el.textContent || '').trim();
+                if (!newVal || newVal === original) return;
+                fetch('/api/admin/translations', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', Authorization: authHeader },
+                    body: JSON.stringify({ key: key, value: newVal, lang: document.documentElement.lang || 'fi' })
+                }).catch(function() { /* ignore */ });
+            }
+
+            var SKIP_TAGS = new Set(['script', 'style', 'meta', 'link', 'title', 'input', 'textarea', 'button', 'select', 'option']);
+
+            function enableI18nEditing() {
+                document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                    if (SKIP_TAGS.has(el.tagName.toLowerCase())) return;
+                    el.setAttribute('contenteditable', 'true');
+                    el.setAttribute('data-i18n-original', (el.innerText || el.textContent || '').trim());
+                    el.addEventListener('keydown', preventEnterKey);
+                    el.addEventListener('blur', saveI18nEdit);
+                });
+            }
+
+            function disableI18nEditing() {
+                document.querySelectorAll('[data-i18n][contenteditable]').forEach(function(el) {
+                    el.removeAttribute('contenteditable');
+                    el.removeAttribute('data-i18n-original');
+                    el.removeEventListener('keydown', preventEnterKey);
+                    el.removeEventListener('blur', saveI18nEdit);
+                });
+            }
+
+            function getCustomListItems(listEl) {
+                return Array.from(listEl.querySelectorAll('li[data-custom-element-id]'));
+            }
+
+            function getOrderedIds(listEl) {
+                return getCustomListItems(listEl).map(function(li) { return li.getAttribute('data-custom-element-id'); });
+            }
+
+            async function sendReorder(listEl) {
+                var orderedIds = getOrderedIds(listEl);
+                try {
+                    await fetch('/api/admin/elements/reorder', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json', Authorization: authHeader },
+                        body: JSON.stringify({ orderedIds: orderedIds })
+                    });
+                } catch(e) { /* ignore */ }
+            }
+
+            function addReorderButtons(li, listEl) {
+                if (li.querySelector('.elem-up-btn')) return;
+
+                var upBtn = document.createElement('button');
+                upBtn.className = 'elem-up-btn';
+                upBtn.title = 'Siirrä ylös';
+                upBtn.textContent = '↑';
+                upBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var prev = li.previousElementSibling;
+                    while (prev && !prev.hasAttribute('data-custom-element-id')) prev = prev.previousElementSibling;
+                    if (prev) { listEl.insertBefore(li, prev); sendReorder(listEl); }
+                });
+
+                var downBtn = document.createElement('button');
+                downBtn.className = 'elem-down-btn';
+                downBtn.title = 'Siirrä alas';
+                downBtn.textContent = '↓';
+                downBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var next = li.nextElementSibling;
+                    while (next && !next.hasAttribute('data-custom-element-id')) next = next.nextElementSibling;
+                    if (next) { listEl.insertBefore(next, li); sendReorder(listEl); }
+                });
+
+                li.appendChild(upBtn);
+                li.appendChild(downBtn);
             }
 
             function showDeleteButtons() {
                 document.querySelectorAll('[data-custom-element-id]').forEach(function(el) {
                     if (el.querySelector('.poista-elem-btn')) return;
                     var id = el.getAttribute('data-custom-element-id');
+                    var isLi = el.tagName.toLowerCase() === 'li';
+                    var listEl = isLi ? el.parentElement : null;
+
+                    if (isLi && listEl) {
+                        addReorderButtons(el, listEl);
+                    }
+
                     var btn = document.createElement('button');
                     btn.className = 'poista-elem-btn';
                     btn.title = 'Poista elementti';
-                    btn.textContent = '🗑';
+                    btn.textContent = '✕';
                     btn.addEventListener('click', function(e) { e.preventDefault(); deleteElement(id, el); });
                     el.appendChild(btn);
                 });
@@ -503,10 +584,11 @@
                         a.textContent = fi;
                         if (list.tagName.toLowerCase() === 'ul') {
                             li.appendChild(a);
+                            addReorderButtons(li, list);
                             var delBtn = document.createElement('button');
                             delBtn.className = 'poista-elem-btn';
                             delBtn.title = 'Poista elementti';
-                            delBtn.textContent = '🗑';
+                            delBtn.textContent = '✕';
                             delBtn.addEventListener('click', function(e) { e.preventDefault(); deleteElement(data.id, li); });
                             li.appendChild(delBtn);
                             list.appendChild(li);

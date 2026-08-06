@@ -1,0 +1,21 @@
+{
+  "ansioluettelot": "resume",
+  "cv-make": "cv-builder",
+  "hakemus-it": "it-application",
+  "hakemus-jakelu": "delivery-application",
+  "hakemus-make": "application-builder",
+  "jako": "share",
+  "base64": "base64",
+  "json": "json-formatter",
+  "lataus": "download",
+  "linkinlyhennin": "link-shortener",
+  "lyhennin": "shortener",
+  "ohjeet": "guides",
+  "pastebin": "pastebin",
+  "lue": "view",
+  "salasanat": "passwords",
+  "tiedostojako": "file-sharing",
+  "vieraskirja": "guestbook",
+  "muutokset": "changes",
+  "uuid": "uuid"
+}
