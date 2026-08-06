@@ -803,16 +803,16 @@
                 return;
             }
             translations.forEach(t => {
-                const keyEsc = t.key.replace(/'/g, "\\'");
-                const fiEsc = (t.fi || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                const enEsc = (t.en || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const keyEsc = t.key.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                const fiEsc = (t.fi || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const enEsc = (t.en || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 tbody.innerHTML += `
                     <tr id="trans-row-${t.key.replace(/[^a-zA-Z0-9]/g, '_')}">
                         <td style="font-family:monospace; font-size:0.8rem; color:#a0aec0; min-width:180px;">${t.key.replace(/</g, '&lt;')}</td>
                         <td><input type="text" value="${fiEsc}" class="syote" style="width:100%; font-size:0.85rem; padding:4px;" id="fi-${t.key.replace(/[^a-zA-Z0-9]/g, '_')}"></td>
                         <td><input type="text" value="${enEsc}" class="syote" style="width:100%; font-size:0.85rem; padding:4px;" id="en-${t.key.replace(/[^a-zA-Z0-9]/g, '_')}"></td>
                         <td style="white-space:nowrap;">
-                            <button onclick="tallennnaKaannos('${keyEsc}')" class="action-btn edit-btn" style="margin-bottom:4px;">Tallenna</button>
+                            <button onclick="tallennaKaannos('${keyEsc}')" class="action-btn edit-btn" style="margin-bottom:4px;">Tallenna</button>
                             <button onclick="poistaKaannos('${keyEsc}')" class="action-btn">Poista</button>
                         </td>
                     </tr>
@@ -843,7 +843,7 @@
             } catch { alert('Palvelinvirhe.'); }
         }
 
-        async function tallennnaKaannos(key) {
+        async function tallennaKaannos(key) {
             const safeId = key.replace(/[^a-zA-Z0-9]/g, '_');
             const fiVal = document.getElementById(`fi-${safeId}`)?.value ?? '';
             const enVal = document.getElementById(`en-${safeId}`)?.value ?? '';
@@ -902,12 +902,13 @@
                 return;
             }
             routes.forEach(r => {
-                const fiEsc = r.fi.replace(/'/g, "\\'");
+                const fiEsc = r.fi.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                const enEsc = r.en.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-family:monospace; color:#c4b5fd;">/${r.fi}</td>
                         <td>
-                            <input type="text" value="${r.en}" class="syote" style="width:100%; font-size:0.85rem; padding:4px;" id="route-en-${r.fi}">
+                            <input type="text" value="${enEsc}" class="syote" style="width:100%; font-size:0.85rem; padding:4px;" id="route-en-${r.fi}">
                         </td>
                         <td style="white-space:nowrap;">
                             <button onclick="tallennaPolkukaannos('${fiEsc}')" class="action-btn edit-btn" style="margin-bottom:4px;">Tallenna</button>
