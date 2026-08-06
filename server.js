@@ -20,7 +20,6 @@ import {
 
 import { db } from './db.js';
 import { s3, bucketName, ensureBucketExists } from './storage.js';
-import dnsRouter from './api/dns.js';
 
 const app = express();
 app.use(
@@ -624,8 +623,6 @@ app.all('/api/lyhennin/create', async (req, res) => {
   }
 });
 
-app.use('/api/dns', requireAuth, dnsRouter);
-
 // --- PASTEBIN REITIT ---
 app.post('/api/paste', async (req, res) => {
   try {
@@ -945,6 +942,41 @@ app.delete('/api/admin/elements/:id', requireAuth, async (req, res) => {
   }
 });
 
+app.post('/api/admin/changelog', requireAuth, async (req, res) => {
+  try {
+    const dateStr = String(req.body?.date_str || '').trim();
+    const titleFi = String(req.body?.title_fi || '').trim();
+    const titleEn = String(req.body?.title_en || '').trim();
+    const contentFi = String(req.body?.content_fi || '').trim();
+    const contentEn = String(req.body?.content_en || '').trim();
+
+    if (!dateStr || !titleFi || !titleEn || !contentFi || !contentEn) {
+      return res.status(400).json({ error: 'Kaikki kentät ovat pakollisia.' });
+    }
+
+    const result = await db.query(
+      'INSERT INTO changelog (date_str, title_fi, title_en, content_fi, content_en) VALUES ($1, $2, $3, $4, $5)',
+      [dateStr, titleFi, titleEn, contentFi, contentEn]
+    );
+
+    return res.json({ success: true, id: result.lastInsertRowid });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/admin/changelog/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ error: 'ID puuttuu.' });
+    const result = await db.query('DELETE FROM changelog WHERE id = $1', [id]);
+    if (result.changes === 0) return res.status(404).json({ error: 'Muutoslokimerkintää ei löydy.' });
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/admin/files', requireAuth, async (_req, res) => {
   try {
     const result = await db.query('SELECT id, s3_key, original_name, file_size, mime_type, expires_at, max_downloads, created_by, created_at FROM admin_files ORDER BY created_at DESC');
@@ -1030,7 +1062,7 @@ function injectCustomElements(html, elements, lang) {
   for (const [section, items] of Object.entries(bySection)) {
     const escapedSection = section.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const ulRegex = new RegExp(`(<ul[^>]*\\bid="${escapedSection}"[^>]*>)(.*?)(</ul>)`, 's');
-    result = result.replace(ulRegex, (_match, open, inner, close) => {
+    const ulInjected = result.replace(ulRegex, (_match, open, inner, close) => {
       const injected = items.map(el => {
         const content = lang === 'en' ? el.content_en : el.content_fi;
         if (el.element_type === 'button') {
@@ -1040,8 +1072,47 @@ function injectCustomElements(html, elements, lang) {
       }).join('');
       return `${open}${inner}${injected}\n                    ${close}`;
     });
+    if (ulInjected !== result) {
+      result = ulInjected;
+      continue;
+    }
+
+    const navRegex = new RegExp(`(<nav[^>]*\\bid="${escapedSection}"[^>]*>)(.*?)(</nav>)`, 's');
+    result = result.replace(navRegex, (_match, open, inner, close) => {
+      const injected = items.map(el => {
+        const content = lang === 'en' ? el.content_en : el.content_fi;
+        if (el.element_type === 'button') {
+          return `\n                    <a href="${escapeHtml(el.url)}" class="nappula1" data-custom-element-id="${el.id}">${escapeHtml(content)}</a>`;
+        }
+        return `\n                    <div data-custom-element-id="${el.id}">${escapeHtml(content)}</div>`;
+      }).join('');
+      return `${open}${inner}${injected}\n                ${close}`;
+    });
   }
   return result;
+}
+
+function renderChangelogEntries(entries, lang, includeDeleteButtons = false) {
+  if (!entries || entries.length === 0) return '';
+  return entries.map((entry) => {
+    const title = lang === 'en' ? entry.title_en : entry.title_fi;
+    const content = lang === 'en' ? entry.content_en : entry.content_fi;
+    const deleteButton = includeDeleteButtons
+      ? '<button class="poista-changelog-btn" type="button" title="Poista merkintä">🗑</button>'
+      : '';
+    return `
+            <div class="osion-tausta" data-changelog-id="${entry.id}">
+                <div class="muutos-pvm">${escapeHtml(entry.date_str)} - ${escapeHtml(title)}${deleteButton}</div>
+                <ul class="muutos-lista"><li>${escapeHtml(content)}</li></ul>
+            </div>`;
+  }).join('');
+}
+
+function injectChangelogEntries(html, entriesHtml) {
+  if (!entriesHtml) return html;
+  const mainRegex = /(<main[^>]*id="paaosio"[^>]*>)/i;
+  if (!mainRegex.test(html)) return html;
+  return html.replace(mainRegex, `$1${entriesHtml}\n`);
 }
 
 // Kaikki muut reitit ohjataan oikeisiin .html tiedostoihin tai index.html:ään
@@ -1050,16 +1121,31 @@ app.get('*', pageLimiter, async (req, res) => {
   const htmlFilePath = staticHtmlPath || path.join(distPath, 'index.html');
 
   try {
-    const elementsResult = await db.query('SELECT id, target_section, element_type, url, content_fi, content_en FROM custom_elements ORDER BY created_at ASC');
-    const elements = elementsResult.rows;
+    const lang = req.path.startsWith('/en') ? 'en' : 'fi';
+    const normalizedPath = req.path.replace(/\/+$/, '') || '/';
+    const isChangelogPage = normalizedPath === '/muutokset' || normalizedPath === '/en/changes';
+    const html = await fs.readFile(htmlFilePath, 'utf8');
 
-    if (elements.length > 0) {
-      const lang = req.path.startsWith('/en') ? 'en' : 'fi';
-      const html = await fs.readFile(htmlFilePath, 'utf8');
-      const injected = injectCustomElements(html, elements, lang);
-      res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      return res.send(injected);
+    const [elementsResult, changelogResult, authedUser] = await Promise.all([
+      db.query('SELECT id, target_section, element_type, url, content_fi, content_en FROM custom_elements ORDER BY created_at ASC'),
+      isChangelogPage
+        ? db.query('SELECT id, date_str, title_fi, title_en, content_fi, content_en, created_at FROM changelog ORDER BY id DESC')
+        : Promise.resolve({ rows: [] }),
+      isChangelogPage ? haeKayttaja(req).catch(() => null) : Promise.resolve(null)
+    ]);
+
+    let injected = html;
+    if (elementsResult.rows.length > 0) {
+      injected = injectCustomElements(injected, elementsResult.rows, lang);
     }
+
+    if (changelogResult.rows.length > 0) {
+      const changelogHtml = renderChangelogEntries(changelogResult.rows, lang, Boolean(authedUser));
+      injected = injectChangelogEntries(injected, changelogHtml);
+    }
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.send(injected);
   } catch {
     // Jatketaan normaalilla tiedoston lähetyksellä virhetilanteessa
   }
