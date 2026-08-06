@@ -58,11 +58,7 @@ const migrateCustomElementsSortOrder = (connection) => {
     return;
   }
 
-  const migrate = connection.transaction(() => {
-    connection.prepare('ALTER TABLE custom_elements ADD COLUMN sort_order INTEGER DEFAULT 0').run();
-  });
-
-  migrate();
+  connection.prepare('ALTER TABLE custom_elements ADD COLUMN sort_order INTEGER DEFAULT 0').run();
 };
 
 const runMigrations = (connection) => {
