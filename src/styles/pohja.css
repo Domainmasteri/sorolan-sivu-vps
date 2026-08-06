@@ -1,1 +1,318 @@
+/* =========================================================
+   PERUSASETUKSET (Reset & Base)
+========================================================= */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0b0d13;
+    color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   ASETTELU (Layout)
+========================================================= */
+.laatikko {
+    width: calc(100% - 32px);
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 32px;
+    background-color: #191f2d;
+    border-radius: 14px;
+    border: 1px solid #2d3748;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.55);
+}
+
+.osion-tausta {
+    background-color: #11141d;
+    padding: 22px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #2d3748;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.osion-tausta:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================================
+   TYPOGRAFIA
+========================================================= */
+.otsikko {
+    text-align: center;
+    color: #ffaa00;
+    margin-top: 0;
+    margin-bottom: 24px;
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+}
+
+h2 {
+    font-size: 1.45rem;
+    color: #f8fafc;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 1.15rem;
+    color: #cbd5e1;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 14px;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================================
+   LOMAKKEET JA SYÖTTEET (Forms & Inputs)
+========================================================= */
+.syote {
+    width: 100%;
+    padding: 12px 14px;
+    background-color: #0b0d13;
+    border: 1px solid #4a5568;
+    border-radius: 8px;
+    color: #f8fafc;
+    font-size: 16px; /* Estää iOS-safarin automaattisen zoomaamisen */
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.syote:focus {
+    outline: none;
+    border-color: #ffaa00;
+    box-shadow: 0 0 0 3px rgba(255, 170, 0, 0.18);
+}
+
+.syote::placeholder {
+    color: #64748b;
+}
+
+.flex-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.flex-form > * {
+    flex: 1 1 auto;
+}
+
+/* =========================================================
+   PAINIKKEET JA LINKIT (Buttons & Links)
+========================================================= */
+.nappula, .nappula1 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.98rem;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.1s, background-color 0.2s, box-shadow 0.2s;
+    min-height: 48px;
+    user-select: none;
+}
+
+.nappula {
+    background-color: #ffaa00;
+    color: #11141d;
+    box-shadow: 0 4px 12px rgba(255, 170, 0, 0.2);
+}
+
+.nappula:hover {
+    background-color: #ffb726;
+    box-shadow: 0 6px 16px rgba(255, 170, 0, 0.3);
+}
+
+.nappula:active {
+    transform: scale(0.98);
+}
+
+.nappula1 {
+    background-color: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.nappula1:hover {
+    background-color: #2563eb;
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+}
+
+.nappula1:active {
+    transform: scale(0.98);
+}
+
+/* Nappilistat etusivulla ja ohjesivuilla */
+.nappilista,
+.nappilista-ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.nappilista li,
+.nappilista-ul li {
+    width: 100%;
+    max-width: 340px;
+}
+
+.nappilista li .nappula1,
+.nappilista-ul li .nappula1 {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.linkki-takaisin {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: #94a3b8;
+    text-decoration: none;
+    margin-top: 24px;
+    padding: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.linkki-takaisin:hover {
+    color: #ffaa00;
+}
+
+/* Saavutettavuus: Hyppää sisältöön linkki */
+.skip-to-content {
+    position: absolute;
+    top: -50px;
+    left: 16px;
+    background: #ffaa00;
+    color: #11141d;
+    padding: 10px 16px;
+    border-radius: 6px;
+    z-index: 1000;
+    transition: top 0.2s ease;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.skip-to-content:focus {
+    top: 16px;
+}
+
+/* =========================================================
+   TAULUKOT (Admin-paneeli ym.)
+========================================================= */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 16px;
+    border-radius: 8px;
+    border: 1px solid #2d3748;
+    background: #0b0d13;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.92rem;
+}
+
+th, td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #1e293b;
+}
+
+th {
+    background-color: #11141d;
+    color: #cbd5e1;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* =========================================================
+   MOBIILIOPTIMOINTI (Media Queries)
+========================================================= */
+@media (max-width: 650px) {
+    .laatikko {
+        width: calc(100% - 24px);
+        margin: 20px auto;
+        padding: 22px 18px;
+        border-radius: 12px;
+    }
+
+    .osion-tausta {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .otsikko {
+        font-size: 1.75rem;
+        margin-bottom: 18px;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    h3 {
+        font-size: 1.05rem;
+    }
+
+    .flex-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .flex-form > * {
+        width: 100%;
+    }
+
+    .nappilista li,
+    .nappilista-ul li {
+        max-width: 100%;
+    }
+}
