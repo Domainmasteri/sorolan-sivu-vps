@@ -42,11 +42,36 @@ const openDatabase = () => {
 
 const schemaSql = readSchemaSql();
 
+const migrateCustomElementsSortOrder = (connection) => {
+  const customElementsTable = connection
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?")
+    .get('custom_elements');
+
+  if (!customElementsTable) {
+    return;
+  }
+
+  const columns = connection.prepare('PRAGMA table_info(custom_elements)').all();
+  const hasSortOrder = columns.some(column => column.name === 'sort_order');
+
+  if (hasSortOrder) {
+    return;
+  }
+
+  connection.prepare('ALTER TABLE custom_elements ADD COLUMN sort_order INTEGER DEFAULT 0').run();
+  connection.prepare('UPDATE custom_elements SET sort_order = 0 WHERE sort_order IS NULL').run();
+};
+
+const runMigrations = (connection) => {
+  migrateCustomElementsSortOrder(connection);
+};
+
 const initializeDatabase = () => {
   const connection = openDatabase();
 
   try {
     connection.exec(schemaSql);
+    runMigrations(connection);
     return connection;
   } catch (error) {
     connection.close();
