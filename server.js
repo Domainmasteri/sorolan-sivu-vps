@@ -64,6 +64,22 @@ const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 40, standardHea
 const uploadLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false });
 const pageLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 1200, standardHeaders: true, legacyHeaders: false });
 
+function resolveRequestSiteUrl(req) {
+  const configured = String(process.env.SITE_URL || '').trim();
+  if (configured) {
+    return configured.replace(/\/$/, '');
+  }
+
+  const host = String(req.get('host') || req.hostname || '').trim();
+  if (!host) {
+    return `${req.protocol}://localhost`;
+  }
+
+  const forwardedProto = String(req.get('x-forwarded-proto') || '').split(',')[0].trim();
+  const protocol = forwardedProto || req.protocol || 'http';
+  return `${protocol}://${host}`;
+}
+
 async function resolveStaticHtmlPath(requestPath) {
   if (typeof requestPath !== 'string') return null;
   const trimmedPath = requestPath.replace(/^\/+|\/+$/g, '');
@@ -314,6 +330,25 @@ async function requireAuth(req, res, next) {
   }
 }
 
+const TOOL_KEY_CACHE_TTL_MS = 60 * 1000;
+const toolApiKeyCache = new Map();
+
+async function resolveToolApiKey(toolName) {
+  const cacheEntry = toolApiKeyCache.get(toolName);
+  if (cacheEntry && cacheEntry.expiresAt > Date.now()) {
+    return cacheEntry.apiKey;
+  }
+
+  const result = await db.query('SELECT api_key FROM tool_api_keys WHERE tool_name = $1 LIMIT 1', [toolName]);
+  const apiKey = String(result.rows[0]?.api_key || '').trim();
+  toolApiKeyCache.set(toolName, { apiKey, expiresAt: Date.now() + TOOL_KEY_CACHE_TTL_MS });
+  return apiKey;
+}
+
+function invalidateToolApiKeyCache(toolName) {
+  toolApiKeyCache.delete(toolName);
+}
+
 async function requireApiKey(req, res, next) {
   try {
     const apiKey = String(req.headers['x-api-key'] || req.query?.api_key || '').trim();
@@ -326,17 +361,79 @@ async function requireApiKey(req, res, next) {
     req.apiKey = key;
     return next();
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
+}
+
+function requireWebTool(toolName) {
+  return async (req, res, next) => {
+    try {
+      const configuredKey = await resolveToolApiKey(toolName);
+      if (!configuredKey) {
+        return res.status(503).json({ error: 'Työkalun API-avainta ei ole asetettu.' });
+      }
+
+      const origin = String(req.headers.origin || '').trim();
+      const secFetchSite = String(req.headers['sec-fetch-site'] || '').trim().toLowerCase();
+      const hasBrowserContextHeaders = Boolean(origin || secFetchSite);
+      const isSameOriginRequest = !origin || origin === resolveRequestSiteUrl(req);
+      const isBrowserSameSite = secFetchSite === 'same-origin';
+
+      if (!hasBrowserContextHeaders || !isSameOriginRequest || !isBrowserSameSite) {
+        return requireApiKey(req, res, next);
+      }
+
+      req.apiKey = { id: null, owner_name: toolName, tool_name: toolName, is_web_tool: true };
+      return next();
+    } catch {
+      return res.status(500).json({ error: 'Palvelinvirhe.' });
+    }
+  };
 }
 
 async function trackApiKeyUsage(apiKeyId) {
   await db.query('INSERT INTO api_key_usage (api_key_id) VALUES ($1)', [apiKeyId]);
 }
 
+const TOOL_KEY_NAMES = ['shortener', 'pastebin', 'share', 'mobile_app'];
+function isValidToolName(toolName) {
+  return TOOL_KEY_NAMES.includes(String(toolName || '').trim());
+}
+
+function normalizeToolName(toolName) {
+  return String(toolName || '').trim();
+}
+
+async function getToolApiKeys(toolNames = TOOL_KEY_NAMES) {
+  const placeholders = toolNames.map((_, index) => `$${index + 1}`).join(', ');
+  const result = await db.query(
+    `SELECT tool_name, api_key, updated_at FROM tool_api_keys WHERE tool_name IN (${placeholders}) ORDER BY tool_name ASC`,
+    toolNames
+  );
+
+  const rowsByName = new Map(result.rows.map((row) => [row.tool_name, row]));
+  return toolNames.map((toolName) => ({
+    tool_name: toolName,
+    api_key: rowsByName.get(toolName)?.api_key || '',
+    updated_at: rowsByName.get(toolName)?.updated_at || null
+  }));
+}
+
+async function upsertToolApiKey(toolName, apiKey) {
+  await db.query(
+    `INSERT INTO tool_api_keys (tool_name, api_key, updated_at)
+     VALUES ($1, $2, CURRENT_TIMESTAMP)
+     ON CONFLICT(tool_name)
+     DO UPDATE SET api_key = excluded.api_key, updated_at = CURRENT_TIMESTAMP`,
+    [toolName, apiKey]
+  );
+  invalidateToolApiKeyCache(toolName);
+}
+
+
 function apiKeyUsageMiddleware(req, res, next) {
   res.on('finish', () => {
-    if (req.apiKey?.id && res.statusCode < 400) {
+    if (req.apiKey?.id != null && res.statusCode < 400) {
       void trackApiKeyUsage(req.apiKey.id).catch(() => {});
     }
   });
@@ -424,7 +521,37 @@ app.post('/api/auth', async (req, res) => {
 
     return res.status(400).json({ error: 'Tuntematon pyyntö.' });
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
+  }
+});
+
+
+app.get('/api/admin/tool-keys', requireAuth, async (_req, res) => {
+  try {
+    const toolKeys = await getToolApiKeys();
+    return res.json({ toolKeys });
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
+  }
+});
+
+app.put('/api/admin/tool-keys', requireAuth, async (req, res) => {
+  try {
+    const toolName = normalizeToolName(req.body?.tool_name);
+    const apiKey = String(req.body?.api_key || '').trim();
+
+    if (!isValidToolName(toolName)) {
+      return res.status(400).json({ error: 'Virheellinen työkalun nimi.' });
+    }
+
+    if (!apiKey) {
+      return res.status(400).json({ error: 'API-avain puuttuu.' });
+    }
+
+    await upsertToolApiKey(toolName, apiKey);
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
 });
 
@@ -696,7 +823,7 @@ app.delete('/api/links', requireAuth, async (req, res) => {
   }
 });
 
-app.all('/api/lyhennin/create', requireApiKey, apiKeyUsageMiddleware, async (req, res) => {
+app.all('/api/lyhennin/create', requireWebTool('shortener'), apiKeyUsageMiddleware, async (req, res) => {
   try {
     if (!['GET', 'POST'].includes(req.method)) {
       return res.status(405).json({ error: 'Tuntematon metodi.' });
@@ -717,7 +844,7 @@ app.all('/api/lyhennin/create', requireApiKey, apiKeyUsageMiddleware, async (req
 
 
 // --- PASTEBIN REITIT ---
-app.post('/api/paste', requireApiKey, apiKeyUsageMiddleware, async (req, res) => {
+app.post('/api/paste', requireWebTool('pastebin'), apiKeyUsageMiddleware, async (req, res) => {
   try {
     const { content } = req.body;
     if (!content || !content.trim()) return res.status(400).json({ error: 'Teksti on pakollinen.' });
@@ -779,7 +906,7 @@ void ensureUploadBucketReady().catch((error) => {
   console.error(`Bucketin varmistus epäonnistui käynnistyksessä: ${error.message}`);
 });
 
-app.post('/api/upload', requireApiKey, apiKeyUsageMiddleware, uploadShare.single('file'), async (req, res) => {
+app.post('/api/upload', requireWebTool('share'), apiKeyUsageMiddleware, uploadShare.single('file'), async (req, res) => {
   const file = req.file;
   const expiryDays = Math.min(Number.parseInt(req.body?.expiryDays || '7', 10), 7);
   const maxDownloads = Number.parseInt(req.body?.maxDownloads || '0', 10) || 0;
@@ -810,9 +937,7 @@ app.post('/api/upload', requireApiKey, apiKeyUsageMiddleware, uploadShare.single
       }
     }));
 
-    const siteUrl = process.env.SITE_URL
-      ? process.env.SITE_URL.replace(/\/$/, '')
-      : `${req.protocol}://${req.hostname}`;
+    const siteUrl = resolveRequestSiteUrl(req);
 
     return res.json({ url: `${siteUrl}/api/download?file=${encodeURIComponent(fileName)}`, id: fileName });
   } catch (error) {
@@ -980,9 +1105,7 @@ app.post('/api/admin/upload', requireAuth, uploadAdmin.single('file'), async (re
       [fileName, file.originalname, file.size, file.mimetype || 'application/octet-stream', expiresAt || null, maxDownloads, req.user.username]
     );
 
-    const siteUrl = process.env.SITE_URL
-      ? process.env.SITE_URL.replace(/\/$/, '')
-      : `${req.protocol}://${req.hostname}`;
+    const siteUrl = resolveRequestSiteUrl(req);
 
     return res.json({
       success: true,
