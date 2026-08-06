@@ -1313,7 +1313,7 @@ function validateUrl(url) {
   if (!value || /[\u0000-\u001F\u007F\s]/.test(value)) return false;
   if (value.startsWith('//')) return false;
   if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) {
-    return value.startsWith('/') && !/(^|\/)\.\.?(?=\/|$|[?#])/.test(value);
+    return isSafeRelativeButtonPath(value);
   }
   try {
     const parsed = new URL(value);
@@ -1321,6 +1321,18 @@ function validateUrl(url) {
   } catch {
     return false;
   }
+}
+
+function isSafeRelativeButtonPath(value) {
+  if (!value.startsWith('/')) return false;
+  const pathPart = value.split(/[?#]/, 1)[0];
+  let decodedPath;
+  try {
+    decodedPath = decodeURIComponent(pathPart);
+  } catch {
+    return false;
+  }
+  return !/(^|\/)\.\.?(?=\/|$)/.test(decodedPath);
 }
 
 function stripHtml(str) {
