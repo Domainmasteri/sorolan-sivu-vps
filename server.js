@@ -566,12 +566,13 @@ app.put('/api/guestbook', requireAuth, async (req, res) => {
   try {
     const { id, name, message, adminReply } = req.body || {};
     const idNum = Number.parseInt(id, 10);
-    if (!idNum) return res.status(400).json({ error: 'Viestin ID puuttuu.' });
+    if (!idNum || idNum <= 0) return res.status(400).json({ error: 'Viestin ID puuttuu.' });
     if (!name || !message) return res.status(400).json({ error: 'Nimi ja viesti ovat pakollisia.' });
-    await db.query(
+    const result = await db.query(
       'UPDATE guestbook SET name = $1, message = $2, admin_reply = $3 WHERE id = $4',
       [String(name).trim(), String(message).trim(), adminReply ? String(adminReply).trim() : null, idNum]
     );
+    if (result.rowCount === 0) return res.status(404).json({ error: 'Viestiä ei löydy.' });
     return res.json({ success: true });
   } catch {
     return res.status(500).json({ error: 'Palvelinvirhe.' });

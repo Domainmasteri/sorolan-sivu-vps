@@ -193,22 +193,27 @@ function renderLinkTable(tableId, links, domain) {
   links.forEach((link) => {
     const baseUrl = domain === 'soro.la' ? 'soro.la' : domain;
     const date = new Date(link.created_at).toLocaleDateString('en-US');
-    const escapedPath = link.short_path.replace(/'/g, "\\'");
-    const escapedUrl = link.original_url.replace(/'/g, "\\'");
-    tbody.innerHTML += `
-      <tr>
-        <td><a href="https://${baseUrl}/${link.short_path}" target="_blank" style="color:#ffaa00;">/${link.short_path}</a></td>
-        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-          <a href="${link.original_url}" target="_blank" style="color:#60a5fa;">${link.original_url}</a>
-        </td>
-        <td>${link.clicks}</td>
-        <td>${date}</td>
-        <td>
-          <button onclick="muokkaaLinkkia('${domain}', '${escapedPath}', '${escapedUrl}')" class="action-btn edit-btn">Muokkaa</button>
-          <button onclick="poistaLinkki('${domain}', '${escapedPath}')" class="action-btn">Poista</button>
-        </td>
-      </tr>
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><a href="https://${baseUrl}/${link.short_path}" target="_blank" style="color:#ffaa00;">/${link.short_path}</a></td>
+      <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+        <a href="${link.original_url}" target="_blank" style="color:#60a5fa;">${link.original_url}</a>
+      </td>
+      <td>${link.clicks}</td>
+      <td>${date}</td>
+      <td>
+        <button class="action-btn edit-btn link-edit-btn">Muokkaa</button>
+        <button class="action-btn link-delete-btn">Poista</button>
+      </td>
     `;
+    const editBtn = tr.querySelector('.link-edit-btn');
+    editBtn.dataset.domain = domain;
+    editBtn.dataset.path = link.short_path;
+    editBtn.dataset.url = link.original_url;
+    editBtn.addEventListener('click', () => muokkaaLinkkia(domain, link.short_path, link.original_url));
+    const deleteBtn = tr.querySelector('.link-delete-btn');
+    deleteBtn.addEventListener('click', () => poistaLinkki(domain, link.short_path));
+    tbody.appendChild(tr);
   });
 }
 
@@ -255,21 +260,64 @@ async function lataaTiedot() {
     } else {
       guestbookData.messages.forEach((message) => {
         const date = new Date(message.created_at).toLocaleDateString('fi-FI');
-        const nameHtml = message.is_admin ? `<span style="color:#f472b6;font-weight:bold;">👑 ${message.name}</span>` : message.name;
-        const replyHtml = message.admin_reply || '<em style="color:#64748b;">Ei vastausta</em>';
-        guestbookBody.innerHTML += `
-          <tr>
-            <td>${nameHtml}</td>
-            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${message.message}</td>
-            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${replyHtml}</td>
-            <td>${date}</td>
-            <td>
-              <button onclick="muokkaaGbViestia(${message.id}, ${JSON.stringify(message.name)}, ${JSON.stringify(message.message)}, ${JSON.stringify(message.admin_reply || '')})" class="action-btn edit-btn">Muokkaa</button>
-              ${!message.is_admin ? `<button onclick="vastaaVieraskirjaan(${message.id})" class="action-btn edit-btn">Vastaa</button>` : ''}
-              <button onclick="poistaVieraskirjaviesti(${message.id})" class="action-btn">Poista</button>
-            </td>
-          </tr>
-        `;
+        const nameHtml = message.is_admin ? `<span style="color:#f472b6;font-weight:bold;">👑 </span>` : '';
+        const replyHtml = message.admin_reply || '';
+        const tr = document.createElement('tr');
+
+        const nameTd = document.createElement('td');
+        if (message.is_admin) {
+          const badge = document.createElement('span');
+          badge.style.cssText = 'color:#f472b6;font-weight:bold;';
+          badge.textContent = '👑 ';
+          nameTd.appendChild(badge);
+        }
+        nameTd.appendChild(document.createTextNode(message.name));
+
+        const msgTd = document.createElement('td');
+        msgTd.style.cssText = 'max-width: 200px; overflow: hidden; text-overflow: ellipsis;';
+        msgTd.textContent = message.message;
+
+        const replyTd = document.createElement('td');
+        replyTd.style.cssText = 'max-width: 200px; overflow: hidden; text-overflow: ellipsis;';
+        if (replyHtml) {
+          replyTd.textContent = replyHtml;
+        } else {
+          const em = document.createElement('em');
+          em.style.color = '#64748b';
+          em.textContent = 'Ei vastausta';
+          replyTd.appendChild(em);
+        }
+
+        const dateTd = document.createElement('td');
+        dateTd.textContent = date;
+
+        const actionsTd = document.createElement('td');
+        const editBtn = document.createElement('button');
+        editBtn.className = 'action-btn edit-btn';
+        editBtn.textContent = 'Muokkaa';
+        editBtn.addEventListener('click', () => muokkaaGbViestia(message.id, message.name, message.message, message.admin_reply || ''));
+        actionsTd.appendChild(editBtn);
+
+        if (!message.is_admin) {
+          const replyBtn = document.createElement('button');
+          replyBtn.className = 'action-btn edit-btn';
+          replyBtn.textContent = 'Vastaa';
+          replyBtn.addEventListener('click', () => vastaaVieraskirjaan(message.id));
+          actionsTd.appendChild(replyBtn);
+        }
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'action-btn';
+        deleteBtn.textContent = 'Poista';
+        deleteBtn.addEventListener('click', () => poistaVieraskirjaviesti(message.id));
+        actionsTd.appendChild(deleteBtn);
+
+        tr.appendChild(nameTd);
+        tr.appendChild(msgTd);
+        tr.appendChild(replyTd);
+        tr.appendChild(dateTd);
+        tr.appendChild(actionsTd);
+        guestbookBody.appendChild(tr);
       });
     }
 
