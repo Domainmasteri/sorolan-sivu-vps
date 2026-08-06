@@ -12,20 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Spämmieston muuttuja
     let voiLahettaa = true;
-    let apiKeyPromise = null;
-
-    async function haeJulkinenApiAvain(toolName) {
-        const storageKey = `public-tool-key:${toolName}`;
-        const cached = sessionStorage.getItem(storageKey);
-        if (cached) return cached;
-        if (!apiKeyPromise) {
-            apiKeyPromise = fetch('/api/config/public-keys')
-                .then((response) => response.json())
-                .then((data) => {
-                    Object.entries(data || {}).forEach(([name, value]) => {
-                        if (typeof value === 'string' && value) {
-                            sessionStorage.setItem(`public-tool-key:${name}`, value);
-                        }
                     });
                     return data || {};
                 })
@@ -56,8 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fetchUrl = `${WORKER_URL}?url=${encodeURIComponent(alkuperainenUrl)}&domain=${encodeURIComponent(domain)}`;
             
             // Tehdään pyyntö Workerille
-            const apiKey = await haeJulkinenApiAvain('shortener');
-            const response = await fetch(fetchUrl, { headers: { 'X-API-Key': apiKey } });
+            const response = await fetch(fetchUrl);
             const data = await response.json();
 
             if (data.success && data.shortUrl) {

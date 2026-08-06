@@ -345,10 +345,11 @@ function requireWebTool(toolName) {
 
       const origin = String(req.headers.origin || '').trim();
       const secFetchSite = String(req.headers['sec-fetch-site'] || '').trim().toLowerCase();
-      const isSameOriginRequest = !origin || origin === `${req.protocol}://${req.get('host')}`;
-      const isBrowserSameSite = !secFetchSite || secFetchSite === 'same-origin' || secFetchSite === 'same-site' || secFetchSite === 'none';
+      const hasBrowserContextHeaders = Boolean(origin || secFetchSite);
+      const isSameOriginRequest = Boolean(origin) && origin === `${req.protocol}://${req.get('host')}`;
+      const isBrowserSameSite = ['same-origin', 'same-site', 'none'].includes(secFetchSite);
 
-      if (!isSameOriginRequest || !isBrowserSameSite) {
+      if (!hasBrowserContextHeaders || !isSameOriginRequest || !isBrowserSameSite) {
         return requireApiKey(req, res, next);
       }
 
@@ -401,7 +402,7 @@ async function upsertToolApiKey(toolName, apiKey) {
 
 function apiKeyUsageMiddleware(req, res, next) {
   res.on('finish', () => {
-    if (req.apiKey?.id && res.statusCode < 400) {
+    if (req.apiKey?.id != null && res.statusCode < 400) {
       void trackApiKeyUsage(req.apiKey.id).catch(() => {});
     }
   });
