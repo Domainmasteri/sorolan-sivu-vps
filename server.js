@@ -314,9 +314,23 @@ async function requireAuth(req, res, next) {
   }
 }
 
+const TOOL_KEY_CACHE_TTL_MS = 60 * 1000;
+const toolApiKeyCache = new Map();
+
 async function resolveToolApiKey(toolName) {
+  const cacheEntry = toolApiKeyCache.get(toolName);
+  if (cacheEntry && cacheEntry.expiresAt > Date.now()) {
+    return cacheEntry.apiKey;
+  }
+
   const result = await db.query('SELECT api_key FROM tool_api_keys WHERE tool_name = $1 LIMIT 1', [toolName]);
-  return String(result.rows[0]?.api_key || '').trim();
+  const apiKey = String(result.rows[0]?.api_key || '').trim();
+  toolApiKeyCache.set(toolName, { apiKey, expiresAt: Date.now() + TOOL_KEY_CACHE_TTL_MS });
+  return apiKey;
+}
+
+function invalidateToolApiKeyCache(toolName) {
+  toolApiKeyCache.delete(toolName);
 }
 
 async function requireApiKey(req, res, next) {
@@ -347,7 +361,7 @@ function requireWebTool(toolName) {
       const secFetchSite = String(req.headers['sec-fetch-site'] || '').trim().toLowerCase();
       const hasBrowserContextHeaders = Boolean(origin || secFetchSite);
       const isSameOriginRequest = Boolean(origin) && origin === `${req.protocol}://${req.get('host')}`;
-      const isBrowserSameSite = ['same-origin', 'same-site'].includes(secFetchSite);
+      const isBrowserSameSite = secFetchSite === 'same-origin';
 
       if (!hasBrowserContextHeaders || !isSameOriginRequest || !isBrowserSameSite) {
         return requireApiKey(req, res, next);
@@ -397,6 +411,7 @@ async function upsertToolApiKey(toolName, apiKey) {
      DO UPDATE SET api_key = excluded.api_key, updated_at = CURRENT_TIMESTAMP`,
     [toolName, apiKey]
   );
+  invalidateToolApiKeyCache(toolName);
 }
 
 
@@ -520,7 +535,7 @@ app.put('/api/admin/tool-keys', requireAuth, async (req, res) => {
     await upsertToolApiKey(toolName, apiKey);
     return res.json({ success: true });
   } catch (error) {
-    return res.status(500).json({ error: 'Palvelinvirhe.', details: error.message });
+    return res.status(500).json({ error: 'Palvelinvirhe.' });
   }
 });
 
