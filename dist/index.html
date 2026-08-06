@@ -471,10 +471,12 @@
                     // Lisätään uusi elementti listaan ilman sivun latausta
                     var list = document.getElementById(section);
                     if (list) {
+                        var sanitizedUrl = url;
+                        try { var parsed = new URL(url); if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') sanitizedUrl = '#'; } catch(e) { sanitizedUrl = '#'; }
                         var li = document.createElement('li');
                         li.setAttribute('data-custom-element-id', data.id);
                         var a = document.createElement('a');
-                        a.href = url;
+                        a.href = sanitizedUrl;
                         a.className = 'nappula1';
                         a.textContent = fi;
                         li.appendChild(a);
