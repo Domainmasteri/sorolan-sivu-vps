@@ -234,7 +234,7 @@
             <input type="hidden" id="add-target-section">
             <input type="text" id="add-content-fi" placeholder="Napin teksti (suomi)">
             <input type="text" id="add-content-en" placeholder="Button text (english)">
-            <input type="url" id="add-url" placeholder="URL (esim. https://...)">
+            <input type="text" id="add-url" placeholder="URL tai polku (esim. /ohjeet/ tai https://...)">
             <button class="ok" id="admin-add-btn">Tallenna</button>
             <button class="cancel" onclick="document.getElementById('admin-add-overlay').classList.remove('open')">Peruuta</button>
         </div>
@@ -556,6 +556,18 @@
                 document.getElementById('add-content-fi').focus();
             }
 
+            function isAllowedButtonUrl(url) {
+                var value = String(url || '').trim();
+                if (!value || /[\u0000-\u001F\u007F\s]/.test(value) || value.indexOf('//') === 0) return false;
+                if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) return true;
+                try {
+                    var parsed = new URL(value);
+                    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+                } catch(e) {
+                    return false;
+                }
+            }
+
             document.getElementById('admin-add-btn').addEventListener('click', async function() {
                 var section = document.getElementById('add-target-section').value;
                 var fi = document.getElementById('add-content-fi').value.trim();
@@ -574,8 +586,7 @@
                     // Lisätään uusi elementti listaan ilman sivun latausta
                     var list = document.getElementById(section);
                     if (list) {
-                        var sanitizedUrl = url;
-                        try { var parsed = new URL(url); if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') sanitizedUrl = '#'; } catch(e) { sanitizedUrl = '#'; }
+                        var sanitizedUrl = isAllowedButtonUrl(url) ? url : '#';
                         var li = document.createElement('li');
                         li.setAttribute('data-custom-element-id', data.id);
                         var a = document.createElement('a');
