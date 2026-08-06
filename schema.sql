@@ -88,5 +88,3 @@ CREATE TABLE IF NOT EXISTS changelog (
     content_en TEXT NOT NULL,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT OR IGNORE INTO invites (code_hash) VALUES ('root');
