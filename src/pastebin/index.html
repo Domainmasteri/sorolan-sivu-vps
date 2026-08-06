@@ -88,17 +88,6 @@
     </div>
     
     <script>
-                        });
-                        return data || {};
-                    })
-                    .finally(() => { publicToolKeyRequest = null; });
-            }
-            const data = await publicToolKeyRequest;
-            const apiKey = String(data?.[toolName] || '').trim();
-            if (!apiKey) throw new Error('API-avain puuttuu.');
-            return apiKey;
-        }
-
         document.getElementById('tallenna-btn').addEventListener('click', async () => {
             const content = document.getElementById('paste-content').value;
             if (!content.trim()) return alert('Tekstikenttä on tyhjä!');

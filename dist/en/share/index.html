@@ -197,16 +197,6 @@
         const shareLink = document.getElementById('shareLink');
         const copyBtn = document.getElementById('copyBtn');
         const encryptCheckbox = document.getElementById('encryptCheckbox');
-                        });
-                        return data || {};
-                    })
-                    .finally(() => { publicToolKeyRequest = null; });
-            }
-            const data = await publicToolKeyRequest;
-            const apiKey = String(data?.[toolName] || '').trim();
-            if (!apiKey) throw new Error('API-avain puuttuu.');
-            return apiKey;
-        }
 
         dropzone.addEventListener('click', () => fileInput.click());
         dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });

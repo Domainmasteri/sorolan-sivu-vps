@@ -12,16 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Spämmieston muuttuja
     let voiLahettaa = true;
-                    });
-                    return data || {};
-                })
-                .finally(() => { apiKeyPromise = null; });
-        }
-        const data = await apiKeyPromise;
-        const apiKey = String(data?.[toolName] || '').trim();
-        if (!apiKey) throw new Error('API-avain puuttuu.');
-        return apiKey;
-    }
 
     lomake.addEventListener('submit', async (e) => {
         e.preventDefault();
