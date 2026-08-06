@@ -22,7 +22,23 @@
     if (!banner || !latestChange) return;
     const prefix = texts[lang].latestPrefix;
     const date = latestChange.date ? ` (${latestChange.date})` : '';
-    banner.innerHTML = `⚡ <strong>${prefix}${date}:</strong> <span>${latestChange.text || ''}</span> <a href="${lang === 'en' ? '/en/changes' : '/muutokset'}">${texts[lang].changelogLink}</a>`;
+    banner.textContent = '';
+
+    banner.append('⚡ ');
+    const strong = document.createElement('strong');
+    strong.textContent = `${prefix}${date}:`;
+    banner.appendChild(strong);
+    banner.append(' ');
+
+    const span = document.createElement('span');
+    span.textContent = latestChange.text || '';
+    banner.appendChild(span);
+    banner.append(' ');
+
+    const link = document.createElement('a');
+    link.href = lang === 'en' ? '/en/changes' : '/muutokset';
+    link.textContent = texts[lang].changelogLink;
+    banner.appendChild(link);
   }
 
   function createButton(button) {

@@ -19,7 +19,6 @@ import {
 } from '@aws-sdk/client-s3';
 import { db } from './db.js';
 import { s3, bucketName, ensureBucketExists } from './storage.js';
-import { s3, bucketName, ensureBucketExists } from './storage.js';
 
 const app = express();
 app.use(
