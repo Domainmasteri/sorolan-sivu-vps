@@ -377,7 +377,7 @@ function requireWebTool(toolName) {
       const origin = String(req.headers.origin || '').trim();
       const secFetchSite = String(req.headers['sec-fetch-site'] || '').trim().toLowerCase();
       const hasBrowserContextHeaders = Boolean(origin || secFetchSite);
-      const isSameOriginRequest = Boolean(origin) && origin === `${req.protocol}://${req.get('host')}`;
+      const isSameOriginRequest = Boolean(origin) && origin === resolveRequestSiteUrl(req);
       const isBrowserSameSite = secFetchSite === 'same-origin';
 
       if (!hasBrowserContextHeaders || !isSameOriginRequest || !isBrowserSameSite) {
