@@ -937,7 +937,7 @@ app.post('/api/admin/elements', requireAuth, async (req, res) => {
     if (!content_fi) return res.status(400).json({ error: 'content_fi on pakollinen.' });
     if (!content_en) return res.status(400).json({ error: 'content_en on pakollinen.' });
     if (element_type === 'button' && !url) return res.status(400).json({ error: 'url on pakollinen button-tyypille.' });
-    if (element_type === 'button' && url && !validateUrl(url)) return res.status(400).json({ error: 'URL on virheellinen. Hyväksytään vain http:// ja https://-osoitteet.' });
+    if (element_type === 'button' && url && !validateUrl(url)) return res.status(400).json({ error: 'URL on virheellinen. Hyväksytään http://, https:// sekä suhteelliset polut kuten /ohjeet/.' });
 
     const maxOrderResult = await db.query('SELECT COALESCE(MAX(sort_order), -1) AS max_order FROM custom_elements WHERE target_section = $1', [target_section]);
     const nextOrder = (maxOrderResult.rows[0]?.max_order ?? -1) + 1;
@@ -1309,9 +1309,12 @@ function escapeHtml(str) {
 }
 
 function validateUrl(url) {
-  if (!url) return false;
+  const value = String(url || '').trim();
+  if (!value || /[\u0000-\u001F\u007F\s]/.test(value)) return false;
+  if (value.startsWith('//')) return false;
+  if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) return true;
   try {
-    const parsed = new URL(url);
+    const parsed = new URL(value);
     return parsed.protocol === 'https:' || parsed.protocol === 'http:';
   } catch {
     return false;
