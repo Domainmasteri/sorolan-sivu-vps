@@ -1,50 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <!-- Etusivu -->
-   <url><loc>https://sorola.fi/</loc><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
-   <!-- IT-ohjeet -->
-   <url><loc>https://sorola.fi/ohjeet/</loc><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-   <!-- Bitwarden-ohje -->
-   <url><loc>https://sorola.fi/ohjeet/bitwarden</loc><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <!-- Cryptomator-ohje -->
-   <url><loc>https://sorola.fi/ohjeet/cryptomator</loc><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <!-- Ansioluettelot ja portfolio -->
-   <url><loc>https://sorola.fi/ansioluettelot/</loc><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+   <url><loc>https://sorola.fi/</loc><lastmod>2026-08-08</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
    
-   <!-- TYÖKALUT -->
-   <url><loc>https://sorola.fi/jako/</loc><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-   <url><loc>https://sorola.fi/lyhennin/</loc><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-   <url><loc>https://sorola.fi/qr/</loc><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-   <url><loc>https://sorola.fi/salasanat/</loc><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-   <url><loc>https://sorola.fi/json/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-   <url><loc>https://sorola.fi/base64/</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-   <url><loc>https://sorola.fi/pastebin/</loc><lastmod>2026-08-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-   <url><loc>https://sorola.fi/uuid</loc><lastmod>2026-08-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-   
-   <url><loc>https://sorola.fi/vieraskirja/</loc><lastmod>2025-07-12</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-   <url><loc>https://sorola.fi/makelink/</loc><lastmod>2025-07-12</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <!-- Päätyökalut ja osiot (Kansioreitit aina vinoviivalla /) -->
+   <url><loc>https://sorola.fi/jako/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+   <url><loc>https://sorola.fi/lyhennin/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+   <url><loc>https://sorola.fi/qr/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+   <url><loc>https://sorola.fi/salasanat/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+   <url><loc>https://sorola.fi/json/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+   <url><loc>https://sorola.fi/base64/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+   <url><loc>https://sorola.fi/pastebin/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+   <url><loc>https://sorola.fi/uuid/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+   <url><loc>https://sorola.fi/vieraskirja/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/makelink/</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/ansioluettelot/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+   <url><loc>https://sorola.fi/muutokset/</loc><lastmod>2026-08-08</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 
-   <!-- TIETOSUOJASELOSTEET -->
-   <url><loc>https://sorola.fi/privacy/</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
-   <url><loc>https://sorola.fi/privacy/qr</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-   <url><loc>https://sorola.fi/privacy/pastebin</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-   <url><loc>https://sorola.fi/privacy/jako</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-   <url><loc>https://sorola.fi/privacy/json</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-   <url><loc>https://sorola.fi/privacy/base64</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-   <url><loc>https://sorola.fi/privacy/lyhennin</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-   <url><loc>https://sorola.fi/privacy/salasanat</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
-   <url><loc>https://sorola.fi/privacy/uuid</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+   <!-- IT- ja käyttöohjeet -->
+   <url><loc>https://sorola.fi/ohjeet/</loc><lastmod>2026-08-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/bitwarden</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/cryptomator</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/qr</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/salasanat</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/pastebin</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/json</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/base64</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/linkinlyhennin</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/tiedostojako</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
+   <url><loc>https://sorola.fi/ohjeet/uuid</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
 
-   <!-- KÄYTTÖOHJEET -->
-   <url><loc>https://sorola.fi/ohjeet/qr</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <url><loc>https://sorola.fi/ohjeet/salasanat</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <url><loc>https://sorola.fi/ohjeet/pastebin</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <url><loc>https://sorola.fi/ohjeet/json</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <url><loc>https://sorola.fi/ohjeet/base64</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <url><loc>https://sorola.fi/ohjeet/linkinlyhennin</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <url><loc>https://sorola.fi/ohjeet/tiedostojako</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-   <url><loc>https://sorola.fi/ohjeet/uuid</loc><lastmod>2026-08-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
-
-   <!-- Muutosloki -->
-   <url><loc>https://sorola.fi/muutokset</loc><lastmod>2026-08-05</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+   <!-- Tietosuojaselosteet -->
+   <url><loc>https://sorola.fi/privacy/</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+   <url><loc>https://sorola.fi/privacy/qr</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+   <url><loc>https://sorola.fi/privacy/pastebin</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+   <url><loc>https://sorola.fi/privacy/jako</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+   <url><loc>https://sorola.fi/privacy/json</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+   <url><loc>https://sorola.fi/privacy/base64</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+   <url><loc>https://sorola.fi/privacy/lyhennin</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+   <url><loc>https://sorola.fi/privacy/salasanat</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+   <url><loc>https://sorola.fi/privacy/uuid</loc><lastmod>2026-08-08</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
